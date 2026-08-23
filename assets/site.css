@@ -10,7 +10,7 @@
   --display:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --body:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  --bar:3.25rem; --gut:clamp(1.25rem,4vw,2rem); --wide:64rem;
+  --bar:4.25rem; --gut:clamp(1.25rem,3.5vw,3rem); --wide:min(110rem,96vw);
   --ease:cubic-bezier(.2,.7,.3,1);
 }
 *{box-sizing:border-box}
@@ -31,17 +31,19 @@ img{max-width:100%;height:auto}
 .bar::after{content:"";position:absolute;inset:auto 0 0 0;height:1px;background:var(--line);
             opacity:0;transition:opacity .3s}
 .bar.stuck::after{opacity:1}
-.bar .prog{position:absolute;inset:auto auto 0 0;height:1px;background:var(--teal);width:0}
-.wordmark{display:flex;align-items:center;gap:.5rem;font-family:var(--display);font-weight:700;
-          font-size:.9375rem;letter-spacing:-.025em}
-.led{width:.4375rem;height:.4375rem;border-radius:50%;background:var(--ink3);flex:none;
+/* was 1px, which is invisible on a dark bar and reads as "not working". */
+.bar .prog{position:absolute;inset:auto auto 0 0;height:3px;background:var(--teal);width:0;
+           box-shadow:0 0 .5rem rgba(0,212,177,.55);transition:width .1s linear;border-radius:0 3px 3px 0}
+.wordmark{display:flex;align-items:center;gap:.625rem;font-family:var(--display);font-weight:700;
+          font-size:1.375rem;letter-spacing:-.03em}
+.led{width:.5625rem;height:.5625rem;border-radius:50%;background:var(--ink3);flex:none;
      transition:background .4s,box-shadow .4s}
 .led.up{background:var(--teal);box-shadow:0 0 .5rem rgba(0,212,177,.65)}
 .led.down{background:var(--amber)}
-.bar nav{display:flex;gap:1.5rem;font-size:.8125rem;color:var(--ink3)}
+.bar nav{display:flex;gap:2rem;font-size:1rem;color:var(--ink2);font-weight:500}
 .bar nav a{transition:color .2s}
 .bar nav a:hover,.bar nav a:focus-visible,.bar nav a[aria-current]{color:var(--ink)}
-@media (max-width:36rem){.bar nav{gap:.9375rem;font-size:.75rem}.bar nav .opt{display:none}}
+@media (max-width:40rem){.wordmark{font-size:1.125rem}.bar nav{gap:1.125rem;font-size:.875rem}.bar nav .opt{display:none}}
 
 
 main{padding-top:var(--bar)}
@@ -54,10 +56,12 @@ main{padding-top:var(--bar)}
 .scene.reading{max-width:52rem}
 .scene.tight::before{display:none}
 /* the hero owns the screen it opens on */
-.hero{min-height:calc(100svh - var(--bar));display:flex;align-items:center;
-      padding-top:clamp(2rem,5vw,3rem);padding-bottom:clamp(2rem,5vw,3rem)}
+.hero{min-height:calc(100svh - var(--bar));display:flex;flex-direction:column;
+      justify-content:space-between;gap:clamp(2rem,4vw,3rem);
+      padding-top:clamp(2.5rem,7vh,5.5rem);padding-bottom:clamp(1.5rem,3vh,2.5rem)}
+.hero-grid{flex:1;align-content:center}
 .hero::before{display:none}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(2rem,5vw,3.5rem);
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);
            align-items:center;width:100%}
 .hero-grid > *{min-width:0}
 @media (max-width:56rem){
@@ -67,9 +71,9 @@ main{padding-top:var(--bar)}
 .narrow{max-width:44rem}
 
 /* ── type ─────────────────────────────────────────────── */
-.eyebrow{font-family:var(--mono);font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;
-         color:var(--teal);margin:0 0 .875rem;display:flex;align-items:center;gap:.625rem}
-.eyebrow::before{content:"";width:1.25rem;height:1px;background:var(--teal);flex:none;opacity:.6}
+.eyebrow{font-family:var(--mono);font-size:.8125rem;letter-spacing:.15em;text-transform:uppercase;font-weight:500;
+         color:var(--teal);margin:0 0 1rem;display:flex;align-items:center;gap:.75rem}
+.eyebrow::before{content:"";width:1.75rem;height:2px;background:var(--teal);flex:none;opacity:.85}
 h1{font-family:var(--display);font-weight:700;font-size:clamp(2.125rem,6.4vw,3.875rem);line-height:1.02;
    letter-spacing:-.038em;margin:0 0 1.125rem;max-width:17ch;text-wrap:balance}
 h2{font-family:var(--display);font-weight:700;font-size:clamp(1.625rem,4.2vw,2.625rem);line-height:1.07;
@@ -160,3 +164,29 @@ footer nav a:hover{color:var(--ink)}
 .pair > *{min-width:0}
 @media (max-width:56rem){.pair{grid-template-columns:1fr;gap:2rem}}
 .stack{display:grid;gap:.75rem;max-width:100%}
+
+/* ── the hero facts strip: closes the hero instead of leaving it dead ── */
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+       border-radius:12px;overflow:hidden}
+.facts div{background:var(--surface);padding:1.125rem 1.25rem}
+.facts b{display:block;font-family:var(--display);font-weight:700;font-size:1.0625rem;
+         letter-spacing:-.015em;margin-bottom:.25rem}
+.facts span{display:block;font-size:.875rem;color:var(--ink3);line-height:1.45}
+@media (max-width:44rem){.facts{grid-template-columns:1fr}}
+
+/* ── MOTION.
+   CSS only, above the fold only, and gated behind prefers-reduced-motion. If animations are
+   unsupported the rule is ignored and the content is simply there. Nothing below the fold is
+   ever animated in, because that is what made an entire page invisible. ── */
+@media (prefers-reduced-motion:no-preference){
+  @keyframes rise{from{opacity:0;transform:translateY(1.5rem)}to{opacity:1;transform:none}}
+  .hero .eyebrow{animation:rise .7s var(--ease) both}
+  .hero h1{animation:rise .7s var(--ease) .06s both}
+  .hero .sub{animation:rise .7s var(--ease) .12s both}
+  .hero .chips{animation:rise .7s var(--ease) .18s both}
+  .hero .stack{animation:rise .8s var(--ease) .24s both}
+  .hero .facts{animation:rise .8s var(--ease) .32s both}
+  .appcard,.side,.chip,.row,.facts div{transition:transform .3s var(--ease),background .3s var(--ease)}
+  .appcard:hover{transform:translateY(-2px)}
+  .row:hover{background:rgba(255,255,255,.02)}
+}

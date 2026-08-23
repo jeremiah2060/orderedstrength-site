@@ -16,8 +16,14 @@
 <style>
 /* ── the coaching stack: real app UI, rendered rather than screenshotted ── */
 .stack{display:grid;gap:.75rem;max-width:23rem}
-.appcard{background:var(--surface);border-radius:14px;padding:1.0625rem 1.125rem;
-         box-shadow:0 1.25rem 3.5rem rgba(0,0,0,.5),0 0 0 1px var(--line)}
+.appcard{background:var(--surface);border-radius:16px;padding:1.375rem 1.5rem;
+         box-shadow:0 1.5rem 4rem rgba(0,0,0,.55),0 0 0 1px var(--line)}
+.hero .appcard{padding:1.625rem 1.75rem}
+.hero .lift{padding:.6875rem 0}
+.hero .lift .nm{font-size:.9375rem}
+.hero .lift .vd{font-size:.8125rem}
+.hero .appcard .cap{font-size:.75rem;margin-bottom:1.125rem}
+.hero .appcard .said{font-size:.875rem;margin-top:1.125rem;padding-top:1.125rem}
 .appcard .cap{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;
               color:var(--ink3);margin:0 0 .75rem}
 .setline{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;padding:.4375rem 0}
@@ -150,6 +156,12 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
           I update my model from every result.</p>
         </div>
       </div>
+    </div>
+
+    <div class="facts">
+      <div><b>Sealed before the set</b><span>The prediction is fingerprinted before your first repetition, and it cannot be edited afterwards.</span></div>
+      <div><b>Graded where you can read it</b><span>Hits and misses both. The misses stay on the record.</span></div>
+      <div><b>Your training stays on your phone</b><span>Computed on your device. No account, so nothing to profile.</span></div>
     </div>
   </section>
 
