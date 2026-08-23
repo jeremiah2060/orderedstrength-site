@@ -44,20 +44,60 @@ for f in pages:
             print(f"  {f}: {sel}"); fail += 1
 print("  none" if not fail else "")
 
-print("\nSTRUCTURE")
+print("\nNESTING")
+# 🔒 A TAG-COUNT CHECK CANNOT SEE A MIS-NESTING, AND TWO OPPOSITE ERRORS CANCEL.
+# This block used to count `<div` against `</div>` per page. /how-it-works had a .head
+# that was never closed (so the four "moments" cards rendered INSIDE the centred 52rem
+# header) AND a stray </div> in the last section. Open 6, close 6: the counter reported
+# the page clean while the layout it was written to protect was visibly wrong. A stack
+# tells you WHERE, and it is the only form of this check worth running.
+VOID = {'area','base','br','col','embed','hr','img','input','link','meta','param',
+        'source','track','wbr'}
+TAG = re.compile(r'<(/?)([a-zA-Z][a-zA-Z0-9]*)([^>]*?)(/?)>')
 for f in pages:
     s = open(f, encoding='utf-8').read()
     body = re.sub(r'<(script|style)[^>]*>.*?</\1>', '', s, flags=re.S)
+    body = re.sub(r'<!--.*?-->', '', body, flags=re.S)
+    stack, iss = [], []
+    for m in TAG.finditer(body):
+        closing, name, attrs, selfclose = m.group(1), m.group(2).lower(), m.group(3), m.group(4)
+        if name in VOID or selfclose or name == '!doctype':
+            continue
+        line = body[:m.start()].count('\n') + 1
+        if not closing:
+            stack.append((name, line))
+        else:
+            if not stack:
+                iss.append(f'line {line}: </{name}> with nothing open'); continue
+            if stack[-1][0] == name:
+                stack.pop()
+            elif any(n == name for n, _ in stack):
+                while stack and stack[-1][0] != name:
+                    n, l = stack.pop()
+                    iss.append(f'line {line}: </{name}> closes <{n}> opened at line {l}')
+                stack.pop()
+            else:
+                iss.append(f'line {line}: </{name}> with no matching open tag')
+    for n, l in stack:
+        if n not in ('html', 'body', 'head'):
+            iss.append(f'<{n}> opened at line {l} is never closed')
+    print(f"  {f:28} {'OK' if not iss else iss[0]}")
+    for extra in iss[1:]:
+        print(f"  {'':28} {extra}")
+    fail += len(iss)
+
+print("\nHYGIENE")
+for f in pages:
+    s = open(f, encoding='utf-8').read()
     iss = []
-    for t in ['div','section','ul','ol','li','p','h1','h2','h3','dl','main','footer','nav']:
-        o = len(re.findall(r'<' + t + r'[\s>]', body)); c = len(re.findall(r'</' + t + r'>', body))
-        if o != c: iss.append(f'{t} {o}/{c}')
     ids = re.findall(r'id="([^"]+)"', s)
     if [i for i in set(ids) if ids.count(i) > 1]: iss.append('duplicate ids')
     if [a[1:] for a in re.findall(r'href="(#[^"]+)"', s) if a[1:] not in ids]: iss.append('dead anchor')
     if [r for r in re.findall(r'(?:href|src)="(/assets/[^"]*)"', s) if '?v=' not in r]: iss.append('unversioned asset')
     if 'scene narrow' in s: iss.append('stale narrow width')
-    if any(s.count(ch) for ch in ['—', '×', '→']): iss.append('banned symbol')
+    if any(s.count(ch) for ch in ['\u2014', '\u00d7', '\u2192']): iss.append('banned symbol')
+    for m in re.finditer(r'<img\b[^>]*>', s):
+        if 'alt=' not in m.group(0): iss.append('img with no alt text')
     print(f"  {f:28} {'OK' if not iss else '; '.join(iss)}")
     fail += len(iss)
 

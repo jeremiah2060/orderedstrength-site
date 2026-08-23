@@ -13,7 +13,8 @@ def h(path):
     return hashlib.sha256(open(path,'rb').read()).hexdigest()[:10]
 
 assets = {'/assets/site.css': h('assets/site.css'), '/assets/site.js': h('assets/site.js')}
-for img in sorted(glob.glob('assets/shots/*.png')) + sorted(glob.glob('assets/shots/*.jpg')):
+for img in (sorted(glob.glob('assets/shots/*.png')) + sorted(glob.glob('assets/shots/*.jpg'))
+            + sorted(glob.glob('assets/shots/*.webp'))):
     assets['/' + img] = h(img)
 changed = 0
 for f in glob.glob('*.html') + glob.glob('*/index.html'):
