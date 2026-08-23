@@ -1,0 +1,52 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  /* THE SHARE CARD IS BUILT FROM THE SITE'S OWN STYLESHEET, so it cannot drift from the
+     brand: change a token and the next render of this card changes with it. */
+  html,body{margin:0;width:1200px;height:630px;overflow:hidden}
+  body{background-color:var(--e0);background-image:var(--grain);background-size:160px 160px;
+       counter-reset:scene}
+  .card{position:relative;width:1200px;height:630px;display:grid;
+        grid-template-columns:1fr 430px;align-items:center;gap:40px;
+        padding:56px 0 56px 72px;overflow:hidden}
+  .card::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+        background:
+          radial-gradient(30% 46% at 74% 40%, rgba(0,212,177,.055) 0%, transparent 100%),
+          radial-gradient(38% 52% at 34% 12%, rgba(132,172,230,.06) 0%, transparent 100%)}
+  .card > *{position:relative;z-index:1}
+  .og-mark{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;
+        font-size:26px;letter-spacing:-.035em;color:var(--ink);margin-bottom:34px}
+  .og-mark i{width:11px;height:11px;border-radius:50%;background:var(--teal);
+        box-shadow:0 0 10px rgba(0,212,177,.7)}
+  /* the specification rule numbers SECTIONS; a share card is not one, and its flex
+     leader was also squeezing the label onto two lines */
+  .card .eyebrow::after{content:none}
+  .card .eyebrow{font-size:17px;letter-spacing:.15em}
+  .card h1{font-size:60px;line-height:1.03;letter-spacing:-.038em;max-width:15ch;margin:0 0 22px}
+  .card p{font-size:21px;line-height:1.5;color:var(--ink2);max-width:34ch;margin:0}
+  .og-shot{position:relative;height:630px;margin-right:-40px}
+  .og-shot .device{position:absolute;top:-4px;height:600px;width:auto}
+  .og-shot .device--front{left:0;z-index:2}
+  .og-shot .device--back{left:186px;top:52px;height:520px;z-index:1;opacity:.94}
+  .og-shot .device--back .device__glass{filter:brightness(.52) saturate(.9)}
+  .og-shot .device--back .device__body{filter:brightness(.78)}
+</style></head><body><div class="card">
+  <div>
+    <div class="og-mark"><i></i>OrderedStrength</div>
+    <p class="eyebrow" style="margin-bottom:20px">Strength coaching for iPhone</p>
+    <h1>A coach who writes it down before you lift.</h1>
+    <p>He records what he expected from you before you touch the bar, then grades himself on it
+    and keeps the misses.</p>
+  </div>
+  <div class="og-shot">
+    <div class="device device--back"><div class="device__body"><div class="device__glass">
+      <div class="device__screenwrap"><img class="device__screen" src="/assets/shots/dashboard-session1.webp" alt=""></div>
+      <span class="device__island"></span><span class="device__sheen"></span></div></div>
+      <span class="device__key device__key--pwr"></span></div>
+    <div class="device device--front"><div class="device__body"><div class="device__glass">
+      <div class="device__screenwrap"><img class="device__screen" src="/assets/shots/dashboard-session3.webp" alt=""></div>
+      <span class="device__island"></span><span class="device__sheen"></span></div></div>
+      <span class="device__key device__key--act"></span><span class="device__key device__key--vup"></span>
+      <span class="device__key device__key--vdn"></span><span class="device__key device__key--pwr"></span></div>
+  </div>
+</div></body></html>
