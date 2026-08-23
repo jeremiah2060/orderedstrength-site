@@ -4,6 +4,9 @@
 #   check-site.py    what the source says: shadowed selectors, real tag NESTING (a stack,
 #                    not a count: two opposite errors cancel in a count), dead anchors,
 #                    unversioned assets, banned symbols, images with no alt text.
+#   contrast-gate.py what the EYE cannot judge on a dark screen in a dark room: every
+#                    ink-on-surface pair, computed against WCAG 2.1, read out of the
+#                    stylesheet's own tokens so it cannot go stale.
 #   align-gate.mjs   what the BROWSER does: every stacked block inside a section starts on
 #                    the same left edge, that edge is the nav wordmark's, and no page
 #                    scrolls sideways. Run across the widths people actually use.
@@ -16,6 +19,8 @@ PORT="${PORT:-8899}"
 fail=0
 
 python3 check-site.py || fail=1
+echo
+python3 tools/contrast-gate.py | tail -3 || fail=1
 
 if ! curl -sf -o /dev/null "http://127.0.0.1:${PORT}/"; then
   python3 -m http.server "$PORT" >/dev/null 2>&1 &

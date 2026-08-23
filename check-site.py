@@ -6,6 +6,58 @@ That mistake cost three separate rounds (.stack overflow, .dialhead cap, ol.loop
 centring): each time the edit looked applied and changed nothing."""
 import re, glob, sys
 
+SHORTHANDS = {
+    'margin': ['margin-top','margin-right','margin-bottom','margin-left'],
+    'padding': ['padding-top','padding-right','padding-bottom','padding-left'],
+    'inset': ['top','right','bottom','left'],
+    'background': ['background-color','background-image','background-size','background-position',
+                   'background-repeat','background-attachment'],
+    'border': ['border-width','border-style','border-color'],
+    'border-radius': ['border-radius'],
+    'font': ['font-family','font-size','font-weight','line-height'],
+    'flex': ['flex-grow','flex-shrink','flex-basis'],
+    'grid-area': ['grid-row','grid-column'],
+    'transition': ['transition-property','transition-duration','transition-timing-function'],
+    'animation': ['animation-name','animation-duration','animation-timing-function','animation-fill-mode'],
+}
+
+def props(decl):
+    """The property names a declaration block sets, with shorthands expanded.
+
+    🔒 THE SELECTOR IS NOT THE FAILURE; THE SELECTOR PLUS THE PROPERTY IS. Comparing
+    selector names alone made this check fire on four rules that set entirely different
+    properties in the two sheets, which is the fastest way to teach a person to ignore a
+    gate. Expanding shorthands is not optional either: the one REAL collision the day this
+    was written was a page saying `margin:0` against a shared sheet saying
+    `margin-top:auto`, and a naive name comparison sees two different properties."""
+    out = set()
+    for line in decl.split(';'):
+        if ':' not in line:
+            continue
+        name = line.split(':', 1)[0].strip().lower()
+        if not name or name.startswith('--'):
+            continue
+        out.update(SHORTHANDS.get(name, [name]))
+        if name in SHORTHANDS:
+            out.add(name)
+    return out
+
+
+def rules(css):
+    """(selector, properties) for every declaration in a stylesheet, @media unwrapped."""
+    flat = re.sub(r'/\*.*?\*/', ' ', css, flags=re.S)
+    for _ in range(6):
+        flat = re.sub(r'@[a-z-]+[^{}]*\{((?:[^{}]|\{[^{}]*\})*)\}', r'\1', flat)
+    for sel, decl in re.findall(r'([^{}]+)\{([^{}]*)\}', flat):
+        pr = props(decl)
+        if not pr:
+            continue
+        for part in sel.split(','):
+            part = part.strip()
+            if part and not part.startswith('@'):
+                yield part, pr
+
+
 def selectors(css):
     """Selectors declared in a stylesheet.
 
@@ -36,12 +88,18 @@ shared = open('assets/site.css', encoding='utf-8').read()
 shared_sel = selectors(shared)
 fail = 0
 
-print("SHADOWED SELECTORS (page style beats the shared sheet)")
+shared_rules = {}
+for sel, pr in rules(shared):
+    shared_rules.setdefault(sel, set()).update(pr)
+
+print("SHADOWED DECLARATIONS (a page style silently beats the shared sheet)")
 for f in pages:
     s = open(f, encoding='utf-8').read()
     for blk in re.findall(r'<style[^>]*>(.*?)</style>', s, re.S):
-        for sel in sorted(selectors(blk) & shared_sel):
-            print(f"  {f}: {sel}"); fail += 1
+        for sel, pr in rules(blk):
+            clash = pr & shared_rules.get(sel, set())
+            if clash:
+                print(f"  {f}: {sel} {{ {', '.join(sorted(clash))} }}"); fail += 1
 print("  none" if not fail else "")
 
 print("\nNESTING")
