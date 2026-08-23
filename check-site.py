@@ -4,7 +4,7 @@ biting: a rule edited in the SHARED stylesheet does nothing when the same select
 also lives in a page's own <style>, because the page block loads last and wins.
 That mistake cost three separate rounds (.stack overflow, .dialhead cap, ol.loop
 centring): each time the edit looked applied and changed nothing."""
-import re, glob, sys
+import re, glob, sys, os
 
 SHORTHANDS = {
     'margin': ['margin-top','margin-right','margin-bottom','margin-left'],
@@ -151,7 +151,21 @@ for f in pages:
     ids = re.findall(r'id="([^"]+)"', s)
     if [i for i in set(ids) if ids.count(i) > 1]: iss.append('duplicate ids')
     if [a[1:] for a in re.findall(r'href="(#[^"]+)"', s) if a[1:] not in ids]: iss.append('dead anchor')
-    if [r for r in re.findall(r'(?:href|src)="(/assets/[^"]*)"', s) if '?v=' not in r]: iss.append('unversioned asset')
+    # 🔒 FONTS ARE EXEMPT FROM VERSIONING, AND THE REASON IS NOT LAZINESS. A font file is
+    # already content-addressed by its own name: family, weight and subset fully determine
+    # its bytes. Worse, versioning it would DOUBLE-DOWNLOAD it, because the preload lives in
+    # the HTML (which the stamper rewrites) while the src lives inside @font-face in the
+    # stylesheet (which it does not), so the two URLs would disagree and the browser would
+    # fetch the same glyphs twice. They are served immutable for a year instead.
+    unversioned = [r for r in re.findall(r'(?:href|src)="(/assets/[^"]*)"', s)
+                   if '?v=' not in r and not r.startswith('/assets/fonts/')]
+    if unversioned: iss.append('unversioned asset: ' + unversioned[0])
+    # ...but an asset that does not EXIST is the failure fonts actually risk: a typo in a
+    # @font-face src or a preload is invisible, because the page simply falls back to a
+    # system face and still looks like a website.
+    missing = [r.split('?')[0] for r in re.findall(r'(?:href|src)="(/assets/[^"]*)"', s)
+               if not os.path.exists('.' + r.split('?')[0])]
+    if missing: iss.append('missing asset: ' + missing[0])
     if 'scene narrow' in s: iss.append('stale narrow width')
     if any(s.count(ch) for ch in ['\u2014', '\u00d7', '\u2192']): iss.append('banned symbol')
     for m in re.finditer(r'<img\b[^>]*>', s):
