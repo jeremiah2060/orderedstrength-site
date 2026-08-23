@@ -4,7 +4,7 @@ biting: a rule edited in the SHARED stylesheet does nothing when the same select
 also lives in a page's own <style>, because the page block loads last and wins.
 That mistake cost three separate rounds (.stack overflow, .dialhead cap, ol.loop
 centring): each time the edit looked applied and changed nothing."""
-import re, glob, sys, os, html
+import re, glob, sys, os, html, hashlib
 
 SHORTHANDS = {
     'margin': ['margin-top','margin-right','margin-bottom','margin-left'],
@@ -177,6 +177,25 @@ for f in pages:
     if hits: iss.append('banned symbol: ' + ' '.join(hits))
     for m in re.finditer(r'<img\b[^>]*>', s):
         if 'alt=' not in m.group(0): iss.append('img with no alt text')
+    print(f"  {f:28} {'OK' if not iss else '; '.join(iss)}")
+    fail += len(iss)
+
+print("\nSTAMP")
+# 🔒 EVERY PAGE MUST CARRY THE SAME BUILD, AND IT MUST BE THE REAL ONE. Committing with
+# explicit paths is correct, and it is also how three pages got left behind: the stamper had
+# touched them, the commit had not, so /how-it-works/, /join/ and /record/ shipped pointing
+# at a stylesheet version that was one build old and printed a build stamp in the footer
+# that was simply wrong. On a site whose argument is that its numbers can be checked, the
+# one number nobody types being wrong is not a small thing. This compares every page against
+# the stylesheet's ACTUAL hash, so a missed page cannot reach the deploy.
+real = hashlib.sha256(open('assets/site.css','rb').read()).hexdigest()[:10]
+for f in pages:
+    s = open(f, encoding='utf-8').read()
+    iss = []
+    refs = set(re.findall(r'/assets/site\.css\?v=([0-9a-f]+)', s))
+    if refs and refs != {real}: iss.append(f'stylesheet version {"/".join(sorted(refs))}, build is {real}')
+    stamps = set(re.findall(r'<b class="stamp">([^<]*)</b>', s))
+    if stamps and stamps != {real}: iss.append(f'footer stamp {"/".join(sorted(stamps))}, build is {real}')
     print(f"  {f:28} {'OK' if not iss else '; '.join(iss)}")
     fail += len(iss)
 
