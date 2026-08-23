@@ -6,18 +6,42 @@ That mistake cost three separate rounds (.stack overflow, .dialhead cap, ol.loop
 centring): each time the edit looked applied and changed nothing."""
 import re, glob, sys
 
+def selectors(css):
+    """Selectors declared in a stylesheet.
+
+    🔒 STRIP @media WRAPPERS FIRST. A naive ([^{}]+)\{([^{}]*)\} sweep cannot parse a
+    nested block: it swallows the @media prelude and everything after it silently, so
+    the checker skipped real rules and reported a clean sheet. It missed .stack being
+    capped at 23rem in a page style while the shared sheet said 100%, which is the exact
+    defect class this file exists to catch. Found 2026-08-23 by measuring a card that
+    would not stretch."""
+    # 🔒 STRIP COMMENTS FIRST. A rule preceded by a /* comment */ parses as the selector
+    # "/* comment */\n.stack", which matches nothing, so the rule is invisible to the
+    # comparison. The very comment I wrote to explain a rule is what hid it. Measured
+    # 2026-08-23: .stack was capped at 23rem in a page style while the shared sheet said
+    # 100%, and the checker reported a clean sheet.
+    flat = re.sub(r'/\*.*?\*/', ' ', css, flags=re.S)
+    for _ in range(6):
+        flat = re.sub(r'@[a-z-]+[^{}]*\{((?:[^{}]|\{[^{}]*\})*)\}', r'\1', flat)
+    out = set()
+    for sel, _decl in re.findall(r'([^{}]+)\{([^{}]*)\}', flat):
+        for part in sel.split(','):
+            part = part.strip()
+            if part and not part.startswith('@'):
+                out.add(part)
+    return out
+
 pages = sorted(glob.glob('*.html') + glob.glob('*/index.html'))
 shared = open('assets/site.css', encoding='utf-8').read()
-shared_sel = {s.strip() for s, _ in re.findall(r'([^{}]+)\{([^{}]*)\}', shared)}
+shared_sel = selectors(shared)
 fail = 0
 
 print("SHADOWED SELECTORS (page style beats the shared sheet)")
 for f in pages:
     s = open(f, encoding='utf-8').read()
     for blk in re.findall(r'<style[^>]*>(.*?)</style>', s, re.S):
-        for sel, _ in re.findall(r'([^{}]+)\{([^{}]*)\}', blk):
-            if sel.strip() in shared_sel:
-                print(f"  {f}: {sel.strip()}"); fail += 1
+        for sel in sorted(selectors(blk) & shared_sel):
+            print(f"  {f}: {sel}"); fail += 1
 print("  none" if not fail else "")
 
 print("\nSTRUCTURE")

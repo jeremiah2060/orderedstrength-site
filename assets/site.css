@@ -163,7 +163,7 @@ footer nav a:hover{color:var(--ink)}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,4vw,3rem);align-items:start}
 .pair > *{min-width:0}
 @media (max-width:56rem){.pair{grid-template-columns:1fr;gap:2rem}}
-.stack{display:grid;gap:.75rem;max-width:100%}
+.stack{display:grid;gap:.75rem;max-width:100%;justify-items:stretch}
 
 /* ── the hero facts strip: closes the hero instead of leaving it dead ── */
 .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
@@ -195,8 +195,8 @@ footer nav a:hover{color:var(--ink)}
    One real capture, annotated. A restrained device outline in the app's own
    materials, not a glossy 3D render floating at an angle: this product argues from
    measurement, and the phone-at-an-angle is the brochure move we are not making. */
-.gallery{display:grid;grid-template-columns:auto 1fr;gap:clamp(2rem,5vw,4.5rem);
-         align-items:center;margin-top:2.75rem}
+.gallery{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4.5rem);
+         align-items:center;margin-top:2.75rem;justify-items:center}
 .gallery > *{min-width:0}
 @media (max-width:60rem){.gallery{grid-template-columns:1fr;gap:2.5rem;justify-items:center}}
 
@@ -209,7 +209,7 @@ footer nav a:hover{color:var(--ink)}
 .pin[data-active="true"]{transform:translate(-50%,-50%) scale(1.25);
      box-shadow:0 0 0 7px rgba(0,212,177,.3),0 0 1.5rem rgba(0,212,177,.7)}
 
-.callouts{list-style:none;padding:0;margin:0;display:grid;gap:.625rem;max-width:34rem}
+.callouts{list-style:none;padding:0;margin:0;display:grid;gap:.625rem;width:100%;max-width:38rem}
 .callout{display:grid;grid-template-columns:1.5rem 1fr;gap:1rem;align-items:start;
          background:var(--surface);border-radius:10px;padding:1.0625rem 1.125rem;
          border-left:3px solid transparent;transition:background .25s var(--ease),border-color .25s var(--ease)}
@@ -221,8 +221,8 @@ footer nav a:hover{color:var(--ink)}
 
 /* ── the hero product shot: the real phone, with one rendered card overlapping it ── */
 .hero-shot{position:relative;display:flex;justify-content:center;align-items:center}
-.hero-shot .phone{width:min(23rem,76vw)}
-.hero-shot .appcard.float{position:absolute;right:0;bottom:2.5rem;width:min(19rem,68vw);
+.hero-shot .phone{width:min(27rem,80vw)}
+.hero-shot .appcard.float{position:absolute;right:-1.5rem;bottom:3rem;width:min(20rem,68vw);
   z-index:5;padding:1.125rem 1.25rem;
   box-shadow:0 1.75rem 4.5rem rgba(0,0,0,.8),0 0 0 1px var(--line)}
 .hero-shot .appcard.float .cap{margin-bottom:.75rem}
@@ -238,13 +238,16 @@ footer nav a:hover{color:var(--ink)}
    floating island, one diagonal glass sweep, and a bottom dissolve so the device
    melts into the page instead of sitting on it like a sticker. Nothing here is an
    image, so it stays sharp at any density and costs no bytes. */
-.phone{position:relative;width:min(22rem,82vw);aspect-ratio:1206/2622;
+.phone{position:relative;width:min(24rem,84vw);aspect-ratio:1206/2622;
   border-radius:3.4rem;padding:.28rem;isolation:isolate;
   background:
-    linear-gradient(160deg,#5c6672 0%,#2b3138 14%,#1b2026 30%,#151a20 50%,#1b2026 70%,#333a43 86%,#6b7684 100%);
+    linear-gradient(158deg,
+      #e7ecf2 0%, #aab4c0 5%, #7d8794 11%, #59636f 20%,
+      #3f4854 34%, #39424d 50%, #414a56 66%,
+      #5d6774 80%, #98a3b0 90%, #dfe6ee 100%);
   box-shadow:
-    0 0 0 1px rgba(255,255,255,.10),
-    0 .0625rem .0625rem rgba(255,255,255,.16) inset,
+    0 0 0 1px rgba(255,255,255,.22),
+    0 .0625rem .0625rem rgba(255,255,255,.30) inset,
     0 3rem 6rem -1rem rgba(0,0,0,.85),
     0 1rem 3rem rgba(0,0,0,.6);
 }
@@ -258,12 +261,12 @@ footer nav a:hover{color:var(--ink)}
 /* the island */
 .phone .screen::before{content:"";position:absolute;top:1.15%;left:50%;transform:translateX(-50%);
   width:30%;height:3.3%;background:#000;border-radius:100px;z-index:3;
-  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.05)}
+  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.06),
+             inset -2.6rem 0 0 -2.15rem #12161c,
+             inset -2.6rem 0 0 -2.3rem #2b3a52}
 /* one diagonal glass sweep, and a dissolve at the foot */
 .phone .screen::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:
-    linear-gradient(122deg, rgba(255,255,255,.085) 0%, rgba(255,255,255,.028) 16%, transparent 34%),
-    linear-gradient(to bottom, transparent 88%, rgba(6,7,9,.35) 97%, rgba(6,7,9,.6) 100%)}
+  background:linear-gradient(to bottom, rgba(255,255,255,.04) 0%, transparent 6%)}
 /* Physical buttons, in the real places. LEFT edge top to bottom: Action, Volume Up,
    Volume Down. RIGHT edge: the side button, longer and lower. Percentages are of the
    device height so they hold at any size. */
@@ -343,8 +346,8 @@ footer nav a:hover{color:var(--ink)}
 /* Antenna bands: two hairlines across the rail near each end, the detail that makes a
    metal frame read as machined rather than drawn. */
 .phone .band{position:absolute;left:-1px;right:-1px;height:2px;z-index:4;pointer-events:none;
-  background:linear-gradient(90deg,rgba(200,212,226,.55),rgba(120,132,146,.18) 12%,
-             transparent 22%,transparent 78%,rgba(120,132,146,.18) 88%,rgba(200,212,226,.55))}
+  background:linear-gradient(90deg,rgba(30,36,44,.85),rgba(60,70,82,.35) 14%,
+             transparent 26%,transparent 74%,rgba(60,70,82,.35) 86%,rgba(30,36,44,.85))}
 .phone .band.top{top:8.4%}
 .phone .band.bot{bottom:8.4%}
 /* the curved glass catching light along the very edge of the display */

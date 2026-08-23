@@ -12,10 +12,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=05771e01f8">
+<link rel="stylesheet" href="/assets/site.css?v=7942329742">
 <style>
 /* ── the coaching stack: real app UI, rendered rather than screenshotted ── */
-.stack{display:grid;gap:.75rem;max-width:23rem}
 .hero .appcard{padding:1.625rem 1.75rem}
 .hero .lift{padding:.6875rem 0}
 .hero .lift .nm{font-size:.9375rem}
@@ -65,7 +64,7 @@ input[type=range]::-moz-range-thumb{width:1.125rem;height:1.125rem;border:0;bord
 @media (max-width:40rem){.versus{grid-template-columns:1fr}}
 
 /* ── the console ── */
-.console{margin-top:2.25rem;background:var(--surface);border-radius:14px;overflow:hidden;
+.seal-console{margin-top:2.25rem;background:var(--surface);border-radius:14px;overflow:hidden;
          box-shadow:0 1.5rem 4rem rgba(0,0,0,.55),0 0 0 1px var(--line)}
 .chead{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.875rem 1.125rem;
        border-bottom:1px solid var(--line);background:var(--raised)}
@@ -280,7 +279,7 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
       <div><p class="sub">A real sealed prediction, made before the set. Widen the range so he looks right,
     or change the lift. The fingerprint recomputes in your browser as you type.</p></div>
     </div>
-    <div class="console reveal">
+    <div class="console seal-console reveal">
       <div class="chead">
         <span class="lbl">Sealed before the set</span>
         <span class="verdict ok" id="verdict" role="status" aria-live="polite">VERIFIED</span>
