@@ -17,7 +17,7 @@
 import { withPage } from './measure.mjs';
 
 const BASE  = process.env.BASE || 'http://127.0.0.1:8899';
-const PAGES = ['/', '/how-it-works/', '/record/', '/verify/', '/support/', '/app-privacy/', '/404.html'];
+const PAGES = ['/', '/how-it-works/', '/join/', '/record/', '/verify/', '/support/', '/app-privacy/', '/404.html'];
 const WIDTHS = process.argv.slice(2).map(Number).filter(Boolean);
 const TOL = 1.5;
 

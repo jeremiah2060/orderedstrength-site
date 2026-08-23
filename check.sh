@@ -7,6 +7,9 @@
 #   contrast-gate.py what the EYE cannot judge on a dark screen in a dark room: every
 #                    ink-on-surface pair, computed against WCAG 2.1, read out of the
 #                    stylesheet's own tokens so it cannot go stale.
+#   measure-gate.mjs one specific browser failure that every other check here reports as
+#                    clean: a block of running text wrapping one word per line because a
+#                    grid or flex placement broke. It has happened twice.
 #   align-gate.mjs   what the BROWSER does: every stacked block inside a section starts on
 #                    the same left edge, that edge is the nav wordmark's, and no page
 #                    scrolls sideways. Run across the widths people actually use.
@@ -29,6 +32,8 @@ if ! curl -sf -o /dev/null "http://127.0.0.1:${PORT}/"; then
 fi
 echo
 BASE="http://127.0.0.1:${PORT}" node tools/align-gate.mjs $WIDTHS || fail=1
+echo
+BASE="http://127.0.0.1:${PORT}" node tools/measure-gate.mjs 1550 390 | tail -3 || fail=1
 
 echo
 [ $fail -eq 0 ] && echo "SITE OK" || echo "SITE NOT OK"
