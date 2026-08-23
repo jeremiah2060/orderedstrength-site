@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=788c5fb8d1">
+<link rel="stylesheet" href="/assets/site.css?v=0d643bad6e">
 <style>
 /* ── the coaching stack: real app UI, rendered rather than screenshotted ── */
 .hero .appcard{padding:1.625rem 1.75rem}
@@ -24,7 +24,9 @@
 .setline{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;padding:.4375rem 0}
 .setline + .setline{border-top:1px solid var(--line-soft)}
 .setline .n{font-family:var(--mono);font-size:.75rem;color:var(--ink3);flex:none;width:3.25rem}
-.setline .v{font-family:var(--mono);font-size:.8125rem;color:var(--ink);font-weight:500}
+@media (max-width:34rem){.setline .n{width:2.375rem}.setline .v{font-size:.75rem}}
+.setline .v{font-family:var(--mono);font-size:.8125rem;color:var(--ink);font-weight:500;
+             flex:1;text-align:left}
 .setline .s{font-size:.75rem;flex:none}
 .setline .s.done{color:var(--teal)} .setline .s.cut{color:var(--amber)}
 .lift{display:flex;align-items:flex-start;gap:.6875rem;padding:.5rem 0}
@@ -60,21 +62,33 @@ input[type=range]::-moz-range-thumb{width:1.125rem;height:1.125rem;border:0;bord
 .side .claim{font-size:.9375rem;color:var(--ink);line-height:1.5;margin:0 0 .75rem;flex:1}
 .side .claim b{color:var(--teal);font-weight:600}
 .side.them .claim b{color:var(--ink)}
-.side .basis{font-size:.75rem;color:var(--ink3);margin:0;line-height:1.45}
+.side .basis{font-size:.75rem;color:var(--ink3);line-height:1.45;
+             margin:auto 0 0;padding-top:.875rem;border-top:1px solid var(--line-soft)}
 .frozen{font-family:var(--mono);font-size:.6875rem;color:var(--amber);margin:.625rem 0 0}
 @media (max-width:40rem){.versus{grid-template-columns:1fr}}
 
 /* ── the console ── */
-.seal-console{margin-top:2.25rem;background:var(--surface);border-radius:14px;overflow:hidden;
-         box-shadow:0 1.5rem 4rem rgba(0,0,0,.55),0 0 0 1px var(--line)}
-.chead{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.875rem 1.125rem;
-       border-bottom:1px solid var(--line);background:var(--raised)}
+/* THE CONSOLE IS THE ONE OBJECT ON THIS PAGE YOU CAN OPERATE, so it is the one built
+   like hardware: two RAISED bands, and between them a WELL that the readout sits in.
+   A recess is made with an inset shadow at the top edge and a lit hairline at the
+   bottom, which is the exact inverse of the bevel every raised surface here uses, and
+   the inversion is what the eye reads as sunken. */
+.seal-console{margin-top:2.25rem;background-color:var(--e3);border-radius:14px;overflow:hidden;overflow:clip;
+         box-shadow:var(--shadow-4)}
+.chead{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.9375rem 1.25rem;
+       border-bottom:1px solid rgba(0,0,0,.5);background-color:var(--e3);
+       box-shadow:inset 0 1px 0 rgba(233,241,255,.07)}
 .chead .lbl{font-family:var(--mono);font-size:.6875rem;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3)}
 .verdict{font-family:var(--mono);font-size:.75rem;font-weight:500;letter-spacing:.08em;
          padding:.3125rem .625rem;border-radius:100px;white-space:nowrap;transition:background .2s,color .2s}
+.verdict{display:flex;align-items:center;gap:.4375rem}
+.verdict::before{content:"";width:.4375rem;height:.4375rem;border-radius:50%;background:currentColor;
+       box-shadow:0 0 .5rem currentColor}
 .verdict.ok{background:var(--teal-dim);color:var(--teal)}
 .verdict.bad{background:rgba(242,85,90,.16);color:var(--red)}
-.cbody{padding:1.125rem}
+.cbody{padding:1.25rem;background-color:var(--e1);
+       box-shadow:inset 0 2px 5px -2px rgba(0,0,0,.85), inset 0 1px 0 rgba(0,0,0,.6),
+                  inset 0 -1px 0 rgba(233,241,255,.045)}
 .hrow{display:grid;grid-template-columns:11rem 1fr;gap:.5rem 1rem;padding:.5625rem 0;align-items:center}
 .hrow + .hrow{border-top:1px solid var(--line-soft)}
 .hrow label{font-size:.8125rem;color:var(--ink3)}
@@ -88,14 +102,16 @@ input[type=range]::-moz-range-thumb{width:1.125rem;height:1.125rem;border:0;bord
 .hrow input:focus{outline:none;border-bottom-color:var(--teal);background:rgba(0,212,177,.09)}
 .hrow input.moved{color:var(--amber);border-bottom-color:var(--amber)}
 .hrow .unit{font-family:var(--mono);font-size:.75rem;color:var(--ink3)}
-.hashwrap{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line)}
+.hashwrap{margin-top:1.125rem;padding:.9375rem 1rem;border-radius:8px;
+          background-color:rgba(0,0,0,.32);
+          box-shadow:inset 0 1px 3px rgba(0,0,0,.7), inset 0 -1px 0 rgba(233,241,255,.04)}
 .hlabel{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);
         margin:0 0 .5rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
 .hash{font-family:var(--mono);font-size:.75rem;line-height:1.7;word-break:break-all;color:var(--ink2);margin:0}
-.hash b{color:var(--teal);font-weight:500}
+.hash b{color:var(--teal);font-weight:500;text-shadow:0 0 .75rem rgba(0,212,177,.35)}
 .hash i{color:var(--red);font-style:normal;font-weight:500}
 .cfoot{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between;
-       padding:.875rem 1.125rem;border-top:1px solid var(--line);background:var(--raised)}
+       padding:.9375rem 1.25rem;border-top:1px solid rgba(233,241,255,.05);background-color:var(--e3)}
 .cfoot p{margin:0;font-size:.75rem;color:var(--ink3);max-width:40ch;line-height:1.45}
 .reset{font-size:.8125rem;font-weight:600;background:var(--teal);color:#03110E;border:0;border-radius:100px;
        padding:.4375rem .9375rem;cursor:pointer;font-family:var(--body);white-space:nowrap;transition:filter .2s,opacity .2s}
@@ -374,7 +390,7 @@ field   sealedOn = 1755916800</pre>
     commitment.</p></div>
     </div>
     <div class="chips reveal" style="margin-top:1.75rem">
-      <span class="chip"><b>iPhone</b> · in testing</span>
+      <span class="chip"><b>iPhone</b>in testing</span>
       <span class="chip"><b>199 US dollars</b> per year</span>
       <span class="chip"><b>14 days</b> free</span>
     </div>
@@ -397,7 +413,7 @@ field   sealedOn = 1755916800</pre>
   OrderedStrength. Built for lifters who would rather be told the truth.
 </footer>
 
-<script src="/assets/site.js?v=10952f50a7" defer></script>
+<script src="/assets/site.js?v=5fd125c32d" defer></script>
 <script>
 (function(){
 'use strict';
@@ -511,13 +527,57 @@ function bind(el, i, read, label){
   });
 }
 
+/* THE FINGERPRINT VISIBLY RECOMPUTES, AND THAT IS NOT AN EFFECT.
+   Changing one field changes the SHA-256 of the whole record, so nearly every one of
+   these 64 characters really is a different character than it was a moment ago. Printing
+   the new string instantly hides the one fact this page exists to demonstrate. Each
+   character that actually changed therefore rolls through hex digits and locks, left to
+   right, over a quarter of a second: you watch the avalanche happen instead of being told
+   about it. Characters that did NOT change do not move, because claiming they recomputed
+   when they did not is the exact dishonesty this product is built against.
+   Reduced motion, and the first paint, print instantly. */
+var prevHash = null, settleRAF = 0;
+var HEX = '0123456789abcdef';
+var CALM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 function paintHash(computed){
   var t = RECEIPT.commitmentHex, out = '', gone = false;
   for (var i=0;i<computed.length;i++){
     if (!gone && computed[i] === t[i]) out += '<b>'+computed[i]+'</b>';
     else { gone = true; out += '<i>'+computed[i]+'</i>'; }
   }
-  $('hash').innerHTML = out;
+  var el = $('hash');
+  el.innerHTML = out;
+
+  if (settleRAF) { cancelAnimationFrame(settleRAF); settleRAF = 0; }
+  var previous = prevHash; prevHash = computed;
+  if (!CALM && previous && previous !== computed) {
+    var cells = el.children, n = Math.min(cells.length, computed.length);
+    var changed = [];
+    for (var k = 0; k < n; k++) if (previous[k] !== computed[k]) changed.push(k);
+    if (changed.length) {
+      var DUR = 260, START = 0;
+      var unlock = {};                       /* each character has its own settling time */
+      for (var c = 0; c < changed.length; c++) {
+        unlock[changed[c]] = 90 + (changed[c] / n) * (DUR - 90);
+      }
+      var step = function(now){
+        if (!START) START = now;
+        var t2 = now - START, live2 = 0;
+        for (var c2 = 0; c2 < changed.length; c2++) {
+          var idx = changed[c2];
+          if (t2 < unlock[idx]) {
+            cells[idx].textContent = HEX.charAt((Math.random() * 16) | 0);
+            live2++;
+          } else {
+            cells[idx].textContent = computed[idx];
+          }
+        }
+        settleRAF = live2 ? requestAnimationFrame(step) : 0;
+      };
+      settleRAF = requestAnimationFrame(step);
+    }
+  }
   return !gone;
 }
 

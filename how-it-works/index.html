@@ -10,13 +10,23 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=788c5fb8d1">
+<link rel="stylesheet" href="/assets/site.css?v=0d643bad6e">
 <style>
-ol.loop{list-style:none;counter-reset:s;padding:0;margin:2rem 0 0;max-width:52rem}
-ol.loop li{counter-increment:s;display:grid;grid-template-columns:2.5rem 1fr;gap:1.125rem;
-           padding:1.375rem 0;border-top:1px solid var(--line)}
+/* THE LOOP IS A SEQUENCE, NOT A COMPARISON, so it is set as a scale rather than as a
+   plate: one spine with a node at each step, which is the same instrument language the
+   margin scale uses and the opposite of the milled panel the comparison table uses.
+   The form follows what the content IS. */
+ol.loop{list-style:none;counter-reset:s;padding:0;margin:2rem 0 0;max-width:52rem;position:relative}
+ol.loop::before{content:"";position:absolute;left:.4375rem;top:1.9rem;bottom:1.9rem;width:1px;
+           background:linear-gradient(180deg,transparent,var(--line) 5%,var(--line) 95%,transparent)}
+ol.loop li{position:relative;counter-increment:s;display:grid;grid-template-columns:3.25rem 1fr;gap:1.125rem;
+           padding:1.375rem 0;border-top:1px solid var(--line-soft)}
+ol.loop li:first-child{border-top:0}
 ol.loop li::before{content:counter(s,decimal-leading-zero);font-family:var(--mono);font-size:.8125rem;
-                   color:var(--teal);padding-top:.25rem}
+                   color:var(--teal);padding-top:.25rem;text-align:right;
+                   text-shadow:0 1px 0 rgba(0,0,0,.6)}
+ol.loop li::after{content:"";position:absolute;left:.25rem;top:1.9rem;width:.4375rem;height:.4375rem;
+                  border-radius:50%;background:var(--e0);box-shadow:0 0 0 1px var(--teal)}
 /* 🔒 THREE CHILDREN INTO TWO COLUMNS. ::before takes column 1, <b> takes column 2, and <span>
    auto-places into column 1 of the NEXT row, which is 2.5rem wide, so the body text wrapped one
    word per line. It was invisible for as long as the page was gated behind a scroll reveal, and
@@ -27,7 +37,7 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
 .quote{margin:1.75rem 0 0;max-width:52rem;padding:1.125rem 1.25rem;background:var(--surface);
        border-left:2px solid var(--amber);border-radius:0 10px 10px 0;font-size:.9375rem;color:var(--ink2)}
 .quote cite{display:block;margin-top:.625rem;font-style:normal;font-size:.75rem;color:var(--ink3);line-height:1.45}
-.moment{background:var(--surface);border-radius:12px;padding:1.375rem;height:100%}
+.moment{background-color:var(--e2);border-radius:12px;padding:1.375rem;height:100%;box-shadow:var(--shadow-2)}
 .moment h3{color:var(--ink)}
 .moment p{font-size:.875rem;color:var(--ink3);margin:0;line-height:1.55}
 .refuse{display:grid;grid-template-columns:auto 1fr;gap:.625rem 1rem;margin:1.5rem 0 0;
@@ -39,7 +49,7 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
 .ramp{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:.625rem}
 .ramp .big{font-family:var(--mono);font-size:1.625rem;color:var(--amber);font-weight:500;line-height:1}
 .ramp .unit{font-size:.75rem;color:var(--ink3)}
-.track{height:4px;border-radius:2px;background:var(--raised);overflow:hidden}
+.track{height:4px;border-radius:2px;background:var(--raised);overflow:hidden;overflow:clip}
 .track i{display:block;height:100%;width:38%;background:var(--amber);border-radius:2px}
 .receipt{display:grid;grid-template-columns:auto 1fr;gap:.25rem .625rem;font-size:.75rem;
          color:var(--ink3);margin-top:.75rem}
@@ -247,6 +257,6 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
   OrderedStrength. Built for lifters who would rather be told the truth.
 </footer>
 
-<script src="/assets/site.js?v=10952f50a7" defer></script>
+<script src="/assets/site.js?v=5fd125c32d" defer></script>
 </body>
 </html>

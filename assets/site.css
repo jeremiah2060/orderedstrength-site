@@ -1,17 +1,60 @@
 /* OrderedStrength site system.
-   Palette is the app's own DesignTokens so the site and the app read as one object.
-   Teal is a SIGNAL, not a decoration: it marks verified state, current position, and one
-   word per screen. Amber marks a broken seal. Nothing else is coloured. */
+
+   THE THESIS, and every rule below serves it: this product is a measuring instrument
+   that shows its receipts, so the page is the front panel of one. Machined surfaces under
+   ONE light, a numbered specification, a scale down the side. Not a fitness brochure.
+
+   SIGNAL DISCIPLINE is unchanged and is the brand: teal marks verified state, current
+   position, and one word per screen. Amber marks a broken seal. Nothing else is coloured,
+   and the ink and signal values are the app's own DesignTokens byte for byte so the site
+   and the app still read as one object.
+
+   WHAT CHANGED 2026-08-23 (revert: `git revert`, or reset to tag `site-90`; the previous
+   design stays live at frozen-90.orderedstrength-site.pages.dev for comparison):
+   the NEUTRAL ramp only. It was four ad-hoc greys; it is now an elevation ladder where
+   each rung is measurably lighter AND very slightly cooler, because ambient light in a
+   real room is cool and a surface that catches more of it shifts with it. That single
+   physical fact is what separates a page that feels like a lit space from a page that
+   feels like grey rectangles on black. Contrast of every ink-on-surface pair is checked
+   by tools/contrast-gate.py, not by eye. */
 :root{
-  --ground:#060709; --surface:#121519; --raised:#1A1E24; --line:#242A32; --line-soft:rgba(255,255,255,.055);
-  --ink:#F7F9FA; --ink2:rgba(247,249,250,.72); --ink3:rgba(247,249,250,.50);
+  /* the elevation ladder. e0 is the room, e3 is the surface nearest the light. */
+  --e0:#05070B; --e1:#0A0E14; --e2:#10151D; --e3:#161D27; --e4:#1D2531;
+  --ground:var(--e0); --surface:var(--e2); --raised:var(--e3);
+  --line:#232B37; --line-soft:rgba(196,214,240,.062);
+
+  /* ONE LIGHT. Every raised edge on this page agrees about where it comes from: above
+     and to the left, cool, as an overcast window is. The lit edge is warm because a key
+     light is warm; the shaded edge is a real DARK line, not an absence, because a surface
+     turning away from the light goes darker than the surface it sits on. Almost every
+     dark interface on the web draws one symmetric grey hairline and stops there, and that
+     is precisely why they read as diagrams rather than objects. */
+  --light-angle:147deg;
+  --edge-lit:rgba(233,241,255,.34); --edge-lit-soft:rgba(233,241,255,.085);
+  --edge-shade:rgba(0,0,0,.62); --edge-shade-soft:rgba(0,0,0,.3);
+
+  /* two shadows, always. A tight CONTACT shadow says the object is touching, a wide
+     AMBIENT shadow says how far it stands off. One blurred shadow says neither. */
+  --shadow-1:0 1px 2px rgba(0,0,0,.5), 0 2px 10px -4px rgba(0,0,0,.55);
+  --shadow-2:0 1px 2px rgba(0,0,0,.55), 0 10px 24px -10px rgba(0,0,0,.7);
+  --shadow-3:0 2px 4px rgba(0,0,0,.6), 0 22px 48px -18px rgba(0,0,0,.8);
+  --shadow-4:0 3px 6px rgba(0,0,0,.6), 0 40px 88px -28px rgba(0,0,0,.9);
+
+  --ink:#F7F9FA; --ink2:rgba(247,249,250,.72); --ink3:rgba(247,249,250,.52);
   --teal:#00D4B1; --teal-dim:rgba(0,212,177,.15);
   --stone:#C0A87F; --azure:#4D9DF0; --amber:#F59E0B; --red:#F2555A;
   --display:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --body:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --bar:5rem; --gut:clamp(1.25rem,3.5vw,3rem); --wide:min(80rem,100vw);
+  --rail:clamp(0px, calc((100vw - var(--wide)) / 2), 7.5rem);
+
+  /* MOTION HAS TWO JOBS AND THEY NEED DIFFERENT CURVES. Something arriving should settle
+     like mass (--ease). Something you touched should answer with a little overshoot,
+     because that is what a real control does (--spring). */
   --ease:cubic-bezier(.2,.7,.3,1);
+  --spring:cubic-bezier(.22,1.18,.36,1);
+  --grain:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='160'%20height='160'%3E%3Cfilter%20id='g'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='1.05'%20numOctaves='2'%20stitchTiles='stitch'%20seed='7'/%3E%3CfeColorMatrix%20type='matrix'%20values='0%200%200%200%20.80%20%200%200%200%200%20.84%20%200%200%200%200%20.94%20%20.30%200%200%200%20-.205'/%3E%3C/filter%3E%3Crect%20width='160'%20height='160'%20filter='url(%23g)'/%3E%3C/svg%3E");
 }
 *{box-sizing:border-box}
 /* THE SCROLLBAR MAKES TWO DIFFERENT BOXES, AND THE BAR AND THE CONTENT LIVE IN
@@ -27,11 +70,42 @@
 html{-webkit-text-size-adjust:100%;scrollbar-gutter:stable both-edges}
 @media (max-width:80rem){html{scrollbar-gutter:auto}}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
-body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
-     font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;
-     font-variant-numeric:tabular-nums}
+/* 🔒 `overflow:hidden` MAKES A SCROLL CONTAINER, AND A SCROLL CONTAINER THAT NEVER
+   SCROLLS FREEZES EVERY view() TIMELINE INSIDE IT. Clipping the comparison plate to its
+   own corner radius with `overflow:hidden` silently killed the scroll-driven motion of
+   every row in it: measured as timeline currentTime 83.2899%, byte for byte identical at
+   scroll 3200, 3800, 4200 and 4600, while the element it was tracking moved 2,138px up the
+   screen. Every property resolved perfectly. Nothing moved. That is the failure that looks
+   exactly like success, and the only thing that catches it is reading computed transforms
+   at several scroll positions and noticing they never differ. Anywhere a radius needs
+   clipping the declaration is now paired, `overflow:hidden;overflow:clip`, because `clip`
+   clips identically and creates no scroll container; the first line keeps older browsers
+   clipping, and those have no scroll-driven animation to lose.
+
+   `overflow-x:hidden` was ALSO removed from body here, but honesty about what was
+   measured: an A/B put it back and the timings were identical, so it was never the cause.
+   It stays off because `.scene{overflow-x:clip}` is the correct primitive for the job and
+   the align gate asserts scrollWidth on 7 pages at 9 widths, which is a check rather than
+   a blindfold.
+
+   THE GRAIN IS A DITHER BEFORE IT IS A LOOK. Every ambient pool below is a dark radial
+   gradient, and a dark radial gradient in 8 bits BANDS: you get visible concentric rings
+   on OLED and on any wide-gamut panel. Per-pixel noise breaks the quantisation, which is
+   the same fix film uses and the reason film never bands. It rides on the BACKGROUND
+   layers only, never as an overlay across the text, so it costs one texture lookup and no
+   compositing group. */
+body{margin:0;color:var(--ink);font-family:var(--body);
+     font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased;
+     font-variant-numeric:tabular-nums;
+     background-color:var(--ground);
+     background-image:var(--grain);
+     background-size:160px 160px}
+body{counter-reset:scene}
 a{color:inherit;text-decoration:none}
-:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:3px}
+/* Focus is a TRACE, not a glow: a hairline that follows the shape, plus one ring of
+   spill, which is how a lit indicator behaves and is legible on every surface here. */
+:focus-visible{outline:1px solid var(--teal);outline-offset:3px;border-radius:4px;
+               box-shadow:0 0 0 4px rgba(0,212,177,.16)}
 img{max-width:100%;height:auto}
 
 /* ── instrument bar ───────────────────────────────────── */
@@ -44,14 +118,27 @@ img{max-width:100%;height:auto}
 .bar{position:fixed;inset:0 0 auto;height:var(--bar);z-index:80;display:flex;align-items:center;
      justify-content:space-between;
      padding:0 max(var(--gut), calc((100vw - var(--wide)) / 2 + var(--gut)));
-     background:rgba(6,7,9,.76);backdrop-filter:saturate(170%) blur(20px);
+     background:rgba(5,7,11,.7);backdrop-filter:saturate(160%) blur(22px);
      -webkit-backdrop-filter:saturate(170%) blur(20px)}
 .bar::after{content:"";position:absolute;inset:auto 0 0 0;height:1px;background:var(--line);
             opacity:0;transition:opacity .3s}
 .bar.stuck::after{opacity:1}
-/* was 1px, which is invisible on a dark bar and reads as "not working". */
-.bar .prog{position:absolute;inset:auto auto 0 0;height:3px;background:var(--teal);width:0;
-           box-shadow:0 0 .5rem rgba(0,212,177,.55);transition:width .1s linear;border-radius:0 3px 3px 0}
+/* Was 1px, which is invisible on a dark bar and reads as "not working". It is now also
+   the NARROW-SCREEN half of a pair: above 95rem the scale in the margin says the same
+   thing with far more precision, so this one steps back to a hairline rather than
+   competing with it as a lit rule across the whole page. */
+.bar .prog{position:absolute;inset:auto auto 0 0;height:2px;width:0;
+           background:linear-gradient(90deg,rgba(0,212,177,.55),var(--teal));
+           box-shadow:0 0 .375rem rgba(0,212,177,.4);transition:width .1s linear;border-radius:0 2px 2px 0}
+/* Two position indicators is noise, so the bar's one steps aside where the scale exists.
+   It keys off `has-rail`, which the script sets only once the scale is actually BUILT,
+   never off the media query alone: if the script fails to load, hiding this on the
+   promise of a replacement that never arrived would leave the page with neither. */
+@media (min-width:95rem){.has-rail .bar .prog{opacity:0}}
+/* 🔒 BOTH CONDITIONS, NOT EITHER. `has-rail` says the script BUILT the scale; the query
+   says the margin is wide enough to SHOW it. Keying off the class alone hid this bar at
+   1440px, where the scale is display:none, and left that width with no position
+   indicator of any kind. Measured, not guessed: progOpacity 0 with railShown false. */
 .wordmark{display:flex;align-items:center;gap:.625rem;font-family:var(--display);font-weight:700;
           font-size:1.75rem;letter-spacing:-.035em}
 .led{width:.6875rem;height:.6875rem;border-radius:50%;background:var(--ink3);flex:none;
@@ -65,8 +152,64 @@ img{max-width:100%;height:auto}
 
 
 main{padding-top:var(--bar)}
+
+/* ══ THE SCALE ════════════════════════════════════════════════════════════════
+   A linear gauge down the left margin: a hairline, one tick per section at its true
+   proportional position in the document, and a needle that rides your actual scroll
+   position with the section's own label beside it.
+
+   It is not decoration and it is not a second navigation. It answers the question every
+   long page fails to answer, which is WHERE AM I AND HOW MUCH IS LEFT, and it answers it
+   the way an instrument does rather than with a progress bar. The ticks nearest the needle
+   brighten, the way a backlit scale does.
+
+   It costs no markup at all: the labels are read from each section's own eyebrow, so a
+   section added tomorrow appears on the scale with no second place to update and nothing
+   that can fall out of sync. It lives entirely in the margin the centred container already
+   leaves empty, so it takes nothing from the content, and below the width where that
+   margin exists it simply is not built. */
+.rail{position:fixed;left:0;top:var(--bar);bottom:0;width:var(--rail);z-index:60;
+      pointer-events:none;display:none;
+      font-family:var(--mono);font-size:.625rem;letter-spacing:.18em;text-transform:uppercase}
+@media (min-width:95rem){.js .rail{display:block}}
+.rail__line{position:absolute;left:50%;top:2rem;bottom:2rem;width:1px;transform:translateX(-.5px);
+      background:linear-gradient(180deg,transparent 0,var(--line) 9%,var(--line) 91%,transparent 100%)}
+.rail__tick{position:absolute;left:50%;width:.5625rem;height:1px;background:var(--line);
+      transform:translateX(-.5px);transition:opacity .3s var(--ease),background-color .3s var(--ease)}
+.rail__needle{position:absolute;left:0;right:0;height:0}
+.rail__needle i{position:absolute;left:50%;top:0;width:1.25rem;height:2px;margin-top:-1px;
+      transform:translateX(-50%);border-radius:2px;background:var(--teal);
+      box-shadow:0 0 .625rem rgba(0,212,177,.65)}
+.rail__needle b{position:absolute;left:50%;top:0;margin-left:1rem;transform:translateY(-50%);
+      color:var(--teal);font-weight:500}
+.rail__needle em{position:absolute;right:50%;top:0;margin-right:1rem;
+      transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;font-style:normal;
+      color:var(--ink3);white-space:nowrap;max-height:20rem;overflow:hidden;
+      text-shadow:0 1px 0 rgba(0,0,0,.6)}
+@media (prefers-reduced-motion:no-preference){
+  .rail__needle{transition:top .18s cubic-bezier(.3,.8,.4,1)}
+  .rail__needle em,.rail__needle b{transition:opacity .25s var(--ease)}
+}
+/* A FLAT BLACK PAGE READS AS EMPTY; A LIT ROOM READS AS DEEP. Each section carries one
+   very faint pool of ambient light, alternating side to side, so scrolling feels like
+   moving down a corridor rather than past a wall. It is 5% alpha at its brightest. The
+   grain above is what lets it be this subtle without banding into visible rings. */
 .scene{max-width:var(--wide);margin:0 auto;padding:clamp(2.75rem,6vw,4.25rem) var(--gut);
        position:relative;overflow-x:clip}
+.scene::before{content:"";position:absolute;z-index:-1;pointer-events:none;
+       inset:-4% 0;
+       background:radial-gradient(34% 42% at var(--pool,34%) 26%,
+                  rgba(132,172,230,.036) 0%, rgba(132,172,230,.012) 46%, transparent 100%)}
+/* 🔒 THE POOL MUST REACH ZERO AT THE SECTION'S OWN EDGE. .scene carries overflow-x:clip
+   (it is what keeps the hero devices from widening the page on a phone), so any pool wider
+   than its container gets guillotined and the cut reads as a visible vertical seam down
+   the page. Radius and centre are therefore chosen so the gradient is already transparent
+   where the clip happens: 34% radius at 34%, or at 66%, touches zero exactly at one edge
+   and dies well inside the other. */
+main > .scene:nth-of-type(even)::before{--pool:66%}
+.hero::before{inset:-4% 0;background:
+   radial-gradient(30% 40% at 70% 34%, rgba(0,212,177,.042) 0%, rgba(0,212,177,.012) 52%, transparent 100%),
+   radial-gradient(38% 46% at 38% 16%, rgba(132,172,230,.05) 0%, rgba(132,172,230,.014) 50%, transparent 100%)}
 /* section dividers deliberately removed: spacing carries the rhythm instead of a rule */
 .scene.tight{padding-top:0}
 /* 🔒 ONE WIDTH. Every scene, including long-form pages, shares the hero's container so the
@@ -89,9 +232,48 @@ main{padding-top:var(--bar)}
 .narrow{max-width:44rem}
 
 /* ── type ─────────────────────────────────────────────── */
+/* ══ THE SPECIFICATION RULE ═══════════════════════════════════════════════════
+   The signature of this site, and the thing that will never be confused with anyone
+   else's. Every section label is set the way a dimension is called out on an engineering
+   drawing: a tick, the label, a leader line running the full measure, and the section's
+   number at the end of it.
+
+   It earns its place three times over. It is unmistakably ours. It reads the page as a
+   numbered specification, which is exactly what this product claims to be. And it solves
+   a real compositional problem measured in the previous round: a left-aligned reading
+   measure leaves the right half of a long-form section empty, and the leader line is what
+   now spans it, so the section reads as one object at full width instead of as text
+   pushed against an edge.
+
+   The counter increments on the LABEL, not the section, so a section without one cannot
+   punch a hole in the numbering. */
 .eyebrow{font-family:var(--mono);font-size:.9375rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;
-         color:var(--teal);margin:0 0 1rem;display:flex;align-items:center;gap:.75rem}
-.eyebrow::before{content:"";width:2.25rem;height:2px;background:var(--teal);flex:none;opacity:.85}
+         color:var(--teal);margin:0 0 1rem;display:flex;align-items:center;gap:.75rem;
+         counter-increment:scene;
+         text-shadow:0 1px 0 rgba(0,0,0,.55)}
+.eyebrow::before{content:"";width:2.25rem;height:2px;background:var(--teal);flex:none;opacity:.85;
+         box-shadow:0 0 .625rem rgba(0,212,177,.45)}
+.eyebrow::after{content:counter(scene,decimal-leading-zero);
+         flex:1 1 0;min-width:3.5rem;text-align:right;
+         color:var(--ink3);font-weight:500;letter-spacing:.1em;
+         background-image:linear-gradient(90deg,
+            rgba(35,43,55,0) 0%, var(--line) 6%, var(--line) calc(100% - 3.4em),
+            rgba(35,43,55,0) calc(100% - 3.4em));
+         background-repeat:no-repeat;background-size:100% 1px;background-position:0 52%}
+/* On a narrow screen the label itself needs both lines, and a leader line fighting it for
+   the same row collapses to a three-character stub beside the number, which reads as
+   broken rather than as restrained. It takes its own row instead, at full width, so the
+   signature survives the phone rather than being switched off there. */
+@media (max-width:52rem){
+  /* 🔒 NOT flex-wrap. A wrapped flex line places items at their MAX-CONTENT size before it
+     shrinks anything, so the label jumped to its own row and left the tick stranded alone
+     above it: three rows where two were wanted. Dropping back to block flow lets the tick
+     sit inline with the label, the label wrap normally inside it, and the leader line take
+     the row beneath. */
+  .eyebrow{display:block}
+  .eyebrow::before{display:inline-block;vertical-align:.22em;margin-right:.75rem}
+  .eyebrow::after{display:block;margin-top:.4375rem;background-position:0 50%}
+}
 h1{font-family:var(--display);font-weight:700;font-size:clamp(2.125rem,6.4vw,3.875rem);line-height:1.02;
    letter-spacing:-.038em;margin:0 0 1.125rem;max-width:17ch;text-wrap:balance}
 h2{font-family:var(--display);font-weight:700;font-size:clamp(1.75rem,4.4vw,2.875rem);line-height:1.07;
@@ -116,7 +298,7 @@ hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0}
 .r{opacity:1;transform:none}
 
 /* ── cards / slabs ────────────────────────────────────── */
-.card{background:var(--surface);border-radius:12px;padding:1.25rem}
+.card{background-color:var(--e2);border-radius:12px;padding:1.25rem;box-shadow:var(--shadow-2)}
 /* min-width:0. A grid item defaults to min-width:auto, so a child with a max-width wider than
    the column (a 23rem card in a 350px phone column) EXPANDS the track, widens the page, and pushes
    every line of text off the right edge. Measured at 390px before this line existed. */
@@ -132,27 +314,69 @@ hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0}
 .tag.bld{background:rgba(77,157,240,.16);color:var(--azure)}
 .tag.you{background:var(--teal-dim);color:var(--teal)}
 
-/* ── rows ─────────────────────────────────────────────── */
-.rows{border-top:1px solid var(--line)}
-.row{display:grid;grid-template-columns:9.5rem 1fr;gap:1.25rem;padding:1.0625rem .25rem;
-     border-bottom:1px solid var(--line);align-items:baseline}
+/* ── THE LEDGER ────────────────────────────────────────────────────────────────
+   Five rows of loose text with hairlines between them is a list. The same five rows
+   milled into one plate, with the row that is ours LIT rather than merely tinted, is a
+   verdict. The argument this section makes is a comparison, so it is set as the
+   instrument that makes comparisons: one panel, scribed divisions, one lit reading. */
+.rows{background-color:var(--e1);background-image:var(--grain);background-size:160px 160px;
+      border-radius:12px;overflow:hidden;overflow:clip;box-shadow:var(--shadow-3);position:relative}
+.rows::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;padding:1px;
+  background:linear-gradient(var(--light-angle),var(--edge-lit) 0%,var(--edge-lit-soft) 15%,
+             transparent 38%,transparent 60%,var(--edge-shade-soft) 86%,var(--edge-shade) 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask-composite:exclude;z-index:2}
+.row{position:relative;display:grid;grid-template-columns:11rem 1fr;gap:1.25rem;
+     padding:1.125rem 1.5rem;border-bottom:1px solid var(--line-soft);align-items:baseline}
+.row:last-child{border-bottom:0}
 .row .who{font-size:1.0625rem;color:var(--ink3)}
 .row .does{font-size:1.0625rem;color:var(--ink2)}
-.row.us{background:linear-gradient(90deg,rgba(0,212,177,.075),transparent 72%)}
+.row.us{background-image:linear-gradient(90deg,rgba(0,212,177,.10),rgba(0,212,177,.028) 44%,transparent 76%)}
+.row.us::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--teal);
+     box-shadow:0 0 .75rem rgba(0,212,177,.6)}
 .row.us .who{color:var(--teal);font-weight:600}
 .row.us .does{color:var(--ink);font-weight:600}
-@media (max-width:36rem){.row{grid-template-columns:1fr;gap:.1875rem}}
+@media (max-width:36rem){.row{grid-template-columns:1fr;gap:.1875rem;padding:1rem 1.125rem}}
 
 /* ── chips ────────────────────────────────────────────── */
-.chips{display:flex;flex-wrap:wrap;gap:.5rem}
-.chip{font-size:.9375rem;padding:.5rem .9375rem;border-radius:100px;background:var(--surface);color:var(--ink2)}
-.chip b{color:var(--ink);font-weight:600}
-.btn{display:inline-block;background:var(--teal);color:#03110E;font-weight:600;font-size:1.0625rem;
-     padding:.875rem 1.75rem;border-radius:100px;border:0;cursor:pointer;font-family:var(--body);
-     transition:filter .2s,transform .2s}
-.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
-.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
-.btn.ghost:hover{box-shadow:inset 0 0 0 1px var(--ink3)}
+/* ── THE READOUTS ──────────────────────────────────────────────────────────────
+   The price is the most-read number on any product page and it was set as a grey pill.
+   A number this product wants believed should be set the way this product sets numbers:
+   as a reading on a panel, value above, engraved legend below. Same markup, no new
+   element: the <b> is the value, the rest of the text is its legend, and `order:-1`
+   lifts the value above the words that follow it in the source. */
+.chips{display:flex;flex-wrap:wrap;gap:.625rem}
+.chip{display:flex;flex-direction:column;align-items:flex-start;gap:.1875rem;
+      min-width:8.5rem;padding:.8125rem 1.125rem .75rem;border-radius:10px;
+      background-color:var(--e2);background-image:var(--grain);background-size:160px 160px;
+      box-shadow:var(--shadow-2);
+      font-family:var(--mono);font-size:.625rem;letter-spacing:.17em;text-transform:uppercase;
+      color:var(--ink3);text-shadow:0 1px 0 rgba(0,0,0,.6)}
+.chip b{order:-1;font-family:var(--mono);font-weight:500;font-size:1.1875rem;letter-spacing:-.008em;
+        text-transform:none;color:var(--ink);text-shadow:none}
+/* The buttons obey the same light as everything else: the filled one is a lit key that
+   throws its own colour onto the surface under it, the ghost one is a machined plate with
+   a lit top edge and a dark bottom edge. A control with no shadow reads as a sticker. */
+.btn{position:relative;display:inline-block;background:var(--teal);color:#03110E;font-weight:600;
+     font-size:1.0625rem;padding:.875rem 1.75rem;border-radius:100px;border:0;cursor:pointer;
+     font-family:var(--body);
+     box-shadow:0 1px 0 rgba(255,255,255,.28) inset, 0 2px 6px rgba(0,0,0,.5),
+                0 10px 26px -10px rgba(0,212,177,.5);
+     transition:filter .22s var(--ease),transform .4s var(--spring),box-shadow .3s var(--ease)}
+.btn:hover{filter:brightness(1.07);transform:translateY(-2px);
+     box-shadow:0 1px 0 rgba(255,255,255,.34) inset, 0 3px 8px rgba(0,0,0,.5),
+                0 16px 34px -12px rgba(0,212,177,.6)}
+.btn:active{transform:translateY(0)}
+.btn.ghost{background-color:var(--e2);color:var(--ink);
+     box-shadow:var(--shadow-2)}
+.btn.ghost::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;padding:1px;
+     background:linear-gradient(var(--light-angle),var(--edge-lit) 0%,var(--edge-lit-soft) 18%,
+                transparent 42%,transparent 60%,var(--edge-shade-soft) 86%,var(--edge-shade) 100%);
+     -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+     -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+     mask-composite:exclude}
+.btn.ghost:hover{background-color:var(--e3);box-shadow:var(--shadow-3)}
 
 /* ── prose (legal + long form) ────────────────────────── */
 .prose{max-width:40rem}
@@ -165,9 +389,14 @@ hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0}
 .prose .lede{font-size:1.0625rem;color:var(--ink2)}
 .prose .stamp{font-family:var(--mono);font-size:.75rem;color:var(--ink3);margin-bottom:2rem}
 
-/* ── footer ───────────────────────────────────────────── */
-footer{border-top:1px solid var(--line);max-width:var(--wide);margin:0 auto;
-       padding:2.5rem var(--gut) 4rem;font-size:.8125rem;color:var(--ink3)}
+/* ── footer ───────────────────────────────────────────────────────────────────
+   The closing edge is scribed rather than ruled: bright where the light falls and dark
+   where it does not, exactly like every other edge on this page, so the page ends the way
+   it is built rather than with a generic grey line. */
+footer{border-top:0;max-width:var(--wide);margin:0 auto;position:relative;
+       padding:2.75rem var(--gut) 4.5rem;font-size:.8125rem;color:var(--ink3)}
+footer::before{content:"";position:absolute;inset:0 var(--gut) auto;height:1px;
+       background:linear-gradient(90deg,var(--line) 0,rgba(35,43,55,.35) 62%,transparent 100%)}
 footer nav{display:flex;flex-wrap:wrap;gap:1.375rem;margin-bottom:1.25rem}
 footer nav a{transition:color .2s}
 footer nav a:hover{color:var(--ink)}
@@ -184,9 +413,14 @@ footer nav a:hover{color:var(--ink)}
 .stack{display:grid;gap:.75rem;max-width:100%;justify-items:stretch}
 
 /* ── the hero facts strip: closes the hero instead of leaving it dead ── */
-.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
-       border-radius:12px;overflow:hidden}
-.facts div{background:var(--surface);padding:1.125rem 1.25rem}
+/* The facts strip is ONE plate with scribed divisions, not three cards in a row: a real
+   panel is milled from a single piece and the divisions are cut into it. So the ring goes
+   round the outside only, and the internal lines are hairlines. */
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+       background:linear-gradient(var(--light-angle),rgba(210,228,255,.09),var(--line) 40%,rgba(0,0,0,.5));
+       border-radius:12px;overflow:hidden;overflow:clip;box-shadow:var(--shadow-3)}
+.facts div{background-color:var(--e2);padding:1.125rem 1.25rem}
+.facts div::after{content:none}
 .facts b{display:block;font-family:var(--display);font-weight:700;font-size:1.1875rem;
          letter-spacing:-.015em;margin-bottom:.25rem}
 .facts span{display:block;font-size:.9375rem;color:var(--ink3);line-height:1.45}
@@ -204,9 +438,14 @@ footer nav a:hover{color:var(--ink)}
   .hero .chips{animation:rise .7s var(--ease) .18s both}
   .hero .stack{animation:rise .8s var(--ease) .24s both}
   .hero .facts{animation:rise .8s var(--ease) .32s both}
-  .appcard,.side,.chip,.row,.facts div{transition:transform .3s var(--ease),background .3s var(--ease)}
-  .appcard:hover{transform:translateY(-2px)}
-  .row:hover{background:rgba(255,255,255,.02)}
+  /* A CONTROL YOU TOUCH ANSWERS WITH OVERSHOOT, because a real one has mass and a spring.
+     A surface that merely arrives settles without one. Two curves, two jobs. */
+  .appcard,.side,.chip,.facts div{
+    transition:transform .42s var(--spring),box-shadow .42s var(--ease),background-color .3s var(--ease)}
+  .appcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-4)}
+  .chip:hover{transform:translateY(-2px);box-shadow:var(--shadow-2)}
+  .row{transition:background-color .28s var(--ease)}
+  .row:hover{background-color:rgba(146,180,232,.035)}
 }
 
 /* ══ THE GALLERY ══════════════════════════════════════════════════════════════
@@ -232,9 +471,14 @@ footer nav a:hover{color:var(--ink)}
 
 .callouts{list-style:none;padding:0;margin:0;display:grid;gap:.625rem;width:100%;max-width:none}
 .callout{display:grid;grid-template-columns:1.5rem 1fr;gap:1rem;align-items:start;
-         background:var(--surface);border-radius:10px;padding:1.0625rem 1.125rem;
-         border-left:3px solid transparent;transition:background .25s var(--ease),border-color .25s var(--ease)}
-.callout:hover,.callout[data-active="true"]{background:var(--raised);border-left-color:var(--teal)}
+         background-color:var(--e2);border-radius:10px;padding:1.0625rem 1.125rem;
+         box-shadow:var(--shadow-1);
+         transition:background-color .3s var(--ease),box-shadow .3s var(--ease),transform .35s var(--spring)}
+.callout::before{content:"";position:absolute;left:0;top:12%;bottom:12%;width:2px;border-radius:2px;
+         background:var(--teal);opacity:0;transform:scaleY(.3);transform-origin:center;
+         transition:opacity .3s var(--ease),transform .35s var(--spring);z-index:1}
+.callout:hover,.callout[data-active="true"]{background-color:var(--e3);box-shadow:var(--shadow-2)}
+.callout:hover::before,.callout[data-active="true"]::before{opacity:1;transform:scaleY(1)}
 .callout .n{font-family:var(--mono);font-size:.75rem;color:var(--teal);padding-top:.1875rem}
 .callout b{display:block;font-size:1.0625rem;color:var(--ink);margin-bottom:.25rem;font-weight:600}
 .callout span{display:block;font-size:.9375rem;color:var(--ink3);line-height:1.55}
@@ -378,37 +622,99 @@ footer nav a:hover{color:var(--ink)}
   .hero-shot:hover .device--back{transform:translateX(-14%) translateY(-.25rem)}
 }
 
-/* ══ FUTURISTIC SURFACES ══════════════════════════════════════════════════════
-   A hairline that is brighter where light would fall, a faint inner sheen, and a
-   lift on hover. No neon, no glassmorphism blur: the material reads as machined,
-   which is the register the product argues in. */
-.appcard,.side,.card,.tier,.facts div,.callout,.console{position:relative}
-.appcard::after,.side::after,.tier::after,.console::after{content:"";position:absolute;inset:0;
-  border-radius:inherit;pointer-events:none;padding:1px;
-  background:linear-gradient(150deg,rgba(255,255,255,.14),rgba(255,255,255,.03) 34%,transparent 60%);
+/* ══ THE MACHINED SURFACE ═════════════════════════════════════════════════════
+   The single idea this whole design rests on: EVERY EDGE ON THIS PAGE AGREES ABOUT
+   WHERE THE LIGHT IS. Look at any card, anywhere, and the top-left edge is lit and the
+   bottom-right edge is a real dark line. That is what a machined plate does under a
+   window, it is why these read as objects rather than as rectangles, and it costs one
+   masked pseudo-element.
+
+   The old ring drew rgba(255,255,255,.14) fading to transparent and stopped. It had a lit
+   edge and NO shaded edge, which is the half of a bevel that actually carries the
+   three-dimensionality: without it a surface reads as a sticker.
+
+   The mask-composite trick makes the pseudo-element a 1px RING rather than a fill, so the
+   gradient runs around the border and the card's own background shows through the middle.
+   The -webkit- pair is not legacy dressing: Safari still needs it. */
+.surface,.appcard,.side,.card,.tier,.facts div,.callout,.console,.moment,.quote,.chip{position:relative}
+.surface::after,.appcard::after,.side::after,.tier::after,.console::after,
+.callout::after,.moment::after,.quote::after,.chip::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;padding:1px;
+  background:
+    linear-gradient(var(--light-angle),
+      var(--edge-lit) 0%, var(--edge-lit-soft) 15%, transparent 38%,
+      transparent 60%, var(--edge-shade-soft) 86%, var(--edge-shade) 100%);
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
   -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  mask-composite:exclude}
-.appcard{background:linear-gradient(168deg,#171b21 0%,var(--surface) 45%);border-radius:16px;
-         padding:1.375rem 1.5rem;box-shadow:0 1.5rem 4rem rgba(0,0,0,.55),0 0 0 1px var(--line)}
-.appcard .cap{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;
-              color:var(--ink3);margin:0 0 .875rem}
+  mask-composite:exclude;
+  transition:opacity .4s var(--ease)}
+/* the grain rides the card's own background too, for the same anti-banding reason */
+.appcard,.side,.card,.console,.moment,.callout,.facts div,.tier{
+  background-image:var(--grain);background-size:160px 160px}
+.appcard{background-color:var(--e2);
+         background-image:var(--grain),
+           linear-gradient(var(--light-angle),rgba(210,228,255,.045) 0%,transparent 46%);
+         background-size:160px 160px,100% 100%;
+         border-radius:16px;padding:1.375rem 1.5rem;box-shadow:var(--shadow-3)}
+/* ENGRAVED, NOT PRINTED. A one-pixel dark line under a small caption on a dark panel is
+   how a legend milled into an instrument's face catches light. It applies ONLY to the
+   mono instrument labels, never to body copy, where it would only smear the text. */
+.appcard .cap,.callout .n{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;
+              color:var(--ink3);margin:0 0 .875rem;text-shadow:0 1px 0 rgba(0,0,0,.6)}
+.callout .n{margin:0;text-transform:none}
 .appcard .said{font-size:.875rem;color:var(--ink2);line-height:1.5;margin:.875rem 0 0;
                padding-top:.875rem;border-top:1px solid var(--line-soft)}
-.side{background:linear-gradient(168deg,#171b21 0%,var(--surface) 55%);min-height:15rem;border-radius:12px;padding:1.375rem 1.5rem;display:flex;flex-direction:column}
+.side{background-color:var(--e2);
+       background-image:var(--grain),linear-gradient(var(--light-angle),rgba(210,228,255,.04) 0%,transparent 52%);
+       background-size:160px 160px,100% 100%;
+       min-height:15rem;border-radius:12px;padding:1.375rem 1.5rem;display:flex;flex-direction:column;
+       box-shadow:var(--shadow-2)}
 
-/* ══ REVEAL, WITH A FAILSAFE ══════════════════════════════════════════════════
-   🔒 CONTENT MUST APPEAR EVEN IF THE OBSERVER NEVER FIRES. An earlier build gated
-   every block on IntersectionObserver and 23 of 26 elements on one page stayed
-   invisible forever. So: the hiding class is applied by SCRIPT (no script, no
-   hiding), and a 1.6s timer reveals everything regardless of what the observer
-   did. The animation is a bonus on top of a page that already works. */
+/* ══ MOTION ═══════════════════════════════════════════════════════════════════
+   TWO SYSTEMS, AND ONLY ONE RUNS. Where the browser has scroll-driven animations the
+   page uses them: no observer, no scroll listener, no main-thread work at all, because a
+   view() timeline is evaluated by the compositor. Where it does not, the old
+   IntersectionObserver path is left exactly as it was, with its failsafe.
+
+   🔒 THE SCROLL-DRIVEN PATH ANIMATES TRANSFORM AND NOTHING ELSE, ON PURPOSE. The standing
+   law here is that content must never be hidden by an animation: an earlier build gated
+   every block on IntersectionObserver and 23 of 26 elements on one page stayed invisible
+   forever. A transform-only keyframe cannot reproduce that failure even in principle. If a
+   timeline never advances, the worst case is a block sitting 28px low. That is a cosmetic
+   bug; invisible content is a catastrophe. The fade is the least interesting part of a
+   reveal anyway, and settling without one reads as mass rather than as appearing.
+   The @supports guard is load-bearing: without it, a browser that does not know
+   animation-timeline would run these keyframes once against the document timeline. */
+@supports (animation-timeline:view()){
+  @media (prefers-reduced-motion:no-preference){
+    @keyframes settle{from{transform:translateY(1.75rem)}to{transform:none}}
+    @keyframes settle-near{from{transform:translateY(.875rem)}to{transform:none}}
+    .scene > .head,.scene > .pair,.scene > .gallery,.scene > .console,.scene > .dial,
+    .scene > .chips,.scene > .pagehead,.scene > h2,.scene > p,.quote,.refuse,
+    .facts,.rows .row,.grid > *,ol.loop li,.callouts > *,.versus > *{
+      animation:settle linear both;animation-timeline:view();animation-range:entry 0% cover 24%}
+    /* 🔒 `entry 68%` MEANT THE MOTION WAS OVER BEFORE YOU COULD SEE IT. The `entry` phase
+       is the slice of a view timeline during which the element crosses the scrollport
+       EDGE, and for a 100px row in a 970px viewport that is under a tenth of the range: by
+       the time the row was on screen the animation had already reported `finished` and
+       every transform read back as identity. Everything resolved correctly and nothing
+       moved, which is the failure that looks exactly like success. The end is measured in
+       `cover` instead, which is the element's whole traversal of the scrollport, so a
+       quarter of it is real distance you can watch. Verified by reading computed
+       transforms mid-scroll, not by looking at it. */
+    .rows .row,ol.loop li,.callouts > *,.grid > *{animation-name:settle-near}
+  }
+  /* the JS path is inert here: nothing styles .reveal, so the class it toggles does nothing */
+  .anim .reveal{opacity:1;transform:none;transition:none}
+}
+@supports not (animation-timeline:view()){
 .anim .reveal{opacity:0;transform:translateY(2.25rem);
   transition:opacity .75s var(--ease),transform .75s var(--ease)}
 .anim .reveal.in{opacity:1;transform:none}
 .anim .reveal.d1{transition-delay:.1s}
 .anim .reveal.d2{transition-delay:.2s}
 .anim .reveal.d3{transition-delay:.3s}
+}
 @media (prefers-reduced-motion:reduce){
   .anim .reveal{opacity:1;transform:none;transition:none}
 }
@@ -425,7 +731,7 @@ footer nav a:hover{color:var(--ink)}
    SUPERSEDES the earlier "CENTRED, NOT SPLIT" note: what that note was fixing was a
    TWO-COLUMN header stranding its qualifier on the far right. A single left column
    does not do that, and the container is no longer wide enough for it to. */
-.head{display:flex;flex-direction:column;align-items:flex-start;text-align:left;
+.head{display:flex;flex-direction:column;align-items:stretch;text-align:left;
       margin:0 0 clamp(2rem,4vw,3rem);max-width:none;gap:.5rem}
 .head > *{max-width:100%}
 .head h2{max-width:24ch}
@@ -433,7 +739,7 @@ footer nav a:hover{color:var(--ink)}
 
 /* page heroes on the inner pages: centred, because they have no companion visual
    beside them the way the home page hero has the device */
-.pagehead{display:flex;flex-direction:column;align-items:flex-start;text-align:left;
+.pagehead{display:flex;flex-direction:column;align-items:stretch;text-align:left;
           margin:0;max-width:none}
 .pagehead h1{max-width:20ch}
 .pagehead .sub{max-width:56ch}
