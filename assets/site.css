@@ -10,11 +10,22 @@
   --display:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --body:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  --bar:5rem; --gut:clamp(1.25rem,3.5vw,3rem); --wide:min(110rem,96vw);
+  --bar:5rem; --gut:clamp(1.25rem,3.5vw,3rem); --wide:min(80rem,100vw);
   --ease:cubic-bezier(.2,.7,.3,1);
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+/* THE SCROLLBAR MAKES TWO DIFFERENT BOXES, AND THE BAR AND THE CONTENT LIVE IN
+   DIFFERENT ONES. A fixed element is laid out in the viewport (100vw, scrollbar
+   included); .scene is centred in the document's content box (100vw minus the
+   scrollbar). Where a scrollbar takes layout width, as on Windows and Linux, those two
+   boxes disagree and the bar's 100vw arithmetic lands 7 to 15px off the headings.
+   Reserving the gutter on BOTH edges makes the two boxes concentric, so the offsets
+   cancel exactly, whenever the container is actually at its 80rem cap. Below that the
+   scene fills the content box instead of centring in it, and the cancellation needs the
+   gutter GONE, hence the query. macOS and iOS use overlay scrollbars and were always
+   exact; this is for everyone else. */
+html{-webkit-text-size-adjust:100%;scrollbar-gutter:stable both-edges}
+@media (max-width:80rem){html{scrollbar-gutter:auto}}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
      font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;
@@ -24,8 +35,15 @@ a{color:inherit;text-decoration:none}
 img{max-width:100%;height:auto}
 
 /* ── instrument bar ───────────────────────────────────── */
+/* 🔒 THE BAR SHARES THE SCENE'S LEFT EDGE. It is full-bleed and fixed, so a plain
+   `padding:0 var(--gut)` put the wordmark at the VIEWPORT edge while every heading on
+   every page sat at the centred container's edge. Measured 2026-08-23 at 1920px: the
+   wordmark was at x=48 and every section's content box at x=128, an 80px disagreement
+   on every page, which is the misalignment you notice first because it is at the top.
+   The padding now reproduces the container's own centring offset. */
 .bar{position:fixed;inset:0 0 auto;height:var(--bar);z-index:80;display:flex;align-items:center;
-     justify-content:space-between;padding:0 var(--gut);
+     justify-content:space-between;
+     padding:0 max(var(--gut), calc((100vw - var(--wide)) / 2 + var(--gut)));
      background:rgba(6,7,9,.76);backdrop-filter:saturate(170%) blur(20px);
      -webkit-backdrop-filter:saturate(170%) blur(20px)}
 .bar::after{content:"";position:absolute;inset:auto 0 0 0;height:1px;background:var(--line);
@@ -82,7 +100,7 @@ h3{font-family:var(--display);font-weight:700;font-size:1.1875rem;letter-spacing
 .sub{font-size:clamp(1.0625rem,1.5vw,1.375rem);color:var(--ink2);max-width:46ch;margin:0}
 p{margin:0 0 1.125rem;color:var(--ink2);max-width:44rem;font-size:1.0625rem}
 p:last-child{margin-bottom:0}
-p.small{font-size:.9375rem;color:var(--ink3);max-width:54rem;margin-left:auto;margin-right:auto}
+p.small{font-size:.9375rem;color:var(--ink3);max-width:60ch;margin-left:0;margin-right:0}
 strong{color:var(--ink);font-weight:600}
 em{font-style:normal;color:var(--teal)}
 hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0}
@@ -195,10 +213,13 @@ footer nav a:hover{color:var(--ink)}
    One real capture, annotated. A restrained device outline in the app's own
    materials, not a glossy 3D render floating at an angle: this product argues from
    measurement, and the phone-at-an-angle is the brochure move we are not making. */
-.gallery{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4.5rem);
-         align-items:center;margin-top:2.75rem;justify-items:center}
+.gallery{display:grid;grid-template-columns:auto 1fr;gap:clamp(2rem,5vw,4.5rem);
+         align-items:center;margin-top:2.75rem;justify-items:stretch}
 .gallery > *{min-width:0}
 @media (max-width:60rem){.gallery{grid-template-columns:1fr;gap:2.5rem;justify-items:center}}
+/* the gallery device is the only one sized by WIDTH: its section has no height budget
+   to fit inside, so the constraint there is the column, not the fold. */
+.gallery .device{justify-self:center;width:min(17rem,70vw);height:auto}
 
 
 .pin{position:absolute;width:1.375rem;height:1.375rem;border-radius:50%;background:var(--teal);
@@ -209,7 +230,7 @@ footer nav a:hover{color:var(--ink)}
 .pin[data-active="true"]{transform:translate(-50%,-50%) scale(1.25);
      box-shadow:0 0 0 7px rgba(0,212,177,.3),0 0 1.5rem rgba(0,212,177,.7)}
 
-.callouts{list-style:none;padding:0;margin:0;display:grid;gap:.625rem;width:100%;max-width:38rem}
+.callouts{list-style:none;padding:0;margin:0;display:grid;gap:.625rem;width:100%;max-width:none}
 .callout{display:grid;grid-template-columns:1.5rem 1fr;gap:1rem;align-items:start;
          background:var(--surface);border-radius:10px;padding:1.0625rem 1.125rem;
          border-left:3px solid transparent;transition:background .25s var(--ease),border-color .25s var(--ease)}
@@ -219,69 +240,142 @@ footer nav a:hover{color:var(--ink)}
 .callout span{display:block;font-size:.9375rem;color:var(--ink3);line-height:1.55}
 .callout code{font-family:var(--mono);font-size:.8125em;color:var(--ink2)}
 
-/* ── the hero product shot: the real phone, with one rendered card overlapping it ── */
-.hero-shot{position:relative;display:flex;justify-content:center;align-items:center}
-.hero-shot .phone{width:min(27rem,80vw)}
-.hero-shot .appcard.float{position:absolute;right:-1.5rem;bottom:3rem;width:min(20rem,68vw);
-  z-index:5;padding:1.125rem 1.25rem;
-  box-shadow:0 1.75rem 4.5rem rgba(0,0,0,.8),0 0 0 1px var(--line)}
+/* ══ THE HERO PRODUCT SHOT ════════════════════════════════════════════════════
+   THE DEVICE IS SIZED BY HEIGHT, NOT WIDTH, because the hero's constraint is height.
+   The previous build set `width:min(27rem,80vw)`, which at 1440x900 produced a device
+   432 x 939 px inside a hero with roughly 820 px of room: 120 px of phone and the whole
+   floating card fell below the fold, which is why you could not see it properly. Height
+   first, width derived from the aspect ratio, so it can never outgrow its own hero. */
+.hero-shot{position:relative;display:flex;justify-content:center;align-items:center;
+  --device-h:clamp(19rem, calc(100svh - 21rem), 36rem);
+  --device-w:calc(var(--device-h) * 0.47768);   /* 1295 / 2711 */
+  height:var(--device-h)}
+.devices{position:relative;height:100%;width:100%}
+.devices .device{position:absolute;top:0;left:50%;height:100%}
+/* the front device sits left of centre so the second one reads from behind it on the
+   right: the offset, not a rotation, is what sells the depth. */
+.devices .device--front{transform:translateX(-72%);z-index:2}
+.devices .device--back {transform:translateX(-14%);height:87%;top:9%;z-index:1;opacity:.94}
+.devices .device--back .device__glass{filter:brightness(.52) saturate(.9) contrast(.97)}
+.devices .device--back .device__body{filter:brightness(.78)}
+
+/* the third plane. Anchored to the FRONT device's own left edge, in the device's units,
+   so the overlap holds at every device height instead of drifting with a fixed offset. */
+.hero-shot .appcard.float{position:absolute;z-index:5;padding:.9375rem 1.0625rem;
+  left:calc(50% - .72 * var(--device-w) - 2.25rem);
+  bottom:-3.25rem;
+  width:min(16rem, calc(var(--device-w) + 3rem));
+  box-shadow:0 1.75rem 4.5rem rgba(0,0,0,.85),0 0 0 1px var(--line)}
 .hero-shot .appcard.float .cap{margin-bottom:.75rem}
-.hero-shot .appcard.float .lift{padding:.4375rem 0}
+.hero-shot .appcard.float .lift{padding:.375rem 0}
+.hero-shot .appcard.float .nm{font-size:.8125rem}
+.hero-shot .appcard.float .vd{font-size:.75rem}
 @media (max-width:72rem){
+  .hero-shot{height:auto;flex-direction:column;gap:1rem}
+  .hero-shot .devices{height:var(--device-h)}
   .hero-shot .appcard.float{position:static;width:100%;margin-top:1rem}
-  .hero-shot{flex-direction:column;gap:1rem}
 }
 
 /* ══ THE DEVICE ═══════════════════════════════════════════════════════════════
-   A real phone, built in CSS rather than a stock mockup PNG: a brushed metal rail
-   that catches light on the long edges, a black inner rim, the screen inset, a
-   floating island, one diagonal glass sweep, and a bottom dissolve so the device
-   melts into the page instead of sitting on it like a sticker. Nothing here is an
-   image, so it stays sharp at any density and costs no bytes. */
-.phone{position:relative;width:min(24rem,84vw);aspect-ratio:1206/2622;
-  border-radius:3.4rem;padding:.28rem;isolation:isolate;
+   REBUILT 2026-08-23 after measuring the old one against a real product photograph
+   at matched device width. Every dimension below is a PERCENTAGE of the device width,
+   so the device scales as one object. The previous build wrote the corner radius in
+   rem, so the corner stayed 54 px while the device grew: forced to 590 px wide it drew
+   a 9.2% corner where a real iPhone is 17.8%, and that one number is most of why it
+   read as hand drawn.
+
+   GEOMETRY, from Apple's published iPhone 16 Pro dimensions, not from taste:
+     device 71.5 x 149.6 mm; display 1206 x 2622 px at 460 ppi = 66.6 x 144.8 mm,
+     so 18.11 px per mm, and the frame is (71.5 - 66.6) / 2 = 2.45 mm per side.
+     Display corner radius 62 pt x 3 = 186 px, device corner radius 186 + 44 = 230 px.
+   Working in display pixels the device is 1295 x 2711 with a 230 px corner; the metal
+   band is 15 px (a 4.5 px specular lip plus a 10.5 px face) and the black bezel under
+   the glass is 29.5 px. 15 + 29.5 = 44.5 per side. ✓
+
+   🔒 TWO THINGS HERE WERE TRACED OFF THE PHOTOGRAPH BECAUSE TWO GUESSES WERE WRONG:
+   1. THE CORNER IS A CIRCULAR ARC, NOT A SQUIRCLE. A two-parameter fit over 86 traced
+      rows of the photograph returns exponent 2.02 at 0.34 px rms; a superellipse of
+      n = 5 is out by 13 px. So border-radius is the right primitive. But it must be
+      written as a PAIR of percentages, because one percentage on a 0.478-aspect box
+      makes the horizontal and vertical radii differ and turns the arc into an ellipse.
+   2. THE RAIL IS A BAND, NOT A HAIRLINE, AND IT NEVER REACHES WHITE. Traced luminance
+      across the real rail: 26 -> 88 -> 122 -> 156 -> 51 -> 19 over 7 px, so it peaks
+      at 156 to 185 of 255 and falls to black at the glass. The old rail ran #e7ecf2 to
+      #dfe6ee, luminance 230+ at BOTH ends, which is why it read as a chrome picture
+      frame rather than titanium.
+   The old build also drew its two "antenna bands" as 2 px lines across the FULL device
+   width at 8.4% and 91.6% of the height, which put two bright horizontal rules straight
+   across the app screenshot. A real antenna break is on the metal only, and at the size
+   this site renders a device it is under half a pixel, so it is not drawn at all. */
+.device{position:relative;aspect-ratio:1295/2711;height:100%;width:auto;flex:none;
+  padding:.3475%;                                   /* 4.5px of 1295: the specular lip */
+  border-radius:17.761% / 8.484%;                   /* r=230 in 1295 x 2711 */
+  background:linear-gradient(147deg,
+    #ffffff 0%, #dbe3ec 3%, #97a1af 10%, #616b78 20%,
+    #464e59 33%, #3a414b 46%, #434b56 58%, #5a6470 70%,
+    #8b95a3 82%, #c8d1dc 92%, #ffffff 100%);
+  filter:
+    drop-shadow(0 .0625rem .125rem rgba(0,0,0,.6))
+    drop-shadow(0 1.25rem 1.75rem rgba(0,0,0,.7))
+    drop-shadow(0 2.75rem 4.5rem rgba(0,0,0,.55))}
+.device__body{width:100%;height:100%;
+  padding:.8339%;                                   /* 10.5px of 1259: the band face */
+  border-radius:17.535% / 8.346%;                   /* r=225.5 in 1286 x 2702 */
   background:
-    linear-gradient(158deg,
-      #e7ecf2 0%, #aab4c0 5%, #7d8794 11%, #59636f 20%,
-      #3f4854 34%, #39424d 50%, #414a56 66%,
-      #5d6774 80%, #98a3b0 90%, #dfe6ee 100%);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.22),
-    0 .0625rem .0625rem rgba(255,255,255,.30) inset,
-    0 3rem 6rem -1rem rgba(0,0,0,.85),
-    0 1rem 3rem rgba(0,0,0,.6);
-}
-/* the ambient glow the device sits in */
-.phone::before{content:"";position:absolute;inset:-10% -4% -8%;z-index:-1;pointer-events:none;
-  background:radial-gradient(50% 42% at 50% 42%, rgba(0,212,177,.16), rgba(0,212,177,.05) 45%, transparent 72%);
-  filter:blur(12px)}
-.phone .screen{position:relative;width:100%;height:100%;border-radius:3.15rem;overflow:hidden;
-  background:var(--ground);box-shadow:0 0 0 1.5px #05070a, 0 0 0 3px rgba(0,0,0,.9)}
-.phone .screen img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
-/* the island */
-.phone .screen::before{content:"";position:absolute;top:1.15%;left:50%;transform:translateX(-50%);
-  width:30%;height:3.3%;background:#000;border-radius:100px;z-index:3;
-  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.06),
-             inset -2.6rem 0 0 -2.15rem #12161c,
-             inset -2.6rem 0 0 -2.3rem #2b3a52}
-/* one diagonal glass sweep, and a dissolve at the foot */
-.phone .screen::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:linear-gradient(to bottom, rgba(255,255,255,.04) 0%, transparent 6%)}
-/* Physical buttons, in the real places. LEFT edge top to bottom: Action, Volume Up,
-   Volume Down. RIGHT edge: the side button, longer and lower. Percentages are of the
-   device height so they hold at any size. */
-.phone .btn{position:absolute;width:2.5px;border-radius:3px;
-  background:linear-gradient(90deg,#8b96a3 0%,#5a6470 40%,#39414b 100%);
-  box-shadow:-1px 0 1px rgba(0,0,0,.55)}
-.phone .btn.action{left:-2.5px;top:18.4%;height:3.4%}
-.phone .btn.volup {left:-2.5px;top:25.2%;height:5.6%}
-.phone .btn.voldn {left:-2.5px;top:32.4%;height:5.6%}
-.phone .btn.side  {left:auto;right:-2.5px;top:25.8%;height:9.2%;
-  background:linear-gradient(270deg,#8b96a3 0%,#5a6470 40%,#39414b 100%);
-  box-shadow:1px 0 1px rgba(0,0,0,.55)}
+    linear-gradient(90deg, rgba(255,255,255,.14) 0 6%, transparent 26%,
+                           transparent 74%, rgba(0,0,0,.30) 94% 100%),
+    linear-gradient(147deg,
+      #c3ccd7 0%, #8892a0 6%, #59636f 16%, #3c434e 30%,
+      #2f353d 46%, #2a3039 57%, #333a44 68%, #49515d 79%,
+      #78828f 90%, #b0bac6 100%)}
+.device__glass{position:relative;width:100%;height:100%;
+  padding:2.3320%;                                  /* 29.5px of 1265: the black bezel */
+  border-radius:16.996% / 8.019%;                   /* r=215 in 1265 x 2681 */
+  background:#000;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.045)}
+/* The wrapper's box IS the screen: it is the content box of the glass, so anything
+   pinned to it (the gallery's callout pins) can keep using screen-relative percentages. */
+.device__screenwrap{position:relative;width:100%;height:100%}
+.device__screen{display:block;width:100%;height:100%;object-fit:cover;object-position:top center;
+  border-radius:15.423% / 7.094%;                   /* r=186 in 1206 x 2622, Apple's own */
+  background:var(--ground)}
+.device__screenwrap .pin{z-index:6}
+/* The Dynamic Island, at its real size: 125 x 36.7 pt inset 11 pt from the top of a
+   402 x 874 pt display. Expressed against the glass box, that is 29.64% x 4.103% at
+   2.331% from the top. It is drawn because the capture leaves that area flat black, and
+   a phone whose island is missing reads as a picture of a screen rather than a phone. */
+.device__island{position:absolute;top:2.331%;left:50%;transform:translateX(-50%);
+  width:29.64%;height:4.103%;border-radius:100px;background:#000;z-index:3;
+  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.05)}
+.device__island::after{content:"";position:absolute;top:50%;right:13%;transform:translateY(-50%);
+  width:2.9%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%, #35455f 0%, #16202e 55%, #0a0f16 100%)}
+/* one diagonal sweep of light across the glass, over the bezel as well as the screen */
+.device__sheen{position:absolute;inset:0;z-index:4;pointer-events:none;
+  border-radius:inherit;
+  background:linear-gradient(123deg, rgba(255,255,255,.075) 0%, rgba(255,255,255,.028) 11%,
+                                     rgba(255,255,255,0) 27%)}
+/* Physical keys, in their real places, as percentages of the DEVICE so they hold at any
+   size. Left rail top to bottom: Action, Volume Up, Volume Down. Right rail: the Side
+   button, then Camera Control below it. */
+.device__key{position:absolute;width:.58%;border-radius:.29% / .14%;z-index:0;
+  background:linear-gradient(90deg,#6a7480 0%,#464e59 45%,#2b323b 100%)}
+/* 🔒 EVERY MODIFIER CARRIES THE BLOCK NAME. These were written as bare `.act .vup .side`,
+   and `.side` is already the evidence-dial's comparison card: min-height 15rem, padding
+   1.5rem. The side button of both hero devices therefore rendered as a 48 x 240 px grey
+   slab hanging below the phone and across the facts strip. A bare modifier class is a
+   collision waiting for a stylesheet to grow. */
+.device__key--act{left:-.58%;top:17.4%;height:2.7%}
+.device__key--vup{left:-.58%;top:22.4%;height:4.7%}
+.device__key--vdn{left:-.58%;top:28.4%;height:4.7%}
+.device__key--pwr{left:auto;right:-.58%;top:21.4%;height:8.3%;
+  background:linear-gradient(270deg,#6a7480 0%,#464e59 45%,#2b323b 100%)}
+.device__key--cam{left:auto;right:-.46%;top:33.6%;height:3.5%;width:.46%;
+  background:linear-gradient(270deg,#8b95a2 0%,#5a6470 45%,#363d47 100%)}
 @media (prefers-reduced-motion:no-preference){
-  .phone{transition:transform .6s var(--ease)}
-  .hero-shot:hover .phone{transform:translateY(-4px)}
+  .device{transition:transform .6s var(--ease)}
+  .hero-shot:hover .device--front{transform:translateX(-72%) translateY(-.5rem)}
+  .hero-shot:hover .device--back{transform:translateX(-14%) translateY(-.25rem)}
 }
 
 /* ══ FUTURISTIC SURFACES ══════════════════════════════════════════════════════
@@ -323,34 +417,32 @@ footer nav a:hover{color:var(--ink)}
 /* 🔒 CENTRED, NOT SPLIT. A two-column header stranded the qualifier on the far right
    with a dark gap between, which reads as "content is on the left". The header is now a
    single centred column and the content below it fills the width symmetrically. */
-.head{display:flex;flex-direction:column;align-items:center;text-align:center;
-      margin:0 auto clamp(2rem,4vw,3rem);max-width:52rem}
-.head .eyebrow{justify-content:center}
+/* 🔒 ONE AXIS. Every block on this site starts on the same left edge: the wordmark,
+   every heading, every card, every list, every footer link. The previous build mixed
+   axes inside single sections (a centred 832px header sitting over a 1664px full-bleed
+   slab, left-aligned prose followed by a centred caption 400px further right) and that
+   mixture, not any one element, is what reads as "not aligned and uniform".
+   SUPERSEDES the earlier "CENTRED, NOT SPLIT" note: what that note was fixing was a
+   TWO-COLUMN header stranding its qualifier on the far right. A single left column
+   does not do that, and the container is no longer wide enough for it to. */
+.head{display:flex;flex-direction:column;align-items:flex-start;text-align:left;
+      margin:0 0 clamp(2rem,4vw,3rem);max-width:none;gap:.5rem}
+.head > *{max-width:100%}
 .head h2{max-width:24ch}
-.head .sub{max-width:52ch}
+.head .sub{max-width:56ch}
 
 /* page heroes on the inner pages: centred, because they have no companion visual
    beside them the way the home page hero has the device */
-.pagehead{display:flex;flex-direction:column;align-items:center;text-align:center;
-          margin:0 auto;max-width:56rem}
-.pagehead .eyebrow{justify-content:center}
+.pagehead{display:flex;flex-direction:column;align-items:flex-start;text-align:left;
+          margin:0;max-width:none}
 .pagehead h1{max-width:20ch}
-.pagehead .sub{max-width:54ch}
-/* long-form bodies sit in a centred measure so no page hugs an edge */
-.prose{max-width:44rem;margin-left:auto;margin-right:auto}
+.pagehead .sub{max-width:56ch}
+/* Long-form bodies keep a reading MEASURE, but they keep the page's left edge too.
+   `margin-left:auto` centred a 44rem column inside a 104rem section, which put its
+   first character 400px right of the h2 directly above it. */
+.prose{max-width:44rem;margin-left:0;margin-right:0}
 
 /* page-scoped refinements live here, scoped, so nothing shadows the base rule */
-.hiw-card{max-width:22rem}
-@media (max-width:52rem){.hiw-card{max-width:none}}
-
-/* Antenna bands: two hairlines across the rail near each end, the detail that makes a
-   metal frame read as machined rather than drawn. */
-.phone .band{position:absolute;left:-1px;right:-1px;height:2px;z-index:4;pointer-events:none;
-  background:linear-gradient(90deg,rgba(30,36,44,.85),rgba(60,70,82,.35) 14%,
-             transparent 26%,transparent 74%,rgba(60,70,82,.35) 86%,rgba(30,36,44,.85))}
-.phone .band.top{top:8.4%}
-.phone .band.bot{bottom:8.4%}
-/* the curved glass catching light along the very edge of the display */
-.phone .screen{box-shadow:0 0 0 1px #04060a,0 0 0 2px rgba(0,0,0,.92),
-               inset 0 0 0 .5px rgba(255,255,255,.07),
-               inset 0 1px 2px rgba(255,255,255,.05)}
+/* the card fills its column: a 22rem cap inside an 808px column left 456px of dead
+   space to the right of every card on /how-it-works. */
+.hiw-card{max-width:none}
