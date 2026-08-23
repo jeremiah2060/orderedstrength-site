@@ -1,90 +1,165 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
-<title>Verify an OrderedStrength receipt</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<script>document.documentElement.className="js";</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verify a receipt · OrderedStrength</title>
+<meta name="description" content="Paste a receipt copied from OrderedStrength and check whether the prediction inside it is byte for byte the one that was sealed before the set.">
+<meta name="theme-color" content="#060709">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
 <style>
-  :root{--bg:#0f1113;--fg:#e8e6e3;--dim:#9aa0a6;--ok:#3ddc84;--bad:#ff6b6b;--line:#26292d;--card:#16191c}
-  @media (prefers-color-scheme:light){:root{--bg:#fbfbfa;--fg:#1a1c1e;--dim:#5f6368;--line:#e3e5e8;--card:#fff}}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;padding:2rem 1.25rem}
-  main{max-width:52rem;margin:0 auto}
-  h1{font-size:1.5rem;margin:0 0 .35rem}
-  p.sub{color:var(--dim);margin:0 0 1.5rem}
-  textarea{width:100%;min-height:11rem;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:.85rem;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;resize:vertical}
-  button{margin-top:.85rem;background:var(--fg);color:var(--bg);border:0;border-radius:8px;padding:.7rem 1.3rem;font-size:1rem;font-weight:600;cursor:pointer}
-  button:disabled{opacity:.5;cursor:default}
-  #out{margin-top:1.5rem}
-  .r{background:var(--card);border:1px solid var(--line);border-left-width:4px;border-radius:8px;padding:.85rem 1rem;margin-bottom:.6rem}
-  .r.ok{border-left-color:var(--ok)} .r.bad{border-left-color:var(--bad)}
-  .v{font-weight:700} .v.ok{color:var(--ok)} .v.bad{color:var(--bad)}
-  .why{color:var(--dim);font-size:.9rem;margin-top:.2rem}
-  code{font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--dim);word-break:break-all}
-  details{margin-top:2rem;color:var(--dim);font-size:.9rem}
-  summary{cursor:pointer}
+textarea{width:100%;min-height:11rem;background:var(--surface);color:var(--ink);
+  border:1px solid var(--line);border-radius:10px;padding:.875rem;
+  font-family:var(--mono);font-size:.8125rem;line-height:1.55;resize:vertical}
+textarea:focus{outline:none;border-color:var(--teal)}
+.actions{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin-top:.875rem}
+#out{margin-top:1.75rem;display:grid;gap:.625rem}
+.res{background:var(--surface);border-radius:10px;padding:.9375rem 1.0625rem;
+     border-left:3px solid var(--line)}
+.res.ok{border-left-color:var(--teal)} .res.bad{border-left-color:var(--red)}
+.res .v{font-family:var(--mono);font-size:.8125rem;font-weight:500;letter-spacing:.06em}
+.res.ok .v{color:var(--teal)} .res.bad .v{color:var(--red)}
+.res .idx{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);margin-left:.5rem}
+.res .why{font-size:.875rem;color:var(--ink2);margin:.3125rem 0 0;line-height:1.5}
+.res code{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);word-break:break-all;
+          display:block;margin-top:.375rem}
+details.limits{margin-top:2.5rem;border-top:1px solid var(--line);padding-top:1.5rem}
+details.limits summary{font-size:.875rem;color:var(--ink2);cursor:pointer}
+details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-width:44rem}
 </style>
+</head>
+<body>
+
+<div class="bar">
+  <a class="wordmark" href="/"><span class="led" id="led" aria-hidden="true"></span>OrderedStrength</a>
+  <nav>
+    <a href="/how-it-works/">How it works</a>
+    <a href="/record/" class="opt">The record</a>
+    <a href="/verify/" aria-current="page">Verify</a>
+  </nav>
+  <div class="prog" aria-hidden="true"></div>
+</div>
+
 <main>
-  <h1>Verify a receipt</h1>
-  <p class="sub">Paste a receipt copied from OrderedStrength. This checks whether the prediction inside it
-  is byte-for-byte the one that was sealed before the set was performed.</p>
+  <section class="scene narrow">
+    <p class="eyebrow r">Verifier</p>
+    <h1 class="r d1">Check a receipt.</h1>
+    <p class="sub r d2">Paste a receipt copied from OrderedStrength. This checks whether the
+    prediction inside it is byte for byte the one that was sealed before the set was performed.
+    No account, no sign in, and nothing you paste is stored.</p>
 
-  <textarea id="in" spellcheck="false" placeholder='Paste the receipt JSON here'></textarea>
-  <button id="go">Check it</button>
-  <div id="out"></div>
+    <div class="r d2" style="margin-top:2rem">
+      <label for="in" class="eyebrow quiet" style="display:block">Receipt JSON</label>
+      <textarea id="in" spellcheck="false" placeholder='Paste the receipt here, including the outer brackets'></textarea>
+      <div class="actions">
+        <button class="btn" id="go">Check it</button>
+        <button class="btn ghost" id="demo">Use a sample receipt</button>
+      </div>
+    </div>
 
-  <details>
-    <summary>What this actually proves, and what it does not</summary>
-    <p>A receipt carries a prediction, a random nonce, and a SHA-256 digest committed <em>before</em> the
-    set. This page recomputes the digest from the prediction and the nonce. If they match, the prediction
-    was not edited after the fact. If a single character changed, the digest cannot match.</p>
-    <p><strong>It does not prove when the commitment was made.</strong> That needs a published daily anchor,
-    which does not exist yet. Until it does, this page proves the prediction was not rewritten, and says
-    nothing about the timestamp. That limit is stated here rather than left for you to discover.</p>
-  </details>
+    <div id="out" aria-live="polite"></div>
+
+    <details class="limits r d3">
+      <summary>What this proves, and what it does not</summary>
+      <p>A receipt carries a prediction, a random nonce, and a SHA-256 fingerprint committed
+      <em>before</em> the set. The verifier recomputes the fingerprint from the prediction and the
+      nonce. If they match, the prediction was not edited afterwards. If a single character
+      changed, the fingerprint cannot match.</p>
+      <p><strong>It does not prove when the commitment was made.</strong> That needs a published
+      daily anchor, which does not exist yet. Until it does, this page proves the prediction was
+      not rewritten and says nothing about the timestamp. That limit is stated here rather than
+      left for you to discover. Progress on the anchor is on
+      <a href="/record/">the record</a>.</p>
+    </details>
+  </section>
 </main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/how-it-works/">How it works</a>
+    <a href="/record/">The record</a>
+    <a href="/app-privacy/">Privacy</a>
+    <a href="/support/">Support</a>
+  </nav>
+  OrderedStrength. Built for lifters who would rather be told the truth.
+</footer>
+
+<script src="/assets/site.js" defer></script>
 <script>
-// THE ENDPOINT IS UNAUTHENTICATED BY DESIGN: a skeptic does not have an account.
-const ENDPOINT = 'https://api.orderedstrength.com/api/v1/verify';
-const REASONS = {
-  mismatch: 'The digest does not match the prediction. The prediction was changed after it was sealed, or this is not a genuine receipt.',
-  unsupported_scheme: 'This receipt uses a scheme this verifier does not understand. It was not refused on its contents.',
-  malformed_nonce: 'The nonce is not a valid 32-byte hex value, so no digest can be recomputed.',
-  malformed_fields: 'The prediction fields are missing or empty, so there is nothing to hash.',
-  malformed_body: 'This is not a receipt this verifier can read.',
-  too_many_receipts: 'Too many receipts in one paste. Send fewer.',
+(function(){
+'use strict';
+// UNAUTHENTICATED BY DESIGN: a skeptic does not have an account.
+var ENDPOINT = 'https://api.orderedstrength.com/api/v1/verify';
+var SAMPLE = {
+  scheme:'os-commit-v1-sha256',
+  commitmentHex:'905bb7a70b96e4e5cf20d6b1290074b59d91f6cc461d3a3b46e4f17ed1ae366c',
+  nonceHex:'412cabcd699f0a2a4cc22cfa1871753bd48789a2cc736aa97b517da656d5aec6',
+  fields:[{key:'kind',value:'topSetBand'},{key:'exercise',value:'Barbell Back Squat'},
+          {key:'bandLowKg',value:'1025'},{key:'bandHighKg',value:'1125'},
+          {key:'naiveBaselineKg',value:'1000'},{key:'sealedOn',value:'1755916800'}]
 };
-const el = id => document.getElementById(id);
-function render(html){ el('out').innerHTML = html; }
-function row(i, r){
-  const ok = r.verified === true;
-  const why = ok
-    ? 'The digest matches. This prediction is byte-for-byte the one that was sealed.'
-    : (REASONS[r.reason] || 'This receipt did not verify.');
-  const computed = r.computed ? `<div><code>computed ${r.computed}</code></div>` : '';
-  return `<div class="r ${ok?'ok':'bad'}">
-    <span class="v ${ok?'ok':'bad'}">${ok?'VERIFIED':'NOT VERIFIED'}</span>
-    <span class="why">receipt ${i+1}</span>
-    <div class="why">${why}</div>${computed}</div>`;
+var REASONS = {
+  mismatch:'The fingerprint does not match the prediction. Either the prediction was changed after it was sealed, or this is not a genuine receipt.',
+  unsupported_scheme:'This receipt uses a scheme this verifier does not understand. It was not refused on its contents.',
+  malformed_nonce:'The nonce is not a valid 32 byte hex value, so no fingerprint can be recomputed.',
+  malformed_commitment:'The sealed fingerprint is not a valid 32 byte hex value.',
+  malformed_fields:'The prediction fields are missing or empty, so there is nothing to hash.',
+  malformed_body:'This is not a receipt this verifier can read.',
+  too_many_receipts:'Too many receipts in one paste. Send fewer.'
+};
+var $ = function(id){ return document.getElementById(id); };
+function render(html){ $('out').innerHTML = html; }
+function card(cls, verdict, idx, why, computed){
+  return '<div class="res '+cls+'"><span class="v">'+verdict+'</span>'+
+    (idx!=null?'<span class="idx">receipt '+idx+'</span>':'')+
+    '<p class="why">'+why+'</p>'+
+    (computed?'<code>computed '+computed+'</code>':'')+'</div>';
 }
-el('go').addEventListener('click', async () => {
-  const raw = el('in').value.trim();
-  if (!raw){ render('<div class="r bad"><span class="v bad">NOTHING PASTED</span></div>'); return; }
-  let body;
-  try { body = JSON.parse(raw); }
-  catch { render('<div class="r bad"><span class="v bad">NOT VALID JSON</span><div class="why">Paste the receipt exactly as it was copied, including the outer brackets.</div></div>'); return; }
-  el('go').disabled = true; render('<div class="r"><span class="why">Checking...</span></div>');
-  try {
-    const res = await fetch(ENDPOINT, {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(body)});
-    const data = await res.json();
-    // A 404 means the verifier is not deployed yet. Say THAT, never "not verified":
-    // reporting a deployment gap as a failed receipt would accuse an honest receipt.
-    if (res.status === 404){
-      render('<div class="r bad"><span class="v bad">VERIFIER UNAVAILABLE</span><div class="why">The verification service is not reachable at this address. This says nothing about your receipt.</div></div>');
-      return;
-    }
-    const list = Array.isArray(data.results) ? data.results : [data];
-    render(list.map(row).join(''));
-  } catch (e) {
-    render('<div class="r bad"><span class="v bad">COULD NOT REACH THE VERIFIER</span><div class="why">Network error. This says nothing about your receipt.</div></div>');
-  } finally { el('go').disabled = false; }
+function row(i, r){
+  var ok = r.verified === true;
+  return card(ok?'ok':'bad', ok?'VERIFIED':'NOT VERIFIED', i+1,
+    ok ? 'The fingerprint matches. This prediction is byte for byte the one that was sealed.'
+       : (REASONS[r.reason] || 'This receipt did not verify.'),
+    r.computed);
+}
+
+$('demo').addEventListener('click', function(){
+  $('in').value = JSON.stringify(SAMPLE, null, 2);
+  render('');
+  $('in').focus();
 });
+
+$('go').addEventListener('click', async function(){
+  var raw = $('in').value.trim();
+  if (!raw){ render(card('bad','NOTHING PASTED',null,'Paste a receipt into the box above, or press the sample button.')); return; }
+  var body;
+  try { body = JSON.parse(raw); }
+  catch(e){ render(card('bad','NOT VALID JSON',null,'Paste the receipt exactly as it was copied, including the outer brackets.')); return; }
+  $('go').disabled = true;
+  render('<div class="res"><span class="v" style="color:var(--ink3)">CHECKING</span></div>');
+  try{
+    var res = await fetch(ENDPOINT, {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(body)});
+    // A 404 means the verifier is not deployed. Say THAT, never "not verified": reporting a
+    // deployment gap as a failed receipt would accuse an honest receipt.
+    if (res.status === 404){
+      render(card('bad','VERIFIER UNAVAILABLE',null,'The verification service is not reachable at this address. This says nothing about your receipt.'));
+      $('led').className='led down'; return;
+    }
+    var data = await res.json();
+    var list = Array.isArray(data.results) ? data.results : [data];
+    render(list.map(row).join(''));
+    $('led').className='led up';
+  } catch(e){
+    render(card('bad','COULD NOT REACH THE VERIFIER',null,'The request did not complete. This says nothing about your receipt.'));
+    $('led').className='led down';
+  } finally { $('go').disabled = false; }
+});
+})();
 </script>
+</body>
+</html>

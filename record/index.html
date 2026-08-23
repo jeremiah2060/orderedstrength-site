@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.className="js";</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The record · OrderedStrength</title>
+<meta name="description" content="The public accuracy record. What it will contain, what it proves, and an honest statement that it has not started yet.">
+<meta name="theme-color" content="#060709">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.ledger{margin-top:2rem;background:var(--surface);border-radius:12px;overflow:hidden}
+.lhead{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.875rem 1.125rem;
+       border-bottom:1px solid var(--line);background:var(--raised)}
+.lhead .lbl{font-family:var(--mono);font-size:.6875rem;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3)}
+.lstate{font-family:var(--mono);font-size:.75rem;padding:.25rem .625rem;border-radius:100px;
+        background:rgba(245,158,11,.15);color:var(--amber);white-space:nowrap}
+.lstate.live{background:var(--teal-dim);color:var(--teal)}
+.lbody{padding:1.5rem 1.125rem}
+.empty{text-align:left;max-width:38rem}
+.empty h3{color:var(--ink);margin-bottom:.5rem}
+.empty p{font-size:.875rem;color:var(--ink3);margin:0 0 .875rem}
+.anchor{display:grid;grid-template-columns:7rem 1fr;gap:1rem;padding:.75rem 0;
+        border-top:1px solid var(--line-soft);align-items:baseline}
+.anchor .d{font-family:var(--mono);font-size:.8125rem;color:var(--ink2)}
+.anchor .h{font-family:var(--mono);font-size:.75rem;color:var(--teal);word-break:break-all}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:2rem}
+.two .card p{font-size:.875rem;color:var(--ink3);margin:0}
+.two .card h3{color:var(--ink)}
+.two .card .yes{color:var(--teal)} .two .card .no{color:var(--amber)}
+@media (max-width:40rem){.two{grid-template-columns:1fr}.anchor{grid-template-columns:1fr;gap:.125rem}}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <a class="wordmark" href="/"><span class="led up" aria-hidden="true"></span>OrderedStrength</a>
+  <nav>
+    <a href="/how-it-works/">How it works</a>
+    <a href="/record/" class="opt" aria-current="page">The record</a>
+    <a href="/verify/">Verify</a>
+  </nav>
+  <div class="prog" aria-hidden="true"></div>
+</div>
+
+<main>
+
+  <section class="scene">
+    <p class="eyebrow r">The record</p>
+    <h1 class="r d1">Every call he makes, graded. Including the ones he got wrong.</h1>
+    <p class="sub r d2">Nobody in this market publishes how often they were right. This page is
+    where ours goes, and it goes up before we charge anyone.</p>
+  </section>
+
+  <section class="scene tight">
+    <div class="ledger r">
+      <div class="lhead">
+        <span class="lbl">Daily commitment anchors</span>
+        <span class="lstate" id="lstate">checking</span>
+      </div>
+      <div class="lbody" id="lbody">
+        <div class="empty">
+          <h3>Not started yet.</h3>
+          <p>Reading the public repository.</p>
+        </div>
+      </div>
+    </div>
+    <p class="small r d1" style="margin-top:1rem">Source:
+      <a href="https://github.com/jeremiah2060/orderedstrength-receipts" style="color:var(--teal)">github.com/jeremiah2060/orderedstrength-receipts</a>.
+      Read live from GitHub each time this page loads, so what you see here is what the repository
+      actually contains rather than a number we typed.</p>
+  </section>
+
+  <section class="scene">
+    <p class="eyebrow r">Two different claims</p>
+    <h2 class="r d1">What a receipt proves, and what only the anchor can.</h2>
+    <div class="two r d2">
+      <div class="card">
+        <h3>Was it edited afterwards?</h3>
+        <p class="yes" style="font-family:var(--mono);font-size:.75rem;margin-bottom:.5rem">ANSWERABLE TODAY</p>
+        <p>A receipt carries the prediction, a random nonce, and a fingerprint taken over both. Recompute it and you know whether a single character moved. You can do that right now on the <a href="/verify/" style="color:var(--teal)">verifier</a>, or break one yourself on the <a href="/#seal" style="color:var(--teal)">home page</a>.</p>
+      </div>
+      <div class="card">
+        <h3>Was it really made beforehand?</h3>
+        <p class="no" style="font-family:var(--mono);font-size:.75rem;margin-bottom:.5rem">NOT YET ANSWERABLE</p>
+        <p>That needs a timestamp we do not control. Publishing one root hash per day to a public repository gives it: the commit dates come from GitHub, not from us. Until the first anchor lands, we say so rather than implying a proof we do not have.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene">
+    <p class="eyebrow r">Why it starts empty</p>
+    <h2 class="r d1">Backfilling would destroy the only thing this is for.</h2>
+    <p class="r d2">We could generate anchors for every prediction already sealed on a phone and
+    publish them today. The page would look established. It would also be worthless, because a
+    record assembled after the results were known proves nothing about when anything was decided.</p>
+    <p class="r d2">So the record starts on the day it starts, and the gap before it is stated
+    rather than hidden. That is the whole product in one decision.</p>
+  </section>
+
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/how-it-works/">How it works</a>
+    <a href="/verify/">Verify a receipt</a>
+    <a href="/app-privacy/">Privacy</a>
+    <a href="/support/">Support</a>
+  </nav>
+  OrderedStrength. Built for lifters who would rather be told the truth.
+</footer>
+
+<script src="/assets/site.js" defer></script>
+<script>
+(function(){
+'use strict';
+var API = 'https://api.github.com/repos/jeremiah2060/orderedstrength-receipts/contents/anchors';
+var state = document.getElementById('lstate');
+var body = document.getElementById('lbody');
+
+function empty(reason){
+  state.textContent = 'none yet';
+  body.innerHTML =
+    '<div class="empty"><h3>No anchors published yet.</h3>' +
+    '<p>' + reason + '</p>' +
+    '<p>When the first one lands, this list fills with one line per day: the date, and the root ' +
+    'hash covering every prediction sealed that day. Nothing else, forever.</p></div>';
+}
+
+fetch(API, { headers: { 'accept': 'application/vnd.github+json' } })
+  .then(function(r){
+    if (r.status === 404) { empty('The repository exists and the anchor folder has not been created yet, which is the honest state on ' + new Date().toISOString().slice(0,10) + '.'); return null; }
+    if (!r.ok) throw new Error('http ' + r.status);
+    return r.json();
+  })
+  .then(function(list){
+    if (!list) return;
+    var files = list.filter(function(f){ return f.type === 'file' && /\.txt$|\.json$/.test(f.name); });
+    if (!files.length){ empty('The anchor folder exists but holds no published roots yet.'); return; }
+    files.sort(function(a,b){ return a.name < b.name ? 1 : -1; });
+    state.textContent = files.length + ' published';
+    state.className = 'lstate live';
+    body.innerHTML = files.slice(0, 60).map(function(f){
+      return '<div class="anchor"><span class="d">' + f.name.replace(/\.(txt|json)$/,'') +
+             '</span><a class="h" href="' + f.html_url + '">' + f.sha.slice(0,40) + '</a></div>';
+    }).join('');
+  })
+  .catch(function(){
+    state.textContent = 'unreachable';
+    body.innerHTML = '<div class="empty"><h3>Could not read the repository.</h3>' +
+      '<p>GitHub did not answer, so this page will not guess at a number. ' +
+      '<a href="https://github.com/jeremiah2060/orderedstrength-receipts" style="color:var(--teal)">' +
+      'Open the repository directly</a> and read it yourself.</p></div>';
+  });
+})();
+</script>
+</body>
+</html>
