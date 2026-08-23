@@ -340,6 +340,39 @@ p:last-child{margin-bottom:0}
 p.small{font-size:.9375rem;color:var(--ink3);max-width:60ch;margin-left:0;margin-right:0}
 strong{color:var(--ink);font-weight:600}
 em{font-style:normal;color:var(--teal)}
+
+/* ══ THE INLINE LITERAL ═══════════════════════════════════════════════════════
+   A run of text quoted OUT of the product (a label on a screen, a path through the
+   app, a command) is marked by its FACE, never by being smaller than the sentence
+   holding it.
+
+   🔒 A SIZE REDUCTION ON INLINE MONO IS A REFLEX FROM A DIFFERENT PAIRING, AND THIS
+   PAIRING DOES NOT WANT IT. The habit comes from families where the monospace has a
+   much larger x-height than the prose (SF Mono against SF Pro), so 0.8em restores the
+   match. Measured in the browser here with actualBoundingBoxAscent, Public Sans and
+   IBM Plex Mono have the SAME x-height ratio: 7.76 px and 7.74 px at 15 px. So every
+   reduction came straight off the top of the letters. At the .8125em this site shipped,
+   an inline literal stood 6.28 px tall inside 7.76 px prose, 19% shorter, mid-sentence,
+   while the SAME run was set brighter (--ink2 on --ink3): the colour said emphasis and
+   the size said aside, and the reader sees the argument, not the rule. The pressure-test
+   caption that is mostly literals therefore read as a different, smaller typeface than
+   the two captions beside it.
+
+   .96em puts the x-height within 4.2%, which is the small amount of headroom the mono's
+   heavier stems and wider advance actually need. One value, one place, every surface:
+   the section captions, the callouts, the small print, and the app paths in the legal
+   prose, which were separately at .9em and .75rem. tools/type-gate.mjs measures the
+   rendered x-heights and fails the build if any of them drifts again.
+   REVERT: put .8125em back on this one line. */
+/* SCOPED TO RUNNING PROSE ON PURPOSE. A bare `code` selector also catches the two
+   places on this site where a literal sits inside something ALREADY monospaced (the
+   receipt dump in details.raw pre, and the computed-hash line in the verifier's verdict
+   card), and there .96em compounds into a 4% shrink of a run that was already correct.
+   p and li carry every prose case including p.small; the two block hosts are named.
+   Anything new that escapes this list is caught by tools/type-gate.mjs, which measures
+   what rendered rather than what was declared. */
+.state figcaption code,.callout code,p code,li code,.prose em{
+  font-family:var(--mono);font-size:.96em;color:var(--ink2)}
 hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0}
 
 /* ── reveal ───────────────────────────────────────────── */
@@ -449,8 +482,7 @@ hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0}
    Back Up Everything", and they were set with arrows, which this project bans in user copy
    and which its own checker could not see because they were written as &rarr; entities.
    Set as a mono path they need no arrow to be read as a route. */
-.prose em{font-family:var(--mono);font-size:.9em;font-style:normal;color:var(--ink2);
-          letter-spacing:.01em;white-space:nowrap}
+.prose em{font-style:normal;letter-spacing:.01em;white-space:nowrap}
 .prose .lede{font-size:1.0625rem;color:var(--ink2)}
 .prose .stamp{font-family:var(--mono);font-size:.75rem;color:var(--ink3);margin-bottom:2rem}
 
@@ -578,7 +610,6 @@ footer::before{content:"";position:absolute;inset:0 var(--gut) auto;height:1px;
 .callout .n{font-family:var(--mono);font-size:.75rem;color:var(--teal);padding-top:.1875rem}
 .callout b{display:block;font-size:1.0625rem;color:var(--ink);margin-bottom:.25rem;font-weight:600}
 .callout span{display:block;font-size:.9375rem;color:var(--ink3);line-height:1.55}
-.callout code{font-family:var(--mono);font-size:.8125em;color:var(--ink2)}
 
 /* THE LOOP IS A SEQUENCE, NOT A COMPARISON, so it is set as a scale rather than as a
    plate: one spine with a node at each step, which is the same instrument language the
@@ -616,7 +647,6 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
 .state figcaption b{display:block;font-family:var(--display);font-weight:700;font-size:1.0625rem;
      letter-spacing:-.015em;margin-bottom:.375rem}
 .state figcaption span{display:block;font-size:.9375rem;color:var(--ink3);line-height:1.55}
-.state figcaption code{font-family:var(--mono);font-size:.8125em;color:var(--ink2)}
 @media (max-width:52rem){
   /* on a phone the three read better as a stacked ledger: device beside its own reading */
   .states{grid-template-columns:1fr;gap:2rem}

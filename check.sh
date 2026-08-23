@@ -17,6 +17,14 @@
 #   measure-gate.mjs one specific browser failure that every other check here reports as
 #                    clean: a block of running text wrapping one word per line because a
 #                    grid or flex placement broke. It has happened twice.
+#   type-gate.mjs    THE OPTICAL SIZE OF EVERY INLINE LITERAL, against the sentence holding
+#                    it. Whether a quoted <code> run READS as the same size as its prose is
+#                    decided by x-height, not by the font-size number, and two families at
+#                    one declared size can differ by a fifth. This site shipped .8125em on a
+#                    pairing whose x-heights already matched, so 25 literals across three
+#                    pages stood 10 to 20% short mid-sentence. Valid CSS, aligned, wrapped,
+#                    legible, and reading as a different smaller typeface. Nothing else here
+#                    could see it.
 #   align-gate.mjs   what the BROWSER does: every stacked block inside a section starts on
 #                    the same left edge, that edge is the nav wordmark's, and no page
 #                    scrolls sideways. Run across the widths people actually use.
@@ -43,6 +51,8 @@ echo
 BASE="http://127.0.0.1:${PORT}" node tools/align-gate.mjs $WIDTHS || fail=1
 echo
 BASE="http://127.0.0.1:${PORT}" node tools/measure-gate.mjs 1550 390 | tail -3 || fail=1
+echo
+BASE="http://127.0.0.1:${PORT}" node tools/type-gate.mjs || fail=1
 
 echo
 [ $fail -eq 0 ] && echo "SITE OK" || echo "SITE NOT OK"
