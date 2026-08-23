@@ -4,6 +4,11 @@
 #   check-site.py    what the source says: shadowed selectors, real tag NESTING (a stack,
 #                    not a count: two opposite errors cancel in a count), dead anchors,
 #                    unversioned assets, banned symbols, images with no alt text.
+#   shot-gate.py     THE PIXELS, CHECKED AGAINST THE CLAIMS. Reads the text out of every
+#                    published screenshot with the OS's Vision framework and asserts that
+#                    every quoted phrase and every number the page states about it is
+#                    actually in it. It also refuses a capture that is not native
+#                    resolution, or that is a system permission sheet rather than the app.
 #   contrast-gate.py what the EYE cannot judge on a dark screen in a dark room: every
 #                    ink-on-surface pair, computed against WCAG 2.1, read out of the
 #                    stylesheet's own tokens so it cannot go stale.
@@ -22,6 +27,8 @@ PORT="${PORT:-8899}"
 fail=0
 
 python3 check-site.py || fail=1
+echo
+python3 tools/shot-gate.py || fail=1
 echo
 python3 tools/contrast-gate.py | tail -3 || fail=1
 
