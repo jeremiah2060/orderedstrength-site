@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=0d643bad6e">
+<link rel="stylesheet" href="/assets/site.css?v=c6e0f73afa">
 <style>
 /* ── the coaching stack: real app UI, rendered rather than screenshotted ── */
 .hero .appcard{padding:1.625rem 1.75rem}
@@ -134,6 +134,7 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
     <a href="/how-it-works/">How it works</a>
     <a href="/record/" class="opt">The record</a>
     <a href="/verify/">Verify</a>
+    <a href="/join/" class="cta">Join the test</a>
   </nav>
   <div class="prog" aria-hidden="true"></div>
 </div>
@@ -381,6 +382,61 @@ field   sealedOn = 1755916800</pre>
     </div>
   </section>
 
+
+  <!-- THE PRESSURE TEST: the same screen at three different amounts of evidence -->
+  <section class="scene" id="states">
+    <div class="head reveal">
+      <div><p class="eyebrow">The pressure test</p>
+        <h2>Three states most apps never show you.</h2></div>
+      <div><p class="sub">The same screen, at three different amounts of evidence. Real captures from the
+    test suite, nothing staged and nothing retouched. Read the rings and the phase line.</p></div>
+    </div>
+    <div class="states reveal">
+      <figure class="state">
+        <div class="device">
+          <div class="device__body"><div class="device__glass">
+            <div class="device__screenwrap">
+              <img class="device__screen" src="/assets/shots/dashboard-session1.webp?v=d443e53952" width="1206" height="2622" loading="lazy" decoding="async"
+                   alt="The dashboard after one logged session. Fatigue reads 24 percent and recovery 81 percent, both labelled Pop. Est.">
+            </div>
+            <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
+          </div></div>
+          <span class="device__key device__key--act" aria-hidden="true"></span><span class="device__key device__key--vup" aria-hidden="true"></span><span class="device__key device__key--vdn" aria-hidden="true"></span><span class="device__key device__key--pwr" aria-hidden="true"></span><span class="device__key device__key--cam" aria-hidden="true"></span>
+        </div>
+        <figcaption><b>One session in</b><span>Fatigue 24 percent, recovery 81 percent, both labelled <code>Pop. Est.</code> The line reads that the model starts from this session.</span></figcaption>
+      </figure>
+      <figure class="state">
+        <div class="device">
+          <div class="device__body"><div class="device__glass">
+            <div class="device__screenwrap">
+              <img class="device__screen" src="/assets/shots/dashboard-session3.webp?v=843248fc5b" width="1206" height="2622" loading="lazy" decoding="async"
+                   alt="The dashboard after three logged sessions. Fatigue reads 11 percent and recovery 93 percent, both labelled Pop. Est.">
+            </div>
+            <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
+          </div></div>
+          <span class="device__key device__key--act" aria-hidden="true"></span><span class="device__key device__key--vup" aria-hidden="true"></span><span class="device__key device__key--vdn" aria-hidden="true"></span><span class="device__key device__key--pwr" aria-hidden="true"></span><span class="device__key device__key--cam" aria-hidden="true"></span>
+        </div>
+        <figcaption><b>Three sessions in</b><span>The same two rings now read 11 and 93. The labels still say population estimate, because three sessions is not enough to drop them.</span></figcaption>
+      </figure>
+      <figure class="state">
+        <div class="device">
+          <div class="device__body"><div class="device__glass">
+            <div class="device__screenwrap">
+              <img class="device__screen" src="/assets/shots/dashboard-deload.webp?v=329953debb" width="1206" height="2622" loading="lazy" decoding="async"
+                   alt="The dashboard during a deload week. The banner reads Deload Phase, Week 1 of 1.">
+            </div>
+            <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
+          </div></div>
+          <span class="device__key device__key--act" aria-hidden="true"></span><span class="device__key device__key--vup" aria-hidden="true"></span><span class="device__key device__key--vdn" aria-hidden="true"></span><span class="device__key device__key--pwr" aria-hidden="true"></span><span class="device__key device__key--cam" aria-hidden="true"></span>
+        </div>
+        <figcaption><b>A deload week</b><span>The banner reads <code>Deload Phase &middot; Week 1 of 1</code>. The phase you are in is on the first screen rather than buried in a plan tab, and the rings still carry their <code>Pop. Est.</code> label.</span></figcaption>
+      </figure>
+    </div>
+    <p class="small" style="margin-top:1.5rem">Every one of these was taken by
+    <code style="font-family:var(--mono);font-size:.75rem;color:var(--ink2)">scripts/verify.sh screens</code>
+    on a clean install. If a number here ever stops matching the app, the capture is the thing that is wrong.</p>
+  </section>
+
   <!-- COMMITMENT -->
   <section class="scene" id="price">
     <div class="head reveal">
@@ -394,6 +450,10 @@ field   sealedOn = 1755916800</pre>
       <span class="chip"><b>199 US dollars</b> per year</span>
       <span class="chip"><b>14 days</b> free</span>
     </div>
+    <div class="chips reveal" style="margin-top:1.75rem;gap:.75rem">
+      <a class="btn" href="/join/">Join the test</a>
+      <a class="btn ghost" href="/record/">Read the record</a>
+    </div>
     <p class="small" style="margin-top:1.5rem">Not on the App Store yet, and there is no mailing
     list, because there is no account system to hold one.
     <a href="mailto:tachiwonajeremiah@gmail.com?subject=Tell%20me%20when%20OrderedStrength%20ships"
@@ -403,14 +463,33 @@ field   sealedOn = 1755916800</pre>
 </main>
 
 <footer>
-  <nav>
-    <a href="/how-it-works/">How it works</a>
-    <a href="/record/">The record</a>
-    <a href="/verify/">Verify a receipt</a>
-    <a href="/app-privacy/">Privacy</a>
-    <a href="/support/">Support</a>
-  </nav>
-  OrderedStrength. Built for lifters who would rather be told the truth.
+  <div class="foot">
+    <div class="foot__mark">
+      <a class="wordmark" href="/">OrderedStrength</a>
+      <p>A strength coach for iPhone that writes each session down before you lift, then grades
+      itself on what it wrote.</p>
+    </div>
+    <nav class="foot__col" aria-label="The product">
+      <p class="foot__label">The product</p>
+      <a href="/how-it-works/">How it works</a>
+      <a href="/join/">Join the test</a>
+    </nav>
+    <nav class="foot__col" aria-label="The record">
+      <p class="foot__label">The record</p>
+      <a href="/record/">Published anchors</a>
+      <a href="/verify/">Verify a receipt</a>
+    </nav>
+    <nav class="foot__col" aria-label="The small print">
+      <p class="foot__label">The small print</p>
+      <a href="/app-privacy/">Privacy</a>
+      <a href="/support/">Support</a>
+    </nav>
+  </div>
+  <div class="foot__panel">
+    <span>Build <b class="stamp">c6e0f73afa</b></span>
+    <span>iPhone &middot; in testing</span>
+    <span>Your training is computed on your device</span>
+  </div>
 </footer>
 
 <script src="/assets/site.js?v=5fd125c32d" defer></script>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.className="js";</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Join the test · OrderedStrength</title>
+<meta name="description" content="How to get into the OrderedStrength test on iPhone. No waiting list and no account system: you write to a person, and a person writes back.">
+<meta name="theme-color" content="#060709">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css?v=c6e0f73afa">
+</head>
+<body>
+
+<div class="bar">
+  <a class="wordmark" href="/"><span class="led up" aria-hidden="true"></span>OrderedStrength</a>
+  <nav>
+    <a href="/how-it-works/">How it works</a>
+    <a href="/record/" class="opt">The record</a>
+    <a href="/verify/">Verify</a>
+    <a href="/join/" class="cta" aria-current="page">Join the test</a>
+  </nav>
+  <div class="prog" aria-hidden="true"></div>
+</div>
+
+<main>
+
+  <section class="scene reading">
+    <div class="pagehead">
+      <p class="eyebrow">Join the test</p>
+      <h1>There is no waiting list, because there is no list.</h1>
+      <p class="sub">No account system exists yet, so there is nothing here that could hold your
+    email address without us building the exact thing this product refuses to build. Write to a
+    person instead. A person writes back.</p>
+    </div>
+  </section>
+
+  <section class="scene tight">
+    <div class="chips" style="margin-top:.5rem">
+      <a class="btn" href="mailto:tachiwonajeremiah@gmail.com?subject=OrderedStrength%20test%20flight&amp;body=Roughly%20how%20long%20have%20you%20been%20lifting%3F%0A%0AWhat%20do%20you%20train%20on%2C%20and%20how%20many%20days%20a%20week%3F%0A%0AWhich%20app%20are%20you%20using%20now%2C%20if%20any%3F%0A%0A">Write to us</a>
+      <a class="btn ghost" href="/how-it-works/">Read how it works first</a>
+    </div>
+  </section>
+
+  <section class="scene">
+    <p class="eyebrow">What happens next</p>
+    <h2>Four steps, and none of them are automated.</h2>
+    <ol class="loop">
+      <li><b>You write, with three answers</b><span>The button above opens a message with three
+      questions already in it: how long you have trained, what you train on and how often, and what
+      you use now. Answer them in one line each. That is the whole application.</span></li>
+      <li><b>A person reads it</b><span>Not a form handler and not a queue. The test is small on
+      purpose, because a coaching engine is only worth testing against people whose training we can
+      actually follow.</span></li>
+      <li><b>You get a TestFlight invitation, or an honest no</b><span>If the build is not right for
+      how you train yet, we say that instead of adding you to a list and going quiet.</span></li>
+      <li><b>You are asked for one thing</b><span>Rate your effort honestly after each set. Round up
+      to look strong and the coach learns a fake version of you, which helps nobody and costs you a
+      training block.</span></li>
+    </ol>
+  </section>
+
+  <section class="scene">
+    <p class="eyebrow">What you are agreeing to</p>
+    <h2>Nothing that needs a checkbox.</h2>
+    <p>Your training is computed on your device. There is no account, so there is no profile of you
+    anywhere, and nothing to delete later except the app. What does and does not leave your phone,
+    including the one thing that does, is set out in the
+    <a href="/app-privacy/" style="color:var(--teal)">privacy policy</a>.</p>
+    <p>Your email address exists in one place, which is the message you sent, in an inbox. It is not
+    in a mailing tool, it is not in a customer database, and it is not synced anywhere. If you would
+    rather it were not there at all, say so in the message and it goes.</p>
+    <p class="small">The app is in testing on iPhone. It is not on the App Store yet. When it ships,
+    the price is 199 US dollars per year with 14 days free, and the accuracy record goes up before
+    anyone is charged.</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot">
+    <div class="foot__mark">
+      <a class="wordmark" href="/">OrderedStrength</a>
+      <p>A strength coach for iPhone that writes each session down before you lift, then grades
+      itself on what it wrote.</p>
+    </div>
+    <nav class="foot__col" aria-label="The product">
+      <p class="foot__label">The product</p>
+      <a href="/how-it-works/">How it works</a>
+      <a href="/join/">Join the test</a>
+    </nav>
+    <nav class="foot__col" aria-label="The record">
+      <p class="foot__label">The record</p>
+      <a href="/record/">Published anchors</a>
+      <a href="/verify/">Verify a receipt</a>
+    </nav>
+    <nav class="foot__col" aria-label="The small print">
+      <p class="foot__label">The small print</p>
+      <a href="/app-privacy/">Privacy</a>
+      <a href="/support/">Support</a>
+    </nav>
+  </div>
+  <div class="foot__panel">
+    <span>Build <b class="stamp">c6e0f73afa</b></span>
+    <span>iPhone &middot; in testing</span>
+    <span>Your training is computed on your device</span>
+  </div>
+</footer>
+
+<script src="/assets/site.js?v=5fd125c32d" defer></script>
+<script>
+(function(){
+'use strict';
+var API = 'https://api.github.com/repos/jeremiah2060/orderedstrength-receipts/contents/anchors';
+var state = document.getElementById('lstate');
+var body = document.getElementById('lbody');
+
+function empty(reason){
+  state.textContent = 'none yet';
+  body.innerHTML =
+    '<div class="empty"><h3>No anchors published yet.</h3>' +
+    '<p>' + reason + '</p>' +
+    '<p>When the first one lands, this list fills with one line per day: the date, and the root ' +
+    'hash covering every prediction sealed that day. Nothing else, forever.</p></div>';
+}
+
+fetch(API, { headers: { 'accept': 'application/vnd.github+json' } })
+  .then(function(r){
+    if (r.status === 404) { empty('The repository exists and the anchor folder has not been created yet, which is the honest state on ' + new Date().toISOString().slice(0,10) + '.'); return null; }
+    if (!r.ok) throw new Error('http ' + r.status);
+    return r.json();
+  })
+  .then(function(list){
+    if (!list) return;
+    var files = list.filter(function(f){ return f.type === 'file' && /\.txt$|\.json$/.test(f.name); });
+    if (!files.length){ empty('The anchor folder exists but holds no published roots yet.'); return; }
+    files.sort(function(a,b){ return a.name < b.name ? 1 : -1; });
+    state.textContent = files.length + ' published';
+    state.className = 'lstate live';
+    body.innerHTML = files.slice(0, 60).map(function(f){
+      return '<div class="anchor"><span class="d">' + f.name.replace(/\.(txt|json)$/,'') +
+             '</span><a class="h" href="' + f.html_url + '">' + f.sha.slice(0,40) + '</a></div>';
+    }).join('');
+  })
+  .catch(function(){
+    state.textContent = 'unreachable';
+    body.innerHTML = '<div class="empty"><h3>Could not read the repository.</h3>' +
+      '<p>GitHub did not answer, so this page will not guess at a number. ' +
+      '<a href="https://github.com/jeremiah2060/orderedstrength-receipts" style="color:var(--teal)">' +
+      'Open the repository directly</a> and read it yourself.</p></div>';
+  });
+})();
+</script>
+</body>
+</html>

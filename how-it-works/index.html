@@ -10,30 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=0d643bad6e">
+<link rel="stylesheet" href="/assets/site.css?v=c6e0f73afa">
 <style>
-/* THE LOOP IS A SEQUENCE, NOT A COMPARISON, so it is set as a scale rather than as a
-   plate: one spine with a node at each step, which is the same instrument language the
-   margin scale uses and the opposite of the milled panel the comparison table uses.
-   The form follows what the content IS. */
-ol.loop{list-style:none;counter-reset:s;padding:0;margin:2rem 0 0;max-width:52rem;position:relative}
-ol.loop::before{content:"";position:absolute;left:.4375rem;top:1.9rem;bottom:1.9rem;width:1px;
-           background:linear-gradient(180deg,transparent,var(--line) 5%,var(--line) 95%,transparent)}
-ol.loop li{position:relative;counter-increment:s;display:grid;grid-template-columns:3.25rem 1fr;gap:1.125rem;
-           padding:1.375rem 0;border-top:1px solid var(--line-soft)}
-ol.loop li:first-child{border-top:0}
-ol.loop li::before{content:counter(s,decimal-leading-zero);font-family:var(--mono);font-size:.8125rem;
-                   color:var(--teal);padding-top:.25rem;text-align:right;
-                   text-shadow:0 1px 0 rgba(0,0,0,.6)}
-ol.loop li::after{content:"";position:absolute;left:.25rem;top:1.9rem;width:.4375rem;height:.4375rem;
-                  border-radius:50%;background:var(--e0);box-shadow:0 0 0 1px var(--teal)}
-/* 🔒 THREE CHILDREN INTO TWO COLUMNS. ::before takes column 1, <b> takes column 2, and <span>
-   auto-places into column 1 of the NEXT row, which is 2.5rem wide, so the body text wrapped one
-   word per line. It was invisible for as long as the page was gated behind a scroll reveal, and
-   appeared the moment the content was allowed to render. Pin BOTH children to column 2. */
-ol.loop b{grid-column:2;display:block;font-family:var(--display);font-weight:700;font-size:1.0625rem;
-          letter-spacing:-.015em;margin-bottom:.375rem}
-ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
 .quote{margin:1.75rem 0 0;max-width:52rem;padding:1.125rem 1.25rem;background:var(--surface);
        border-left:2px solid var(--amber);border-radius:0 10px 10px 0;font-size:.9375rem;color:var(--ink2)}
 .quote cite{display:block;margin-top:.625rem;font-style:normal;font-size:.75rem;color:var(--ink3);line-height:1.45}
@@ -66,6 +44,7 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
     <a href="/how-it-works/" aria-current="page">How it works</a>
     <a href="/record/" class="opt">The record</a>
     <a href="/verify/">Verify</a>
+    <a href="/join/" class="cta">Join the test</a>
   </nav>
   <div class="prog" aria-hidden="true"></div>
 </div>
@@ -247,14 +226,33 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
 </main>
 
 <footer>
-  <nav>
-    <a href="/">Home</a>
-    <a href="/record/">The record</a>
-    <a href="/verify/">Verify a receipt</a>
-    <a href="/app-privacy/">Privacy</a>
-    <a href="/support/">Support</a>
-  </nav>
-  OrderedStrength. Built for lifters who would rather be told the truth.
+  <div class="foot">
+    <div class="foot__mark">
+      <a class="wordmark" href="/">OrderedStrength</a>
+      <p>A strength coach for iPhone that writes each session down before you lift, then grades
+      itself on what it wrote.</p>
+    </div>
+    <nav class="foot__col" aria-label="The product">
+      <p class="foot__label">The product</p>
+      <a href="/how-it-works/">How it works</a>
+      <a href="/join/">Join the test</a>
+    </nav>
+    <nav class="foot__col" aria-label="The record">
+      <p class="foot__label">The record</p>
+      <a href="/record/">Published anchors</a>
+      <a href="/verify/">Verify a receipt</a>
+    </nav>
+    <nav class="foot__col" aria-label="The small print">
+      <p class="foot__label">The small print</p>
+      <a href="/app-privacy/">Privacy</a>
+      <a href="/support/">Support</a>
+    </nav>
+  </div>
+  <div class="foot__panel">
+    <span>Build <b class="stamp">c6e0f73afa</b></span>
+    <span>iPhone &middot; in testing</span>
+    <span>Your training is computed on your device</span>
+  </div>
 </footer>
 
 <script src="/assets/site.js?v=5fd125c32d" defer></script>

@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=0d643bad6e">
+<link rel="stylesheet" href="/assets/site.css?v=c6e0f73afa">
 <style>
 /* An input is a place things go INTO, so it is sunk: inset shadow at the top edge, lit
    hairline at the bottom. Every raised surface on this site is the exact inverse, and
@@ -46,6 +46,7 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
     <a href="/how-it-works/">How it works</a>
     <a href="/record/" class="opt">The record</a>
     <a href="/verify/" aria-current="page">Verify</a>
+    <a href="/join/" class="cta">Join the test</a>
   </nav>
   <div class="prog" aria-hidden="true"></div>
 </div>
@@ -87,14 +88,33 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
 </main>
 
 <footer>
-  <nav>
-    <a href="/">Home</a>
-    <a href="/how-it-works/">How it works</a>
-    <a href="/record/">The record</a>
-    <a href="/app-privacy/">Privacy</a>
-    <a href="/support/">Support</a>
-  </nav>
-  OrderedStrength. Built for lifters who would rather be told the truth.
+  <div class="foot">
+    <div class="foot__mark">
+      <a class="wordmark" href="/">OrderedStrength</a>
+      <p>A strength coach for iPhone that writes each session down before you lift, then grades
+      itself on what it wrote.</p>
+    </div>
+    <nav class="foot__col" aria-label="The product">
+      <p class="foot__label">The product</p>
+      <a href="/how-it-works/">How it works</a>
+      <a href="/join/">Join the test</a>
+    </nav>
+    <nav class="foot__col" aria-label="The record">
+      <p class="foot__label">The record</p>
+      <a href="/record/">Published anchors</a>
+      <a href="/verify/">Verify a receipt</a>
+    </nav>
+    <nav class="foot__col" aria-label="The small print">
+      <p class="foot__label">The small print</p>
+      <a href="/app-privacy/">Privacy</a>
+      <a href="/support/">Support</a>
+    </nav>
+  </div>
+  <div class="foot__panel">
+    <span>Build <b class="stamp">c6e0f73afa</b></span>
+    <span>iPhone &middot; in testing</span>
+    <span>Your training is computed on your device</span>
+  </div>
 </footer>
 
 <script src="/assets/site.js?v=5fd125c32d" defer></script>
