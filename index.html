@@ -124,46 +124,23 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
   <div class="prog" aria-hidden="true"></div>
 </div>
 
-<ul class="rail" aria-label="Sections">
-  <li><a href="#top"><span>Top</span></a></li>
-  <li><a href="#coach"><span>The coach</span></a></li>
-  <li><a href="#dial"><span>Day 1 vs day 100</span></a></li>
-  <li><a href="#seal"><span>The seal</span></a></li>
-  <li><a href="#others"><span>Everyone else</span></a></li>
-  <li><a href="#price"><span>Price</span></a></li>
-</ul>
-
 <main>
 
-  <section class="scene" id="top">
-    <p class="eyebrow r">Strength coaching for iPhone</p>
-    <h1 class="r d1">A coach who writes it down before you lift.</h1>
-    <p class="sub r d2">Jerry plans every session, changes it as each set lands, and records what he
-    expected from you <em>before</em> you touch the bar. Then he grades himself on it and keeps the
-    misses.</p>
-  </section>
-
-  <section class="scene tight" id="coach">
-    <div class="grid c2" style="align-items:start;gap:2rem">
+  <!-- HERO: owns the screen, and shows the product rather than describing it -->
+  <section class="scene hero">
+    <div class="hero-grid">
       <div>
-        <p class="eyebrow quiet r">What he actually does</p>
-        <h2 class="r d1">He decides, then he reacts.</h2>
-        <p class="r d2">A logbook remembers. A plan app dictates and stops listening. Jerry picks the
-        lift, sets the load, and then changes the rest of the session the moment your reserve tells
-        him the day is not going the way he thought.</p>
-        <p class="r d2">He never adds weight on a calendar. He holds the load, asks for one more
-        repetition, and adds the plate once you have earned it.</p>
-      </div>
-      <div class="stack r d1">
-        <div class="appcard">
-          <p class="cap">Back Squat · set 3 of 4</p>
-          <div class="setline"><span class="n">Set 1</span><span class="v">100 kg · 6 reps · RIR 2</span><span class="s done">logged</span></div>
-          <div class="setline"><span class="n">Set 2</span><span class="v">102.5 kg · 6 reps · RIR 1</span><span class="s done">logged</span></div>
-          <div class="setline"><span class="n">Set 3</span><span class="v">102.5 kg · 5 reps · RIR 0</span><span class="s done">logged</span></div>
-          <div class="setline"><span class="n">Set 4</span><span class="v">withdrawn</span><span class="s cut">cut</span></div>
-          <p class="said">You are fading faster than I planned. I am cutting the last set. That
-          protects tomorrow more than one more hard set helps today.</p>
+        <p class="eyebrow">Strength coaching for iPhone</p>
+        <h1>A coach who writes it down before you lift.</h1>
+        <p class="sub">Jerry plans every session, changes it as each set lands, and records what
+        he expected from you <em>before</em> you touch the bar. Then he grades himself on it and
+        keeps the misses.</p>
+        <div class="chips" style="margin-top:2rem">
+          <a class="btn" href="#dial">See what that changes</a>
+          <a class="btn ghost" href="/how-it-works/">How it works</a>
         </div>
+      </div>
+      <div class="stack">
         <div class="appcard">
           <p class="cap">Prediction accuracy</p>
           <div class="lift"><span class="dot ok"></span><span class="nm">Bulgarian Split Squat</span><span class="vd inr">Within</span></div>
@@ -176,18 +153,39 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
     </div>
   </section>
 
-  <section class="scene" id="dial">
-    <p class="eyebrow r">Day one against day one hundred</p>
-    <h2 class="r d1">Every other app is exactly as certain on your first session as your hundredth.</h2>
-    <p class="sub r d2">Drag it. Only one side changes.</p>
-
-    <div class="dial r d2">
-      <div class="dialhead">
-        <label for="sessions">Sessions you have logged</label>
-        <output id="sessout" for="sessions">1</output>
+  <!-- WHAT HE DOES -->
+  <section class="scene" id="coach">
+    <div class="pair">
+      <div>
+        <p class="eyebrow">What he actually does</p>
+        <h2>He decides, then he reacts.</h2>
+        <p>A logbook remembers. A plan hands you a program and stops listening. Jerry picks the
+        lift, sets the load, and then changes the rest of the session the moment your reserve tells
+        him the day is not going the way he thought.</p>
+        <p>He never adds weight on a calendar. He holds the load, asks for one more repetition, and
+        adds the plate once you have earned it.</p>
       </div>
-      <input type="range" id="sessions" min="1" max="60" value="1" step="1"
-             aria-describedby="dialnote">
+      <div class="stack">
+        <div class="appcard">
+          <p class="cap">Back Squat · set 3 of 4</p>
+          <div class="setline"><span class="n">Set 1</span><span class="v">100 kg · 6 reps · RIR 2</span><span class="s done">logged</span></div>
+          <div class="setline"><span class="n">Set 2</span><span class="v">102.5 kg · 6 reps · RIR 1</span><span class="s done">logged</span></div>
+          <div class="setline"><span class="n">Set 3</span><span class="v">102.5 kg · 5 reps · RIR 0</span><span class="s done">logged</span></div>
+          <div class="setline"><span class="n">Set 4</span><span class="v">withdrawn</span><span class="s cut">cut</span></div>
+          <p class="said">You are fading faster than I planned. I am cutting the last set. That
+          protects tomorrow more than one more hard set helps today.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE EVIDENCE DIAL: cards first, control underneath, so a thumb never covers the answer -->
+  <section class="scene" id="dial">
+    <p class="eyebrow">Day one against day one hundred</p>
+    <h2>Most coaching apps are exactly as certain on your first session as your hundredth.</h2>
+    <p class="sub">Only one of these two changes.</p>
+
+    <div class="dial">
       <div class="versus">
         <div class="side them">
           <p class="whoi">A typical coaching app</p>
@@ -199,22 +197,29 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
           <p class="whoi">Jerry</p>
           <p class="claim" id="usclaim">I do not know you yet. For a man your age and bodyweight the average top set is around <b>100 kg</b>.</p>
           <p class="basis" id="usbasis">Basis: population research. This is a number about people like you, not about you. I will say so every time until it stops being true.</p>
-          <p style="margin:.625rem 0 0"><span class="tag" id="ustag">Population</span></p>
+          <p style="margin:.625rem 0 0"><span class="tag pop" id="ustag">Population</span></p>
         </div>
       </div>
-      <noscript><p class="small" style="margin-top:1rem;color:var(--amber)">The slider needs JavaScript. Everything it would reveal is written out on <a href="/how-it-works/" style="color:var(--teal)">how it works</a>.</p></noscript>
-      <p class="small" id="dialnote" style="margin-top:1rem">The tier is not a countdown. It moves
-      when the evidence arrives, and it moves back if his predictions start missing.</p>
+
+      <div class="dialhead">
+        <label for="sessions">Drag: sessions you have logged</label>
+        <output id="sessout" for="sessions">1</output>
+      </div>
+      <input type="range" id="sessions" min="1" max="60" value="1" step="1" aria-describedby="dialnote">
+      <noscript><p class="small" style="color:var(--amber)">The slider needs JavaScript. What it
+      reveals is written out on <a href="/how-it-works/" style="color:var(--teal)">how it works</a>.</p></noscript>
+      <p class="small" id="dialnote">The tier is not a countdown. It moves when the evidence
+      arrives, and it moves back if his predictions start missing.</p>
     </div>
   </section>
 
+  <!-- THE SEAL -->
   <section class="scene" id="seal">
-    <p class="eyebrow r">The seal</p>
-    <h2 class="r d1">Try to make him look better than he was.</h2>
-    <p class="sub r d2">This is a real sealed prediction, made before the set. Widen the range so he
-    looks right, or change the lift. The fingerprint is recomputed in your browser as you type.</p>
-
-    <div class="console r d2">
+    <p class="eyebrow">The seal</p>
+    <h2>Try to make him look better than he was.</h2>
+    <p class="sub">A real sealed prediction, made before the set. Widen the range so he looks right,
+    or change the lift. The fingerprint recomputes in your browser as you type.</p>
+    <div class="console">
       <div class="chead">
         <span class="lbl">Sealed before the set</span>
         <span class="verdict ok" id="verdict" role="status" aria-live="polite">VERIFIED</span>
@@ -263,31 +268,33 @@ field   sealedOn = 1755916800</pre>
     </div>
   </section>
 
+  <!-- THE CATEGORY, WITHOUT NAMES -->
   <section class="scene" id="others">
-    <p class="eyebrow r">Where everything else stops</p>
-    <h2 class="r d1">Four kinds of app. One shared habit.</h2>
-    <p class="sub r d2">They ask you a question, then ignore the answer.</p>
-    <div class="rows r d3" style="margin-top:2.25rem">
-      <div class="row"><div class="who">Hevy, Strong</div><div class="does">Record your sets beautifully. Decide nothing.</div></div>
-      <div class="row"><div class="who">Fitbod</div><div class="does">Adapt between sessions. Not during one.</div></div>
-      <div class="row"><div class="who">Whoop</div><div class="does">Score your recovery. Never write your workout.</div></div>
-      <div class="row"><div class="who">Chatbots</div><div class="does">Ask twice, get two answers. Nothing to hold them to next month.</div></div>
+    <p class="eyebrow">Where the category stops</p>
+    <h2>Four kinds of app. One shared habit.</h2>
+    <p class="sub">They ask you a question, then ignore the answer.</p>
+    <div class="rows" style="margin-top:2.25rem">
+      <div class="row"><div class="who">A logbook</div><div class="does">Records your sets beautifully. Decides nothing.</div></div>
+      <div class="row"><div class="who">A plan</div><div class="does">Adapts between sessions. Not during one.</div></div>
+      <div class="row"><div class="who">A wearable</div><div class="does">Scores your recovery. Never writes your workout.</div></div>
+      <div class="row"><div class="who">A chatbot</div><div class="does">Ask twice, get two answers. Nothing to hold it to next month.</div></div>
       <div class="row us"><div class="who">Jerry</div><div class="does">Decides the set, reacts as it lands, remembers you for months, and keeps score on himself where you can read it.</div></div>
     </div>
   </section>
 
+  <!-- COMMITMENT -->
   <section class="scene" id="price">
-    <p class="eyebrow r">The commitment</p>
-    <h2 class="r d1">The accuracy record goes up before we charge anyone.</h2>
-    <p class="sub r d2">Published once the number looks good, it is marketing. Published first, it is
-    a commitment.</p>
-    <div class="chips r d2" style="margin-top:1.75rem">
+    <p class="eyebrow">The commitment</p>
+    <h2>The accuracy record goes up before we charge anyone.</h2>
+    <p class="sub">Published once the number looks good, it is marketing. Published first, it is a
+    commitment.</p>
+    <div class="chips" style="margin-top:1.75rem">
       <span class="chip"><b>iPhone</b> · in testing</span>
       <span class="chip"><b>199 US dollars</b> per year</span>
       <span class="chip"><b>14 days</b> free</span>
     </div>
-    <p class="small r d3" style="margin-top:1.5rem">Not on the App Store yet, and there is no
-    mailing list, because there is no account system to hold one.
+    <p class="small" style="margin-top:1.5rem">Not on the App Store yet, and there is no mailing
+    list, because there is no account system to hold one.
     <a href="mailto:tachiwonajeremiah@gmail.com?subject=Tell%20me%20when%20OrderedStrength%20ships"
        style="color:var(--teal)">Email us</a> and you will hear from a person when it ships.</p>
   </section>

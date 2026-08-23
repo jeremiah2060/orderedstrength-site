@@ -46,14 +46,14 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
 
 <main>
   <section class="scene narrow">
-    <p class="eyebrow r">Verifier</p>
-    <h1 class="r d1">Check a receipt.</h1>
-    <p class="sub r d2">Paste a receipt copied from OrderedStrength. This checks whether the
+    <p class="eyebrow">Verifier</p>
+    <h1 >Check a receipt.</h1>
+    <p class="sub">Paste a receipt copied from OrderedStrength. This checks whether the
     prediction inside it is byte for byte the one that was sealed before the set was performed.
     No account, no sign in, and nothing you paste is stored.</p>
 
-    <div class="r d2" style="margin-top:2rem">
-      <label for="in" class="eyebrow quiet" style="display:block">Receipt JSON</label>
+    <div  style="margin-top:2rem">
+      <label for="in" class="eyebrow" style="display:block">Receipt JSON</label>
       <textarea id="in" spellcheck="false" placeholder='Paste the receipt here, including the outer brackets'></textarea>
       <div class="actions">
         <button class="btn" id="go">Check it</button>
@@ -63,7 +63,7 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
 
     <div id="out" aria-live="polite"></div>
 
-    <details class="limits r d3">
+    <details class="limits">
       <summary>What this proves, and what it does not</summary>
       <p>A receipt carries a prediction, a random nonce, and a SHA-256 fingerprint committed
       <em>before</em> the set. The verifier recomputes the fingerprint from the prediction and the

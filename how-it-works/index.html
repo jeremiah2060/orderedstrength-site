@@ -17,9 +17,13 @@ ol.loop li{counter-increment:s;display:grid;grid-template-columns:2.5rem 1fr;gap
            padding:1.375rem 0;border-top:1px solid var(--line)}
 ol.loop li::before{content:counter(s,decimal-leading-zero);font-family:var(--mono);font-size:.8125rem;
                    color:var(--teal);padding-top:.25rem}
-ol.loop b{display:block;font-family:var(--display);font-weight:700;font-size:1.0625rem;
+/* 🔒 THREE CHILDREN INTO TWO COLUMNS. ::before takes column 1, <b> takes column 2, and <span>
+   auto-places into column 1 of the NEXT row, which is 2.5rem wide, so the body text wrapped one
+   word per line. It was invisible for as long as the page was gated behind a scroll reveal, and
+   appeared the moment the content was allowed to render. Pin BOTH children to column 2. */
+ol.loop b{grid-column:2;display:block;font-family:var(--display);font-weight:700;font-size:1.0625rem;
           letter-spacing:-.015em;margin-bottom:.375rem}
-ol.loop span{font-size:.9375rem;color:var(--ink2);line-height:1.6}
+ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
 .quote{margin:1.75rem 0 0;padding:1.125rem 1.25rem;background:var(--surface);
        border-left:2px solid var(--amber);border-radius:0 10px 10px 0;font-size:.9375rem;color:var(--ink2)}
 .quote cite{display:block;margin-top:.625rem;font-style:normal;font-size:.75rem;color:var(--ink3);line-height:1.45}
@@ -46,8 +50,7 @@ ol.loop span{font-size:.9375rem;color:var(--ink2);line-height:1.6}
          color:var(--ink3);margin-top:.75rem}
 .receipt dt{font-family:var(--mono);color:var(--ink3)}
 .receipt dd{margin:0;color:var(--ink2)}
-.side-by{display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start}
-@media (max-width:52rem){.side-by{grid-template-columns:1fr}.appcard{max-width:none}}
+@media (max-width:52rem){.appcard{max-width:none}}
 </style>
 </head>
 <body>
@@ -64,16 +67,16 @@ ol.loop span{font-size:.9375rem;color:var(--ink2);line-height:1.6}
 
 <main>
 
-  <section class="scene">
-    <p class="eyebrow r">How it works</p>
-    <h1 class="r d1">One loop. You ask, you train, you rate each set, he reacts.</h1>
-    <p class="sub r d2">Everything below is what the app actually does, written from its own source
+  <section class="scene reading">
+    <p class="eyebrow">How it works</p>
+    <h1 >One loop. You ask, you train, you rate each set, he reacts.</h1>
+    <p class="sub">Everything below is what the app actually does, written from its own source
     rather than from a brochure. Where it refuses to answer, that is a feature and it is described
     here too.</p>
   </section>
 
   <section class="scene tight">
-    <ol class="loop r">
+    <ol class="loop">
       <li><b>Day one is a deal, not a promise</b><span>Jerry asks your bodyweight, your experience,
       how many days a week you train, and your current lifts if you know them. Then he tells you
       plainly that on day one he has averages for someone your age, sex and weight, and nothing
@@ -114,9 +117,9 @@ ol.loop span{font-size:.9375rem;color:var(--ink2);line-height:1.6}
   </section>
 
   <section class="scene">
-    <p class="eyebrow r">Four moments</p>
-    <h2 class="r d1">Where it stops feeling like an app.</h2>
-    <div class="grid c2 r d2" style="margin-top:2rem">
+    <p class="eyebrow">Four moments</p>
+    <h2 >Where it stops feeling like an app.</h2>
+    <div class="grid c2" style="margin-top:2rem">
       <div class="moment">
         <h3>Hard Truths</h3>
         <p>When your own data shows a habit working against you, he says it out loud, using only
@@ -152,18 +155,18 @@ ol.loop span{font-size:.9375rem;color:var(--ink2);line-height:1.6}
   </section>
 
   <section class="scene">
-    <div class="side-by">
+    <div class="pair">
       <div>
-        <p class="eyebrow quiet r">On the screen</p>
-        <h2 class="r d1">The number on the screen is the number the engine is using.</h2>
-        <p class="r d2">When you report pain, the ramp does not advance on a calendar. Pain above the
+        <p class="eyebrow">On the screen</p>
+        <h2 >The number on the screen is the number the engine is using.</h2>
+        <p >When you report pain, the ramp does not advance on a calendar. Pain above the
         clinical line holds it exactly where it is. There is no separate optimistic figure shown to
         keep you feeling good, because a comforting number you cannot act on is worse than a hard
         one you can.</p>
-        <p class="r d2">Every confrontation carries a receipt in the same style: whose data, how
+        <p >Every confrontation carries a receipt in the same style: whose data, how
         much of it, and what was ruled out before he said anything.</p>
       </div>
-      <div class="r d1" style="display:grid;gap:.75rem">
+      <div  style="display:grid;gap:.75rem">
         <div class="appcard">
           <p class="cap">Right knee · returning to load</p>
           <div class="ramp"><span class="big">17</span><span class="unit">days until full load</span></div>
@@ -187,46 +190,46 @@ ol.loop span{font-size:.9375rem;color:var(--ink2);line-height:1.6}
     </div>
   </section>
 
-  <section class="scene">
-    <p class="eyebrow r">The part that matters most</p>
-    <h2 class="r d1">He would rather refuse than guess.</h2>
-    <p class="r d2">Most coaching apps overclaim, and once you catch one overclaim you quietly
+  <section class="scene reading">
+    <p class="eyebrow">The part that matters most</p>
+    <h2 >He would rather refuse than guess.</h2>
+    <p >Most coaching apps overclaim, and once you catch one overclaim you quietly
     discount everything else. This one inverts that: it flags every guess and owns every miss, so
     the confident claims actually carry weight.</p>
 
-    <dl class="refuse r d2">
+    <dl class="refuse">
       <dt>declines</dt><dd>The cardio engine has one way to give you a pace and seven separate ways to decline, each naming what is missing.</dd>
       <dt>declines</dt><dd>The camera has one way to say it saw the set and several ways to say it did not.</dd>
       <dt>declines</dt><dd>Ask him a question in plain language and every figure in the answer has to trace back to a value the engine actually returned. If one does not, the answer is thrown away and a plainer one takes its place.</dd>
       <dt>refuses</dt><dd>A recovery model can always flatter itself by measuring numbers it invented. Ours is marked self-referential in the code and barred from every personal claim. It cannot be wrong, which is why it cannot be evidence.</dd>
     </dl>
 
-    <div class="quote r d2">
+    <div class="quote">
       I could see you some of the time, but not enough of it to count honestly, so I am not going
       to guess.
       <cite>What the app says when the camera view was poor, rather than inventing a repetition count.</cite>
     </div>
   </section>
 
-  <section class="scene">
-    <p class="eyebrow r">Your data</p>
-    <h2 class="r d1">Easy to leave, hard to replace.</h2>
-    <p class="r d2">Your training is computed on your device by our own engines. Bring your history
-    in from Strong or Hevy so switching does not mean starting at zero, and export the whole record
+  <section class="scene reading">
+    <p class="eyebrow">Your data</p>
+    <h2 >Easy to leave, hard to replace.</h2>
+    <p >Your training is computed on your device by our own engines. Bring your history
+    in from the big logging apps so switching does not mean starting at zero, and export the whole record
     as a single file whenever you want. Nothing is held hostage to keep you subscribed.</p>
-    <p class="r d2">Losing your history is one of the loudest complaints in this category, and
+    <p >Losing your history is one of the loudest complaints in this category, and
     making cancellation difficult is what gets an app called a scam. We would rather be the product
     that is easy to leave and hard to replace.</p>
-    <p class="small r d3">Exactly what does and does not leave your phone, including the one thing
+    <p class="small">Exactly what does and does not leave your phone, including the one thing
     that does, is set out in the <a href="/app-privacy/" style="color:var(--teal)">privacy
     policy</a>.</p>
   </section>
 
-  <section class="scene">
-    <p class="eyebrow r">See it for yourself</p>
-    <h2 class="r d1">The claims on this page are checkable.</h2>
-    <p class="sub r d2">Not by trusting the page. By running the arithmetic.</p>
-    <div class="chips r d2" style="margin-top:1.75rem">
+  <section class="scene reading">
+    <p class="eyebrow">See it for yourself</p>
+    <h2 >The claims on this page are checkable.</h2>
+    <p class="sub">Not by trusting the page. By running the arithmetic.</p>
+    <div class="chips" style="margin-top:1.75rem">
       <a class="btn" href="/#seal">Break a sealed prediction</a>
       <a class="btn ghost" href="/record/">Read the record</a>
     </div>

@@ -43,28 +43,33 @@ img{max-width:100%;height:auto}
 .bar nav a:hover,.bar nav a:focus-visible,.bar nav a[aria-current]{color:var(--ink)}
 @media (max-width:36rem){.bar nav{gap:.9375rem;font-size:.75rem}.bar nav .opt{display:none}}
 
-/* ── the measurement rail: navigation, not decoration ── */
-.rail{position:fixed;left:1.125rem;top:50%;transform:translateY(-50%);z-index:70;
-      display:flex;flex-direction:column;gap:.6875rem;padding:0;margin:0;list-style:none}
-.rail a{display:block;width:1.125rem;height:1px;background:var(--ink3);opacity:.45;
-        position:relative;transition:opacity .25s,background .25s,width .25s}
-.rail a:hover,.rail a:focus-visible{opacity:1;width:1.5rem}
-.rail a[aria-current="true"]{background:var(--teal);opacity:1;width:1.75rem}
-.rail a span{position:absolute;left:2.25rem;top:50%;transform:translateY(-50%);
-             font-family:var(--mono);font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;
-             color:var(--ink3);white-space:nowrap;opacity:0;transition:opacity .25s;pointer-events:none}
-.rail a:hover span,.rail a[aria-current="true"] span{opacity:1}
-@media (max-width:64rem){.rail{display:none}}
 
 main{padding-top:var(--bar)}
-.scene{max-width:var(--wide);margin:0 auto;padding:clamp(3.5rem,9vw,6.5rem) var(--gut)}
+.scene{max-width:var(--wide);margin:0 auto;padding:clamp(2.75rem,6vw,4.25rem) var(--gut);
+       position:relative}
+.scene + .scene::before{content:"";position:absolute;inset:0 var(--gut) auto var(--gut);
+                        height:1px;background:var(--line)}
 .scene.tight{padding-top:0}
+/* long-form pages hug their measure instead of leaving a third of the screen empty */
+.scene.reading{max-width:52rem}
+.scene.tight::before{display:none}
+/* the hero owns the screen it opens on */
+.hero{min-height:calc(100svh - var(--bar));display:flex;align-items:center;
+      padding-top:clamp(2rem,5vw,3rem);padding-bottom:clamp(2rem,5vw,3rem)}
+.hero::before{display:none}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(2rem,5vw,3.5rem);
+           align-items:center;width:100%}
+.hero-grid > *{min-width:0}
+@media (max-width:56rem){
+  .hero{min-height:0;padding-top:clamp(2.5rem,8vw,4rem)}
+  .hero-grid{grid-template-columns:1fr;gap:2.5rem}
+}
 .narrow{max-width:44rem}
 
 /* ── type ─────────────────────────────────────────────── */
 .eyebrow{font-family:var(--mono);font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;
-         color:var(--teal);margin:0 0 1rem}
-.eyebrow.quiet{color:var(--ink3)}
+         color:var(--teal);margin:0 0 .875rem;display:flex;align-items:center;gap:.625rem}
+.eyebrow::before{content:"";width:1.25rem;height:1px;background:var(--teal);flex:none;opacity:.6}
 h1{font-family:var(--display);font-weight:700;font-size:clamp(2.125rem,6.4vw,3.875rem);line-height:1.02;
    letter-spacing:-.038em;margin:0 0 1.125rem;max-width:17ch;text-wrap:balance}
 h2{font-family:var(--display);font-weight:700;font-size:clamp(1.625rem,4.2vw,2.625rem);line-height:1.07;
@@ -79,15 +84,22 @@ em{font-style:normal;color:var(--teal)}
 hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0}
 
 /* ── reveal ───────────────────────────────────────────── */
-.r{opacity:1}
-.js .r{opacity:0;transform:translateY(1.375rem);
-       transition:opacity .68s var(--ease),transform .68s var(--ease)}
-.js .r.in{opacity:1;transform:none}
-.js .r.d1{transition-delay:.08s}.js .r.d2{transition-delay:.16s}.js .r.d3{transition-delay:.24s}
+/* CONTENT IS NEVER HIDDEN BY AN ANIMATION.
+   The previous build gated every block behind a scroll reveal, and 23 of 26 elements on
+   /how-it-works never became visible: the page was blank below the hero. A page whose text
+   depends on script to exist is broken for a crawler, a slow connection, a failed script and a
+   link preview, and it is invisible to the one check that would have caught it, a screenshot.
+   Motion now attaches only to things already visible, and only where the movement means
+   something. .r stays as a hook so markup does not churn, and it touches nothing. */
+.r{opacity:1;transform:none}
 
 /* ── cards / slabs ────────────────────────────────────── */
 .card{background:var(--surface);border-radius:12px;padding:1.25rem}
+/* min-width:0. A grid item defaults to min-width:auto, so a child with a max-width wider than
+   the column (a 23rem card in a 350px phone column) EXPANDS the track, widens the page, and pushes
+   every line of text off the right edge. Measured at 390px before this line existed. */
 .grid{display:grid;gap:.75rem}
+.grid > *{min-width:0}
 .grid.c3{grid-template-columns:repeat(3,1fr)}
 .grid.c2{grid-template-columns:repeat(2,1fr)}
 @media (max-width:44rem){.grid.c3,.grid.c2{grid-template-columns:1fr}}
@@ -142,3 +154,9 @@ footer nav a:hover{color:var(--ink)}
   .js .r{opacity:1;transform:none;transition:none}
   .btn:hover{transform:none}
 }
+
+/* ── paired columns: both sides start on the same line ── */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,4vw,3rem);align-items:start}
+.pair > *{min-width:0}
+@media (max-width:56rem){.pair{grid-template-columns:1fr;gap:2rem}}
+.stack{display:grid;gap:.75rem;max-width:100%}
