@@ -1,221 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
+<script>document.documentElement.className="js";</script>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>OrderedStrength</title>
-<meta name="description" content="A strength coach for iPhone that seals every prediction before you lift, then shows you when it was wrong. Check the record yourself.">
+<meta name="description" content="A strength coach that writes down what it expects before you lift, seals it, then shows you when it was wrong.">
 <meta property="og:title" content="OrderedStrength">
 <meta property="og:description" content="The strength coach that grades itself in public.">
+<meta name="theme-color" content="#060709">
 <style>
 :root{
   --canvas:#060709; --surface:#121519; --elevated:#1A1E24; --line:#242A32;
-  --ink:#fff; --ink-2:rgba(255,255,255,.72); --ink-3:rgba(255,255,255,.50);
+  --ink:#fff; --ink2:rgba(255,255,255,.70); --ink3:rgba(255,255,255,.48);
   --teal:#00D4B1; --stone:#C0A87F; --azure:#4D9DF0; --amber:#F59E0B;
-  --l1:1.125rem; --l2:1.125rem; --l3:.875rem; --hero:2rem; --num:1.75rem;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,Helvetica,Arial,sans-serif;
+  --nav:3.25rem;
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--sans);
-     font-size:var(--l3);line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:44rem;margin:0 auto;padding:0 1.5rem}
-a{color:var(--teal);text-decoration:none}
-a:hover{text-decoration:underline}
-h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
+     line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
 
-/* ---- hero ---- */
-header{padding:5.5rem 0 3rem}
-.mark{display:inline-flex;align-items:center;gap:.5rem;font-size:var(--l3);
-      color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2.5rem}
-.mark i{width:.5rem;height:.5rem;border-radius:50%;background:var(--teal);font-style:normal}
-h1{font-size:var(--hero);line-height:1.2;margin-bottom:1rem}
-h1 em{font-style:normal;color:var(--teal)}
-.lede{font-size:var(--l1);color:var(--ink-2);line-height:1.55;max-width:34rem}
+/* ── nav ───────────────────────────────────────────── */
+nav{position:fixed;inset:0 0 auto;height:var(--nav);z-index:50;display:flex;
+    align-items:center;justify-content:space-between;padding:0 1.25rem;
+    background:rgba(6,7,9,.72);backdrop-filter:saturate(160%) blur(18px);
+    -webkit-backdrop-filter:saturate(160%) blur(18px);
+    border-bottom:1px solid transparent;transition:border-color .3s}
+nav.stuck{border-bottom-color:var(--line)}
+nav .brand{display:flex;align-items:center;gap:.5rem;font-size:.875rem;font-weight:600;letter-spacing:-.01em}
+nav .brand i{width:.4375rem;height:.4375rem;border-radius:50%;background:var(--teal);font-style:normal;
+             box-shadow:0 0 0 0 rgba(0,212,177,.6);animation:pulse 3.2s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(0,212,177,.5)}70%{box-shadow:0 0 0 .5rem rgba(0,212,177,0)}100%{box-shadow:0 0 0 0 rgba(0,212,177,0)}}
+nav menu{display:flex;gap:1.5rem;margin:0;padding:0;list-style:none;font-size:.8125rem;color:var(--ink3)}
+nav menu a:hover{color:var(--ink)}
+@media (max-width:33rem){nav menu{gap:1rem;font-size:.75rem}nav menu .hide-s{display:none}}
 
-/* ---- the claim strip ---- */
-.claim{margin:3rem 0 0;background:var(--surface);border:1px solid var(--line);
-       border-radius:12px;padding:1.25rem 1.375rem}
-.claim .row{display:flex;gap:.875rem;align-items:flex-start;padding:.625rem 0}
-.claim .row + .row{border-top:1px solid var(--line)}
-.claim .n{flex:0 0 1.5rem;height:1.5rem;border-radius:50%;background:var(--elevated);
-          color:var(--teal);font-size:.75rem;font-weight:700;display:flex;
-          align-items:center;justify-content:center;margin-top:.125rem}
-.claim .t{font-size:var(--l3);color:var(--ink-2)}
-.claim .t b{color:var(--ink);font-weight:600}
-.verify{margin-top:1.125rem;padding-top:1.125rem;border-top:1px solid var(--line);
-        font-size:var(--l3);color:var(--ink-3)}
+/* ── scenes ────────────────────────────────────────── */
+main{padding-top:var(--nav)}
+.scene{min-height:auto;padding:5.5rem 1.5rem;max-width:60rem;margin:0 auto}
+.scene.tall{padding:6.5rem 1.5rem}
+.eyebrow{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);
+         margin:0 0 1rem;font-weight:600}
+h1{font-size:clamp(2.25rem,7.5vw,4rem);line-height:1.04;letter-spacing:-.03em;
+   font-weight:600;margin:0 0 1.25rem;max-width:16ch}
+h2{font-size:clamp(1.75rem,5vw,2.75rem);line-height:1.1;letter-spacing:-.025em;
+   font-weight:600;margin:0 0 1rem;max-width:18ch}
+.sub{font-size:clamp(1rem,2.2vw,1.1875rem);color:var(--ink2);max-width:38ch;margin:0;line-height:1.5}
 
-/* ---- sections ---- */
-section{padding:3rem 0;border-top:1px solid var(--line)}
-.kicker{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;
-        color:var(--ink-3);margin-bottom:.75rem}
-h2{font-size:var(--l1);margin-bottom:.875rem}
-p{margin:0 0 1rem;color:var(--ink-2);font-size:var(--l3)}
-p:last-child{margin-bottom:0}
+/* ── reveal ────────────────────────────────────────── */
+.js .r{opacity:0;transform:translateY(1.5rem);transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
+.r.in{opacity:1;transform:none}
+.r.d1{transition-delay:.09s}.r.d2{transition-delay:.18s}.r.d3{transition-delay:.27s}
 
-/* ---- comparison ---- */
-.vs{display:grid;gap:.5rem;margin-top:1.25rem}
-.vs div{display:grid;grid-template-columns:8.5rem 1fr;gap:1rem;padding:.75rem .875rem;
-        background:var(--surface);border-radius:8px;font-size:var(--l3);align-items:baseline}
-.vs span{color:var(--ink-3)}
-.vs strong{color:var(--ink-2);font-weight:400}
-.vs .us{background:var(--elevated);box-shadow:inset 2px 0 0 var(--teal)}
-.vs .us span{color:var(--teal)}
-.vs .us strong{color:var(--ink)}
+/* ── the live app card ─────────────────────────────── */
+.device{margin:3rem auto 0;max-width:23rem;background:var(--surface);border-radius:16px;
+        padding:1.125rem 1.25rem 1rem;box-shadow:0 2rem 5rem rgba(0,0,0,.6),0 0 0 1px var(--line)}
+.device .cap{font-size:.75rem;color:var(--ink3);letter-spacing:.02em;margin-bottom:.875rem}
+.lift{display:flex;align-items:flex-start;gap:.75rem;padding:.625rem 0}
+.lift + .lift{border-top:1px solid rgba(255,255,255,.05)}
+.dot{flex:0 0 1.125rem;height:1.125rem;border-radius:50%;margin-top:.0625rem;position:relative;
+     border:2px solid var(--ink3);transition:border-color .45s,background .45s}
+.dot.ok{border-color:var(--teal);background:var(--teal)}
+.dot.ok::after{content:"";position:absolute;inset:0;margin:auto;width:.3125rem;height:.5rem;
+               border:solid var(--canvas);border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.dot.miss{border-color:var(--amber)}
+.lift .nm{flex:1;font-size:.875rem;color:var(--ink2);line-height:1.35}
+.js .lift .vd{font-size:.875rem;font-weight:500;white-space:nowrap;opacity:0;transition:opacity .5s}
+.lift .vd.show{opacity:1}
+.vd.in-range{color:var(--teal)} .vd.out-range{color:var(--amber)}
+.device .note{font-size:.8125rem;color:var(--ink3);line-height:1.45;margin:.875rem 0 0;
+              padding-top:.875rem;border-top:1px solid rgba(255,255,255,.05)}
+.device .foot{font-size:.75rem;color:var(--ink3);margin-top:.625rem;opacity:.8}
 
-/* ---- honesty cards ---- */
-.cards{display:grid;gap:.75rem;margin-top:1.25rem}
-.card{background:var(--surface);border-radius:10px;padding:1.125rem}
-.card h3{font-size:var(--l3);margin-bottom:.375rem;color:var(--ink)}
-.card p{font-size:var(--l3);color:var(--ink-3);margin:0}
-.tag{display:inline-block;font-size:.6875rem;letter-spacing:.05em;text-transform:uppercase;
-     padding:.1875rem .5rem;border-radius:100px;margin-bottom:.625rem;font-weight:600}
-.tag.pop{background:rgba(192,168,127,.14);color:var(--stone)}
-.tag.you{background:rgba(0,212,177,.14);color:var(--teal)}
-.tag.bld{background:rgba(77,157,240,.14);color:var(--azure)}
+/* ── seal strip ────────────────────────────────────── */
+.seal{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:2.5rem}
+.step{background:var(--surface);border-radius:12px;padding:1.125rem;position:relative;overflow:hidden}
+.step::before{content:"";position:absolute;inset:auto 0 0 0;height:2px;background:var(--teal)}
+.js .step::before{content:"";position:absolute;inset:auto 0 0 0;height:2px;background:var(--teal);
+              transform:scaleX(0);transform-origin:left;transition:transform .8s ease}
+.step.in::before{transform:scaleX(1)}
+.step.d1::before{transition-delay:.2s}.step.d2::before{transition-delay:.4s}
+.step b{display:block;font-size:.875rem;margin-bottom:.3125rem}
+.step span{font-size:.8125rem;color:var(--ink3);line-height:1.45}
+.hash{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.6875rem;
+      color:var(--teal);word-break:break-all;margin-top:.5rem;display:block;min-height:1.6em}
+@media (max-width:38rem){.seal{grid-template-columns:1fr}}
 
-/* ---- quote ---- */
-blockquote{margin:1.25rem 0 0;padding:1.125rem 1.25rem;background:var(--surface);
-           border-left:2px solid var(--amber);border-radius:0 10px 10px 0;
-           font-size:var(--l3);color:var(--ink-2)}
-blockquote cite{display:block;margin-top:.625rem;font-style:normal;
-                font-size:.75rem;color:var(--ink-3)}
+/* ── comparison ────────────────────────────────────── */
+.rows{margin-top:2.5rem;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:10rem 1fr;gap:1.5rem;padding:1.125rem .25rem;
+     border-bottom:1px solid var(--line);align-items:baseline}
+.row .who{font-size:.9375rem;color:var(--ink3)}
+.row .does{font-size:.9375rem;color:var(--ink2)}
+.row.us{background:linear-gradient(90deg,rgba(0,212,177,.07),transparent 70%)}
+.row.us .who{color:var(--teal);font-weight:600}
+.row.us .does{color:var(--ink);font-weight:500}
+@media (max-width:33rem){.row{grid-template-columns:1fr;gap:.1875rem}}
 
-/* ---- status ---- */
-.status{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:1.25rem}
-.pill{font-size:var(--l3);padding:.4375rem .875rem;border-radius:100px;
-      background:var(--surface);color:var(--ink-2)}
-.pill b{color:var(--ink);font-weight:600}
+/* ── tiers ─────────────────────────────────────────── */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:2.5rem}
+.tier{background:var(--surface);border-radius:12px;padding:1.25rem}
+.tier .tag{display:inline-block;font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;
+           padding:.1875rem .5rem;border-radius:100px;font-weight:700;margin-bottom:.75rem}
+.tag.pop{background:rgba(192,168,127,.15);color:var(--stone)}
+.tag.bld{background:rgba(77,157,240,.15);color:var(--azure)}
+.tag.you{background:rgba(0,212,177,.15);color:var(--teal)}
+.tier p{font-size:.8125rem;color:var(--ink3);margin:0;line-height:1.5}
+@media (max-width:38rem){.tiers{grid-template-columns:1fr}}
 
-footer{padding:2.5rem 0 5rem;border-top:1px solid var(--line);
-       font-size:var(--l3);color:var(--ink-3)}
-footer nav{display:flex;flex-wrap:wrap;gap:1.5rem;margin-bottom:1.25rem}
-@media (max-width:34rem){
-  :root{--hero:1.625rem}
-  header{padding:3.5rem 0 2rem}
-  .vs div{grid-template-columns:1fr;gap:.125rem}
+/* ── cta ───────────────────────────────────────────── */
+.cta{text-align:center;padding:6.5rem 1.5rem 5rem;max-width:60rem;margin:0 auto}
+.price{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:.5rem;margin:1.75rem 0 0}
+.chip{font-size:.8125rem;padding:.5rem 1rem;border-radius:100px;background:var(--surface);color:var(--ink2)}
+.chip b{color:var(--ink)}
+.btn{display:inline-block;margin-top:2rem;background:var(--teal);color:#03110E;font-weight:600;
+     font-size:.9375rem;padding:.8125rem 1.75rem;border-radius:100px;transition:transform .2s,filter .2s}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.08)}
+
+footer{border-top:1px solid var(--line);padding:2.5rem 1.5rem 4rem;max-width:60rem;margin:0 auto;
+       font-size:.8125rem;color:var(--ink3)}
+footer menu{display:flex;flex-wrap:wrap;gap:1.5rem;margin:0 0 1.25rem;padding:0;list-style:none}
+footer a:hover{color:var(--ink)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .r{opacity:1;transform:none;transition:none}
+  .step::before{transform:scaleX(1);transition:none}
+  .lift .vd{opacity:1;transition:none}
+  nav .brand i{animation:none}
 }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-<header>
-  <div class="mark"><i></i>OrderedStrength</div>
-  <h1>A strength coach that writes down what it expects <em>before</em> you lift.</h1>
-  <p class="lede">Jerry plans your session, changes it as each set lands, and seals every
-  prediction before you touch the bar. Afterwards he grades himself against what actually
-  happened, and leaves the misses on the record.</p>
+<nav id="nav">
+  <a class="brand" href="/"><i></i>OrderedStrength</a>
+  <menu>
+    <li><a href="#how">How it works</a></li>
+    <li class="hide-s"><a href="#proof">The record</a></li>
+    <li><a href="/verify/">Verify</a></li>
+  </menu>
+</nav>
 
-  <div class="claim">
-    <div class="row"><div class="n">1</div><div class="t"><b>He predicts.</b> Before your session, Jerry writes down what he expects from you.</div></div>
-    <div class="row"><div class="n">2</div><div class="t"><b>He seals it.</b> The prediction is fingerprinted, so it cannot be quietly rewritten once the result is in.</div></div>
-    <div class="row"><div class="n">3</div><div class="t"><b>He grades himself.</b> Hits and misses both, kept where you can read them.</div></div>
-    <div class="verify">You do not have to believe any of that.
-    <a href="/verify/">Check a receipt yourself</a>.</div>
-  </div>
-</header>
+<main>
 
-<section>
-  <div class="kicker">Why this is not the same as every other app</div>
-  <h2>Four products, one shared habit</h2>
-  <p>Logging apps record and decide nothing. Plan apps hand you a program that freezes the
-  moment the session starts. Wearables watch your recovery and never write your workout.
-  Chatbots sound fluent and give you a different answer if you ask twice.</p>
-  <p>All four ask you a question and then ignore the answer. They ask about your injury and
-  program around nothing. They ask what equipment you own and prescribe a machine you do not
-  have. Lifters rarely complain about this. They quietly load a different weight than the one
-  on the screen, and stop believing the rest of it.</p>
+  <!-- ── HERO ─────────────────────────────────── -->
+  <section class="scene tall">
+    <p class="eyebrow r">Strength coaching for iPhone</p>
+    <h1 class="r d1">He tells you what you will lift. Before you lift it.</h1>
+    <p class="sub r d2">Then he grades himself on it, in public, and leaves the misses on the record.</p>
 
-  <div class="vs">
-    <div><span>Logging app</span><strong>Remembers</strong></div>
-    <div><span>Plan app</span><strong>Dictates, then stops listening</strong></div>
-    <div><span>Wearable</span><strong>Watches</strong></div>
-    <div><span>Chatbot</span><strong>Improvises, and forgets</strong></div>
-    <div class="us"><span>Jerry</span><strong>Decides, reacts set by set, remembers you for months, and keeps score on himself</strong></div>
-  </div>
-</section>
+    <div class="device r d3" id="card">
+      <div class="cap">Prediction Accuracy</div>
+      <div class="lift">
+        <div class="dot ok" data-dot="0"></div>
+        <div class="nm">Bulgarian Split Squat</div>
+        <div class="vd in-range" data-vd="0">Within prediction</div>
+      </div>
+      <div class="lift">
+        <div class="dot miss" data-dot="1"></div>
+        <div class="nm">Romanian Deadlift</div>
+        <div class="vd out-range" data-vd="1">Outside prediction</div>
+      </div>
+      <div class="lift">
+        <div class="dot ok" data-dot="2"></div>
+        <div class="nm">Incline Barbell Press</div>
+        <div class="vd in-range" data-vd="2">Within prediction</div>
+      </div>
+      <p class="note">My ranges are built to contain your result 80 percent of the time.</p>
+      <p class="foot">I update my model from every result.</p>
+    </div>
+  </section>
 
-<section>
-  <div class="kicker">The part competitors cannot copy</div>
-  <h2>Every number says where it came from</h2>
-  <p>On day one Jerry has averages for someone your age, sex and weight, and he says so in
-  those words. As you log real sets he shifts off the averages onto your own body, and shows
-  you how far he has moved and how sure he is. The pace follows your evidence, never a
-  countdown, and he never claims to know you after a fixed number of sessions.</p>
+  <!-- ── THE SEAL ─────────────────────────────── -->
+  <section class="scene" id="proof">
+    <p class="eyebrow r">The part nobody else will do</p>
+    <h2 class="r d1">A prediction that cannot be edited afterwards.</h2>
+    <p class="sub r d2">Every call is fingerprinted before your first repetition. Change one character later and the fingerprint stops matching.</p>
 
-  <div class="cards">
-    <div class="card"><span class="tag pop">Population</span>
-      <h3>Borrowed from the literature</h3>
-      <p>Stated as an average for people like you, not as a fact about you. If the research was measured on a different population, it is labelled a conservative approximation.</p></div>
-    <div class="card"><span class="tag bld">Building</span>
-      <h3>Still collecting your data</h3>
-      <p>Jerry says what he is missing rather than printing a number he cannot stand behind. The cardio engine has one way to answer and seven ways to decline, each naming the gap.</p></div>
-    <div class="card"><span class="tag you">Yours</span>
-      <h3>Measured on you</h3>
-      <p>Earned from your logged sets. This is the only tier that speaks about you specifically, and it is the hardest one to reach.</p></div>
-  </div>
+    <div class="seal">
+      <div class="step r" data-step><b>1 · He predicts</b><span>Before the session, in writing.</span></div>
+      <div class="step r d1" data-step><b>2 · It is sealed</b><span>Fingerprinted, then locked.</span><code class="hash" id="hash">a7f3c1e9b2d84f60</code></div>
+      <div class="step r d2" data-step><b>3 · You can check it</b><span>Paste a receipt. Anyone can, without an account.</span></div>
+    </div>
+  </section>
 
-  <blockquote>I could see you some of the time, but not enough of it to count honestly,
-  so I am not going to guess.
-  <cite>What Jerry says when the camera view was poor, rather than inventing a rep count</cite></blockquote>
-</section>
+  <!-- ── COMPARISON ───────────────────────────── -->
+  <section class="scene" id="how">
+    <p class="eyebrow r">Where everything else stops</p>
+    <h2 class="r d1">Four kinds of app. One shared habit.</h2>
+    <p class="sub r d2">They ask you a question, then ignore the answer.</p>
 
-<section>
-  <div class="kicker">The day it matters most</div>
-  <h2>Tell him something hurts and he keeps coaching you</h2>
-  <p>This is where other apps go quiet. Jerry removes what is unsafe, trains everything else,
-  and brings the injured movement back gradually rather than all at once. Pain above the
-  clinical line holds the ramp where it is instead of letting the calendar advance it. The
-  screen shows the honest number of days until full load, and it is the same number the engine
-  is using.</p>
-  <p>He is built never to shame you. The words <em>missed</em>, <em>skipped</em> and
-  <em>streak</em> are blocked from his coaching by an automatic check, so a rough week cannot
-  trigger a punishment.</p>
-</section>
+    <div class="rows r d3">
+      <div class="row"><div class="who">Logging apps</div><div class="does">Record beautifully. Decide nothing.</div></div>
+      <div class="row"><div class="who">Plan apps</div><div class="does">Hand you a program that freezes the moment you start.</div></div>
+      <div class="row"><div class="who">Wearables</div><div class="does">Watch your recovery. Never write your workout.</div></div>
+      <div class="row"><div class="who">Chatbots</div><div class="does">Ask twice, get two answers. Nothing to hold them to.</div></div>
+      <div class="row us"><div class="who">Jerry</div><div class="does">Decides the set, reacts as it lands, remembers you for months, and keeps score on himself.</div></div>
+    </div>
+  </section>
 
-<section>
-  <div class="kicker">Your data</div>
-  <h2>Easy to leave, hard to replace</h2>
-  <p>Your training is computed on your device by our own engines. There is no third party
-  code in this app, no vendor SDK, and no advertising identifier.</p>
-  <p><b style="color:var(--ink)">One thing does leave your phone, and we would rather write it
-  here than let you find it.</b> Once a day the app sends a small usage beacon. It carries
-  counts and yes or no facts about the app itself: whether you opened it, whether you finished
-  a session, whether you reached the subscription screen, how many times it crashed, and your
-  language. It is tied to a random identifier created on your device that links to nothing
-  about you, and it is cleared when you clear your data. It never carries a set, a weight, a
-  repetition, or anything about your body. There is a switch to turn it off in Data and
-  Privacy, and it works.</p>
-  <p>Bring your history in from Strong or Hevy so switching does not mean starting at zero,
-  and export your whole record as a single file whenever you want. Nothing about your training
-  is held hostage to keep you subscribed. If you stay, we want it to be because nothing else
-  understands you as well.</p>
-</section>
+  <!-- ── TIERS ────────────────────────────────── -->
+  <section class="scene">
+    <p class="eyebrow r">Honesty, wired in</p>
+    <h2 class="r d1">Every number says where it came from.</h2>
+    <p class="sub r d2">On day one he has averages. He says so, in those words, and moves off them only as you earn it.</p>
 
-<section>
-  <div class="kicker">Status</div>
-  <h2>Not shipped yet, and we would rather say so</h2>
-  <div class="status">
-    <span class="pill"><b>iPhone</b> · in testing</span>
-    <span class="pill"><b>199 US dollars</b> per year</span>
-    <span class="pill"><b>14 days</b> free trial</span>
-  </div>
-  <p style="margin-top:1.25rem">The public accuracy record goes up before we ever charge
-  anyone, not after. A hit rate published once the number looks good is a marketing asset.
-  Published first, it is a commitment.</p>
-</section>
+    <div class="tiers">
+      <div class="tier r"><span class="tag pop">Population</span><p>An average for people like you. Never stated as a fact about you.</p></div>
+      <div class="tier r d1"><span class="tag bld">Building</span><p>He names what is missing instead of printing a number he cannot stand behind.</p></div>
+      <div class="tier r d2"><span class="tag you">Yours</span><p>Measured on you. The hardest tier to reach, and the only one that speaks about you.</p></div>
+    </div>
+  </section>
+
+  <!-- ── CTA ──────────────────────────────────── -->
+  <section class="cta">
+    <h2 class="r" style="max-width:22ch;margin-inline:auto">The accuracy record goes up before we charge anyone.</h2>
+    <p class="sub r d1" style="margin-inline:auto">Published once the number looks good, it is marketing. Published first, it is a commitment.</p>
+    <div class="price r d2">
+      <span class="chip"><b>iPhone</b> · in testing</span>
+      <span class="chip"><b>199 US dollars</b> per year</span>
+      <span class="chip"><b>14 days</b> free</span>
+    </div>
+    <a class="btn r d3" href="/verify/">Check a receipt</a>
+  </section>
+
+</main>
 
 <footer>
-  <nav>
-    <a href="/verify/">Verify a receipt</a>
-    <a href="/app-privacy/">Privacy</a>
-    <a href="/support/">Support</a>
-  </nav>
+  <menu>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="/verify/">Verify a receipt</a></li>
+    <li><a href="/app-privacy/">Privacy</a></li>
+    <li><a href="/support/">Support</a></li>
+  </menu>
   OrderedStrength. Built for lifters who would rather be told the truth.
 </footer>
 
-</div>
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // sticky nav hairline
+  var nav = document.getElementById('nav');
+  var onScroll = function(){ nav.classList.toggle('stuck', window.scrollY > 8); };
+  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+  if (reduce) {
+    document.querySelectorAll('.r').forEach(function(n){ n.classList.add('in'); });
+    document.querySelectorAll('[data-dot]').forEach(function(n,i){ n.classList.add(i===1?'miss':'ok'); });
+    document.querySelectorAll('[data-vd]').forEach(function(n){ n.classList.add('show'); });
+    var h = document.getElementById('hash'); if (h) h.textContent = 'a7f3c1e9b2d84f60';
+    document.querySelectorAll('[data-step]').forEach(function(n){ n.classList.add('in'); });
+    return;
+  }
+
+  // dots start blank ONLY when JS can animate them back
+  document.querySelectorAll('[data-dot]').forEach(function(n){ n.classList.remove('ok','miss'); });
+
+  // scroll reveal
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+      if (e.target.id === 'card') gradeCard();
+      if (e.target.hasAttribute('data-step')) e.target.classList.add('in');
+      if (e.target.querySelector && e.target.querySelector('#hash')) rollHash();
+    });
+  }, {threshold:0.25, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.r').forEach(function(n){ io.observe(n); });
+
+  // the card grades itself, one lift at a time
+  function gradeCard(){
+    [0,1,2].forEach(function(i){
+      setTimeout(function(){
+        var dot = document.querySelector('[data-dot="'+i+'"]');
+        var vd  = document.querySelector('[data-vd="'+i+'"]');
+        if (dot) dot.classList.add(i===1 ? 'miss' : 'ok');
+        if (vd) vd.classList.add('show');
+      }, 550 + i*420);
+    });
+  }
+
+  // the fingerprint settles into place
+  var rolled = false;
+  function rollHash(){
+    if (rolled) return; rolled = true;
+    var el = document.getElementById('hash'); if (!el) return;
+    var chars = '0123456789abcdef', target = 'a7f3c1e9b2d84f60', frame = 0;
+    var timer = setInterval(function(){
+      frame++;
+      var out = '';
+      for (var i=0;i<target.length;i++){
+        out += (i < frame/2) ? target[i] : chars[Math.floor(Math.random()*16)];
+      }
+      el.textContent = out;
+      if (frame/2 >= target.length){ clearInterval(timer); el.textContent = target; }
+    }, 45);
+  }
+})();
+</script>
 </body>
 </html>
