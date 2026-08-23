@@ -4,7 +4,7 @@ biting: a rule edited in the SHARED stylesheet does nothing when the same select
 also lives in a page's own <style>, because the page block loads last and wins.
 That mistake cost three separate rounds (.stack overflow, .dialhead cap, ol.loop
 centring): each time the edit looked applied and changed nothing."""
-import re, glob, sys, os
+import re, glob, sys, os, html
 
 SHORTHANDS = {
     'margin': ['margin-top','margin-right','margin-bottom','margin-left'],
@@ -167,7 +167,14 @@ for f in pages:
                if not os.path.exists('.' + r.split('?')[0])]
     if missing: iss.append('missing asset: ' + missing[0])
     if 'scene narrow' in s: iss.append('stale narrow width')
-    if any(s.count(ch) for ch in ['\u2014', '\u00d7', '\u2192']): iss.append('banned symbol')
+    # 🔒 DECODE ENTITIES FIRST. This check looked for the literal characters only, so seven
+    # banned arrows written as `&rarr;` sat on two live pages while it reported both clean.
+    # A rule about what the READER sees has to be applied to what the reader sees.
+    decoded = html.unescape(s)
+    hits = [ch for ch in ['\u2014', '\u00d7', '\u2192', '\u2190', '\u2191', '\u2193',
+                          '\u2265', '\u2264', '\u00b1', '\u2713', '\u2717']
+            if ch in decoded]
+    if hits: iss.append('banned symbol: ' + ' '.join(hits))
     for m in re.finditer(r'<img\b[^>]*>', s):
         if 'alt=' not in m.group(0): iss.append('img with no alt text')
     print(f"  {f:28} {'OK' if not iss else '; '.join(iss)}")

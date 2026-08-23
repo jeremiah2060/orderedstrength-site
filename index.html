@@ -19,7 +19,7 @@
 <meta name="theme-color" content="#060709">
 <link rel="preload" href="/assets/fonts/public-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/archivo-700-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.css?v=5bffa8ca1c">
+<link rel="stylesheet" href="/assets/site.css?v=72c16c1c81">
 <style>
 /* ── the coaching stack: real app UI, rendered rather than screenshotted ── */
 .hero .appcard{padding:1.625rem 1.75rem}
@@ -493,7 +493,7 @@ field   sealedOn = 1755916800</pre>
     </nav>
   </div>
   <div class="foot__panel">
-    <span>Build <b class="stamp">5bffa8ca1c</b></span>
+    <span>Build <b class="stamp">72c16c1c81</b></span>
     <span>iPhone &middot; in testing</span>
     <span>Your training is computed on your device</span>
   </div>
@@ -537,8 +537,33 @@ if (sess){
       basis.textContent = 'Basis: your own logged sets. I sealed this range before the session and I will grade myself against it afterwards.';
     }
   }
+  /* THE TWO CARDS MUST NOT JUMP AS YOU DRAG, and the height they need is not a number
+     anyone can write down. It depends on the copy AND on the width: measured across nine
+     viewports it ranges from 220px at 1300 to 287px at 660, and the fixed 15rem in the
+     stylesheet was 20px too tall at desktop widths and 47px too SHORT at 660, so the thing
+     put there to stop the jump was causing one. Five breakpoints of magic numbers would
+     also be wrong the moment a sentence changes.
+     So the page measures itself: render each tier once, keep the tallest, reserve exactly
+     that. Correct at every width, and it stays correct when the words change. The
+     stylesheet keeps a plain min-height as the no-script floor. */
+  var sides = [].slice.call(document.querySelectorAll('.versus .side'));
+  function reserve(){
+    if (!sides.length) return;
+    var keep = sess.value, tallest = 0;
+    sides.forEach(function(c){ c.style.minHeight = '0px'; });
+    [1, 12, 30].forEach(function(probe){
+      sess.value = probe; paintDial();
+      sides.forEach(function(c){ tallest = Math.max(tallest, c.getBoundingClientRect().height); });
+    });
+    sess.value = keep; paintDial();
+    sides.forEach(function(c){ c.style.minHeight = Math.ceil(tallest) + 'px'; });
+  }
+  var rt;
+  window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(reserve, 160); }, {passive:true});
   sess.addEventListener('input', paintDial);
   paintDial();
+  reserve();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(reserve);
 }
 
 /* ══ THE SEAL ═══════════════════════════════════════════════════════

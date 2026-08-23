@@ -57,6 +57,26 @@ const PROBE = `(() => {
   return { url: location.pathname, bad };
 })()`;
 
+/* SECOND CHECK: the evidence dial must not resize as you drag it.
+   The two comparison cards carry three different sentences, and the height they need
+   varies with BOTH the copy and the viewport: measured across nine widths it runs from
+   220px at 1300 to 287px at 660. The page reserves the tallest state at load, measured
+   from the real strings at the real width. This asserts that the reservation is actually
+   working, because the failure is a page that shifts under the reader's thumb, which no
+   screenshot and no other gate here can see. */
+const DIAL = `(() => {
+  const s = document.getElementById('sessions'); if (!s) return null;
+  const box = document.querySelector('.versus'); if (!box) return null;
+  const keep = s.value, heights = [];
+  for (const v of [1, 4, 5, 12, 19, 20, 35, 60]) {
+    s.value = v; s.dispatchEvent(new Event('input', { bubbles: true }));
+    document.body.offsetHeight;
+    heights.push(Math.round(box.getBoundingClientRect().height));
+  }
+  s.value = keep; s.dispatchEvent(new Event('input', { bubbles: true }));
+  return { heights, swing: Math.max(...heights) - Math.min(...heights) };
+})()`;
+
 let total = 0;
 for (const width of WIDTHS) {
   await withPage(async page => {
@@ -67,6 +87,14 @@ for (const width of WIDTHS) {
       for (const b of d.bad)
         console.log(`         ${b.sel}  ${b.perLine} chars/line over ${b.lines} lines in ${b.w}px  "${b.sample}"`);
       total += d.bad.length;
+      if (p === '/') {
+        await page.evaluate(`new Promise(r=>setTimeout(r,700))`);
+        const dial = await page.evaluate(DIAL);
+        if (dial && dial.swing > 0) {
+          console.log(`         the evidence dial RESIZES as you drag it: ${dial.swing}px swing across ${dial.heights.length} states ${JSON.stringify(dial.heights)}`);
+          total += 1;
+        }
+      }
     }
   }, { width, height: 950, dsf: 1 });
 }
