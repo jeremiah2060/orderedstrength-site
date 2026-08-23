@@ -30,12 +30,17 @@ class CDP {
 
 export async function withPage(fn, { width = 1440, height = 900, dsf = 2 } = {}) {
   const profile = mkdtempSync(join(tmpdir(), 'os-measure-'));
+  // 🔒 KILL THE GROUP, NOT THE PARENT. Chrome forks renderer, GPU and zygote children, and
+  // killing only the process we spawned leaves them alive holding their profile directory.
+  // Measured at the end of this session: 7 headless Chromes still running from harness calls
+  // that had all returned cleanly. `detached: true` puts them in their own process group so
+  // `process.kill(-pid)` reaches every one of them.
   const chrome = spawn(CHROME, [
     '--headless=new', `--remote-debugging-port=${PORT}`, `--user-data-dir=${profile}`,
     '--no-first-run', '--no-default-browser-check', '--disable-extensions',
     '--hide-scrollbars', '--force-color-profile=srgb', '--disable-lcd-text',
     `--window-size=${width},${height}`, 'about:blank',
-  ], { stdio: 'ignore' });
+  ], { stdio: 'ignore', detached: true });
 
   let target = null;
   for (let i = 0; i < 60 && !target; i++) {
@@ -86,5 +91,10 @@ export async function withPage(fn, { width = 1440, height = 900, dsf = 2 } = {})
   };
 
   try { return await fn(api); }
-  finally { ws.close(); chrome.kill('SIGKILL'); await sleep(200); try { rmSync(profile, { recursive: true, force: true }); } catch {} }
+  finally {
+    ws.close();
+    try { process.kill(-chrome.pid, 'SIGKILL'); } catch { try { chrome.kill('SIGKILL'); } catch {} }
+    await sleep(200);
+    try { rmSync(profile, { recursive: true, force: true }); } catch {}
+  }
 }
