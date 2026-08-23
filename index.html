@@ -225,6 +225,51 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
     </div>
   </section>
 
+  <!-- THE GALLERY: one real capture, annotated. Placed after the dial so the claim is made, then shown. -->
+  <section class="scene" id="screens">
+    <p class="eyebrow">Not a mockup</p>
+    <h2>This is the actual screen. Read what it admits.</h2>
+    <p class="sub">A real capture from the app, taken by the test suite on a clean install with
+    three sessions logged. Nothing retouched, nothing staged.</p>
+
+    <div class="gallery">
+      <div class="phone">
+        <div class="screen">
+          <img src="/assets/shots/dashboard-session3.png" width="1206" height="2622"
+               alt="The OrderedStrength dashboard after three logged sessions, showing an Intelligence Mode badge reading Building, fatigue and recovery rings labelled Pop. Est., and a line reading that all five intelligence surfaces open on evidence, not time.">
+          <span class="pin" style="left:88%;top:36.9%" data-pin="0">1</span>
+          <span class="pin" style="left:6.5%;top:67.5%" data-pin="1">2</span>
+          <span class="pin" style="left:91%;top:79.5%" data-pin="2">3</span>
+        </div>
+      </div>
+
+      <ul class="callouts">
+        <li class="callout" data-callout="0">
+          <span class="n">01</span>
+          <span><b>It tells you it is still learning</b>
+          <span>The badge reads <code>Building</code>, not a confidence score invented to look
+          reassuring. Three sessions is not enough to know you and the screen says so.</span></span>
+        </li>
+        <li class="callout" data-callout="1">
+          <span class="n">02</span>
+          <span><b>Every number carries where it came from</b>
+          <span>Fatigue and recovery are marked <code>Pop. Est.</code>, a population estimate.
+          They are not claims about your body, and they are not allowed to pretend to be.</span></span>
+        </li>
+        <li class="callout" data-callout="2">
+          <span class="n">03</span>
+          <span><b>The gate is evidence, never a countdown</b>
+          <span>In the app's own words: the intelligence surfaces
+          <code>open on evidence, not time</code>. No feature unlocks because a week passed.</span></span>
+        </li>
+      </ul>
+    </div>
+
+    <p class="small" style="margin-top:1.75rem">Captured by
+    <code style="font-family:var(--mono);font-size:.75rem;color:var(--ink2)">scripts/verify.sh screens</code>,
+    the same flow the test suite runs. The status bar is the simulator's own.</p>
+  </section>
+
   <!-- THE SEAL -->
   <section class="scene" id="seal">
     <p class="eyebrow">The seal</p>
@@ -505,6 +550,25 @@ if (window.crypto && crypto.subtle && window.TextEncoder && typeof BigInt !== 'u
   $('selftest').textContent = 'This browser cannot compute the fingerprint locally.';
   $('cnote').textContent = 'Open the verifier page to check a receipt instead.';
 }
+})();
+
+/* ══ GALLERY: pins and callouts highlight together ══ */
+(function(){
+  var pins=[].slice.call(document.querySelectorAll('.pin'));
+  var outs=[].slice.call(document.querySelectorAll('.callout'));
+  if(!pins.length||!outs.length) return;
+  function set(i,on){
+    if(pins[i]) pins[i].setAttribute('data-active', on?'true':'false');
+    if(outs[i]) outs[i].setAttribute('data-active', on?'true':'false');
+  }
+  outs.forEach(function(o,i){
+    o.addEventListener('mouseenter',function(){set(i,true);});
+    o.addEventListener('mouseleave',function(){set(i,false);});
+  });
+  pins.forEach(function(pn,i){
+    pn.addEventListener('mouseenter',function(){set(i,true);});
+    pn.addEventListener('mouseleave',function(){set(i,false);});
+  });
 })();
 </script>
 </body>
