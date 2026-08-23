@@ -223,3 +223,16 @@ footer nav a:hover{color:var(--ink)}
 .callout b{display:block;font-size:.9375rem;color:var(--ink);margin-bottom:.25rem;font-weight:600}
 .callout span{display:block;font-size:.875rem;color:var(--ink3);line-height:1.55}
 .callout code{font-family:var(--mono);font-size:.8125em;color:var(--ink2)}
+
+/* ── the hero product shot: the real phone, with one rendered card overlapping it ── */
+.hero-shot{position:relative;display:flex;justify-content:center;align-items:center}
+.hero-shot .phone{width:min(20rem,72vw)}
+.hero-shot .appcard.float{position:absolute;right:-1rem;bottom:2.5rem;width:min(19rem,68vw);
+  z-index:5;padding:1.125rem 1.25rem;
+  box-shadow:0 1.75rem 4.5rem rgba(0,0,0,.8),0 0 0 1px var(--line)}
+.hero-shot .appcard.float .cap{margin-bottom:.75rem}
+.hero-shot .appcard.float .lift{padding:.4375rem 0}
+@media (max-width:72rem){
+  .hero-shot .appcard.float{position:static;width:100%;margin-top:1rem}
+  .hero-shot{flex-direction:column;gap:1rem}
+}

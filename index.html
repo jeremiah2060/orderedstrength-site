@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/site.css?v=6c9e9ab5b5">
 <style>
 /* ── the coaching stack: real app UI, rendered rather than screenshotted ── */
 .stack{display:grid;gap:.75rem;max-width:23rem}
@@ -146,14 +146,18 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
           <a class="btn ghost" href="/how-it-works/">How it works</a>
         </div>
       </div>
-      <div class="stack">
-        <div class="appcard">
+      <div class="hero-shot">
+        <div class="phone">
+          <div class="screen">
+            <img src="/assets/shots/dashboard-session3.png?v=7e66eb5c05" width="1206" height="2622" fetchpriority="high"
+                 alt="The OrderedStrength dashboard after three logged sessions. The mode badge reads Building, the fatigue and recovery rings are labelled Pop. Est., and a line reads that all five intelligence surfaces open on evidence, not time.">
+          </div>
+        </div>
+        <div class="appcard float">
           <p class="cap">Prediction accuracy</p>
           <div class="lift"><span class="dot ok"></span><span class="nm">Bulgarian Split Squat</span><span class="vd inr">Within</span></div>
           <div class="lift"><span class="dot miss"></span><span class="nm">Romanian Deadlift</span><span class="vd outr">Outside</span></div>
           <div class="lift"><span class="dot ok"></span><span class="nm">Incline Barbell Press</span><span class="vd inr">Within</span></div>
-          <p class="said">My ranges are built to contain your result 4 times out of 5.
-          I update my model from every result.</p>
         </div>
       </div>
     </div>
@@ -235,7 +239,7 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
     <div class="gallery">
       <div class="phone">
         <div class="screen">
-          <img src="/assets/shots/dashboard-session3.png" width="1206" height="2622"
+          <img src="/assets/shots/dashboard-session3.png?v=7e66eb5c05" width="1206" height="2622"
                alt="The OrderedStrength dashboard after three logged sessions, showing an Intelligence Mode badge reading Building, fatigue and recovery rings labelled Pop. Est., and a line reading that all five intelligence surfaces open on evidence, not time.">
           <span class="pin" style="left:88%;top:36.9%" data-pin="0">1</span>
           <span class="pin" style="left:6.5%;top:67.5%" data-pin="1">2</span>
@@ -369,7 +373,7 @@ field   sealedOn = 1755916800</pre>
   OrderedStrength. Built for lifters who would rather be told the truth.
 </footer>
 
-<script src="/assets/site.js" defer></script>
+<script src="/assets/site.js?v=5fe381d4e4" defer></script>
 <script>
 (function(){
 'use strict';
