@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=ce6a303345">
+<link rel="stylesheet" href="/assets/site.css?v=dbb71835c9">
 <style>
 textarea{width:100%;min-height:11rem;background:var(--surface);color:var(--ink);
   border:1px solid var(--line);border-radius:10px;padding:.875rem;
@@ -45,14 +45,16 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
 </div>
 
 <main>
-  <section class="scene narrow">
-    <p class="eyebrow">Verifier</p>
-    <h1 >Check a receipt.</h1>
-    <p class="sub">Paste a receipt copied from OrderedStrength. This checks whether the
+  <section class="scene">
+    <div class="pagehead">
+      <p class="eyebrow">Verifier</p>
+      <h1>Check a receipt.</h1>
+      <p class="sub">Paste a receipt copied from OrderedStrength. This checks whether the
     prediction inside it is byte for byte the one that was sealed before the set was performed.
     No account, no sign in, and nothing you paste is stored.</p>
+    </div>
 
-    <div  style="margin-top:2rem">
+    <div style="margin-top:2rem">
       <label for="in" class="eyebrow" style="display:block">Receipt JSON</label>
       <textarea id="in" spellcheck="false" placeholder='Paste the receipt here, including the outer brackets'></textarea>
       <div class="actions">

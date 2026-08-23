@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=ce6a303345">
+<link rel="stylesheet" href="/assets/site.css?v=dbb71835c9">
 <style>
 /* ── the coaching stack: real app UI, rendered rather than screenshotted ── */
 .stack{display:grid;gap:.75rem;max-width:23rem}
@@ -48,11 +48,10 @@
 
 /* ── the evidence dial ── */
 .dial{margin-top:2.25rem}
-.dialhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.75rem;
-          margin-bottom:.875rem}
+.dialhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.75rem;margin:0 auto .875rem;max-width:48rem}
 .dialhead label{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
 .dialhead output{font-family:var(--mono);font-size:.9375rem;color:var(--teal);font-weight:500}
-input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:2rem;background:transparent;cursor:grab}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;max-width:48rem;height:2rem;background:transparent;cursor:grab;display:block;margin:0 auto}
 input[type=range]:active{cursor:grabbing}
 input[type=range]::-webkit-slider-runnable-track{height:2px;background:var(--line);border-radius:2px}
 input[type=range]::-moz-range-track{height:2px;background:var(--line);border-radius:2px}
@@ -148,7 +147,7 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
       </div>
       <div class="hero-shot">
         <div class="phone">
-          <span class="btn-rail" aria-hidden="true"></span><span class="pwr" aria-hidden="true"></span>
+          <span class="btn action" aria-hidden="true"></span><span class="btn volup" aria-hidden="true"></span><span class="btn voldn" aria-hidden="true"></span><span class="btn side" aria-hidden="true"></span>
           <div class="screen">
             <img src="/assets/shots/dashboard-session3.png?v=7e66eb5c05" width="1206" height="2622" fetchpriority="high"
                  alt="The OrderedStrength dashboard after three logged sessions. The mode badge reads Building, the fatigue and recovery rings are labelled Pop. Est., and a line reads that all five intelligence surfaces open on evidence, not time.">
@@ -227,7 +226,7 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
       <input type="range" id="sessions" min="1" max="60" value="1" step="1" aria-describedby="dialnote">
       <noscript><p class="small" style="color:var(--amber)">The slider needs JavaScript. What it
       reveals is written out on <a href="/how-it-works/" style="color:var(--teal)">how it works</a>.</p></noscript>
-      <p class="small" id="dialnote">The tier is not a countdown. It moves when the evidence
+      <p class="small" id="dialnote" style="max-width:48rem;margin-left:auto;margin-right:auto;text-align:center">The tier is not a countdown. It moves when the evidence
       arrives, and it moves back if his predictions start missing.</p>
     </div>
   </section>
@@ -243,7 +242,7 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
 
     <div class="gallery reveal">
       <div class="phone">
-        <span class="btn-rail" aria-hidden="true"></span><span class="pwr" aria-hidden="true"></span>
+        <span class="btn action" aria-hidden="true"></span><span class="btn volup" aria-hidden="true"></span><span class="btn voldn" aria-hidden="true"></span><span class="btn side" aria-hidden="true"></span>
         <div class="screen">
           <img src="/assets/shots/dashboard-session3.png?v=7e66eb5c05" width="1206" height="2622"
                alt="The OrderedStrength dashboard after three logged sessions, showing an Intelligence Mode badge reading Building, fatigue and recovery rings labelled Pop. Est., and a line reading that all five intelligence surfaces open on evidence, not time.">

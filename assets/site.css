@@ -49,21 +49,18 @@ img{max-width:100%;height:auto}
 main{padding-top:var(--bar)}
 .scene{max-width:var(--wide);margin:0 auto;padding:clamp(2.75rem,6vw,4.25rem) var(--gut);
        position:relative;overflow-x:clip}
-.scene + .scene::before{content:"";position:absolute;inset:0 var(--gut) auto var(--gut);
-                        height:1px;background:var(--line)}
+/* section dividers deliberately removed: spacing carries the rhythm instead of a rule */
 .scene.tight{padding-top:0}
 /* 🔒 ONE WIDTH. Every scene, including long-form pages, shares the hero's container so the
    left edge never moves as you scroll. A narrower "reading" width made /how-it-works float in the
    middle of a wide bar and read as a different site. The MEASURE is still controlled, but by the
    text elements themselves, never by shrinking the section. */
 .scene.reading{max-width:var(--wide)}
-.scene.tight::before{display:none}
 /* the hero owns the screen it opens on */
 .hero{min-height:calc(100svh - var(--bar));display:flex;flex-direction:column;
       justify-content:space-between;gap:clamp(2rem,4vw,3rem);
       padding-top:clamp(2.5rem,7vh,5.5rem);padding-bottom:clamp(1.5rem,3vh,2.5rem)}
 .hero-grid{flex:1;align-content:center}
-.hero::before{display:none}
 .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);
            align-items:center;width:100%}
 .hero-grid > *{min-width:0}
@@ -85,7 +82,7 @@ h3{font-family:var(--display);font-weight:700;font-size:1.1875rem;letter-spacing
 .sub{font-size:clamp(1.0625rem,1.5vw,1.375rem);color:var(--ink2);max-width:46ch;margin:0}
 p{margin:0 0 1.125rem;color:var(--ink2);max-width:44rem;font-size:1.0625rem}
 p:last-child{margin-bottom:0}
-p.small{font-size:.9375rem;color:var(--ink3);max-width:54rem}
+p.small{font-size:.9375rem;color:var(--ink3);max-width:54rem;margin-left:auto;margin-right:auto}
 strong{color:var(--ink);font-weight:600}
 em{font-style:normal;color:var(--teal)}
 hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0}
@@ -267,14 +264,18 @@ footer nav a:hover{color:var(--ink)}
   background:
     linear-gradient(122deg, rgba(255,255,255,.085) 0%, rgba(255,255,255,.028) 16%, transparent 34%),
     linear-gradient(to bottom, transparent 62%, rgba(6,7,9,.55) 88%, var(--ground) 100%)}
-/* side rails */
-.phone .btn-rail,.phone .btn-rail::after,.phone .btn-rail::before{position:absolute;
-  background:linear-gradient(90deg,#7d8894,#3a424c);border-radius:2px}
-.phone .btn-rail{left:-2px;top:22%;width:3px;height:5.5%}
-.phone .btn-rail::before{content:"";left:0;top:8.4%;width:3px;height:100%}
-.phone .btn-rail::after{content:"";left:0;top:19%;width:3px;height:100%}
-.phone .pwr{position:absolute;right:-2px;top:27%;width:3px;height:9%;border-radius:2px;
-  background:linear-gradient(90deg,#3a424c,#7d8894)}
+/* Physical buttons, in the real places. LEFT edge top to bottom: Action, Volume Up,
+   Volume Down. RIGHT edge: the side button, longer and lower. Percentages are of the
+   device height so they hold at any size. */
+.phone .btn{position:absolute;width:2.5px;border-radius:3px;
+  background:linear-gradient(90deg,#8b96a3 0%,#5a6470 40%,#39414b 100%);
+  box-shadow:-1px 0 1px rgba(0,0,0,.55)}
+.phone .btn.action{left:-2.5px;top:18.4%;height:3.4%}
+.phone .btn.volup {left:-2.5px;top:25.2%;height:5.6%}
+.phone .btn.voldn {left:-2.5px;top:32.4%;height:5.6%}
+.phone .btn.side  {left:auto;right:-2.5px;top:25.8%;height:9.2%;
+  background:linear-gradient(270deg,#8b96a3 0%,#5a6470 40%,#39414b 100%);
+  box-shadow:1px 0 1px rgba(0,0,0,.55)}
 @media (prefers-reduced-motion:no-preference){
   .phone{transition:transform .6s var(--ease)}
   .hero-shot:hover .phone{transform:translateY(-4px)}
@@ -311,9 +312,23 @@ footer nav a:hover{color:var(--ink)}
 }
 
 /* ── section headers fill the width: statement left, qualifier right ── */
-.head{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(1.5rem,4vw,4rem);
-      align-items:end;margin-bottom:.5rem}
-.head > *{min-width:0}
-.head .sub{max-width:38ch;padding-bottom:.375rem}
-@media (max-width:56rem){.head{grid-template-columns:1fr;gap:1rem;align-items:start}
-  .head .sub{padding-bottom:0}}
+/* 🔒 CENTRED, NOT SPLIT. A two-column header stranded the qualifier on the far right
+   with a dark gap between, which reads as "content is on the left". The header is now a
+   single centred column and the content below it fills the width symmetrically. */
+.head{display:flex;flex-direction:column;align-items:center;text-align:center;
+      margin:0 auto clamp(2rem,4vw,3rem);max-width:52rem}
+.head .eyebrow{justify-content:center}
+.head h2{max-width:24ch}
+.head .sub{max-width:52ch}
+
+/* page heroes on the inner pages: centred, because they have no companion visual
+   beside them the way the home page hero has the device */
+.pagehead{display:flex;flex-direction:column;align-items:center;text-align:center;
+          margin:0 auto;max-width:56rem}
+.pagehead .eyebrow{justify-content:center}
+.pagehead h1{max-width:20ch}
+.pagehead .sub{max-width:54ch}
+/* long-form bodies sit in a centred measure so no page hugs an edge */
+.prose{max-width:44rem;margin-left:auto;margin-right:auto}
+ol.loop{margin-left:auto;margin-right:auto}
+.refuse{margin-left:auto;margin-right:auto}
