@@ -4,54 +4,211 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>OrderedStrength</title>
-<meta name="description" content="OrderedStrength is a strength-training coach for iPhone that adapts to your logged sets and tells you when it isn't sure yet.">
+<meta name="description" content="A strength coach for iPhone that seals every prediction before you lift, then shows you when it was wrong. Check the record yourself.">
+<meta property="og:title" content="OrderedStrength">
+<meta property="og:description" content="The strength coach that grades itself in public.">
 <style>
+:root{
+  --canvas:#060709; --surface:#121519; --elevated:#1A1E24; --line:#242A32;
+  --ink:#fff; --ink-2:rgba(255,255,255,.72); --ink-3:rgba(255,255,255,.50);
+  --teal:#00D4B1; --stone:#C0A87F; --azure:#4D9DF0; --amber:#F59E0B;
+  --l1:1.125rem; --l2:1.125rem; --l3:.875rem; --hero:2rem; --num:1.75rem;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,Helvetica,Arial,sans-serif;
+}
 *{box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;margin:0;color:#1a1a1a;background:#fff;line-height:1.6}
-.wrap{max-width:680px;margin:0 auto;padding:0 20px}
-header{padding:88px 0 56px}
-header h1{font-size:2.4em;margin:0 0 0.25em;letter-spacing:-0.01em}
-header p.tagline{font-size:1.2em;color:#444;margin:0}
-section{padding:36px 0;border-top:1px solid #ececec}
-section h2{font-size:1.05em;text-transform:uppercase;letter-spacing:0.04em;color:#888;margin:0 0 0.6em}
-section p{font-size:1.05em;color:#2a2a2a;margin:0}
-.cta{padding:48px 0;border-top:1px solid #ececec}
-.cta .status{display:inline-block;font-size:0.85em;font-weight:600;letter-spacing:0.03em;text-transform:uppercase;color:#0a5fff;background:#eef3ff;padding:6px 12px;border-radius:100px}
-footer{padding:40px 0 80px;border-top:1px solid #ececec;font-size:0.95em;color:#666}
-footer a{color:#0a5fff;text-decoration:none;margin-right:20px}
-footer a:hover{text-decoration:underline}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--sans);
+     font-size:var(--l3);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:44rem;margin:0 auto;padding:0 1.5rem}
+a{color:var(--teal);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
+
+/* ---- hero ---- */
+header{padding:5.5rem 0 3rem}
+.mark{display:inline-flex;align-items:center;gap:.5rem;font-size:var(--l3);
+      color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2.5rem}
+.mark i{width:.5rem;height:.5rem;border-radius:50%;background:var(--teal);font-style:normal}
+h1{font-size:var(--hero);line-height:1.2;margin-bottom:1rem}
+h1 em{font-style:normal;color:var(--teal)}
+.lede{font-size:var(--l1);color:var(--ink-2);line-height:1.55;max-width:34rem}
+
+/* ---- the claim strip ---- */
+.claim{margin:3rem 0 0;background:var(--surface);border:1px solid var(--line);
+       border-radius:12px;padding:1.25rem 1.375rem}
+.claim .row{display:flex;gap:.875rem;align-items:flex-start;padding:.625rem 0}
+.claim .row + .row{border-top:1px solid var(--line)}
+.claim .n{flex:0 0 1.5rem;height:1.5rem;border-radius:50%;background:var(--elevated);
+          color:var(--teal);font-size:.75rem;font-weight:700;display:flex;
+          align-items:center;justify-content:center;margin-top:.125rem}
+.claim .t{font-size:var(--l3);color:var(--ink-2)}
+.claim .t b{color:var(--ink);font-weight:600}
+.verify{margin-top:1.125rem;padding-top:1.125rem;border-top:1px solid var(--line);
+        font-size:var(--l3);color:var(--ink-3)}
+
+/* ---- sections ---- */
+section{padding:3rem 0;border-top:1px solid var(--line)}
+.kicker{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;
+        color:var(--ink-3);margin-bottom:.75rem}
+h2{font-size:var(--l1);margin-bottom:.875rem}
+p{margin:0 0 1rem;color:var(--ink-2);font-size:var(--l3)}
+p:last-child{margin-bottom:0}
+
+/* ---- comparison ---- */
+.vs{display:grid;gap:.5rem;margin-top:1.25rem}
+.vs div{display:grid;grid-template-columns:8.5rem 1fr;gap:1rem;padding:.75rem .875rem;
+        background:var(--surface);border-radius:8px;font-size:var(--l3);align-items:baseline}
+.vs span{color:var(--ink-3)}
+.vs strong{color:var(--ink-2);font-weight:400}
+.vs .us{background:var(--elevated);box-shadow:inset 2px 0 0 var(--teal)}
+.vs .us span{color:var(--teal)}
+.vs .us strong{color:var(--ink)}
+
+/* ---- honesty cards ---- */
+.cards{display:grid;gap:.75rem;margin-top:1.25rem}
+.card{background:var(--surface);border-radius:10px;padding:1.125rem}
+.card h3{font-size:var(--l3);margin-bottom:.375rem;color:var(--ink)}
+.card p{font-size:var(--l3);color:var(--ink-3);margin:0}
+.tag{display:inline-block;font-size:.6875rem;letter-spacing:.05em;text-transform:uppercase;
+     padding:.1875rem .5rem;border-radius:100px;margin-bottom:.625rem;font-weight:600}
+.tag.pop{background:rgba(192,168,127,.14);color:var(--stone)}
+.tag.you{background:rgba(0,212,177,.14);color:var(--teal)}
+.tag.bld{background:rgba(77,157,240,.14);color:var(--azure)}
+
+/* ---- quote ---- */
+blockquote{margin:1.25rem 0 0;padding:1.125rem 1.25rem;background:var(--surface);
+           border-left:2px solid var(--amber);border-radius:0 10px 10px 0;
+           font-size:var(--l3);color:var(--ink-2)}
+blockquote cite{display:block;margin-top:.625rem;font-style:normal;
+                font-size:.75rem;color:var(--ink-3)}
+
+/* ---- status ---- */
+.status{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:1.25rem}
+.pill{font-size:var(--l3);padding:.4375rem .875rem;border-radius:100px;
+      background:var(--surface);color:var(--ink-2)}
+.pill b{color:var(--ink);font-weight:600}
+
+footer{padding:2.5rem 0 5rem;border-top:1px solid var(--line);
+       font-size:var(--l3);color:var(--ink-3)}
+footer nav{display:flex;flex-wrap:wrap;gap:1.5rem;margin-bottom:1.25rem}
+@media (max-width:34rem){
+  :root{--hero:1.625rem}
+  header{padding:3.5rem 0 2rem}
+  .vs div{grid-template-columns:1fr;gap:.125rem}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
+
 <header>
-<h1>OrderedStrength</h1>
-<p class="tagline">A strength coach for iPhone that tells you when it isn't sure yet.</p>
+  <div class="mark"><i></i>OrderedStrength</div>
+  <h1>A strength coach that writes down what it expects <em>before</em> you lift.</h1>
+  <p class="lede">Jerry plans your session, changes it as each set lands, and seals every
+  prediction before you touch the bar. Afterwards he grades himself against what actually
+  happened, and leaves the misses on the record.</p>
+
+  <div class="claim">
+    <div class="row"><div class="n">1</div><div class="t"><b>He predicts.</b> Before your session, Jerry writes down what he expects from you.</div></div>
+    <div class="row"><div class="n">2</div><div class="t"><b>He seals it.</b> The prediction is fingerprinted, so it cannot be quietly rewritten once the result is in.</div></div>
+    <div class="row"><div class="n">3</div><div class="t"><b>He grades himself.</b> Hits and misses both, kept where you can read them.</div></div>
+    <div class="verify">You do not have to believe any of that.
+    <a href="/verify/">Check a receipt yourself</a>.</div>
+  </div>
 </header>
 
 <section>
-<h2>What it does</h2>
-<p>OrderedStrength builds your training session by session: what to lift, how much, and when to push. It adjusts to the sets you actually log, your recovery, and how hard each set really felt, not a fixed program you're supposed to follow regardless.</p>
+  <div class="kicker">Why this is not the same as every other app</div>
+  <h2>Four products, one shared habit</h2>
+  <p>Logging apps record and decide nothing. Plan apps hand you a program that freezes the
+  moment the session starts. Wearables watch your recovery and never write your workout.
+  Chatbots sound fluent and give you a different answer if you ask twice.</p>
+  <p>All four ask you a question and then ignore the answer. They ask about your injury and
+  program around nothing. They ask what equipment you own and prescribe a machine you do not
+  have. Lifters rarely complain about this. They quietly load a different weight than the one
+  on the screen, and stop believing the rest of it.</p>
+
+  <div class="vs">
+    <div><span>Logging app</span><strong>Remembers</strong></div>
+    <div><span>Plan app</span><strong>Dictates, then stops listening</strong></div>
+    <div><span>Wearable</span><strong>Watches</strong></div>
+    <div><span>Chatbot</span><strong>Improvises, and forgets</strong></div>
+    <div class="us"><span>Jerry</span><strong>Decides, reacts set by set, remembers you for months, and keeps score on himself</strong></div>
+  </div>
 </section>
 
 <section>
-<h2>What it starts from, and what it says about that</h2>
-<p>Your first sessions are estimated from population averages, and the app tells you so. As you log real sets, the plan shifts from those averages to your own numbers, and it stays honest about which one it's currently using.</p>
+  <div class="kicker">The part competitors cannot copy</div>
+  <h2>Every number says where it came from</h2>
+  <p>On day one Jerry has averages for someone your age, sex and weight, and he says so in
+  those words. As you log real sets he shifts off the averages onto your own body, and shows
+  you how far he has moved and how sure he is. The pace follows your evidence, never a
+  countdown, and he never claims to know you after a fixed number of sessions.</p>
+
+  <div class="cards">
+    <div class="card"><span class="tag pop">Population</span>
+      <h3>Borrowed from the literature</h3>
+      <p>Stated as an average for people like you, not as a fact about you. If the research was measured on a different population, it is labelled a conservative approximation.</p></div>
+    <div class="card"><span class="tag bld">Building</span>
+      <h3>Still collecting your data</h3>
+      <p>Jerry says what he is missing rather than printing a number he cannot stand behind. The cardio engine has one way to answer and seven ways to decline, each naming the gap.</p></div>
+    <div class="card"><span class="tag you">Yours</span>
+      <h3>Measured on you</h3>
+      <p>Earned from your logged sets. This is the only tier that speaks about you specifically, and it is the hardest one to reach.</p></div>
+  </div>
+
+  <blockquote>I could see you some of the time, but not enough of it to count honestly,
+  so I am not going to guess.
+  <cite>What Jerry says when the camera view was poor, rather than inventing a rep count</cite></blockquote>
 </section>
 
 <section>
-<h2>The record it keeps on itself</h2>
-<p>OrderedStrength keeps a running scorecard of its own predictions against what actually happened. Right or wrong, it's kept, not just the calls it got right.</p>
+  <div class="kicker">The day it matters most</div>
+  <h2>Tell him something hurts and he keeps coaching you</h2>
+  <p>This is where other apps go quiet. Jerry removes what is unsafe, trains everything else,
+  and brings the injured movement back gradually rather than all at once. Pain above the
+  clinical line holds the ramp where it is instead of letting the calendar advance it. The
+  screen shows the honest number of days until full load, and it is the same number the engine
+  is using.</p>
+  <p>He is built never to shame you. The words <em>missed</em>, <em>skipped</em> and
+  <em>streak</em> are blocked from his coaching by an automatic check, so a rough week cannot
+  trigger a punishment.</p>
 </section>
 
-<div class="cta">
-<span class="status">iPhone &middot; Coming soon</span>
-</div>
+<section>
+  <div class="kicker">Your data</div>
+  <h2>Easy to leave, hard to replace</h2>
+  <p>Your training is computed on your device by our own engines. There is no analytics
+  package in this app, no crash reporting vendor, no advertising identifier, and no
+  third party code of any kind.</p>
+  <p>Bring your history in from Strong or Hevy so switching does not mean starting at zero,
+  and export your whole record as a single file whenever you want. Nothing about your training
+  is held hostage to keep you subscribed. If you stay, we want it to be because nothing else
+  understands you as well.</p>
+</section>
+
+<section>
+  <div class="kicker">Status</div>
+  <h2>Not shipped yet, and we would rather say so</h2>
+  <div class="status">
+    <span class="pill"><b>iPhone</b> · in testing</span>
+    <span class="pill"><b>199 US dollars</b> per year</span>
+    <span class="pill"><b>14 days</b> free trial</span>
+  </div>
+  <p style="margin-top:1.25rem">The public accuracy record goes up before we ever charge
+  anyone, not after. A hit rate published once the number looks good is a marketing asset.
+  Published first, it is a commitment.</p>
+</section>
 
 <footer>
-<a href="/app-privacy/">Privacy Policy</a>
-<a href="/support/">Support</a>
+  <nav>
+    <a href="/verify/">Verify a receipt</a>
+    <a href="/app-privacy/">Privacy</a>
+    <a href="/support/">Support</a>
+  </nav>
+  OrderedStrength. Built for lifters who would rather be told the truth.
 </footer>
+
 </div>
 </body>
 </html>
