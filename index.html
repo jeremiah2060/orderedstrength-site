@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=85d7e5ed91">
+<link rel="stylesheet" href="/assets/site.css?v=ce6a303345">
 <style>
 /* ── the coaching stack: real app UI, rendered rather than screenshotted ── */
 .stack{display:grid;gap:.75rem;max-width:23rem}
@@ -141,13 +141,14 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
         <p class="sub">Jerry plans every session, changes it as each set lands, and records what
         he expected from you <em>before</em> you touch the bar. Then he grades himself on it and
         keeps the misses.</p>
-        <div class="chips" style="margin-top:2rem">
+        <div class="chips reveal" style="margin-top:2rem">
           <a class="btn" href="#dial">See what that changes</a>
           <a class="btn ghost" href="/how-it-works/">How it works</a>
         </div>
       </div>
       <div class="hero-shot">
         <div class="phone">
+          <span class="btn-rail" aria-hidden="true"></span><span class="pwr" aria-hidden="true"></span>
           <div class="screen">
             <img src="/assets/shots/dashboard-session3.png?v=7e66eb5c05" width="1206" height="2622" fetchpriority="high"
                  alt="The OrderedStrength dashboard after three logged sessions. The mode badge reads Building, the fatigue and recovery rings are labelled Pop. Est., and a line reads that all five intelligence surfaces open on evidence, not time.">
@@ -162,7 +163,7 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
       </div>
     </div>
 
-    <div class="facts">
+    <div class="facts reveal">
       <div><b>Sealed before the set</b><span>The prediction is fingerprinted before your first repetition, and it cannot be edited afterwards.</span></div>
       <div><b>Graded where you can read it</b><span>Hits and misses both. The misses stay on the record.</span></div>
       <div><b>Your training stays on your phone</b><span>Computed on your device. No account, so nothing to profile.</span></div>
@@ -171,7 +172,7 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
 
   <!-- WHAT HE DOES -->
   <section class="scene" id="coach">
-    <div class="pair">
+    <div class="pair reveal">
       <div>
         <p class="eyebrow">What he actually does</p>
         <h2>He decides, then he reacts.</h2>
@@ -197,11 +198,13 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
 
   <!-- THE EVIDENCE DIAL: cards first, control underneath, so a thumb never covers the answer -->
   <section class="scene" id="dial">
-    <p class="eyebrow">Day one against day one hundred</p>
-    <h2>Most coaching apps are exactly as certain on your first session as your hundredth.</h2>
-    <p class="sub">Only one of these two changes.</p>
+    <div class="head reveal">
+      <div><p class="eyebrow">Day one against day one hundred</p>
+        <h2>Most coaching apps are exactly as certain on your first session as your hundredth.</h2></div>
+      <div><p class="sub">Only one of these two changes.</p></div>
+    </div>
 
-    <div class="dial">
+    <div class="dial reveal">
       <div class="versus">
         <div class="side them">
           <p class="whoi">A typical coaching app</p>
@@ -231,13 +234,16 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
 
   <!-- THE GALLERY: one real capture, annotated. Placed after the dial so the claim is made, then shown. -->
   <section class="scene" id="screens">
-    <p class="eyebrow">Not a mockup</p>
-    <h2>This is the actual screen. Read what it admits.</h2>
-    <p class="sub">A real capture from the app, taken by the test suite on a clean install with
-    three sessions logged. Nothing retouched, nothing staged.</p>
+    <div class="head reveal">
+      <div><p class="eyebrow">Not a mockup</p>
+        <h2>This is the actual screen. Read what it admits.</h2></div>
+      <div><p class="sub">A real capture from the app, taken by the test suite on a clean install with
+    three sessions logged. Nothing retouched, nothing staged.</p></div>
+    </div>
 
-    <div class="gallery">
+    <div class="gallery reveal">
       <div class="phone">
+        <span class="btn-rail" aria-hidden="true"></span><span class="pwr" aria-hidden="true"></span>
         <div class="screen">
           <img src="/assets/shots/dashboard-session3.png?v=7e66eb5c05" width="1206" height="2622"
                alt="The OrderedStrength dashboard after three logged sessions, showing an Intelligence Mode badge reading Building, fatigue and recovery rings labelled Pop. Est., and a line reading that all five intelligence surfaces open on evidence, not time.">
@@ -276,11 +282,13 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
 
   <!-- THE SEAL -->
   <section class="scene" id="seal">
-    <p class="eyebrow">The seal</p>
-    <h2>Try to make him look better than he was.</h2>
-    <p class="sub">A real sealed prediction, made before the set. Widen the range so he looks right,
-    or change the lift. The fingerprint recomputes in your browser as you type.</p>
-    <div class="console">
+    <div class="head reveal">
+      <div><p class="eyebrow">The seal</p>
+        <h2>Try to make him look better than he was.</h2></div>
+      <div><p class="sub">A real sealed prediction, made before the set. Widen the range so he looks right,
+    or change the lift. The fingerprint recomputes in your browser as you type.</p></div>
+    </div>
+    <div class="console reveal">
       <div class="chead">
         <span class="lbl">Sealed before the set</span>
         <span class="verdict ok" id="verdict" role="status" aria-live="polite">VERIFIED</span>
@@ -331,10 +339,12 @@ field   sealedOn = 1755916800</pre>
 
   <!-- THE CATEGORY, WITHOUT NAMES -->
   <section class="scene" id="others">
-    <p class="eyebrow">Where the category stops</p>
-    <h2>Four kinds of app. One shared habit.</h2>
-    <p class="sub">They ask you a question, then ignore the answer.</p>
-    <div class="rows" style="margin-top:2.25rem">
+    <div class="head reveal">
+      <div><p class="eyebrow">Where the category stops</p>
+        <h2>Four kinds of app. One shared habit.</h2></div>
+      <div><p class="sub">They ask you a question, then ignore the answer.</p></div>
+    </div>
+    <div class="rows reveal" style="margin-top:2.25rem">
       <div class="row"><div class="who">A logbook</div><div class="does">Records your sets beautifully. Decides nothing.</div></div>
       <div class="row"><div class="who">A plan</div><div class="does">Adapts between sessions. Not during one.</div></div>
       <div class="row"><div class="who">A wearable</div><div class="does">Scores your recovery. Never writes your workout.</div></div>
@@ -345,11 +355,13 @@ field   sealedOn = 1755916800</pre>
 
   <!-- COMMITMENT -->
   <section class="scene" id="price">
-    <p class="eyebrow">The commitment</p>
-    <h2>The accuracy record goes up before we charge anyone.</h2>
-    <p class="sub">Published once the number looks good, it is marketing. Published first, it is a
-    commitment.</p>
-    <div class="chips" style="margin-top:1.75rem">
+    <div class="head reveal">
+      <div><p class="eyebrow">The commitment</p>
+        <h2>The accuracy record goes up before we charge anyone.</h2></div>
+      <div><p class="sub">Published once the number looks good, it is marketing. Published first, it is a
+    commitment.</p></div>
+    </div>
+    <div class="chips reveal" style="margin-top:1.75rem">
       <span class="chip"><b>iPhone</b> · in testing</span>
       <span class="chip"><b>199 US dollars</b> per year</span>
       <span class="chip"><b>14 days</b> free</span>
@@ -373,7 +385,7 @@ field   sealedOn = 1755916800</pre>
   OrderedStrength. Built for lifters who would rather be told the truth.
 </footer>
 
-<script src="/assets/site.js?v=5fe381d4e4" defer></script>
+<script src="/assets/site.js?v=10952f50a7" defer></script>
 <script>
 (function(){
 'use strict';
