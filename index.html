@@ -41,10 +41,11 @@
 
 /* ── the evidence dial ── */
 .dial{margin-top:2.25rem}
-.dialhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.75rem;margin:0 0 .875rem;max-width:100%}
+.dialhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.75rem;
+          margin:1.875rem 0 .875rem;max-width:52rem}
 .dialhead label{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
 .dialhead output{font-family:var(--mono);font-size:.9375rem;color:var(--teal);font-weight:500}
-input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:2rem;background:transparent;cursor:grab;display:block;margin:0}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;max-width:52rem;height:2rem;background:transparent;cursor:grab;display:block;margin:0}
 input[type=range]:active{cursor:grabbing}
 input[type=range]::-webkit-slider-runnable-track{height:2px;background:var(--line);border-radius:2px}
 input[type=range]::-moz-range-track{height:2px;background:var(--line);border-radius:2px}
@@ -250,7 +251,7 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
     </div>
 
     <div class="gallery reveal">
-      <div class="device device--flat">
+      <div class="device">
         <div class="device__body"><div class="device__glass">
           <div class="device__screenwrap">
             <img class="device__screen" src="/assets/shots/dashboard-session3.webp?v=843248fc5b" width="1206" height="2622" loading="lazy" decoding="async"
