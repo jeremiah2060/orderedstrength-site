@@ -292,8 +292,13 @@ footer nav a:hover{color:var(--ink)}
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
   -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
   mask-composite:exclude}
-.appcard{background:linear-gradient(168deg,#171b21 0%,var(--surface) 45%)}
-.side{background:linear-gradient(168deg,#171b21 0%,var(--surface) 55%);min-height:15rem}
+.appcard{background:linear-gradient(168deg,#171b21 0%,var(--surface) 45%);border-radius:16px;
+         padding:1.375rem 1.5rem;box-shadow:0 1.5rem 4rem rgba(0,0,0,.55),0 0 0 1px var(--line)}
+.appcard .cap{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;
+              color:var(--ink3);margin:0 0 .875rem}
+.appcard .said{font-size:.875rem;color:var(--ink2);line-height:1.5;margin:.875rem 0 0;
+               padding-top:.875rem;border-top:1px solid var(--line-soft)}
+.side{background:linear-gradient(168deg,#171b21 0%,var(--surface) 55%);min-height:15rem;border-radius:12px;padding:1.375rem 1.5rem;display:flex;flex-direction:column}
 
 /* ══ REVEAL, WITH A FAILSAFE ══════════════════════════════════════════════════
    🔒 CONTENT MUST APPEAR EVEN IF THE OBSERVER NEVER FIRES. An earlier build gated
@@ -330,5 +335,7 @@ footer nav a:hover{color:var(--ink)}
 .pagehead .sub{max-width:54ch}
 /* long-form bodies sit in a centred measure so no page hugs an edge */
 .prose{max-width:44rem;margin-left:auto;margin-right:auto}
-ol.loop{margin-left:auto;margin-right:auto}
-.refuse{margin-left:auto;margin-right:auto}
+
+/* page-scoped refinements live here, scoped, so nothing shadows the base rule */
+.hiw-card{max-width:22rem}
+@media (max-width:52rem){.hiw-card{max-width:none}}

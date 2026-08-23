@@ -12,19 +12,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=dbb71835c9">
+<link rel="stylesheet" href="/assets/site.css?v=82df2591a2">
 <style>
 /* ── the coaching stack: real app UI, rendered rather than screenshotted ── */
 .stack{display:grid;gap:.75rem;max-width:23rem}
-.appcard{background:var(--surface);border-radius:16px;padding:1.375rem 1.5rem;
-         box-shadow:0 1.5rem 4rem rgba(0,0,0,.55),0 0 0 1px var(--line)}
 .hero .appcard{padding:1.625rem 1.75rem}
 .hero .lift{padding:.6875rem 0}
 .hero .lift .nm{font-size:.9375rem}
 .hero .lift .vd{font-size:.8125rem}
-.hero .appcard .cap{font-size:.75rem;margin-bottom:1.125rem}
-.hero .appcard .said{font-size:.875rem;margin-top:1.125rem;padding-top:1.125rem}
-.appcard .cap{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;
+.hero .hero .appcard .cap{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;
               color:var(--ink3);margin:0 0 .75rem}
 .setline{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;padding:.4375rem 0}
 .setline + .setline{border-top:1px solid var(--line-soft)}
@@ -32,8 +28,6 @@
 .setline .v{font-family:var(--mono);font-size:.8125rem;color:var(--ink);font-weight:500}
 .setline .s{font-size:.75rem;flex:none}
 .setline .s.done{color:var(--teal)} .setline .s.cut{color:var(--amber)}
-.appcard .said{margin:.875rem 0 0;padding-top:.875rem;border-top:1px solid var(--line-soft);
-               font-size:.8125rem;color:var(--ink2);line-height:1.5}
 .lift{display:flex;align-items:flex-start;gap:.6875rem;padding:.5rem 0}
 .lift + .lift{border-top:1px solid var(--line-soft)}
 .dot{flex:none;width:1.0625rem;height:1.0625rem;border-radius:50%;margin-top:.0625rem;position:relative;
@@ -60,7 +54,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 input[type=range]::-moz-range-thumb{width:1.125rem;height:1.125rem;border:0;border-radius:50%;
   background:var(--teal);box-shadow:0 0 0 5px rgba(0,212,177,.14)}
 .versus{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:1.25rem}
-.side{background:var(--surface);border-radius:12px;padding:1.125rem;min-height:12.5rem;display:flex;flex-direction:column}
 .side.them{opacity:.82}
 .side .whoi{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;
             color:var(--ink3);margin:0 0 .875rem}

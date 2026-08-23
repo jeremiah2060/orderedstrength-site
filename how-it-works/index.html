@@ -10,9 +10,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=dbb71835c9">
+<link rel="stylesheet" href="/assets/site.css?v=82df2591a2">
 <style>
-ol.loop{list-style:none;counter-reset:s;padding:0;margin:2rem 0 0;max-width:44rem}
+ol.loop{list-style:none;counter-reset:s;padding:0;margin:2rem auto 0;max-width:46rem}
 ol.loop li{counter-increment:s;display:grid;grid-template-columns:2.5rem 1fr;gap:1.125rem;
            padding:1.375rem 0;border-top:1px solid var(--line)}
 ol.loop li::before{content:counter(s,decimal-leading-zero);font-family:var(--mono);font-size:.8125rem;
@@ -24,22 +24,17 @@ ol.loop li::before{content:counter(s,decimal-leading-zero);font-family:var(--mon
 ol.loop b{grid-column:2;display:block;font-family:var(--display);font-weight:700;font-size:1.0625rem;
           letter-spacing:-.015em;margin-bottom:.375rem}
 ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
-.quote{margin:1.75rem 0 0;padding:1.125rem 1.25rem;background:var(--surface);
+.quote{margin:1.75rem auto 0;max-width:46rem;padding:1.125rem 1.25rem;background:var(--surface);
        border-left:2px solid var(--amber);border-radius:0 10px 10px 0;font-size:.9375rem;color:var(--ink2)}
 .quote cite{display:block;margin-top:.625rem;font-style:normal;font-size:.75rem;color:var(--ink3);line-height:1.45}
 .moment{background:var(--surface);border-radius:12px;padding:1.375rem;height:100%}
 .moment h3{color:var(--ink)}
 .moment p{font-size:.875rem;color:var(--ink3);margin:0;line-height:1.55}
-.refuse{display:grid;grid-template-columns:auto 1fr;gap:.625rem 1rem;margin-top:1.5rem;
-        font-size:.875rem;align-items:baseline;max-width:40rem}
+.refuse{display:grid;grid-template-columns:auto 1fr;gap:.625rem 1rem;margin:1.5rem auto 0;
+        font-size:.9375rem;align-items:baseline;max-width:46rem}
 .refuse dt{font-family:var(--mono);font-size:.75rem;color:var(--amber);white-space:nowrap}
 .refuse dd{margin:0;color:var(--ink2)}
 
-.appcard{background:var(--surface);border-radius:14px;padding:1.0625rem 1.125rem;
-         box-shadow:0 1rem 3rem rgba(0,0,0,.45),0 0 0 1px var(--line);max-width:22rem}
-.appcard .cap{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;
-              color:var(--ink3);margin:0 0 .875rem}
-.appcard .said{font-size:.8125rem;color:var(--ink2);line-height:1.5;margin:0}
 .appcard .rule{margin:.875rem 0;border:0;border-top:1px solid var(--line-soft)}
 .ramp{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:.625rem}
 .ramp .big{font-family:var(--mono);font-size:1.625rem;color:var(--amber);font-weight:500;line-height:1}
@@ -50,7 +45,7 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
          color:var(--ink3);margin-top:.75rem}
 .receipt dt{font-family:var(--mono);color:var(--ink3)}
 .receipt dd{margin:0;color:var(--ink2)}
-@media (max-width:52rem){.appcard{max-width:none}}
+
 </style>
 </head>
 <body>
@@ -170,7 +165,7 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
         much of it, and what was ruled out before he said anything.</p>
       </div>
       <div style="display:grid;gap:.75rem">
-        <div class="appcard">
+        <div class="appcard hiw-card">
           <p class="cap">Right knee · returning to load</p>
           <div class="ramp"><span class="big">17</span><span class="unit">days until full load</span></div>
           <div class="track"><i></i></div>
@@ -178,7 +173,7 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
           <p class="said">Squats are out. I am training everything else at full effort. You logged
           pain at 4 out of 10 on Tuesday, which holds the ramp where it is rather than advancing it.</p>
         </div>
-        <div class="appcard">
+        <div class="appcard hiw-card">
           <p class="cap">Hard truth</p>
           <p class="said">Your legs have sat under the growth minimum for three weeks while your
           pressing runs full.</p>

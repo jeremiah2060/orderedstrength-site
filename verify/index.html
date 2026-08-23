@@ -10,14 +10,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=dbb71835c9">
+<link rel="stylesheet" href="/assets/site.css?v=82df2591a2">
 <style>
-textarea{width:100%;min-height:11rem;background:var(--surface);color:var(--ink);
+textarea{width:100%;max-width:46rem;display:block;margin:0 auto;min-height:11rem;background:var(--surface);color:var(--ink);
   border:1px solid var(--line);border-radius:10px;padding:.875rem;
   font-family:var(--mono);font-size:.8125rem;line-height:1.55;resize:vertical}
 textarea:focus{outline:none;border-color:var(--teal)}
-.actions{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin-top:.875rem}
-#out{margin-top:1.75rem;display:grid;gap:.625rem}
+.actions{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:center;margin:.875rem auto 0;max-width:46rem}
+#out{margin:1.75rem auto 0;display:grid;gap:.625rem;max-width:46rem}
 .res{background:var(--surface);border-radius:10px;padding:.9375rem 1.0625rem;
      border-left:3px solid var(--line)}
 .res.ok{border-left-color:var(--teal)} .res.bad{border-left-color:var(--red)}
@@ -27,7 +27,7 @@ textarea:focus{outline:none;border-color:var(--teal)}
 .res .why{font-size:.875rem;color:var(--ink2);margin:.3125rem 0 0;line-height:1.5}
 .res code{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);word-break:break-all;
           display:block;margin-top:.375rem}
-details.limits{margin-top:2.5rem;border-top:1px solid var(--line);padding-top:1.5rem}
+details.limits{margin:2.5rem auto 0;max-width:46rem;border-top:1px solid var(--line);padding-top:1.5rem}
 details.limits summary{font-size:.875rem;color:var(--ink2);cursor:pointer}
 details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-width:44rem}
 </style>
