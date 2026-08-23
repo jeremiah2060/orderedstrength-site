@@ -9,6 +9,8 @@
 #                    every quoted phrase and every number the page states about it is
 #                    actually in it. It also refuses a capture that is not native
 #                    resolution, or that is a system permission sheet rather than the app.
+#                    (tools/audit-captures.py is its upstream twin: point it at a capture
+#                    directory BEFORE choosing which frames to publish.)
 #   contrast-gate.py what the EYE cannot judge on a dark screen in a dark room: every
 #                    ink-on-surface pair, computed against WCAG 2.1, read out of the
 #                    stylesheet's own tokens so it cannot go stale.
