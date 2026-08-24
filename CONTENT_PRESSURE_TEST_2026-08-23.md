@@ -45,9 +45,38 @@
 >
 > **What is still not true, and is not mine to make true tonight:**
 >
-> 1. **The app still sends the sets.** `FreestyleWorkoutView.swift:4466`. The policy now discloses
->    it honestly, which is the best a website can do. Gating that call behind consent is five
->    lines and it makes the stronger promise available again in one revert of the policy section.
+> 1. **The app still sends the sets, and the fix below is DECIDED, not open.**
+>    `FreestyleWorkoutView.swift:4466`. I first wrote this up as a product-identity call for the
+>    CEO. That was wrong, and the source says why: this exact defect class was already adjudicated
+>    and fixed once in this codebase, for the cloud-answers path, whose own comment at
+>    `JerryCloudBrain.swift:125` reads *"behind nothing but a plist key while the privacy screen
+>    said 'nothing is sent to external servers' was App-Review and regulatory exposure, not a copy
+>    nit."* The precedent is the decision. Set ingestion simply never got the same treatment.
+>    There is nothing here for a product owner to weigh.
+>
+>    **The change, decided and ready to apply.** Add the consent gate as the first line of
+>    `submitSetsToSovereignEngine()` (`FreestyleWorkoutView.swift:4691`), directly above the
+>    existing `guard let userId = user.uuid`:
+>
+>    ```swift
+>    // Set ingestion is a server path, so it takes the same explicit consent the cloud-answers
+>    // path takes. `UserDefaults.bool(forKey:)` returns false when the key is unset, so this is
+>    // default-OFF by construction, the same way JerryCloudBrain.hasUserConsent is.
+>    // Without it, the published privacy policy's "every set you log ... never sent to us"
+>    // was false. Precedent: JerryCloudBrain.swift:125-131.
+>    // REVERT: delete this guard.
+>    guard UserDefaults.standard.bool(forKey: "os.setIngest.consentGranted") else { return }
+>    ```
+>
+>    Then the policy's point 4 is deleted and the "never sent to us" list goes back to being
+>    unqualified, which is one revert of one section of `app-privacy/index.html`.
+>
+>    **Why it is not applied tonight: ADJUDICATED, hard external blocker.** The app repo's index
+>    is held by a concurrent session with four Swift files staged, its simulator is running a
+>    corpus, and the CEO instructed this session to stay out of that tree. A networking change
+>    needs `scripts/verify.sh fast`, and starting a second `xcodebuild` against a live corpus run
+>    is a documented way to wedge `testmanagerd` in this repo. The blocker is the machine and the
+>    tree, never the decision. First thing when both free up.
 > 2. **The same false claim exists a second time, in the app repo.** `docs/legal/privacy.html`
 >    still reads "Three things can leave your device" and still lists the sets as "never sent to
 >    us". Measured tonight: that file and the site's copy were **already 4.2% divergent before
