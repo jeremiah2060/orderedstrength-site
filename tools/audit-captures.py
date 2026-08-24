@@ -8,8 +8,12 @@ failures that actually shipped to the front page on 2026-08-23:
   2. the lapse banner contradicts the session count ("away for 26 days" above
      "3 sessions logged");
   3. "Estimated 1RM" is a number no human in an acclimation block lifts;
-  4. the Calibration ring carries no percentage, which means the RIR belief never
-     updated, which means the reserve was logged unauthored;
+  4. the Calibration ring carries no percentage. THE STATED CAUSE WAS FIXED AND THE
+     SENTENCE STAYED WRONG, which is the very failure number 5 below exists to name.
+     `JerryEnvironment` has logged `rirAuthored: true` since 2026-08-23, verified at
+     source on `github/main:...JerryEnvironment.swift:935`, and the ring is STILL empty
+     at 3, 12, 39 and 100 sessions. So "the reserve was logged unauthored" now sends a
+     reader to fix something already fixed;
   5. the movement named beside that number is not one the seeded athlete trains.
 
 Number 5 is here because number 3 was fixed on its own and the sentence stayed wrong.
@@ -26,7 +30,24 @@ Usage: python3 tools/audit-captures.py <capture-dir>
 import re, sys, os, subprocess, glob
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PLAUSIBLE_1RM = (20.0, 90.0)     # an acclimation-block beginner, in kilograms
+# 🔒 THIS BAND WAS CALIBRATED WHEN SESSION 3 WAS THE DEEPEST FRAME THAT EXISTED, AND IT
+# THEN REJECTED CORRECT FRAMES FOR BEING DEEP (2026-08-24). The app repo's camera now
+# photographs session 40 and session 100, and the auditor failed both: "Estimated 1RM
+# 129.2 kg is outside 20-90 kg" on a hundred-session athlete whose squat is genuinely
+# 1.58x bodyweight. The number in the picture was right and the checker was stale, which
+# is the same class as everything else that round: a check answering the question it was
+# built for after the question moved.
+#
+# 160 is not a guess. `ColdStartFixtureLoadTests.test_noSeededLoadIsAbsurdAtAnyDepth` caps
+# the seeded WORKING load at 1.5x bodyweight, and the blended estimator turns a working set
+# of 8 reps at reserve 2 into roughly 1.26x that load, so the deepest honest estimate the
+# fixture can produce is about 1.9x bodyweight: ~155 kg at 82 kg. 160 clears that with a
+# little room and still rejects what this band exists to catch, the 292.5 kg squat the
+# pre-2026-08-24 fixture arithmetic would have printed at session 100 (~367 kg estimated).
+#
+# THE FLOOR STAYS AT 20. A day-one athlete really does start there, and lowering the ceiling
+# is what a future beginner-only calibration would be tempted to do again.
+PLAUSIBLE_1RM = (20.0, 160.0)    # day-one beginner through strong intermediate, in kilograms
 MAX_LAPSE_DAYS = 10              # the fixture trains every 3 days
 
 # The six movements JerryEnvironment.seedColdStartSessions names, lower-cased. This IS a
@@ -85,8 +106,19 @@ def audit(path):
     if 'calibration' in low:
         # the ring's own centre text is a percentage; building renders none
         if '(building)' in low and sessions and sessions >= 2:
+            # 🔒 REPORT THE OBSERVATION, NOT A CAUSE THAT WAS FIXED (2026-08-24). This used
+            # to assert "the reserve was logged unauthored". That was true when written and
+            # false from 2026-08-23, when the seeder began passing `rirAuthored: true`; the
+            # ring is empty anyway at every depth ever photographed. A confident wrong reason
+            # is worse than no reason: it routes the next engineer to a closed defect. The
+            # leading hypothesis is stated AS a hypothesis, because it is not established:
+            # this fixture reports reserve 2 on every one of its sets, and a belief
+            # distribution with zero variance may have nothing to calibrate against.
             issues.append('Calibration ring still reads (Building) with no percentage at '
-                          f'{sessions} sessions: the reserve was logged unauthored')
+                          f'{sessions} sessions. CAUSE NOT ESTABLISHED: the reserve IS '
+                          'logged authored since 2026-08-23, so this is not that. Likely '
+                          'the fixture reporting an identical reserve on every set; vary '
+                          "SyntheticAthlete's ReserveReporter and re-shoot to find out")
     return issues
 
 
