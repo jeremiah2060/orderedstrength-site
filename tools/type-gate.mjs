@@ -25,6 +25,11 @@ import { withPage } from './measure.mjs';
 
 const BASE = process.env.BASE || 'http://127.0.0.1:8899';
 const TOL = Number(process.env.TYPE_TOL || 7);   // percent of x-height
+// The ratio this gate measures is width-independent TODAY, because every inline literal is
+// sized in `em` and therefore tracks its host. It is parameterised anyway, and check.sh runs
+// a phone width as well as a desktop one, because the failure this gate exists to catch is
+// an ABSOLUTE size on a literal, and an absolute size is exactly what a media query adds.
+const W = Number(process.env.WIDTH || 1440);
 const PAGES = (process.env.PAGES || '/,/how-it-works/,/record/,/join/,/verify/,/support/,/app-privacy/,/404.html').split(',');
 
 const PROBE = `JSON.stringify((() => {
@@ -92,9 +97,9 @@ await withPage(async page => {
     console.log(`  ${p.padEnd(16)} ${String(rows.length).padStart(3)} inline literal(s)` +
       (worst ? `  worst ${worst.delta > 0 ? '+' : ''}${worst.delta}%  ${JSON.stringify(worst.text)}` : ''));
   }
-}, { width: 1440, height: 900, dsf: 1 });
+}, { width: W, height: 900, dsf: 1 });
 
-console.log(`\ntype-gate: ${checked} inline literal(s) measured, tolerance ${TOL}% of x-height`);
+console.log(`\ntype-gate: ${checked} inline literal(s) measured at ${W}px, tolerance ${TOL}% of x-height`);
 if (bad.length) {
   console.log(`\nOPTICAL SIZE MISMATCH (${bad.length}):`);
   for (const b of bad) {

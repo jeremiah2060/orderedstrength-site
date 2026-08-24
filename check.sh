@@ -53,6 +53,8 @@ echo
 BASE="http://127.0.0.1:${PORT}" node tools/measure-gate.mjs 1550 390 | tail -3 || fail=1
 echo
 BASE="http://127.0.0.1:${PORT}" node tools/type-gate.mjs || fail=1
+echo
+BASE="http://127.0.0.1:${PORT}" WIDTH=390 node tools/type-gate.mjs | tail -3 || fail=1
 
 echo
 [ $fail -eq 0 ] && echo "SITE OK" || echo "SITE NOT OK"

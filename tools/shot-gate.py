@@ -15,13 +15,32 @@ So: read the text out of every published screenshot with the OS's own Vision fra
 and assert that every quoted phrase and every number the page states about that screenshot
 is actually present in it. A claim the pixels do not support fails the build.
 
-It also refuses a capture that is not native resolution, and one that is a system
-permission sheet rather than the product.
+It also refuses a capture that is not native resolution, one that is a system permission
+sheet rather than the product, and one whose "Best on record" line names a movement the
+seeded athlete does not train.
+
+🔒 THAT LAST ONE EXISTS BECAUSE FIXING THE NUMBER LEFT THE SENTENCE WRONG. The published
+dashboard read "Best on record: Arnold Press (Smith Machine) . Estimated 1RM 152.4 kg".
+The load was corrected to a plausible 53 kg and shipped, and the line still named a
+movement that cannot be performed: an Arnold press is defined by rotating the wrists
+through the press, and a Smith bar is fixed in a track. The CEO found it on the front
+page. One sentence, two independent claims, and only one of them was being checked.
 """
 import re, sys, os, subprocess, unicodedata
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 NATIVE = (1206, 2622)
+
+# The six movements JerryEnvironment.seedColdStartSessions names, normalised the way norm()
+# leaves them. This IS a coupling to the app repo and the coupling is the point: the site
+# publishes a photograph of one specific seeded athlete, and the only way to know the
+# photograph shows HIM is to know who he is. When the fixture's six change, this changes
+# with them, and until it does the gate says so rather than vouching for a screen it can no
+# longer vouch for. tools/audit-captures.py carries the same list for the upstream pass.
+SEEDED_LIFTS = {
+    'overhead press', 'barbell row', 'barbell bench press',
+    'lat pulldown', 'romanian deadlift', 'barbell back squat',
+}
 
 
 def ocr(path):
@@ -114,6 +133,13 @@ def main():
                 issues.append(f"not native resolution: {im.size[0]}x{im.size[1]}, expected {NATIVE[0]}x{NATIVE[1]}")
             if 'health access' in t or 'access your health data' in t:
                 issues.append("this is a system permission sheet, not the product")
+            m_best = re.search(r'best on record[:/\s]+(.+?)(?:\s*[/|-]\s*estimated|\s+estimated|$)', t)
+            if m_best:
+                movement = re.sub(r'\s+', ' ', m_best.group(1)).strip(" .,:-/'\"")
+                if movement and movement not in SEEDED_LIFTS:
+                    issues.append(f'"Best on record: {movement}" names a movement the fixture '
+                                  f'does not seed, so this photograph is of an athlete the app '
+                                  f'never built')
         for kind, c in claims(said):
             if c not in t:
                 issues.append(f"{where} states {kind} \"{c}\" and the pixels do not show it")
