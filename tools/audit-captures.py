@@ -9,11 +9,13 @@ failures that actually shipped to the front page on 2026-08-23:
      "3 sessions logged");
   3. "Estimated 1RM" is a number no human in an acclimation block lifts;
   4. the Calibration ring carries no percentage. THE STATED CAUSE WAS FIXED AND THE
-     SENTENCE STAYED WRONG, which is the very failure number 5 below exists to name.
-     `JerryEnvironment` has logged `rirAuthored: true` since 2026-08-23, verified at
-     source on `github/main:...JerryEnvironment.swift:935`, and the ring is STILL empty
-     at 3, 12, 39 and 100 sessions. So "the reserve was logged unauthored" now sends a
-     reader to fix something already fixed;
+     SENTENCE STAYED WRONG, twice, which is the very failure number 5 below exists to
+     name. It said "the reserve was logged unauthored"; `rirAuthored: true` has been
+     passed since 2026-08-23. It then said "an identical reserve on every set"; that was
+     a guess and it was also wrong. MEASURED 2026-08-24: the belief write is gated on
+     `strengthCurveDataPoints >= 3`, which counts DISTINCT REP VALUES, and this fixture
+     logs reps 8 forever. One bucket, gate never opens, zero observations, ring empty by
+     construction. The ring is not a defect in any photograph;
   5. the movement named beside that number is not one the seeded athlete trains.
 
 Number 5 is here because number 3 was fixed on its own and the sentence stayed wrong.
@@ -115,10 +117,15 @@ def audit(path):
             # this fixture reports reserve 2 on every one of its sets, and a belief
             # distribution with zero variance may have nothing to calibrate against.
             issues.append('Calibration ring still reads (Building) with no percentage at '
-                          f'{sessions} sessions. CAUSE NOT ESTABLISHED: the reserve IS '
-                          'logged authored since 2026-08-23, so this is not that. Likely '
-                          'the fixture reporting an identical reserve on every set; vary '
-                          "SyntheticAthlete's ReserveReporter and re-shoot to find out")
+                          f'{sessions} sessions. CAUSE NOW MEASURED, and it is neither of '
+                          'the two things previously written here: the RIR belief is never '
+                          'UPDATED, because that write is gated on '
+                          'strengthCurveDataPoints >= 3 (JerryKernel:6679) and that count is '
+                          'bestAtReps.count, a dict keyed by REPS. This fixture logs reps 8 '
+                          'forever, so it holds ONE key and the gate never opens. Measured in '
+                          'SyntheticAthleteSimulationTests O7 at 100 sessions: buckets '
+                          'bench=2 squat=1 row=3 press=0 rdl=0, and RIR observations [0,0,0,0,0] '
+                          'on all five. NOT a defect in this screenshot')
     return issues
 
 
