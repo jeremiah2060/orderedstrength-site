@@ -28,6 +28,11 @@
 #   align-gate.mjs   what the BROWSER does: every stacked block inside a section starts on
 #                    the same left edge, that edge is the nav wordmark's, and no page
 #                    scrolls sideways. Run across the widths people actually use.
+#                    🔒 IT COVERS 8 PAGES, NOT 7. This line said 7 until 2026-08-23, when
+#                    /join/ made it 8 and nobody re-counted, and the stale number was then
+#                    copied out of this comment into two commit messages as though it had
+#                    been measured. Derive it: the gate walks $PAGES, so COUNT THE OUTPUT
+#                    rather than quoting this header.
 #
 # A screenshot tells you something feels wrong. These tell you by how many pixels, where.
 set -uo pipefail
