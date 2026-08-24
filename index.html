@@ -5,9 +5,9 @@
 <script>document.documentElement.className="js";</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>OrderedStrength</title>
-<meta name="description" content="A strength coach for iPhone that writes each session, adapts set by set, and is the only one that can be checked. Seal a prediction, then try to change it.">
+<meta name="description" content="A strength coach for iPhone that changes your session while you are in it, writes down what it expected before you lift, and can be checked. Seal a prediction, then try to change it.">
 <meta property="og:title" content="OrderedStrength">
-<meta property="og:description" content="Every coaching app sounds equally certain on day one and day one hundred. Watch what happens when only one of them has to be honest about it.">
+<meta property="og:description" content="He writes the next set while you are still breathing hard from the last one, cuts the session when you are fading, and writes down what he expected before you lift so you can check him after.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="OrderedStrength">
 <meta property="og:image" content="/assets/og.jpg">
@@ -153,12 +153,13 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
     <div class="hero-grid">
       <div>
         <p class="eyebrow">Strength coaching for iPhone</p>
-        <h1>A coach who writes it down before you lift.</h1>
-        <p class="sub">Jerry plans every session, changes it as each set lands, and records what
-        he expected from you <em>before</em> you touch the bar. Then he grades himself on it and
-        keeps the misses.</p>
+        <h1>He changes your workout in the middle of it.</h1>
+        <p class="sub">Most apps hand you a program and stop listening. Jerry, the coach inside
+        the app, writes the next set while you are still breathing hard from the last one. He cuts
+        the session when you are fading, adds the plate the day you earn it, and writes down what
+        he expected from you <em>before</em> you touch the bar, so you can check him on it after.</p>
         <div class="chips reveal" style="margin-top:2rem">
-          <a class="btn" href="#dial">See what that changes</a>
+          <a class="btn" href="#coach">See him cut a set</a>
           <a class="btn ghost" href="/how-it-works/">How it works</a>
         </div>
       </div>
@@ -169,8 +170,8 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
           <div class="device device--back">
             <div class="device__body"><div class="device__glass">
               <div class="device__screenwrap">
-                <img class="device__screen" src="/assets/shots/intelligence.webp?v=f66583ef3a" width="1206" height="2622" loading="lazy" decoding="async"
-                     alt="The same dashboard scrolled down to the coaching cards. Each one is tagged Building and states its own basis: 1 session, building your model.">
+                <img class="device__screen" src="/assets/shots/evidence.webp?v=7f031d6a7e" width="1206" height="2622" loading="lazy" decoding="async"
+                     alt="The Trust Intelligence screen, badged Population, listing open investigations and naming the evidence each one still needs before it will make a claim.">
               </div>
               <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
             </div></div>
@@ -197,9 +198,9 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
     </div>
 
     <div class="facts reveal">
-      <div><b>Sealed before the set</b><span>The prediction is fingerprinted before your first repetition, and it cannot be edited afterwards.</span></div>
-      <div><b>Graded where you can read it</b><span>Hits and misses both. The misses stay on the record.</span></div>
-      <div><b>Your training stays on your phone</b><span>Computed on your device. No account, so nothing to profile.</span></div>
+      <div><b>Sealed before the set</b><span>The prediction is fingerprinted before your first repetition. Change one character of it afterwards and the fingerprint stops matching.</span></div>
+      <div><b>Graded where you can read it</b><span>Hits and misses both. Nothing is deleted to make him look better.</span></div>
+      <div><b>The coaching runs on your phone</b><span>Every decision is computed on your device. No account, no password, nothing to log into.</span></div>
     </div>
   </section>
 
@@ -227,6 +228,17 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
         </div>
       </div>
     </div>
+
+    <div class="facts reveal" style="margin-top:clamp(2rem,4vw,3rem)">
+      <div><b>You add the plate the week you earn it</b><span>Not the week a calendar says.
+      The load moves when you finish the top of the rep range at the effort he asked for, and
+      it holds when you do not.</span></div>
+      <div><b>You finish the block instead of stalling in it</b><span>The set he cuts today is
+      why Thursday still has something in it. Fatigue gets spent where it buys you something.</span></div>
+      <div><b>You keep training when something hurts</b><span>Tell him and he removes what is
+      unsafe, trains everything else at full effort, and brings the movement back on a ramp you
+      can watch, in days you can count.</span></div>
+    </div>
   </section>
 
   <!-- THE EVIDENCE DIAL: cards first, control underneath, so a thumb never covers the answer -->
@@ -247,8 +259,8 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
         </div>
         <div class="side">
           <p class="whoi">Jerry</p>
-          <p class="claim" id="usclaim">I do not know you yet. For a man your age and bodyweight the average top set is around <b>100 kg</b>.</p>
-          <p class="basis" id="usbasis">Basis: population research. This is a number about people like you, not about you. I will say so every time until it stops being true.</p>
+          <p class="claim" id="usclaim">I do not know you yet. Until your own sets exist I start from population averages for your age, sex and bodyweight, and <b>I say so every time I do</b>.</p>
+          <p class="basis" id="usbasis">Basis: population research. Nothing here is a claim about your body. It becomes one only when your own sets say so.</p>
           <p style="margin:.625rem 0 0"><span class="tag pop" id="ustag">Population</span></p>
         </div>
       </div>
@@ -260,8 +272,11 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
       <input type="range" id="sessions" min="1" max="60" value="1" step="1" aria-describedby="dialnote">
       <noscript><p class="small" style="color:var(--amber)">The slider needs JavaScript. What it
       reveals is written out on <a href="/how-it-works/" style="color:var(--teal)">how it works</a>.</p></noscript>
-      <p class="small" id="dialnote">The tier is not a countdown. It moves when the evidence
-      arrives, and it moves back if his predictions start missing.</p>
+      <p class="small" id="dialnote">The slider is a session count because that is the only
+      dial a web page can offer you. Inside the app the pace runs on evidence: dense sessions of
+      real working sets move it faster than the calendar does, and it moves back if his
+      predictions start missing. A few of the deeper reads also hold a hard floor, and those are
+      named on <a href="/how-it-works/" style="color:var(--teal)">how it works</a>.</p>
     </div>
   </section>
 
@@ -304,16 +319,18 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
         </li>
         <li class="callout" data-callout="2">
           <span class="n">03</span>
-          <span><b>The gate is evidence, never a countdown</b>
-          <span>In the app's own words: the intelligence surfaces
-          <code>open on evidence, not time</code>. No feature unlocks because a week passed.</span></span>
+          <span><b>Evidence moves it, and some of it holds a floor</b>
+          <span>The app's own line, on the screen: the intelligence surfaces
+          <code>open on evidence, not time</code>. True of the pace. Not true of everything: a few
+          deep reads will not speak below fifteen sessions however hard you train, because the
+          sample is too small to mean anything. Both halves are here because only one flatters
+          us.</span></span>
         </li>
       </ul>
     </div>
 
-    <p class="small" style="margin-top:1.75rem">Captured by
-    <code>scripts/verify.sh screens</code>,
-    the same flow the test suite runs. The status bar is the simulator's own.</p>
+    <p class="small" style="margin-top:1.75rem">Photographed automatically by our own test run,
+    on a phone with nothing else on it.</p>
   </section>
 
   <!-- THE SEAL -->
@@ -321,8 +338,9 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
     <div class="head reveal">
       <div><p class="eyebrow">The seal</p>
         <h2>Try to make him look better than he was.</h2></div>
-      <div><p class="sub">A real sealed prediction, made before the set. Widen the range so he looks right,
-    or change the lift. The fingerprint recomputes in your browser as you type.</p></div>
+      <div><p class="sub">A sealed prediction in the exact shape the app produces, field for
+    field. Widen the range so he looks right, or change the lift. The fingerprint recomputes in
+    your browser as you type.</p></div>
     </div>
     <div class="console seal-console reveal">
       <div class="chead">
@@ -349,20 +367,20 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
 
         <div class="hashwrap">
           <p class="hlabel"><span>Fingerprint, recomputed in your browser</span><span id="hstate">matches the seal</span></p>
-          <p class="hash" id="hash"><b>905bb7a70b96e4e5cf20d6b1290074b59d91f6cc461d3a3b46e4f17ed1ae366c</b></p>
+          <p class="hash" id="hash"><b>28168c46d4cffa65957c2d3bd3f6494fbf2ac1933a67248bd1c5a51d2db46915</b></p>
         </div>
 
         <details class="raw">
           <summary>What is actually sealed</summary>
           <pre id="rawdump">scheme  os-commit-v1-sha256
-sealed  905bb7a70b96e4e5cf20d6b1290074b59d91f6cc461d3a3b46e4f17ed1ae366c
+sealed  28168c46d4cffa65957c2d3bd3f6494fbf2ac1933a67248bd1c5a51d2db46915
 nonce   412cabcd699f0a2a4cc22cfa1871753bd48789a2cc736aa97b517da656d5aec6
-field   kind = topSetBand
+field   kind = session-forecast
 field   exercise = Barbell Back Squat
-field   bandLowKg = 1025
-field   bandHighKg = 1125
-field   naiveBaselineKg = 1000
-field   sealedOn = 1755916800</pre>
+field   bandLowKg = 1025000
+field   bandHighKg = 1125000
+field   naiveBaselineKg = 1000000
+field   sealedFor = 1755916800</pre>
         </details>
       </div>
       <div class="cfoot">
@@ -385,7 +403,7 @@ field   sealedOn = 1755916800</pre>
       <div class="row"><div class="who">A plan</div><div class="does">Adapts between sessions. Not during one.</div></div>
       <div class="row"><div class="who">A wearable</div><div class="does">Scores your recovery. Never writes your workout.</div></div>
       <div class="row"><div class="who">A chatbot</div><div class="does">Ask twice, get two answers. Nothing to hold it to next month.</div></div>
-      <div class="row us"><div class="who">Jerry</div><div class="does">Decides the set, reacts as it lands, remembers you for months, and keeps score on himself where you can read it.</div></div>
+      <div class="row us"><div class="who">Jerry</div><div class="does">Decides your set, changes it as it lands, remembers you for months, and keeps score on himself where you can read it. You train, he adjusts, and you can check every call he made.</div></div>
     </div>
   </section>
 
@@ -394,10 +412,10 @@ field   sealedOn = 1755916800</pre>
   <section class="scene" id="states">
     <div class="head reveal">
       <div><p class="eyebrow">The pressure test</p>
-        <h2>Three screens most apps never show you.</h2></div>
-      <div><p class="sub">Not three angles on one screen. Three different surfaces, each one admitting
-    something: what it knows, why it says it, and what it still needs before it will claim more. Real
-    captures from the test suite on a clean install, nothing staged and nothing retouched.</p></div>
+        <h2>Three things most apps never show you.</h2></div>
+      <div><p class="sub">One screen at the top, the same screen further down, and the sheet behind
+    it. Each one admits something: what it knows, why it says it, and what it still needs before it
+    will claim more. Real captures on a clean install, nothing staged and nothing retouched.</p></div>
     </div>
     <div class="states reveal">
             <figure class="state">
@@ -424,7 +442,7 @@ field   sealedOn = 1755916800</pre>
           </div></div>
           <span class="device__key device__key--act" aria-hidden="true"></span><span class="device__key device__key--vup" aria-hidden="true"></span><span class="device__key device__key--vdn" aria-hidden="true"></span><span class="device__key device__key--pwr" aria-hidden="true"></span><span class="device__key device__key--cam" aria-hidden="true"></span>
         </div>
-        <figcaption><b>Why it says it</b><span>The same session, further down. Every card is tagged <code>Building</code> and carries its own basis: <code>1 session</code>, building your model. <code>Systemic Fatigue</code> reads <code>10%</code> and offers <code>Show Reasoning</code> rather than asking to be believed.</span></figcaption>
+        <figcaption><b>Why it says it</b><span>The same session, further down. Every card is tagged <code>Building</code> and carries its own basis: <code>1 session</code>, building your model. <code>Systemic Fatigue</code> reads <code>10%</code> and offers <code>Show Reasoning</code> rather than asking to be believed. The <code>Unlock Map</code> below it is a plain list of what opens next and what evidence opens it, which is the opposite of the word's usual job.</span></figcaption>
       </figure>
       <figure class="state">
         <div class="device">
@@ -437,12 +455,28 @@ field   sealedOn = 1755916800</pre>
           </div></div>
           <span class="device__key device__key--act" aria-hidden="true"></span><span class="device__key device__key--vup" aria-hidden="true"></span><span class="device__key device__key--vdn" aria-hidden="true"></span><span class="device__key device__key--pwr" aria-hidden="true"></span><span class="device__key device__key--cam" aria-hidden="true"></span>
         </div>
-        <figcaption><b>What it still needs</b><span>The line that no competitor ships: <code>Each one names the evidence I still need.</code> Then it does, by name: <code>Metabolic Phenotype</code>, <code>Individual Recovery Fingerprint</code>, and what would close each.</span></figcaption>
+        <figcaption><b>What it still needs</b><span>A line we have not found in any competitor: <code>Each one names the evidence I still need.</code> Then it does, by name: <code>Metabolic Phenotype</code>, <code>Individual Recovery Fingerprint</code>, and what would close each.</span></figcaption>
       </figure>
     </div>
-    <p class="small" style="margin-top:1.5rem">Every one of these was taken by
-    <code>scripts/verify.sh screens</code>
-    on a clean install. If a number here ever stops matching the app, the capture is the thing that is wrong.</p>
+    <p class="small" style="margin-top:1.5rem">Every one of these was photographed automatically
+    by our own test run, on a phone with nothing else on it. If a number here ever stops matching
+    the app, the capture is the thing that is wrong.</p>
+  </section>
+
+  <!-- THE PERSON. No eyebrow and no heading: the one section on this page shaped like a
+       person talking rather than a product explaining itself. `.eyebrow` is what carries
+       counter-increment, so omitting it leaves the section numbering untouched. -->
+  <section class="scene" id="who">
+    <div class="reveal">
+      <p class="sub" style="max-width:52ch">I am Jeremiah Tachiwona, and I built this.</p>
+      <p style="margin-top:1.25rem">Every coaching app I have paid for was certain about me on
+      the first day, and not one of them ever came back and told me it had been wrong. That is
+      the whole reason this one writes its guess down before you lift and then grades itself
+      where you can read it.</p>
+      <p>I am one person and a small test group, not a company with a support desk. If you write
+      to <a href="mailto:jeremiah@orderedstrength.com" style="color:var(--teal)">jeremiah@orderedstrength.com</a>,
+      I am who answers.</p>
+    </div>
   </section>
 
   <!-- COMMITMENT -->
@@ -458,13 +492,15 @@ field   sealedOn = 1755916800</pre>
       <span class="chip"><b>199 US dollars</b> per year</span>
       <span class="chip"><b>14 days</b> free</span>
     </div>
+    <p class="small" style="margin-top:1.25rem">A strength coach costs 200 to 400 US dollars a
+    month. This is 199 a year, and the accuracy record goes up before anyone is charged.</p>
     <div class="chips reveal" style="margin-top:1.75rem;gap:.75rem">
       <a class="btn" href="/join/">Join the test</a>
-      <a class="btn ghost" href="/record/">Read the record</a>
+      <a class="btn ghost" href="/how-it-works/">How it works</a>
     </div>
     <p class="small" style="margin-top:1.5rem">Not on the App Store yet, and there is no mailing
     list, because there is no account system to hold one.
-    <a href="mailto:tachiwonajeremiah@gmail.com?subject=Tell%20me%20when%20OrderedStrength%20ships"
+    <a href="mailto:jeremiah@orderedstrength.com?subject=Tell%20me%20when%20OrderedStrength%20ships"
        style="color:var(--teal)">Email us</a> and you will hear from a person when it ships.</p>
   </section>
 
@@ -523,8 +559,8 @@ if (sess){
 
     if (n < 5){
       tag.textContent = 'Population'; tag.className = 'tag pop';
-      claim.innerHTML = 'I do not know you yet. For a man your age and bodyweight the average top set is around <b>100 kg</b>.';
-      basis.textContent = 'Basis: population research. This is a number about people like you, not about you. I will say so every time until it stops being true.';
+      claim.innerHTML = 'I do not know you yet. Until your own sets exist I start from population averages for your age, sex and bodyweight, and <b>I say so every time I do</b>.';
+      basis.textContent = 'Basis: population research. Nothing here is a claim about your body. It becomes one only when your own sets say so.';
     } else if (n < 20){
       var pct = Math.round(((n - 5) / 15) * 70) + 15;
       tag.textContent = 'Building'; tag.className = 'tag bld';
@@ -534,7 +570,7 @@ if (sess){
       var lo = (102.5 + Math.min(10, (n - 20) * 0.25)).toFixed(1);
       var hi = (112.5 + Math.min(10, (n - 20) * 0.25)).toFixed(1);
       tag.textContent = 'Yours'; tag.className = 'tag you';
-      claim.innerHTML = 'From your ' + n + ' sessions: your top set lands between <b>' + lo + ' kg</b> and <b>' + hi + ' kg</b>, four times out of five.';
+      claim.innerHTML = 'From your ' + n + ' sessions: your top set lands between <b>' + lo + ' kg</b> and <b>' + hi + ' kg</b>, nineteen times out of twenty.';
       basis.textContent = 'Basis: your own logged sets. I sealed this range before the session and I will grade myself against it afterwards.';
     }
   }
@@ -575,15 +611,15 @@ if (sess){
 var ENDPOINT = 'https://api.orderedstrength.com/api/v1/verify';
 var RECEIPT = {
   scheme: 'os-commit-v1-sha256',
-  commitmentHex: '905bb7a70b96e4e5cf20d6b1290074b59d91f6cc461d3a3b46e4f17ed1ae366c',
+  commitmentHex: '28168c46d4cffa65957c2d3bd3f6494fbf2ac1933a67248bd1c5a51d2db46915',
   nonceHex: '412cabcd699f0a2a4cc22cfa1871753bd48789a2cc736aa97b517da656d5aec6',
   fields: [
-    { key:'kind',            value:'topSetBand' },
+    { key:'kind',            value:'session-forecast' },
     { key:'exercise',        value:'Barbell Back Squat' },
-    { key:'bandLowKg',       value:'1025' },
-    { key:'bandHighKg',      value:'1125' },
-    { key:'naiveBaselineKg', value:'1000' },
-    { key:'sealedOn',        value:'1755916800' }
+    { key:'bandLowKg',       value:'1025000' },
+    { key:'bandHighKg',      value:'1125000' },
+    { key:'naiveBaselineKg', value:'1000000' },
+    { key:'sealedFor',       value:'1755916800' }
   ]
 };
 var IDX = { exercise:1, bandLowKg:2, bandHighKg:3, naiveBaselineKg:4 };
@@ -614,9 +650,10 @@ async function digest(fields, nonceHex){
   return toHex(await crypto.subtle.digest('SHA-256', cat([canonical(fields), hexBytes(nonceHex)])));
 }
 
-/* kg on screen, the scaled integer in the seal. Round-tripped so 102.5 -> "1025". */
-function toRaw(kg){ return String(Math.round(parseFloat(kg) * 10)); }
-function toKg(raw){ return (parseInt(raw,10) / 10).toFixed(1); }
+/* kg on screen, the scaled integer in the seal. The app commits loads at four decimal
+   places, so 102.5 kg is sealed as "1025000". Anything coarser would not match a real receipt. */
+function toRaw(kg){ return String(Math.round(parseFloat(kg) * 10000)); }
+function toKg(raw){ return (parseInt(raw,10) / 10000).toFixed(1); }
 
 function wire(){
   $('ex').value = live[IDX.exercise].value;

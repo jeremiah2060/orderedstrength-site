@@ -134,11 +134,11 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
 var ENDPOINT = 'https://api.orderedstrength.com/api/v1/verify';
 var SAMPLE = {
   scheme:'os-commit-v1-sha256',
-  commitmentHex:'905bb7a70b96e4e5cf20d6b1290074b59d91f6cc461d3a3b46e4f17ed1ae366c',
+  commitmentHex:'28168c46d4cffa65957c2d3bd3f6494fbf2ac1933a67248bd1c5a51d2db46915',
   nonceHex:'412cabcd699f0a2a4cc22cfa1871753bd48789a2cc736aa97b517da656d5aec6',
-  fields:[{key:'kind',value:'topSetBand'},{key:'exercise',value:'Barbell Back Squat'},
-          {key:'bandLowKg',value:'1025'},{key:'bandHighKg',value:'1125'},
-          {key:'naiveBaselineKg',value:'1000'},{key:'sealedOn',value:'1755916800'}]
+  fields:[{key:'kind',value:'session-forecast'},{key:'exercise',value:'Barbell Back Squat'},
+          {key:'bandLowKg',value:'1025000'},{key:'bandHighKg',value:'1125000'},
+          {key:'naiveBaselineKg',value:'1000000'},{key:'sealedFor',value:'1755916800'}]
 };
 var REASONS = {
   mismatch:'The fingerprint does not match the prediction. Either the prediction was changed after it was sealed, or this is not a genuine receipt.',

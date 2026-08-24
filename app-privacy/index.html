@@ -5,9 +5,9 @@
 <script>document.documentElement.className="js";</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacy Policy · OrderedStrength</title>
-<meta name="description" content="What the OrderedStrength iPhone app stores on your device, the three things that can leave it, and how to switch each one off.">
+<meta name="description" content="What the OrderedStrength iPhone app stores on your device, the four things that can leave it, how to switch each one off, and the one that should not be there.">
 <meta property="og:title" content="Privacy Policy · OrderedStrength">
-<meta property="og:description" content="What the OrderedStrength iPhone app stores on your device, the three things that can leave it, and how to switch each one off.">
+<meta property="og:description" content="What the OrderedStrength iPhone app stores on your device, the four things that can leave it, how to switch each one off, and the one that should not be there.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="OrderedStrength">
 <meta property="og:image" content="/assets/og.jpg">
@@ -42,13 +42,13 @@
 <p><strong>Last updated: 17 August 2026.</strong> This policy covers the <strong>OrderedStrength iPhone app</strong>. It does not cover any other service.</p>
 
 <h2>The short version</h2>
-<p>Your training lives on your phone. We have no account system, so we do not know who you are. Three things can leave your device, two of them only if you switch them on, and none of them is your training log.</p>
+<p>Your training lives on your phone. We have no account system, so we do not know who you are. <strong>Four things can leave your device, and one of them should not be there.</strong> Point 4 is a set-submission left over from an earlier server design: it sends the sets you log, it contradicts what the rest of this page promises, and it is being removed rather than kept and explained. It is written here because you should not have to find it in a network log.</p>
 
 <h2>What stays on your device</h2>
-<p>All of this is stored on your iPhone and is never sent to us:</p>
+<p>All of this is stored on your iPhone. Nothing here is sent to us except where point 4 below says otherwise:</p>
 <ul>
   <li>Your name, age, bodyweight, height and sex, if you enter them.</li>
-  <li>Every set you log: exercise, weight, reps, and the reps you had left in reserve.</li>
+  <li>Every set you log: exercise, weight, reps, and the reps you had left in reserve. <strong>This is the one currently affected by point 4.</strong></li>
   <li>Any injury you record, and how you said it felt.</li>
   <li>Everything the coach learns about you: your strength estimates, fatigue model, calibration and history.</li>
 </ul>
@@ -58,7 +58,7 @@
 <p>Only if you grant permission, the app <strong>reads</strong>: heart rate variability, resting heart rate, heart rate, sleep analysis, and active energy. It <strong>writes</strong> completed workouts back to Health so they appear alongside your other activity.</p>
 <p>Health data is used on your device to inform recovery and readiness. <strong>It is never transmitted to us or to anyone else.</strong> You can revoke access at any time in Apple Health, and the app keeps working without it.</p>
 
-<h2>The three things that can leave your device</h2>
+<h2>The four things that can leave your device</h2>
 
 <h3>1. Jerry's voice &middot; on when the spoken coaching voice is on</h3>
 <p>To speak in a natural voice rather than the built-in system voice, the <em>text of the sentence Jerry is about to say</em> is sent to our server, which forwards it to Microsoft Azure to turn into audio. Jerry's lines are a bounded set of templates, and each distinct line is fetched once and then stored on your phone and replayed from there forever.</p>
@@ -76,6 +76,10 @@
   <li>which language you use.</li>
 </ul>
 <p><strong>It does not include your sets, your weights, your body data, or anything from Apple Health.</strong> You can switch it off in <em>Profile / Data &amp; Privacy</em>, and switching it off stops it completely.</p>
+
+<h3>4. Your logged sets &middot; currently sent, and being removed</h3>
+<p>When you finish a freestyle workout, the app currently sends each set you logged to our server: the exercise, the weight, the repetitions, and the reserve you reported. It is tied to a random identifier created on your device and never to your name, and it is not sold, shared or used to advertise to you.</p>
+<p><strong>We are not defending this one.</strong> It is left over from an earlier design in which the coaching engine ran on a server, and it survived the move onto the phone. It contradicts the promise at the top of this page, which is the promise that matters most here, so it is being removed rather than kept and explained away. Until the build that removes it reaches you, this section is how you find out about it.</p>
 
 <h2>What we never do</h2>
 <ul>
@@ -106,7 +110,7 @@
 <p>If what the app does with data changes, this page changes with it and the date above is updated. The page is written from the app's own source code so that it stays true rather than generic.</p>
 
 <h2>Contact</h2>
-<p>Questions about this policy, or about your data: <a href="mailto:tachiwonajeremiah@gmail.com">tachiwonajeremiah@gmail.com</a></p>
+<p>Questions about this policy, or about your data: <a href="mailto:jeremiah@orderedstrength.com">jeremiah@orderedstrength.com</a></p>
     </div>
   </section>
 </main>
