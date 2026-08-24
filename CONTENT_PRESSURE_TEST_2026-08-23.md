@@ -1,5 +1,62 @@
 # THE CONTENT PRESSURE TEST
 
+> ## CLOSED 2026-08-23, commit `b8755c8`, deployed to the `redesign-elite` preview.
+>
+> Fourteen of the sixteen actions are shipped. Two are not words or pictures and are named at
+> the bottom with what they need. `./check.sh` reports **SITE OK**: 0 source failures, 0
+> screenshot failures, 0 contrast failures, 0 alignment failures, 0 measure failures, TYPE OK at
+> 1440px and 390px. The rebuilt seal receipt was proven end to end against the live verifier at
+> `api.orderedstrength.com`, which returned `verified: true` on it and refused a tampered arm
+> with `reason: "mismatch"`.
+>
+> | | Item | State |
+> |---|---|---|
+> | **A0** | Privacy policy told the truth about the set-ingest path | **SHIPPED (site half).** The app half is the CEO's call. |
+> | **A0b** | Seal receipt rebuilt in the app's real payload shape | **SHIPPED,** verified against the live server |
+> | **A0c** | "The misses stay on the record" | **SHIPPED** |
+> | **A1** | "One thing" vs "three things" | **SHIPPED,** now four, and it overshoots the policy |
+> | **A2** | "Three different surfaces" was two | **SHIPPED** |
+> | **A3** | Four competitive superlatives | **SHIPPED,** all four now falsifiable |
+> | **A4** | A person on the site | **SHIPPED,** signed, its own section shape |
+> | **A5** | Support address off gmail | **SHIPPED,** `jeremiah@orderedstrength.com` in 3 places |
+> | **A6** | Hero leads with the set he cuts | **SHIPPED** |
+> | **A7** | Hero CTA points at that card | **SHIPPED** |
+> | **A8** | Price anchor | **SHIPPED** |
+> | **A9** | Jerry introduced | **SHIPPED** |
+> | **A10** | "Read the record" demoted | **SHIPPED** |
+> | **A11** | Engineer vocabulary off the homepage | **SHIPPED** |
+> | **A12/A13** | Photograph day one hundred, fix the fixture athlete | **OWED. Needs the simulator.** |
+> | **A14** | Re-shoot `intelligence.png` | **MITIGATED in copy,** re-shoot owed with A12 |
+> | **A15** | Break the template | **SHIPPED,** one real break rather than three cosmetic ones |
+> | **A16** | One named athlete with numbers | **OWED. No test-group data exists yet.** |
+>
+> **The audit's own headline, re-measured after the fix.** The finding was that the homepage had
+> exactly one sentence with the reader as its subject, inside a mock quote. It now has five. The
+> first re-measurement after the hero rewrite showed the proof-apparatus count had barely moved,
+> 65 to 62, which meant the re-aim was cosmetic; that is recorded here rather than hidden, and the
+> athlete block that closes it was added afterwards in response.
+>
+> **Three defects were found during the fix that this document had missed.** The hero fact
+> "it cannot be edited afterwards" claimed an immutability the receipt cannot provide, since it is
+> local and only tamper-evident. The dial quoted Jerry saying "for a man your age and bodyweight
+> the average top set is around 100 kg", and no numeric population claim of that kind exists
+> anywhere in the app: it was invented copy, the same class of defect as the fabricated receipt.
+> And the support and join pages carried the privacy claim in other clothes. All three are fixed.
+>
+> **What is still not true, and is not mine to make true tonight:**
+>
+> 1. **The app still sends the sets.** `FreestyleWorkoutView.swift:4466`. The policy now discloses
+>    it honestly, which is the best a website can do. Gating that call behind consent is five
+>    lines and it makes the stronger promise available again in one revert of the policy section.
+> 2. **The same false claim exists a second time, in the app repo.** `docs/legal/privacy.html`
+>    still reads "Three things can leave your device" and still lists the sets as "never sent to
+>    us". Measured tonight: that file and the site's copy were **already 4.2% divergent before
+>    this mission touched anything**, so the "source of truth" convention in the site README was
+>    not being held before now. `scripts/check_legal_links.sh` only probes that the URLs resolve,
+>    so nothing red will fire on this; it needs a deliberate sync.
+> 3. **The 14-day trial has no configured offer.** `Configuration.storekit` shows
+>    `"introductoryOffer": null` on both products. App Store Connect, and the CEO's.
+
 **Site:** orderedstrength.com, branch `redesign-elite`, HEAD `d7be874`
 **Date:** 2026-08-23
 **Scope:** content only. No design, no code. Seven pages, 4,904 visible words, three app captures.
