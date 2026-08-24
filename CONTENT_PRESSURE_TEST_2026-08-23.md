@@ -121,6 +121,88 @@ been walked through a cryptographic commitment demo.
 
 ## PART 2 — DEFECTS, RANKED BY WHAT THEY COST
 
+### D0 — THE PRIVACY POLICY STATES A FALSE FACT ABOUT THE APP. THIS OUTRANKS EVERYTHING ELSE IN THIS DOCUMENT.
+
+A source-verification pass against the app repo (`OrderedStrength22`, branch `The-Tax-Sunday`)
+was run against every factual claim on the site. It found one that is not a wording problem.
+
+**The published policy says, verbatim** (`app-privacy/index.html:48-51`):
+
+> "All of this is stored on your iPhone and is **never sent to us**: ...
+> **Every set you log: exercise, weight, reps, and the reps you had left in reserve.**"
+
+**The app sends exactly that list, on every freestyle workout completion, ungated.**
+
+- `OrderedStrength2/FreestyleWorkoutView.swift:4466` calls `submitSetsToSovereignEngine()`
+  unconditionally in the success path of `completeWorkout()`, after the Core Data save.
+- `OrderedStrength2/FreestyleWorkoutView.swift:4691-4697` is the whole gate: `guard let userId =
+  user.uuid`. There is no consent check, no toggle, and no `ProxyGateway.isEnabled` check. The
+  proxy master switch gates voice and chat; **the set-ingest path never consults it.**
+- `OrderedStrength2/FreestyleWorkoutView.swift:4725-4735` builds
+  `SetIngestRequest(setId, userId, exerciseId, weight, weightUnit, reps, reportedRIR)`. That is
+  the policy's enumerated list, plus a stable per-install `userId`.
+- `OrderedStrength2/Core/Services/SetIngestionService.swift:57` validates and, when `isOnline`
+  (which defaults to `true`), calls `apiClient.ingestSet`.
+- `OrderedStrength2/Core/Networking/APIEndpoint.swift:138` and `:179` point at
+  `https://ordered-strength-proxy.fly.dev`. That is the production host and it is live.
+
+It is the **only** production construction of `SetIngestRequest` in the app; the other two are in
+`Phase3MacrocycleTests`. So one call site is the whole exposure, and one call site is the whole fix.
+
+**The server may reject the request today.** That does not help: privacy is about what leaves the
+device, not about what the far end accepts. The body is on the wire either way.
+
+**Two adjacent defaults are also ON**, and both carry stale comments in source claiming otherwise:
+`Info.plist:35-36` sets `OSProxyDefaultEnabled` to `true` (while `ProxyGateway.swift:24-32`
+still describes the default as off), and `RetentionAnalytics.isEnabled` returns
+`... as? Bool ?? true` under a comment reading "sends NOTHING until the proxy ships". The proxy
+has shipped.
+
+**RECOMMENDATION, and this one is genuinely the CEO's because it is what the product IS.**
+Gate `FreestyleWorkoutView.swift:4466` behind explicit consent, defaulting OFF. The pattern
+already exists in the codebase at `JerryCloudBrain.swift:130`, which is how Cloud Answers is
+correctly handled. That makes the strongest sentence on the whole website true, costs roughly five
+lines, and reverts by deleting the guard. The alternative, amending the privacy policy to disclose
+set ingestion, is worse: it trades the product's central promise for a paragraph, and the promise
+is the moat.
+
+**Not fixed in this mission, and why.** The directive was explicitly content-only, the app's
+working tree currently holds twenty-two uncommitted Swift files belonging to another session, and
+a networking change on a build that is on TestFlight needs `scripts/verify.sh fast` plus the
+gauntlet on a tree I can own. This is not an engineering deferral: the next action is a
+product-identity decision about whether OrderedStrength ingests training data server-side at all,
+and that decision is the CEO's. The engineering behind it is five lines and one commit.
+
+### D0b — THE SEAL DEMO ON THE HOMEPAGE IS NOT A REAL RECEIPT
+
+The homepage says of the seal widget: "**A real sealed prediction, made before the set.**"
+It is not. No app-produced receipt could ever hash to the object on screen.
+
+- **The `kind` does not exist.** The site's console shows `field kind = topSetBand`.
+  `topSetBand` appears **nowhere** in the app. The only three kinds the engine ever emits are
+  `session-forecast` (`JerryTrackRecordEngine.swift:105`, `:236`), `sealed-envelope`
+  (`SealedEnvelopeEngine.swift:76`), and `trial-prereg` (`SilentTrialEngine.swift:215`).
+- **The field name is borrowed from a different payload.** The site shows `sealedOn`. The real
+  session-forecast payload's sixth field is `sealedFor` (`JerryTrackRecordEngine.swift:109`).
+- **The numeric scale is wrong by a factor of 1000.** `PredictionCommitment.swift:117` is
+  `add(_ key: String, _ value: Double, places: Int = 4)` and no call site overrides it, so a real
+  receipt encodes 102.5 kg as `1025000`. The site encodes it as `1025`.
+
+The *protocol* is faithful: the page's JavaScript matches `server/verify.js` byte for byte, the
+seal genuinely is minted before the first repetition (`LivePredictionEngine.swift:317-339`), and
+the naive baseline it races is real. So the mechanism survives scrutiny and the **specimen does
+not.** On the one page that says "not a mockup", that is the worst possible place to have a prop.
+
+Fix: generate the demo receipt from a real `session-forecast` payload with the real field names
+and the real 4-decimal scale, or relabel it "a receipt in the same format" and stop calling it real.
+
+### D0c — "THE MISSES STAY ON THE RECORD" IS NOT TRUE INDEFINITELY
+
+`index.html` hero fact: "Hits and misses both. **The misses stay on the record.**"
+`JerryTrackRecordEngine.swift:457-459` trims to `record.events.prefix(100)`, newest first, so the
+oldest events are evicted at one hundred. Honest version: "The misses stay on the record" →
+"**Nothing is deleted to make him look better**", which is what is actually true.
+
 ### D1 — BLOCKING: THE PRIVACY PAGE CONTRADICTS THE MARKETING PAGES ON THE ONE SUBJECT THIS SITE IS ABOUT
 
 Two pages say **one thing** leaves your phone. The privacy policy says **three**.
