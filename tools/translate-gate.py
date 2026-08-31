@@ -75,7 +75,8 @@ def audit(path, rel):
 def main():
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     pages = sorted(glob.glob(os.path.join(root, '*.html'))) + \
-            sorted(glob.glob(os.path.join(root, '*', 'index.html')))
+            sorted(glob.glob(os.path.join(root, '*', 'index.html'))) + \
+            sorted(glob.glob(os.path.join(root, '*', '*', 'index.html')))
     print("TRANSLATION")
     fails = 0
     for p in pages:

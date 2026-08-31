@@ -87,7 +87,8 @@ def audit(path):
 def main():
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     pages = sorted(glob.glob(os.path.join(root, '*.html'))) + \
-            sorted(glob.glob(os.path.join(root, '*', 'index.html')))
+            sorted(glob.glob(os.path.join(root, '*', 'index.html'))) + \
+            sorted(glob.glob(os.path.join(root, '*', '*', 'index.html')))
     print("RING CAUSES")
     fails = 0
     for p in pages:

@@ -30,7 +30,9 @@ const TOL = Number(process.env.TYPE_TOL || 7);   // percent of x-height
 // a phone width as well as a desktop one, because the failure this gate exists to catch is
 // an ABSOLUTE size on a literal, and an absolute size is exactly what a media query adds.
 const W = Number(process.env.WIDTH || 1440);
-const PAGES = (process.env.PAGES || '/,/how-it-works/,/stronger/,/record/,/join/,/verify/,/support/,/app-privacy/,/404.html').split(',');
+const _PAGES_EN = '/,/how-it-works/,/stronger/,/record/,/join/,/verify/,/support/,/app-privacy/,/404.html'.split(',');
+const PAGES = (process.env.PAGES || [..._PAGES_EN,
+  ..._PAGES_EN.map(p => p === '/404.html' ? '/es/404.html' : '/es' + p)].join(',')).split(',');
 
 const PROBE = `JSON.stringify((() => {
   const c = document.createElement('canvas').getContext('2d');

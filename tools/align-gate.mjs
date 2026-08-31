@@ -17,7 +17,10 @@
 import { withPage } from './measure.mjs';
 
 const BASE  = process.env.BASE || 'http://127.0.0.1:8899';
-const PAGES = ['/', '/how-it-works/', '/stronger/', '/join/', '/record/', '/verify/', '/support/', '/app-privacy/', '/404.html'];
+const PAGES_EN = ['/', '/how-it-works/', '/stronger/', '/join/', '/record/', '/verify/', '/support/', '/app-privacy/', '/404.html'];
+// The locale pages are DERIVED from the English list, never retyped: a second
+// hand-maintained list is a list that goes stale the first time a page is added.
+const PAGES = [...PAGES_EN, ...PAGES_EN.map(p => p === '/404.html' ? '/es/404.html' : '/es' + p)];
 const WIDTHS = process.argv.slice(2).map(Number).filter(Boolean);
 const TOL = 1.5;
 

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es-419">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.className="js";</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cómo funciona · OrderedStrength</title>
+<meta name="description" content="El ciclo completo en español simple: cómo decide Jerry qué levantas, cómo reacciona a cada serie, cómo maneja una lesión, y cómo se niega a adivinar cuando no alcanza a ver lo suficiente.">
+<meta property="og:title" content="Cómo funciona · OrderedStrength">
+<meta property="og:description" content="El ciclo completo en español simple: cómo decide Jerry qué levantas, cómo reacciona a cada serie, cómo maneja una lesión, y cómo se niega a adivinar cuando no alcanza a ver lo suficiente.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OrderedStrength">
+<meta property="og:image" content="/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: a coach who writes it down before you lift.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="/assets/og.jpg">
+<meta name="theme-color" content="#060709">
+<link rel="preload" href="/assets/fonts/public-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/archivo-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/how-it-works/">
+<link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/how-it-works/">
+<link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/how-it-works/">
+<link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/how-it-works/">
+<link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/how-it-works/">
+<link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/how-it-works/">
+<link rel="stylesheet" href="/assets/site.css?v=8b051bd229">
+<style>
+.quote{margin:1.75rem 0 0;max-width:52rem;padding:1.125rem 1.25rem;background:var(--surface);
+       border-left:2px solid var(--amber);border-radius:0 10px 10px 0;font-size:.9375rem;color:var(--ink2)}
+.quote cite{display:block;margin-top:.625rem;font-style:normal;font-size:.75rem;color:var(--ink3);line-height:1.45}
+.moment{background-color:var(--e2);border-radius:12px;padding:1.375rem;height:100%;box-shadow:var(--shadow-2)}
+.moment h3{color:var(--ink)}
+.moment p{font-size:.875rem;color:var(--ink3);margin:0;line-height:1.55}
+.refuse{display:grid;grid-template-columns:auto 1fr;gap:.625rem 1rem;margin:1.5rem 0 0;
+        font-size:.9375rem;align-items:baseline;max-width:52rem}
+.refuse dt{font-family:var(--mono);font-size:.75rem;color:var(--amber);white-space:nowrap}
+.refuse dd{margin:0;color:var(--ink2)}
+
+.appcard .rule{margin:.875rem 0;border:0;border-top:1px solid var(--line-soft)}
+.ramp{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:.625rem}
+.ramp .big{font-family:var(--mono);font-size:1.625rem;color:var(--amber);font-weight:500;line-height:1}
+.ramp .unit{font-size:.75rem;color:var(--ink3)}
+.track{height:4px;border-radius:2px;background:var(--raised);overflow:hidden;overflow:clip}
+.track i{display:block;height:100%;width:38%;background:var(--amber);border-radius:2px}
+.receipt{display:grid;grid-template-columns:auto 1fr;gap:.25rem .625rem;font-size:.75rem;
+         color:var(--ink3);margin-top:.75rem}
+.receipt dt{font-family:var(--mono);color:var(--ink3)}
+.receipt dd{margin:0;color:var(--ink2)}
+
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <a class="wordmark" translate="no" href="/es/"><span class="led up" aria-hidden="true"></span>OrderedStrength</a>
+  <nav>
+    <a href="/es/how-it-works/" aria-current="page">Cómo funciona</a>
+    <a href="/es/stronger/" class="opt">Más fuerte</a>
+    <a href="/es/record/" class="opt">El registro</a>
+    <a href="/es/verify/">Verificar</a>
+    <a href="/" class="opt" hreflang="en" lang="en" translate="no">English</a>
+    <a href="/es/join/" class="cta">Únete a la prueba</a>
+  </nav>
+  <div class="prog" aria-hidden="true"></div>
+</div>
+
+<main>
+
+  <section class="scene reading">
+    <div class="pagehead">
+      <p class="eyebrow">Cómo funciona</p>
+      <h1>Un solo ciclo. Pides, entrenas, calificas cada serie, él reacciona.</h1>
+      <p class="sub">Todo lo de abajo es lo que la app realmente hace, escrito desde su propio código y no desde un folleto. Donde se niega a responder, eso es una función y también se describe aquí.</p>
+    </div>
+  </section>
+
+  <section class="scene tight">
+    <ol class="loop">
+      <li><b>El día uno es un trato, no una promesa</b><span>Jerry te pregunta tu peso corporal, tu experiencia, cuántos días a la semana entrenas, y tus marcas actuales si las sabes. Después te dice sin rodeos que el día uno tiene promedios de alguien de tu edad, sexo y peso, y nada sobre ti. Pide una sola cosa a cambio: que califiques tu esfuerzo con honestidad. Si lo inflas para verte fuerte, entrena a una versión falsa de ti.</span></li>
+
+      <li><b>Arma el plan, y después promete calificarlo</b><span>Recibes un plan de varias semanas y una primera sesión, etiquetada por lo que es: cierta para el levantador promedio como tú, todavía no cierta sobre ti. Cada decisión que toma sobre ti se califica, los aciertos y los fallos por igual.</span></li>
+
+      <li><b>Tres formas de entrar</b><span>Déjalo planear la sesión entera, elige los músculos que quieras, o entrena libre y registra lo que hagas. Si eliges músculos no obedece sin más: si un músculo todavía necesita recuperación, o tu carga semanal ya está alta, lo recorta o lo rechaza y muestra un comprobante explicando exactamente por qué.</span></li>
+
+      <li><b>Califica cada serie, y él reacciona antes de la siguiente</b><span>Después de cada serie dices cuántas repeticiones te quedaban. Él lo compara con lo que esperaba y te dice en una línea si vas bien, si te estás desviando, o si todavía le estás enseñando tu base en un ejercicio nuevo. Si estás cayendo más rápido de lo planeado, recorta las series restantes en el momento y dice que el recorte protege tu recuperación.</span></li>
+
+      <li><b>El peso sube cuando te lo ganaste</b><span>No por calendario. Mantiene la carga y pide una repetición más, y después agrega el disco cuando las repeticiones están. Funciona con lo que realmente completaste, no con lo duro que dijiste que se sintió.</span></li>
+
+      <li><b>Dile algo y observa cómo aterriza</b><span>Reporta una lesión y te nombra los ejercicios que acaba de quitar. Di que un músculo está adolorido y te muestra el margen de esfuerzo que agregó. Viaja, enférmate, cambia de equipo, y el plan cambia con un comprobante adjunto. Si usas en silencio un peso más ligero del que te pidió, se da cuenta, y si lo repites otro día baja él mismo la prescripción en vez de discutir contigo.</span></li>
+
+      <li><b>Se vuelve más personal con el tiempo</b><span>Cada número empieza como un promedio honesto. Conforme registras series reales, él se mueve hacia tu propio cuerpo y te muestra cuánto se ha movido y qué tan seguro está. El ritmo sigue tu evidencia: sesiones densas de series de trabajo reales lo mueven hacia tus números más rápido que el calendario, y nada se abre porque pasó una semana. Dos de las lecturas más profundas son la excepción y sostienen un piso duro de quince sesiones por muy duro que entrenes, porque debajo de eso la muestra no puede significar nada. Él dice cuáles, por su nombre, en la pantalla donde importa.</span></li>
+    </ol>
+  </section>
+
+  <section class="scene">
+    <div class="head">
+      <p class="eyebrow">Cuatro momentos</p>
+      <h2>Donde deja de sentirse como una app.</h2>
+    </div>
+    <div class="grid c2" style="margin-top:2rem">
+      <div class="moment">
+        <h3>Verdades Duras</h3>
+        <p>Cuando tus propios datos muestran un hábito trabajando en tu contra, lo dice en voz alta, usando solo tus números registrados. Antes de hablar descarta las explicaciones inocentes: una lesión, un principiante que todavía aprende, una semana fácil planeada, un regreso. Cada confrontación lleva un comprobante que nombra los datos de quién, cuántos, y qué revisó primero. Si no puede descartar la explicación inocente se queda callado, porque una sola acusación falsa cuesta la confianza para siempre.</p>
+      </div>
+      <div class="moment">
+        <h3>El Maestro</h3>
+        <p>En vez de un feed genérico de consejos, enseña un principio en el momento exacto en que tu propio entrenamiento lo demuestra, y cita la investigación detrás. Una cosa a la vez, nunca repetida, nunca inventada. La lección misma no lleva números, porque tus números están en el comprobante justo encima.</p>
+      </div>
+      <div class="moment">
+        <h3>El día que te lesionas</h3>
+        <p>Aquí es donde otras apps se quedan calladas. Dile que algo duele y sigue entrenándote: quita lo que no es seguro, entrena todo lo demás, y trae el movimiento lesionado de vuelta en una rampa gradual. El dolor por encima de la línea clínica mantiene la rampa donde está en vez de dejar que el calendario la avance. La pantalla muestra el número honesto de días hasta carga completa, y es el mismo número que está usando el motor.</p>
+      </div>
+      <div class="moment">
+        <h3>La serie que miró</h3>
+        <p>Apoya el teléfono y mirará una serie. Cuenta tus repeticiones y mide cuánto bajó tu velocidad de la primera a la última, que es la señal más clara de qué tan cerca del fallo llegaste. Después te dice lo que vio y lo compara con lo que registraste. No tiene permitido cambiar tu peso a partir de eso, y lo dice.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene">
+    <div class="pair">
+      <div>
+        <p class="eyebrow">En la pantalla</p>
+        <h2>El número en la pantalla es el número que está usando el motor.</h2>
+        <p>Cuando reportas dolor, la rampa no avanza por calendario. El dolor por encima de la línea clínica la mantiene exactamente donde está. No hay una cifra optimista aparte para que te sientas bien, porque un número reconfortante sobre el que no puedes actuar es peor que uno duro sobre el que sí.</p>
+        <p>Cada confrontación lleva un comprobante con el mismo formato: los datos de quién, cuántos, y qué se descartó antes de que dijera nada.</p>
+      </div>
+      <div style="display:grid;gap:.75rem">
+        <div class="appcard hiw-card">
+          <p class="cap">Rodilla derecha · volviendo a la carga</p>
+          <div class="ramp"><span class="big">17</span><span class="unit">días hasta carga completa</span></div>
+          <div class="track"><i></i></div>
+          <hr class="rule">
+          <p class="said">Las sentadillas quedan fuera. Estoy entrenando todo lo demás a esfuerzo completo. Registraste dolor de 4 sobre 10 el martes, lo que mantiene la rampa donde está en vez de avanzarla.</p>
+        </div>
+        <div class="appcard hiw-card">
+          <p class="cap">Verdad dura</p>
+          <p class="said">Tus piernas llevan tres semanas por debajo del mínimo de crecimiento mientras tu press va a tope.</p>
+          <hr class="rule">
+          <dl class="receipt">
+            <dt>from</dt><dd>your last 9 sessions</dd>
+            <dt>ruled out</dt><dd>injury, planned easy week, comeback from time off</dd>
+            <dt>if unsure</dt><dd>he says nothing at all</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene reading">
+    <p class="eyebrow">La parte que más importa</p>
+    <h2>Prefiere negarse antes que adivinar.</h2>
+    <p>La mayoría de las apps de coaching prometen de más, y en cuanto le atrapas una exageración descuentas en silencio todo lo demás. Esta lo invierte: marca cada suposición y asume cada fallo, así que las afirmaciones seguras sí pesan.</p>
+
+    <dl class="refuse">
+      <dt>declines</dt><dd>The cardio engine has one way to give you a pace and seven separate ways to decline, each naming what is missing.</dd>
+      <dt>declines</dt><dd>The camera has one way to say it saw the set and several ways to say it did not.</dd>
+      <dt>declines</dt><dd>Ask him a question in plain language and every figure in the answer has to trace back to a value the engine actually returned. If one does not, the answer is thrown away and a plainer one takes its place.</dd>
+      <dt>refuses</dt><dd>A recovery model can always flatter itself by measuring numbers it invented. Ours is marked self-referential in the code and barred from every personal claim. It cannot be wrong, which is why it cannot be evidence.</dd>
+    </dl>
+
+    <div class="quote">
+      I could see you some of the time, but not enough of it to count honestly, so I am not going
+      to guess.
+      <cite>What the app says when the camera view was poor, rather than inventing a rep count.</cite>
+    </div>
+  </section>
+
+  <section class="scene reading">
+    <p class="eyebrow">Tus datos</p>
+    <h2>Fácil de dejar, difícil de reemplazar.</h2>
+    <p>Tu entrenamiento se calcula en tu dispositivo con nuestros propios motores. Trae tu historial desde las apps grandes de registro para que cambiarte no signifique empezar de cero, y exporta el registro completo como un solo archivo cuando quieras. Nada se retiene como rehén para mantenerte suscrito.</p>
+    <p>Perder tu historial es una de las quejas más ruidosas de esta categoría, y poner difícil la cancelación es lo que hace que a una app le digan estafa. Preferimos ser el producto que es fácil de dejar y difícil de reemplazar.</p>
+    <p class="small">Exactly what does and does not leave your phone, including the four things
+    that can and the one of those we are removing, is set out in the
+    <a href="/es/app-privacy/" style="color:var(--teal)">política de privacidad</a>.</p>
+  </section>
+
+  <section class="scene reading">
+    <p class="eyebrow">Compruébalo tú mismo</p>
+    <h2>Las afirmaciones de esta página se pueden comprobar.</h2>
+      <p class="sub">No confiando en la página. Corriendo la aritmética.</p>
+    <div class="chips" style="margin-top:1.75rem">
+      <a class="btn" href="/es/#seal">Rompe una predicción sellada</a>
+      <a class="btn ghost" href="/es/record/">Lee el registro</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot">
+    <div class="foot__mark">
+      <a class="wordmark" translate="no" href="/es/">OrderedStrength</a>
+      <p>Un coach de fuerza para iPhone que anota cada sesión antes de que levantes, y después
+      se califica a sí mismo con lo que escribió.</p>
+    </div>
+    <nav class="foot__col" aria-label="El producto">
+      <p class="foot__label">El producto</p>
+      <a href="/es/how-it-works/">Cómo funciona</a>
+      <a href="/es/stronger/">Ponerse más fuerte</a>
+      <a href="/es/join/">Únete a la prueba</a>
+    </nav>
+    <nav class="foot__col" aria-label="El registro">
+      <p class="foot__label">El registro</p>
+      <a href="/es/record/">Anclas publicadas</a>
+      <a href="/es/verify/">Verificar un comprobante</a>
+    </nav>
+    <nav class="foot__col" aria-label="La letra chica">
+      <p class="foot__label">La letra chica</p>
+      <a href="/es/app-privacy/">Privacidad</a>
+      <a href="/es/support/">Soporte</a>
+    </nav>
+  </div>
+  <div class="foot__panel">
+    <span>Compilación  <b class="stamp" translate="no">8b051bd229</b></span>
+    <span>iPhone &middot; en pruebas</span>
+    <span>Tu entrenamiento se calcula en tu dispositivo</span>
+  </div>
+</footer>
+
+<script src="/assets/site.js?v=5fd125c32d" defer></script>
+</body>
+</html>

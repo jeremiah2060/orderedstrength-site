@@ -83,7 +83,7 @@ def selectors(css):
                 out.add(part)
     return out
 
-pages = sorted(glob.glob('*.html') + glob.glob('*/index.html'))
+pages = sorted(glob.glob('*.html') + glob.glob('*/index.html') + glob.glob('*/*/index.html'))
 shared = open('assets/site.css', encoding='utf-8').read()
 shared_sel = selectors(shared)
 fail = 0

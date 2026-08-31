@@ -46,10 +46,24 @@ switched off.
 import re, sys, glob, os, html as _html
 
 # The pages whose job is to sell. Only these are gated; see the docstring for the rest.
-SELLING = {'index.html', 'how-it-works/index.html', 'stronger/index.html', 'join/index.html'}
+_SELLING_EN = ['index.html', 'how-it-works/index.html', 'stronger/index.html', 'join/index.html']
+# 🔒 THE LOCALE SET IS DERIVED, NEVER RETYPED. A hand-copied second list is how this repo's
+# screens gate ended up naming three classes while the files held ten.
+SELLING = set(_SELLING_EN) | {'es/' + p for p in _SELLING_EN}
 
-READER = re.compile(r'^(you|your|he\b|jerry\b|both halves|muscle comes|the (set|weight|reps|bar|plate|number|second half))', re.I)
-SITE   = re.compile(r'^(we\b|this (page|site)\b|these pages\b|the (page|site)\b|our (site|pages)\b)', re.I)
+# 🔒 A GATE WITH ONLY ENGLISH PATTERNS SCORES A SPANISH PAGE 0 TO 0 AND CALLS IT A FAILURE.
+# Shipped that way for one run on 2026-08-31: /es/how-it-works/ and /es/join/ both came back
+# "reader 0, site 0", which is not a verdict about the page, it is the gate admitting it
+# cannot read it. A checker that returns the same number for "perfect" and "unintelligible"
+# is worse than no checker, because the number looks like a measurement.
+READER = re.compile(
+    r'^(you|your|he\b|jerry\b|both halves|muscle comes|the (set|weight|reps|bar|plate|number|second half)'
+    r'|t[uú]\b|te\b|tus\b|usted\b|[ée]l\b|decide|mira|mantiene|cada|una bit[aá]cora|un plan'
+    r'|un wearable|un chatbot|el (peso|m[uú]sculo|coach|n[uú]mero|d[ií]a|registro)|la (carga|serie|fuerza|mayor[ií]a)'
+    r'|no viniste|terminas|agregas|sigues|estrategia|acercarse|ponerse)', re.I)
+SITE   = re.compile(
+    r'^(we\b|this (page|site)\b|these pages\b|the (page|site)\b|our (site|pages)\b'
+    r'|nosotros\b|esta (p[aá]gina|web|secci[oó]n)\b|estas p[aá]ginas\b|nuestro sitio\b|este sitio\b)', re.I)
 
 
 def prose(path):

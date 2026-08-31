@@ -27,9 +27,18 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def _protect(s):
-    """Regions whose text must never be touched by a text substitution pass."""
+    """Regions whose text must never be touched by a text substitution pass.
+
+    🔒 <code> IS IN HERE, AND IT WAS NOT UNTIL 2026-08-31. Those runs quote the app, so their
+    language is decided by the code_map alone. Leaving them exposed to the prose pass let the
+    chrome key 'Build' -> 'Compilación' rewrite the quoted string "Calibration (Building)"
+    into "Calibration (Compilacióning)" on the Spanish home page: a corrupted word inside a
+    claim about what the product says, which is the worst possible place for one. The type
+    gate caught it by measuring the literal, not by reading it.
+    """
     spans = []
-    for m in re.finditer(r'<script[^>]*>.*?</script>|<style[^>]*>.*?</style>', s, re.S):
+    for m in re.finditer(r'<script[^>]*>.*?</script>|<style[^>]*>.*?</style>|<code[^>]*>.*?</code>',
+                         s, re.S):
         spans.append((m.start(), m.end()))
     return spans
 
@@ -98,6 +107,12 @@ def build(src_rel, out_rel, text_map, code_map, lang='es-419', link_prefix='/es'
     # back to the English home page from inside the Spanish site.
     s = re.sub(r'href="/(?!es/|assets/)([a-z0-9-]*/?)(#[a-zA-Z0-9-]+)?"',
                lambda m: f'href="{link_prefix}/{m.group(1)}{m.group(2) or ""}"', s)
+
+    # 3b. THE LANGUAGE SWITCHER POINTS THE OTHER WAY, and it has to be flipped AFTER the link
+    #     rewrite above or it gets dragged into /es/ with every other page link, leaving the
+    #     Spanish site with a button to itself labelled "Español".
+    s = s.replace('<a href="/es/" class="opt" hreflang="es" lang="es" translate="no">Espa&ntilde;ol</a>',
+                  '<a href="/" class="opt" hreflang="en" lang="en" translate="no">English</a>')
 
     # 4. hreflang, so a search engine and a browser both know the pair exists.
     canon = '/' + out_rel.replace('es/', '', 1).replace('index.html', '')
