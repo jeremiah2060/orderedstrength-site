@@ -29,7 +29,7 @@ not the NAME is checking half of one sentence.
 
 Usage: python3 tools/audit-captures.py <capture-dir>
 """
-import re, sys, os, subprocess, glob
+import re, sys, os, subprocess, glob, math
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # 🔒 THIS BAND WAS CALIBRATED WHEN SESSION 3 WAS THE DEEPEST FRAME THAT EXISTED, AND IT
@@ -74,26 +74,86 @@ SEEDED_LIFTS = {
 # must still audit a capture directory on a machine that has only the website checked out.
 APP_FIXTURE = os.path.expanduser(
     '~/Desktop/OrderedStrength22/OrderedStrength2/Jerry/JerryEnvironment.swift')
-BAND_DERIVED_FOR_REPS = 8   # the rep count PLAUSIBLE_1RM's ceiling was computed from
+SEEDED_RESERVE = 2                    # the reserve the seeder logs on every working set
+BAND_REFERENCE_BODYWEIGHT_KG = 82.0   # the athlete the ceiling is expressed for
 
 
-def seeded_rep_counts():
-    """The rep values the cold-start seeder actually logs, read from the fixture itself.
-
-    🔒 THIS EXISTS SO THE BAND CAN REPORT ITS OWN DEATH. The ceiling above is DERIVED from a
-    working set of eight reps, so the day somebody varies the seeder the band silently starts
-    rejecting correct photographs, which is this file's 2026-08-24 failure exactly. A number a
-    human has to remember to re-derive is a number that goes stale. Returns None when the app
-    repo is not present, which is an unverified premise, not a pass.
-    """
+def _fixture_source():
     try:
-        src = open(APP_FIXTURE, encoding='utf-8').read()
+        return open(APP_FIXTURE, encoding='utf-8').read()
     except OSError:
         return None
-    seeder = re.search(r'func seedColdStartSessions.*?(?=\n    (?:public |private |internal )?func )',
+
+
+def seeded_rep_counts(src=None):
+    """The rep values the cold-start seeder logs, read out of the fixture's own helper.
+
+    🔒 THIS EXISTS SO THE BAND CAN REPORT ITS OWN DEATH. Returns None when the app repo is
+    absent, which is an unverified premise, not a pass.
+    """
+    src = src if src is not None else _fixture_source()
+    if src is None:
+        return None
+    m = re.search(r'func coldStartRepsForSession[^\n]*\n\s*\[([0-9,\s]+)\]', src)
+    if m:
+        return sorted({int(x) for x in m.group(1).split(',') if x.strip()})
+    region = re.search(r'func seedColdStartSessions.*?(?=\n    (?:public |private |internal )?func )',
                        src, re.S)
-    region = seeder.group(0) if seeder else src
-    return sorted({int(m) for m in re.findall(r'(?:reps:|row\.reps\s*=)\s*(\d+)', region)})
+    return sorted({int(x) for x in re.findall(r'(?:reps:|row\.reps\s*=)\s*(\d+)',
+                                              (region.group(0) if region else src))})
+
+
+def _e1rm(w, reps):
+    """FatigueModelSystem.E1RMEstimator.estimate, replicated. Epley + Brzycki + Mayhew,
+    weighted exactly as the Swift does, because a band derived from a DIFFERENT formula than
+    the app uses is a band that rejects correct photographs politely."""
+    if reps < 1 or w <= 0 or reps == 1:
+        return w
+    r = float(reps); ws = tw = 0.0
+    ew = 1.0 if 3 <= reps <= 15 else 0.3
+    ws += w * (1.0 + r / 30.0) * ew; tw += ew
+    if reps <= 10:
+        bw_ = 1.2 if reps <= 8 else 0.5
+        ws += w * (36.0 / (37.0 - r)) * bw_; tw += bw_
+    if 2 <= reps <= 12:
+        mw = 0.8 if 3 <= reps <= 10 else 0.4
+        ws += (w / (0.522 + 0.419 * math.exp(-0.055 * r))) * mw; tw += mw
+    return ws / tw if tw > 0 else w * (1.0 + r / 30.0)
+
+
+def required_ceiling(src=None):
+    """The highest e1RM this fixture can honestly print, derived from ITS OWN constants.
+
+    Reads the six seeded fractions, the career-gain multiple, the per-scheme fraction nudge
+    and the rep cycle straight out of JerryEnvironment.swift, walks every (lift, scheme)
+    pair at the seeded reserve of 2, and returns the worst case as a MULTIPLE OF BODYWEIGHT.
+    Nothing here is a remembered number, so nothing here can go stale the way the pinned
+    ceiling did.
+    """
+    src = src if src is not None else _fixture_source()
+    if src is None:
+        return None
+    fr = [float(x) for x in re.findall(r'\(\s*"[^"]+",\s*([0-9.]+),\s*[0-9.]+\)', src)]
+    cm = re.search(r'coldStartCareerGainMultiple:\s*Double\s*=\s*([0-9.]+)', src)
+    nudges = re.search(r'func coldStartFractionNudge[^\n]*\n\s*reps <= (\d+) \? ([-0-9.]+) : '
+                       r'\(reps >= (\d+) \? ([-0-9.]+) : ([-0-9.]+)\)', src)
+    reps = seeded_rep_counts(src)
+    if not fr or not cm or not reps:
+        return None
+    career = float(cm.group(1))
+    def nudge(r):
+        if not nudges: return 0.0
+        lo, lov, hi, hiv, mid = int(nudges.group(1)), float(nudges.group(2)), \
+                                int(nudges.group(3)), float(nudges.group(4)), float(nudges.group(5))
+        return lov if r <= lo else (hiv if r >= hi else mid)
+    worst = 0.0; where = ''
+    for f in fr:
+        for r in reps:
+            per_bw = (f + nudge(r)) * (1.0 + career)      # deep-session load asymptote
+            est = _e1rm(per_bw, r + SEEDED_RESERVE)       # per kg of bodyweight
+            if est > worst:
+                worst, where = est, f'fraction {f} at {r} reps'
+    return worst, where
 
 
 def ocr(path):
@@ -168,19 +228,20 @@ def audit(path):
 
 
 def band_premise_line():
-    """One line saying whether the 1RM band's own premise still holds."""
-    reps = seeded_rep_counts()
-    if reps is None:
+    """One line saying whether the 1RM band still clears what the fixture can actually print."""
+    got = required_ceiling()
+    if got is None:
         return ("  band premise  UNVERIFIED. The app repo is not at the expected path, so this run "
-                f"cannot confirm PLAUSIBLE_1RM's ceiling is still derived correctly.")
-    if reps == [BAND_DERIVED_FOR_REPS]:
-        return f"  band premise  OK. Seeder still logs {reps[0]} reps only, which is what the ceiling assumes."
-    return ("  band premise  STALE. PLAUSIBLE_1RM's ceiling of "
-            f"{PLAUSIBLE_1RM[1]:.0f} kg was derived from {BAND_DERIVED_FOR_REPS} reps at reserve 2, and "
-            f"the seeder now logs {reps}. A HIGHER rep count yields a HIGHER estimate from the same "
-            "load, so a CORRECT deep frame can now fall outside this band and be rejected for a reason "
-            "that has nothing to do with the photograph. RE-DERIVE THE CEILING BEFORE TRUSTING ANY "
-            "'outside' verdict below.")
+                "cannot confirm PLAUSIBLE_1RM's ceiling still clears what the fixture can print.")
+    worst_per_bw, where = got
+    need = worst_per_bw * BAND_REFERENCE_BODYWEIGHT_KG
+    verdict = 'OK' if PLAUSIBLE_1RM[1] >= need else 'STALE'
+    tail = ('' if verdict == 'OK' else
+            f' RAISE THE CEILING TO AT LEAST {math.ceil(need / 5) * 5:.0f} kg, or a CORRECT deep frame '
+            'will be rejected for a reason that has nothing to do with the photograph.')
+    return (f"  band premise  {verdict}. Worst case the fixture can print is {worst_per_bw:.2f}x "
+            f"bodyweight ({where}), which is {need:.0f} kg at the {BAND_REFERENCE_BODYWEIGHT_KG:.0f} kg "
+            f"reference athlete. Ceiling is {PLAUSIBLE_1RM[1]:.0f}.{tail}")
 
 
 def main():
