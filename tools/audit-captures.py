@@ -70,6 +70,32 @@ SEEDED_LIFTS = {
 }
 
 
+# The app repo, if it is sitting where it normally sits. Absence is not an error: this tool
+# must still audit a capture directory on a machine that has only the website checked out.
+APP_FIXTURE = os.path.expanduser(
+    '~/Desktop/OrderedStrength22/OrderedStrength2/Jerry/JerryEnvironment.swift')
+BAND_DERIVED_FOR_REPS = 8   # the rep count PLAUSIBLE_1RM's ceiling was computed from
+
+
+def seeded_rep_counts():
+    """The rep values the cold-start seeder actually logs, read from the fixture itself.
+
+    🔒 THIS EXISTS SO THE BAND CAN REPORT ITS OWN DEATH. The ceiling above is DERIVED from a
+    working set of eight reps, so the day somebody varies the seeder the band silently starts
+    rejecting correct photographs, which is this file's 2026-08-24 failure exactly. A number a
+    human has to remember to re-derive is a number that goes stale. Returns None when the app
+    repo is not present, which is an unverified premise, not a pass.
+    """
+    try:
+        src = open(APP_FIXTURE, encoding='utf-8').read()
+    except OSError:
+        return None
+    seeder = re.search(r'func seedColdStartSessions.*?(?=\n    (?:public |private |internal )?func )',
+                       src, re.S)
+    region = seeder.group(0) if seeder else src
+    return sorted({int(m) for m in re.findall(r'(?:reps:|row\.reps\s*=)\s*(\d+)', region)})
+
+
 def ocr(path):
     r = subprocess.run(['swift', os.path.join(ROOT, 'tools', 'ocr.swift'), path],
                        capture_output=True, text=True)
@@ -141,12 +167,29 @@ def audit(path):
     return issues
 
 
+def band_premise_line():
+    """One line saying whether the 1RM band's own premise still holds."""
+    reps = seeded_rep_counts()
+    if reps is None:
+        return ("  band premise  UNVERIFIED. The app repo is not at the expected path, so this run "
+                f"cannot confirm PLAUSIBLE_1RM's ceiling is still derived correctly.")
+    if reps == [BAND_DERIVED_FOR_REPS]:
+        return f"  band premise  OK. Seeder still logs {reps[0]} reps only, which is what the ceiling assumes."
+    return ("  band premise  STALE. PLAUSIBLE_1RM's ceiling of "
+            f"{PLAUSIBLE_1RM[1]:.0f} kg was derived from {BAND_DERIVED_FOR_REPS} reps at reserve 2, and "
+            f"the seeder now logs {reps}. A HIGHER rep count yields a HIGHER estimate from the same "
+            "load, so a CORRECT deep frame can now fall outside this band and be rejected for a reason "
+            "that has nothing to do with the photograph. RE-DERIVE THE CEILING BEFORE TRUSTING ANY "
+            "'outside' verdict below.")
+
+
 def main():
     d = sys.argv[1] if len(sys.argv) > 1 else '.'
     files = sorted(glob.glob(os.path.join(d, '*.png')))
     from PIL import Image
     full = [f for f in files if Image.open(f).size == (1206, 2622)]
-    print(f"{len(full)} full-screen captures in {d}\n")
+    print(f"{len(full)} full-screen captures in {d}")
+    print(band_premise_line() + "\n")
     bad = 0
     for f in full:
         name = os.path.basename(f).split('__')[-1].replace('_0.png', '')
@@ -161,4 +204,8 @@ def main():
     return 1 if bad else 0
 
 
-sys.exit(main())
+# Guarded, unlike the bare sys.exit(main()) this replaced. Without it the module cannot be
+# imported and therefore cannot be FALSIFIED: every attempt to test band_premise_line() ran
+# a whole audit and then exited the interpreter. Its sibling shot-gate.py was already guarded.
+if __name__ == '__main__':
+    sys.exit(main())
