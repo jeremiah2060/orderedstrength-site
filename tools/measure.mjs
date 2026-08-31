@@ -3,17 +3,30 @@
    Zero dependencies: node's global WebSocket + the local Chrome binary.
    A screenshot shows you that something is wrong; this tells you by how many pixels. */
 import { spawn } from 'node:child_process';
-import { mkdtempSync, rmSync, writeFileSync, mkdirSync } from 'node:fs';
+import { mkdtempSync, rmSync, writeFileSync, mkdirSync, readFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-const PORT = 9333;
+// 🔒 THE DEBUGGING PORT IS PER RUN, NOT A CONSTANT. It was `const PORT = 9333` until
+// 2026-08-31, so two harness runs at once both spawned Chrome on the same port and the
+// second one DROVE THE FIRST ONE'S BROWSER. Measured: two ./check.sh runs started seconds
+// apart wedged with no log output for twenty minutes and left eleven headless Chromes alive,
+// because killing the run from outside never let node reach the `finally` that reaps the
+// group. Nothing reported a collision; it simply hung, which is the worst way for a harness
+// to fail. `--remote-debugging-port=0` makes the OS choose, and Chrome writes the number it
+// got into DevToolsActivePort inside the profile directory, already unique per run.
+const activePort = (profile) => {
+  const f = join(profile, 'DevToolsActivePort');
+  if (!existsSync(f)) return null;
+  const n = parseInt(readFileSync(f, 'utf8').split('\n')[0], 10);
+  return Number.isFinite(n) ? n : null;
+};
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-async function httpJSON(path) {
-  const r = await fetch(`http://127.0.0.1:${PORT}${path}`);
+async function httpJSON(port, path) {
+  const r = await fetch(`http://127.0.0.1:${port}${path}`);
   return r.json();
 }
 
@@ -36,18 +49,27 @@ export async function withPage(fn, { width = 1440, height = 900, dsf = 2 } = {})
   // that had all returned cleanly. `detached: true` puts them in their own process group so
   // `process.kill(-pid)` reaches every one of them.
   const chrome = spawn(CHROME, [
-    '--headless=new', `--remote-debugging-port=${PORT}`, `--user-data-dir=${profile}`,
+    '--headless=new', '--remote-debugging-port=0', `--user-data-dir=${profile}`,
     '--no-first-run', '--no-default-browser-check', '--disable-extensions',
     '--hide-scrollbars', '--force-color-profile=srgb', '--disable-lcd-text',
     `--window-size=${width},${height}`, 'about:blank',
   ], { stdio: 'ignore', detached: true });
 
-  let target = null;
+  let target = null, port = null;
   for (let i = 0; i < 60 && !target; i++) {
-    try { const list = await httpJSON('/json/list'); target = list.find(t => t.type === 'page'); } catch {}
+    port = port ?? activePort(profile);
+    if (port) {
+      try { const list = await httpJSON(port, '/json/list'); target = list.find(t => t.type === 'page'); } catch {}
+    }
     if (!target) await sleep(250);
   }
-  if (!target) { chrome.kill(); throw new Error('Chrome never came up'); }
+  if (!target) {
+    // Reap the GROUP here too: the old path called chrome.kill(), which leaves the renderer
+    // and GPU children alive holding the profile, the exact leak the finally below exists for.
+    try { process.kill(-chrome.pid, 'SIGKILL'); } catch { try { chrome.kill('SIGKILL'); } catch {} }
+    throw new Error(port ? `Chrome came up on ${port} but served no page target`
+                         : 'Chrome never wrote DevToolsActivePort, so it never came up');
+  }
 
   const ws = new WebSocket(target.webSocketDebuggerUrl);
   await new Promise((res, rej) => { ws.onopen = res; ws.onerror = rej; });
