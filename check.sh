@@ -41,6 +41,11 @@
 #                    37 blocks were English. This one strips inline tags, reads whole blocks,
 #                    and counts function words with a margin so a shared word cannot flip a
 #                    verdict. It ignores <code>, which is quotation, not prose.
+#   (authoring)      tools/quotable.py <image> is shot-gate RUN BACKWARDS: it prints what a
+#                    caption is ALLOWED to quote from a frame, and --check tests one phrase.
+#                    shot-gate tells you a quote is wrong AFTER you wrote it; this tells you
+#                    what the right one is BEFORE. Every caption defect this repo has shipped
+#                    came from authoring off MEMORY of a screenshot instead of off the pixels.
 #   contrast-gate.py what the EYE cannot judge on a dark screen in a dark room: every
 #                    ink-on-surface pair, computed against WCAG 2.1, read out of the
 #                    stylesheet's own tokens so it cannot go stale.
