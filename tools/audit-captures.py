@@ -50,6 +50,13 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # THE FLOOR STAYS AT 20. A day-one athlete really does start there, and lowering the ceiling
 # is what a future beginner-only calibration would be tempted to do again.
 PLAUSIBLE_1RM = (20.0, 160.0)    # day-one beginner through strong intermediate, in kilograms
+# 🔒 THIS CEILING IS DERIVED FROM THE FIXTURE'S REP COUNT, SO IT IS NOT A CONSTANT, IT IS A
+# COUPLING. The 160 above is computed from a working set of EIGHT reps at reserve 2 against a
+# seeded load capped at 1.5x bodyweight. Vary the seeded reps and the same load yields a
+# different estimate, so a CORRECT deep frame can fall outside this band and be rejected for
+# a reason that has nothing to do with the photograph. That is this file's 2026-08-24 failure
+# exactly: a band calibrated when session 3 was the deepest frame, rejecting a legitimate
+# 129.2 kg hundred-session squat. RE-DERIVE IT WHENEVER THE SEEDER'S REP DISTRIBUTION MOVES.
 MAX_LAPSE_DAYS = 10              # the fixture trains every 3 days
 
 # The six movements JerryEnvironment.seedColdStartSessions names, lower-cased. This IS a
@@ -117,15 +124,20 @@ def audit(path):
             # this fixture reports reserve 2 on every one of its sets, and a belief
             # distribution with zero variance may have nothing to calibrate against.
             issues.append('Calibration ring still reads (Building) with no percentage at '
-                          f'{sessions} sessions. CAUSE NOW MEASURED, and it is neither of '
-                          'the two things previously written here: the RIR belief is never '
-                          'UPDATED, because that write is gated on '
-                          'strengthCurveDataPoints >= 3 (JerryKernel:6679) and that count is '
-                          'bestAtReps.count, a dict keyed by REPS. This fixture logs reps 8 '
-                          'forever, so it holds ONE key and the gate never opens. Measured in '
-                          'SyntheticAthleteSimulationTests O7 at 100 sessions: buckets '
-                          'bench=2 squat=1 row=3 press=0 rdl=0, and RIR observations [0,0,0,0,0] '
-                          'on all five. NOT a defect in this screenshot')
+                          f'{sessions} sessions. NOT a defect in this screenshot: the ring is '
+                          'reporting honestly that no RIR belief has been written. '
+                          'THE TWO GATES THAT MUST BOTH OPEN BEFORE IT CAN READ ANYTHING, '
+                          'stated as conditions rather than as a claim about any particular '
+                          'fixture: (a) the belief write is skipped while '
+                          'strengthCurveDataPoints(exercise) < 3, and that count is '
+                          'bestAtReps.count, a dict keyed by REPS, so an athlete who logs one '
+                          'identical rep count forever holds ONE key and never opens it; and '
+                          '(b) RIRBeliefDistribution.update returns early unless rirAuthored, '
+                          'so a reserve accepted from a prefill never counts. GO READ THE '
+                          'FIXTURE BEFORE NAMING WHICH ONE IS SHUT. As of 2026-08-30 it was '
+                          '(a), the seeder logging reps 8 at four sites in JerryEnvironment, '
+                          'and a session was in flight to vary them, so that may no longer be '
+                          'true when you read this')
     return issues
 
 
