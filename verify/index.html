@@ -50,7 +50,7 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
 <body>
 
 <div class="bar">
-  <a class="wordmark" href="/"><span class="led" id="led" aria-hidden="true"></span>OrderedStrength</a>
+  <a class="wordmark" translate="no" href="/"><span class="led" id="led" translate="no" aria-hidden="true"></span>OrderedStrength</a>
   <nav>
     <a href="/how-it-works/">How it works</a>
     <a href="/stronger/" class="opt">Stronger</a>
@@ -73,14 +73,14 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
 
     <div style="margin-top:2rem">
       <label for="in" class="ilabel">Receipt JSON</label>
-      <textarea id="in" spellcheck="false" placeholder='Paste the receipt here, including the outer brackets'></textarea>
+      <textarea id="in" translate="no" spellcheck="false" placeholder='Paste the receipt here, including the outer brackets'></textarea>
       <div class="actions">
         <button class="btn" id="go">Check it</button>
         <button class="btn ghost" id="demo">Use a sample receipt</button>
       </div>
     </div>
 
-    <div id="out" aria-live="polite"></div>
+    <div id="out" translate="no" aria-live="polite"></div>
 
     <details class="limits">
       <summary>What this proves, and what it does not</summary>
@@ -100,7 +100,7 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
 <footer>
   <div class="foot">
     <div class="foot__mark">
-      <a class="wordmark" href="/">OrderedStrength</a>
+      <a class="wordmark" translate="no" href="/">OrderedStrength</a>
       <p>A strength coach for iPhone that writes each session down before you lift, then grades
       itself on what it wrote.</p>
     </div>
@@ -122,7 +122,7 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
     </nav>
   </div>
   <div class="foot__panel">
-    <span>Build <b class="stamp">8b051bd229</b></span>
+    <span>Build <b class="stamp" translate="no">8b051bd229</b></span>
     <span>iPhone &middot; in testing</span>
     <span>Your training is computed on your device</span>
   </div>
@@ -157,7 +157,7 @@ function card(cls, verdict, idx, why, computed){
   return '<div class="res '+cls+'"><span class="v">'+verdict+'</span>'+
     (idx!=null?'<span class="idx">receipt '+idx+'</span>':'')+
     '<p class="why">'+why+'</p>'+
-    (computed?'<code>computed '+computed+'</code>':'')+'</div>';
+    (computed?'<code translate="no">computed '+computed+'</code>':'')+'</div>';
 }
 function row(i, r){
   var ok = r.verified === true;

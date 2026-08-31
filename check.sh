@@ -27,6 +27,13 @@
 #                    wide the reader must outnumber the site. 🔒 THE FIRST DRAFT HAD ONLY
 #                    THE SECOND ARM AND COULD NOT GO RED ON THE REAL PARAGRAPH (6 to 2 on a
 #                    page with ten reader sentences). Falsification caught that, not review.
+#   translate-gate.py WHAT A NON-ENGLISH READER GETS. The CEO turned on browser auto-translate
+#                    to Spanish on 2026-08-31 and the page fell apart, while all seven gates
+#                    were green: every one of them reads the ENGLISH DOM. A translator rewrites
+#                    the <code> runs that quote the app verbatim, and the hex digests the seal
+#                    console and /verify/ depend on, so the translated page claims the app says
+#                    things it does not and the one interactive proof stops verifying. Prose
+#                    stays translatable on purpose.
 #   contrast-gate.py what the EYE cannot judge on a dark screen in a dark room: every
 #                    ink-on-surface pair, computed against WCAG 2.1, read out of the
 #                    stylesheet's own tokens so it cannot go stale.
@@ -64,6 +71,8 @@ echo
 python3 tools/ring-cause-gate.py || fail=1
 echo
 python3 tools/voice-gate.py || fail=1
+echo
+python3 tools/translate-gate.py || fail=1
 echo
 python3 tools/contrast-gate.py | tail -3 || fail=1
 
