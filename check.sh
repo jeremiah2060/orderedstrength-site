@@ -11,6 +11,14 @@
 #                    resolution, or that is a system permission sheet rather than the app.
 #                    (tools/audit-captures.py is its upstream twin: point it at a capture
 #                    directory BEFORE choosing which frames to publish.)
+#   ring-cause-gate.py A CAPTION MAY NOT EXPLAIN ONE RING WITH ANOTHER RING'S INPUT.
+#                    shot-gate proves a quoted phrase is in the pixels; it is blind to a
+#                    false CAUSE, and on 2026-08-30 the site shipped "the middle ring
+#                    still says Calibration (Building), because this athlete never once
+#                    told Jerry how sore he was". Soreness feeds RECOVERY. The refutation
+#                    was already on the page: answered.webp shows that same athlete WITH
+#                    soreness reported and the ring still empty. Sentence-scoped, so a
+#                    caption may still discuss both, just not in one breath.
 #   contrast-gate.py what the EYE cannot judge on a dark screen in a dark room: every
 #                    ink-on-surface pair, computed against WCAG 2.1, read out of the
 #                    stylesheet's own tokens so it cannot go stale.
@@ -44,6 +52,8 @@ fail=0
 python3 check-site.py || fail=1
 echo
 python3 tools/shot-gate.py || fail=1
+echo
+python3 tools/ring-cause-gate.py || fail=1
 echo
 python3 tools/contrast-gate.py | tail -3 || fail=1
 
