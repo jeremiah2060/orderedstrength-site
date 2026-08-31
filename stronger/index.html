@@ -5,9 +5,9 @@
 <script>document.documentElement.className="js";</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Getting stronger · OrderedStrength</title>
-<meta name="description" content="What actually happens to your body: inside one set, across one week, across one block. And the results claim we will not make until we have earned it.">
+<meta name="description" content="What actually happens to your body: inside one set, across one week, across months. And the results claim we will not make until we have earned it.">
 <meta property="og:title" content="Getting stronger · OrderedStrength">
-<meta property="og:description" content="What actually happens to your body: inside one set, across one week, across one block. And the results claim we will not make until we have earned it.">
+<meta property="og:description" content="What actually happens to your body: inside one set, across one week, across months. And the results claim we will not make until we have earned it.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="OrderedStrength">
 <meta property="og:image" content="/assets/og.jpg">
@@ -63,37 +63,42 @@
     <div class="pagehead">
       <p class="eyebrow">What actually gets heavier</p>
       <h1>The weight on the bar is the only number that has to go up.</h1>
-      <p class="sub">You did not come here to audit a coach. You came because you want to lift more than you lifted last month. Jerry works on three time scales to get you there: the set you are standing over, the week you are in, and the block you are running. He will also refuse to tell you how much stronger you will get, and the reason is worth more than the number would be.</p>
+      <p class="sub">You did not come here to audit a coach. You came because you want to lift more than you lifted last month. Jerry works on three time scales to get you there: the set you are standing over, the week you are in, and the months you have been at it.</p>
     </div>
   </section>
 
   <section class="scene reading">
     <p class="eyebrow">Three time scales</p>
-    <h2>Strength is built in a set, a week and a block, and he works all three.</h2>
+    <h2>Strength is built across a set, a week and a run of months. He works all three.</h2>
     <div class="beats">
 
-      <!-- 🔒 THE FIFTEEN AND THE FIVE ARE QUOTED FROM A TUNING CONSTANT, SO THIS SENTENCE IS
-           COUPLED TO THE APP AND NOTHING GATES THAT. Source, read 2026-08-30:
-           AdaptiveRecoveryEngine.nextSetLoadAdjustment() caps the cut at max(0.85, ...) and
-           the raise at min(1.05, ...), and it returns 1.0 until sessionSets.count >= 2,
-           which is why this says "from the second set onward" rather than "every set".
-           If those caps move in the app, this paragraph is wrong until someone edits it. -->
+      <!-- 🔒 WHAT MOVES A KILOGRAM MID-SESSION, VERIFIED AT THE CALL SITES, NOT AT THE
+           FUNCTION. An earlier draft of this card quoted 15% and 5% from
+           AdaptiveRecoveryEngine.nextSetLoadAdjustment(). That was FALSE TWICE. Its only
+           two consumers (ActiveWorkoutView:663, FreestyleWorkoutView:2373) both wrap it in
+           min(1.0, ...) and hand it to RealTimeAdaptationBanner, which renders a percentage
+           STRING and nothing else: no prescribed weight is multiplied by it anywhere, and
+           the clamp makes the raise arm unreachable. The real brake is JerryKernel:8521,
+           min(justLoggedWeight * 0.95, nextStepBelow), armed by `hitFailure` at :8169
+           (reported reserve 0 below the ask, or severe bar-speed loss). CITE THE CALL
+           SITE, NEVER THE FUNCTION: a function that returns a number is not a function
+           that changes a weight. -->
       <div class="beat">
         <p class="when">Inside one set</p>
         <h3>He watches the reps land, then writes the next one.</h3>
-        <p>You finish a set and tell him how many reps you had left. From the second set onward he holds that against what he predicted and moves the next load: down by as much as fifteen percent if the set came apart, up by at most five if it did not. He cuts three times harder than he lifts, deliberately. The set that builds muscle is the one taken close enough to failure to be worth taking and not so far past it that the days after pay for it, and that line sits somewhere different every time you walk in.</p>
+        <p>You finish a set and tell him how many reps you had left. If you hit failure under the load he asked for, the next set comes down by five percent, or by one real plate step, whichever is further. That brake fires inside the session, not next week. Close to failure is what grows muscle. Getting strong is mostly load and clean reps, so he leaves reps in reserve on your heavy sets.</p>
       </div>
 
       <div class="beat">
         <p class="when">Across one week</p>
         <h3>Enough work to grow, and a stop before it becomes a hole.</h3>
-        <p>Muscle comes from doing more than your body is used to and then recovering from it. The second half is the one people skip, so Jerry counts what each muscle has taken across the week and cuts the session when the arithmetic says you are borrowing from next week rather than earning this one. Some weeks he asks for less than you came in willing to give, which is the same job as asking for more, done in the direction nobody thanks a coach for.</p>
+        <p>Muscle comes from doing more than your body is used to and then recovering from it. The second half is the one people skip, so Jerry counts what each muscle has taken across the week and cuts the session when the arithmetic says you are borrowing from next week rather than earning this one. Some weeks he asks for less than you came in willing to give. He watches the floor as well as the ceiling: under a weekly minimum a muscle gets no growth signal at all, and he will tell you which one is under it.</p>
       </div>
 
       <div class="beat">
-        <p class="when">Across one block</p>
+        <p class="when">Across the months</p>
         <h3>The reps come first. Then the plate goes on.</h3>
-        <p>The weight does not move because a calendar said week four. It moves when you have shown the reps at the weight you are already lifting: reach the top of the range, hold it, and the plate goes on, after which the target drops to the middle and the climb starts again. That is double progression, the oldest idea in the building. What you watch climb is your estimated one rep max, and the word estimated is carrying real weight there. Nobody measured it under a bar. It is computed from the loads and reps you logged, and Jerry prints that word on the screen for the same reason it is here.</p>
+        <p>While you are building, the weight moves on your reps and not on the week: hit the top of the rep range once at the effort he asked for and the plate goes on, after which the target drops to the middle and the climb starts again. That is double progression. In an overreach or a recovery week the plan sets the percentage instead, and he tells you which week you are in. What you watch climb is your estimated one rep max, and the word estimated is carrying real weight there. Nobody measured it under a bar. It is computed from the loads, the reps and the reserve you reported.</p>
       </div>
 
     </div>
@@ -108,16 +113,16 @@
         <span class="st">none yet</span>
       </div>
       <div class="hb">
-        <p>There is no results dataset. The test group has not finished a block, so any number here about how much stronger anyone got would be invented, and inventing it is the behaviour the rest of this site exists to refuse.</p>
-        <p>When the data exists it goes on <a href="/record/" style="color:var(--teal)">the record</a> beside the accuracy figures, and it will name the athletes it did not work for, because a results page holding only successes is an advertisement wearing a lab coat. Until then you get a narrower promise that holds on your first session: every load he asks of you is written down before you lift it, with the reason attached. If he is wrong about your body he says so, rather than moving the target and hoping you were not watching.</p>
+        <p>There is no results dataset. The test group has not trained long enough, so any number here about how much stronger anyone got would be invented.</p>
+        <p>When the data exists it goes on <a href="/record/" style="color:var(--teal)">the record</a> beside the accuracy figures, and it will name the athletes it did not work for. Until then you get a narrower promise that holds on your first session: every load he asks of you is written down before you lift it, with the reason attached. If he is wrong about your body he says so.</p>
       </div>
     </div>
   </section>
 
   <section class="scene reading">
     <p class="eyebrow">Where to start</p>
-    <h2>Train for a block and check his work.</h2>
-    <p>Log real sets for a block and read what he wrote down before each one. If you want the loop itself first, it is on <a href="/how-it-works/" style="color:var(--teal)">how it works</a>.</p>
+    <h2>Train for a few months and check his work.</h2>
+    <p>Log real sets for a few months and read what he wrote down before each one. If you want the loop itself first, it is on <a href="/how-it-works/" style="color:var(--teal)">how it works</a>.</p>
   </section>
 
 </main>
