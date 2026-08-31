@@ -992,3 +992,26 @@ DT_LABELS = {
     # The app's own Spanish for its Settings screen, from Localizable.xcstrings.
     ', in Settings.': ', en Configuración.',
 }
+
+
+# ── ATTRIBUTES NO GATE WAS READING ───────────────────────────────────────────────────────
+# 🔒 THE CONVERSION ACTION WAS IN ENGLISH. A Spanish reader pressing "Escríbenos" got a mail
+# draft whose subject and three questions were English. That is the primary thing this site
+# asks anyone to do, and no gate looked at an href. Nor at the meta description, which is
+# what Google prints under /es/, nor at og:description and og:image:alt, which are what a
+# person sees when the Spanish page is shared.
+META = {
+    'content="A strength coach for iPhone that changes your session while you are in it, writes down what it expected before you lift, and can be checked. Seal a prediction, then try to change it."':
+        'content="Un coach de fuerza para iPhone que cambia tu sesión mientras estás en ella, anota lo que esperaba antes de que levantes, y se puede comprobar. Sella una predicción, y después intenta cambiarla."',
+    'content="He writes the next set while you are still breathing hard from the last one, cuts the session when you are fading, and writes down what he expected before you lift so you can check him after."':
+        'content="Escribe la siguiente serie mientras todavía respiras fuerte de la anterior, recorta la sesión cuando estás cayendo, y anota lo que esperaba antes de que levantes para que puedas revisarlo después."',
+    'content="Two iPhones showing the OrderedStrength dashboard beside the line: a coach who writes it down before you lift."':
+        'content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: un coach que lo anota antes de que levantes."',
+}
+
+MAILTO = {
+    'mailto:jeremiah@orderedstrength.com?subject=OrderedStrength%20test%20flight&amp;body=Roughly%20how%20long%20have%20you%20been%20lifting%3F%0A%0AWhat%20do%20you%20train%20on%2C%20and%20how%20many%20days%20a%20week%3F%0A%0AWhich%20app%20are%20you%20using%20now%2C%20if%20any%3F%0A%0A':
+        'mailto:jeremiah@orderedstrength.com?subject=Prueba%20de%20vuelo%20de%20OrderedStrength&amp;body=%C2%BFCu%C3%A1nto%20tiempo%20llevas%20levantando%2C%20m%C3%A1s%20o%20menos%3F%0A%0A%C2%BFEn%20qu%C3%A9%20entrenas%2C%20y%20cu%C3%A1ntos%20d%C3%ADas%20a%20la%20semana%3F%0A%0A%C2%BFQu%C3%A9%20app%20usas%20ahora%2C%20si%20usas%20alguna%3F%0A%0A',
+    'mailto:jeremiah@orderedstrength.com?subject=Tell%20me%20when%20OrderedStrength%20ships':
+        'mailto:jeremiah@orderedstrength.com?subject=Av%C3%ADsame%20cuando%20salga%20OrderedStrength',
+}

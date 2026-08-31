@@ -34,7 +34,7 @@ WHAT IT DELIBERATELY IGNORES: quoted app strings inside `<code>`, which are Engl
 Spanish pages ON PURPOSE while the published screenshots are of the English build, and the
 brand name. Both are stripped before counting so the gate measures PROSE, not quotation.
 """
-import re, sys, glob, os, html as _html
+import re, sys, glob, os, html as _html, urllib.parse
 
 # 🔒 ARM TWO, FOR SHORT LABELS. A function-word margin cannot judge a three-word button:
 # "Put it back" scores one English hit and passes, and it is a button a Spanish reader reads.
@@ -84,6 +84,19 @@ def blocks(path):
     for attr in ('alt', 'title', 'placeholder', 'aria-label'):
         for mm in re.finditer(attr + r'="([^"]{4,})"', prose):
             out.append(mm.group(1))
+    # 🔒 THE HEAD AND THE HREFS. A mailto's subject and body are the words the reader SENDS,
+    # and on /es/join/ they were English: a Spanish visitor pressing "Escríbenos" got a draft
+    # asking three questions in English, which is the primary action this whole site requests.
+    # The meta description is what a search engine prints under /es/, and og:description and
+    # og:image:alt are what a person sees when the Spanish page is shared. All four were
+    # English, and no gate here read an attribute in <head> or an href.
+    src_head = head.group(0) if head else ''
+    for mm in re.finditer(r'(?:name|property)="(?:description|og:description|og:title|og:image:alt|twitter:description)" content="([^"]+)"', src_head):
+        out.append(mm.group(1))
+    for mm in re.finditer(r'href="(mailto:[^"]+)"', s):
+        q = urllib.parse.unquote(_html.unescape(mm.group(1)))
+        for part in re.findall(r'(?:subject|body)=([^&]*)', q):
+            out.append(part.replace('\n', ' '))
     for blk in scripts:
         for q in re.findall(r"'((?:[^'\\]|\\.){4,})'", blk):
             out.append(q)
