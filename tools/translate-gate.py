@@ -49,8 +49,17 @@ MACHINE_IDS = {
 
 def audit(path, rel):
     src = open(path, encoding='utf-8').read()
-    # Script bodies are never translated by a browser, so they are not this gate's business.
+    # 🔒 A SCRIPT BODY IS NOT TRANSLATED, BUT THE MARKUP IT INJECTS IS. The first draft of this
+    # gate stripped script bodies wholesale, on the true-but-irrelevant grounds that a browser
+    # does not translate JavaScript. It translates the DOM, and the seal console and the
+    # verifier both BUILD `<code>` elements at runtime out of string literals in those bodies.
+    # Stripping them meant the gate was blind to exactly the two interactive surfaces whose
+    # breakage the CEO would notice first. Markup literals inside scripts are checked; the
+    # surrounding code is not.
+    scripts = re.findall(r'<script[^>]*>(.*?)</script>', src, flags=re.S)
     body = re.sub(r'<script[^>]*>.*?</script>', '', src, flags=re.S)
+    injected = ' '.join(re.findall(r'<(?:code|span|div|pre|b)[^>]*>', ' '.join(scripts)))
+    body = body + ' ' + injected
     issues = []
     for name, pat in RULES:
         n = len(re.findall(pat, body))
