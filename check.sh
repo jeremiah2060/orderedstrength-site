@@ -34,6 +34,13 @@
 #                    console and /verify/ depend on, so the translated page claims the app says
 #                    things it does not and the one interactive proof stops verifying. Prose
 #                    stays translatable on purpose.
+#   lang-gate.py     A PAGE IS ACTUALLY WRITTEN IN THE LANGUAGE IT DECLARES. The Spanish site
+#                    shipped with a Spanish headline over an English paragraph, and the
+#                    BUILDER reported "english-left: 0" on every page because its detector
+#                    matched [^<] and could not see a paragraph containing a <b> or an <a>.
+#                    37 blocks were English. This one strips inline tags, reads whole blocks,
+#                    and counts function words with a margin so a shared word cannot flip a
+#                    verdict. It ignores <code>, which is quotation, not prose.
 #   contrast-gate.py what the EYE cannot judge on a dark screen in a dark room: every
 #                    ink-on-surface pair, computed against WCAG 2.1, read out of the
 #                    stylesheet's own tokens so it cannot go stale.
@@ -73,6 +80,8 @@ echo
 python3 tools/voice-gate.py || fail=1
 echo
 python3 tools/translate-gate.py || fail=1
+echo
+python3 tools/lang-gate.py || fail=1
 echo
 python3 tools/contrast-gate.py | tail -3 || fail=1
 

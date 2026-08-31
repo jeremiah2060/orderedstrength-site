@@ -608,3 +608,205 @@ APP_PATHS = {
     'text of the sentence Jerry is about to say':
         'el texto de la frase que Jerry está a punto de decir',
 }
+
+
+# ── TEXT-NODE FRAGMENTS ─────────────────────────────────────────────────────────────────
+# 🔒 THE REAL UNIT OF HTML TRANSLATION, AND THE REASON THE FIRST BUILD SHIPPED BILINGUAL.
+# A paragraph containing <b>, <a> or <code> is not one string, it is several text nodes with
+# markup between them. Keys written as whole flattened sentences never matched any of them, so
+# 74 nodes stayed English while the reporter said 0. Keyed per node, in source form.
+FRAGMENTS = {
+    # ── home ──
+    'Most apps hand you a program and stop listening. Jerry, the coach inside\n        the app, writes the next set while you are still breathing hard from the last one. He cuts\n        the session when you are fading, adds the plate the day you earn it, and writes down what\n        he expected from you ':
+        'La mayoría de las apps te entregan un programa y dejan de escuchar. Jerry, el coach dentro\n        de la app, escribe la siguiente serie mientras todavía respiras fuerte de la anterior.\n        Recorta la sesión cuando estás cayendo, agrega el disco el día que te lo ganas, y anota lo\n        que esperaba de ti ',
+    ' you touch the bar, so you can check him on it after.':
+        ' de que toques la barra, para que puedas revisarlo después.',
+    'Your one rep max is ': 'Tu máximo de una repetición es ',
+    'I do not know you yet. Until your own sets exist I start from population averages for your age, sex and bodyweight, and ':
+        'Todavía no te conozco. Hasta que existan tus propias series parto de promedios poblacionales para tu edad, sexo y peso corporal, y ',
+    'Drag: sessions you have logged': 'Arrastra: sesiones que has registrado',
+    'The slider needs JavaScript. What it\n      reveals is written out on ':
+        'El deslizador necesita JavaScript. Lo que revela está escrito en ',
+    'The slider is a session count because that is the only\n      dial a web page can offer you. Inside the app the pace runs on evidence: dense sessions of\n      real working sets move it faster than the calendar does, and it moves back if his\n      predictions start missing. A few of the deeper reads also hold a hard floor, and those are\n      named on ':
+        'El deslizador cuenta sesiones porque es el único control que una página web puede\n      ofrecerte. Dentro de la app el ritmo corre con evidencia: sesiones densas de series de\n      trabajo reales lo mueven más rápido que el calendario, y retrocede si sus predicciones\n      empiezan a fallar. Algunas de las lecturas más profundas también sostienen un piso duro, y\n      esas están nombradas en ',
+    'The badge reads  , not a confidence score invented to look\n          reassuring. One session is not enough to know you and the screen says so.':
+        'La insignia dice  , no un puntaje de confianza inventado para tranquilizarte. Una sesión no\n          alcanza para conocerte y la pantalla lo dice.',
+    'Fatigue and recovery are marked  , a population estimate.\n          They are not claims about your body, and they are not allowed to pretend to be.':
+        'La fatiga y la recuperación están marcadas  , una estimación poblacional. No son\n          afirmaciones sobre tu cuerpo, y no tienen permitido fingir que lo son.',
+    "The app's own line, on the screen: the intelligence surfaces\n           . True of the pace. Not true of everything: a few\n          deep reads will not speak below fifteen sessions however hard you train, because the\n          sample is too small to mean anything. Both halves are here because only one flatters\n          us.":
+        'La propia línea de la app, en pantalla: las superficies de inteligencia\n           . Cierto del ritmo. No cierto de todo: algunas lecturas profundas no hablan por debajo\n          de quince sesiones por muy duro que entrenes, porque la muestra es demasiado pequeña\n          para significar algo. Las dos mitades están aquí porque solo una nos favorece.',
+    'He predicted at least': 'Predijo al menos',
+    'The dumb guess he races': 'La suposición tonta contra la que compite',
+    'What is actually sealed': 'Qué se sella realmente',
+    'I am one person and a small test group, not a company with a support desk. If you write\n      to ':
+        'Soy una persona y un grupo pequeño de prueba, no una empresa con mesa de ayuda. Si\n      escribes a ',
+    ',\n      I am who answers.': ',\n      yo soy quien responde.',
+    'Not on the App Store yet, and there is no mailing\n    list, because there is no account system to hold one.\n    ':
+        'Todavía no está en la App Store, y no hay lista de correos, porque no existe un sistema de\n    cuentas que pueda sostener una.\n    ',
+    ' and you will hear from a person when it ships.':
+        ' y sabrás de una persona cuando salga.',
+    # ── privacy ──
+    ' This policy covers the ': ' Esta política cubre la ',
+    '. It does not cover any other service.': '. No cubre ningún otro servicio.',
+    'Your training lives on your phone. We have no account system, so we do not know who you are. ':
+        'Tu entrenamiento vive en tu teléfono. No tenemos sistema de cuentas, así que no sabemos quién eres. ',
+    ' Point 4 is a set-submission left over from an earlier server design: it sends the sets you log, it contradicts what the rest of this page promises, and it is being removed rather than kept and explained. It is written here because you should not have to find it in a network log.':
+        ' El punto 4 es un envío de series que quedó de un diseño anterior con servidor: manda las series que registras, contradice lo que promete el resto de esta página, y se está quitando en vez de conservarlo y explicarlo. Está escrito aquí porque no deberías tener que encontrarlo en un registro de red.',
+    'Every set you log: exercise, weight, reps, and the reps you had left in reserve. ':
+        'Cada serie que registras: ejercicio, peso, repeticiones, y las repeticiones que te quedaban en reserva. ',
+    'Only if you grant permission, the app ': 'Solo si das permiso, la app ',
+    ': heart rate variability, resting heart rate, heart rate, sleep analysis, and active energy. It ':
+        ': variabilidad de la frecuencia cardiaca, frecuencia cardiaca en reposo, frecuencia cardiaca, análisis del sueño, y energía activa. ',
+    ' completed workouts back to Health so they appear alongside your other activity.':
+        ' los entrenamientos completados de vuelta a Health para que aparezcan junto a tu otra actividad.',
+    'Health data is used on your device to inform recovery and readiness. ':
+        'Los datos de Health se usan en tu dispositivo para informar la recuperación y la disposición. ',
+    ' You can revoke access at any time in Apple Health, and the app keeps working without it.':
+        ' Puedes revocar el acceso en cualquier momento en Apple Health, y la app sigue funcionando sin eso.',
+    'To speak in a natural voice rather than the built-in system voice, the ':
+        'Para hablar con una voz natural en vez de la voz del sistema, ',
+    " is sent to our server, which forwards it to Microsoft Azure to turn into audio. Jerry's lines are a bounded set of templates, and each distinct line is fetched once and then stored on your phone and replayed from there forever.":
+        ' se envía a nuestro servidor, que lo reenvía a Microsoft Azure para convertirlo en audio. Las frases de Jerry son un conjunto acotado de plantillas, y cada frase distinta se descarga una vez y después se guarda en tu teléfono y se reproduce desde ahí para siempre.',
+    ' a spoken line can contain numbers from your session, such as a weight or a rep count, because that is what the sentence says. It never contains your name, and no other part of your training log is sent. Turning the voice off stops this entirely.':
+        ' una frase hablada puede contener números de tu sesión, como un peso o un conteo de repeticiones, porque eso es lo que dice la frase. Nunca contiene tu nombre, y no se envía ninguna otra parte de tu registro de entrenamiento. Apagar la voz detiene esto por completo.',
+    ', then when you ask Jerry a question in chat, your typed question and the relevant training context needed to answer it are sent to our server, which forwards them to Anthropic to compose the reply. This is off by default. With it off, Jerry answers from the on-device engine and nothing is sent.':
+        ', entonces cuando le haces una pregunta a Jerry en el chat, tu pregunta escrita y el contexto de entrenamiento necesario para responderla se envían a nuestro servidor, que los reenvía a Anthropic para componer la respuesta. Esto está apagado por defecto. Con esto apagado, Jerry responde desde el motor del dispositivo y no se envía nada.',
+    ' You can switch it off in ': ' Puedes apagarlo en ',
+    ', and switching it off stops it completely.': ', y apagarlo lo detiene por completo.',
+    ' It is left over from an earlier design in which the coaching engine ran on a server, and it survived the move onto the phone. It contradicts the promise at the top of this page, which is the promise that matters most here, so it is being removed rather than kept and explained away. Until the build that removes it reaches you, this section is how you find out about it.':
+        ' Quedó de un diseño anterior en el que el motor de coaching corría en un servidor, y sobrevivió a la mudanza al teléfono. Contradice la promesa que encabeza esta página, que es la promesa que más importa aquí, así que se está quitando en vez de conservarla y explicarla. Hasta que te llegue la versión que lo quita, esta sección es cómo te enteras.',
+    '. The file is yours.': '. El archivo es tuyo.',
+    ', in the same place. This is immediate and cannot be undone.':
+        ', en el mismo lugar. Esto es inmediato y no se puede deshacer.',
+    ', in the same place.': ', en el mismo lugar.',
+    ', in the Apple Health app.': ', en la app Apple Health.',
+    ', which removes everything stored on the device.':
+        ', lo que elimina todo lo guardado en el dispositivo.',
+    'Where data does leave the device it passes through our own server and then to: ':
+        'Donde los datos sí salen del dispositivo, pasan por nuestro propio servidor y después a: ',
+    ' (chat answers, only with Respuestas en la Nube on). They process it to return the result and we do not authorise them to use it for their own purposes.':
+        ' (respuestas de chat, solo con Respuestas en la Nube encendido). Lo procesan para devolver el resultado y no los autorizamos a usarlo para sus propios fines.',
+    'Questions about this policy, or about your data: ':
+        'Preguntas sobre esta política, o sobre tus datos: ',
+    # ── how it works ──
+    'your last 9 sessions': 'tus últimas 9 sesiones',
+    'injury, planned easy week, comeback from time off':
+        'lesión, semana fácil planeada, regreso tras un tiempo fuera',
+    'he says nothing at all': 'no dice absolutamente nada',
+    'The cardio engine has one way to give you a pace and seven separate ways to decline, each naming what is missing.':
+        'El motor de cardio tiene una forma de darte un ritmo y siete formas distintas de negarse, cada una nombrando qué falta.',
+    'The camera has one way to say it saw the set and several ways to say it did not.':
+        'La cámara tiene una forma de decir que vio la serie y varias formas de decir que no.',
+    'Ask him a question in plain language and every figure in the answer has to trace back to a value the engine actually returned. If one does not, the answer is thrown away and a plainer one takes its place.':
+        'Hazle una pregunta en lenguaje simple y cada cifra de la respuesta tiene que rastrearse hasta un valor que el motor realmente devolvió. Si alguna no lo hace, la respuesta se descarta y una más simple toma su lugar.',
+    'A recovery model can always flatter itself by measuring numbers it invented. Ours is marked self-referential in the code and barred from every personal claim. It cannot be wrong, which is why it cannot be evidence.':
+        'Un modelo de recuperación siempre puede halagarse midiendo números que él mismo inventó. El nuestro está marcado como autorreferencial en el código y tiene prohibida toda afirmación personal. No puede equivocarse, y por eso no puede ser evidencia.',
+    '\n      I could see you some of the time, but not enough of it to count honestly, so I am not going\n      to guess.\n      ':
+        '\n      Te pude ver parte del tiempo, pero no lo suficiente como para contar con honestidad, así que\n      no voy a adivinar.\n      ',
+    'What the app says when the camera view was poor, rather than inventing a rep count.':
+        'Lo que dice la app cuando la vista de la cámara fue mala, en vez de inventar un conteo de repeticiones.',
+    'Exactly what does and does not leave your phone, including the four things\n    that can and the one of those we are removing, is set out in the\n    ':
+        'Exactamente qué sale y qué no sale de tu teléfono, incluidas las cuatro cosas que pueden y\n    la que estamos quitando, está detallado en la\n    ',
+    # ── join ──
+    'Tu entrenamiento se calcula en tu dispositivo. There is no account, so there is no name, email\n    or password of yours held anywhere, and nothing to delete later except the app. What does and\n    does not leave your phone,\n    including the four things that can and the one of those we are removing, is set out in the\n    ':
+        'Tu entrenamiento se calcula en tu dispositivo. No hay cuenta, así que no hay ningún nombre,\n    correo ni contraseña tuya guardada en ningún lado, y nada que borrar después salvo la app.\n    Qué sale y qué no sale de tu teléfono, incluidas las cuatro cosas que pueden y la que estamos\n    quitando, está detallado en la\n    ',
+    # ── record ──
+    ', or break one yourself on the ': ', o rompe uno tú mismo en la ',
+    # ── stronger ──
+    'When the data exists it goes on ': 'Cuando existan los datos irán en ',
+    ' beside the accuracy figures, and it will name the athletes it did not work for. Until then you get a narrower promise that holds on your first session: every load he asks of you is written down before you lift it, with the reason attached. If he is wrong about your body he says so.':
+        ' junto a las cifras de precisión, y nombrarán a los atletas con los que no funcionó. Hasta entonces recibes una promesa más estrecha que se sostiene desde tu primera sesión: cada carga que te pide queda anotada antes de que la levantes, con la razón adjunta. Si se equivoca sobre tu cuerpo, lo dice.',
+    'Log real sets for a few months and read what he wrote down before each one. If you want the loop itself first, it is on ':
+        'Registra series reales durante unos meses y lee lo que anotó antes de cada una. Si primero quieres el ciclo en sí, está en ',
+    # ── support ──
+    'Your training is stored on your device, and the coaching is computed there. One thing currently leaves it that should not, and it is point 4 of the ':
+        'Tu entrenamiento se guarda en tu dispositivo, y el coaching se calcula ahí. Una cosa sale actualmente y no debería, y es el punto 4 de la ',
+    '. Because your history lives on the phone, use ':
+        '. Como tu historial vive en el teléfono, usa ',
+    ' to write a backup file you keep, and ':
+        ' para escribir un archivo de respaldo que guardas tú, y ',
+    ' on a new phone. If you have never made a backup and the phone is gone, the training is gone with it.':
+        ' en un teléfono nuevo. Si nunca hiciste un respaldo y el teléfono se perdió, el entrenamiento se fue con él.',
+    ' turns off the daily usage summary. Respuestas en la Nube is off unless you switched it on. Turning the spoken voice off stops the voice requests. Apple Health access is revoked in the Apple Health app. One path has no switch yet, the set submission described in point 4 of the ':
+        ' apaga el resumen diario de uso. Respuestas en la Nube está apagado a menos que lo hayas encendido. Apagar la voz hablada detiene las solicitudes de voz. El acceso a Apple Health se revoca en la app Apple Health. Un camino todavía no tiene interruptor, el envío de series descrito en el punto 4 de la ',
+    ', and it is being removed rather than given a toggle.':
+        ', y se está quitando en vez de darle un interruptor.',
+    ', or delete the app. Both are immediate and cannot be undone, so export a backup first if you might want it later.':
+        ', o borra la app. Ambas son inmediatas y no se pueden deshacer, así que exporta un respaldo primero si crees que lo querrás después.',
+    'What the app does and does not send is set out in full in the ':
+        'Lo que la app envía y lo que no está detallado por completo en la ',
+    # ── verify ──
+    'What this proves, and what it does not': 'Qué prueba esto, y qué no',
+    'A receipt carries a prediction, a random nonce, and a SHA-256 fingerprint committed\n      ':
+        'Un comprobante lleva una predicción, un nonce aleatorio, y una huella SHA-256 comprometida\n      ',
+    ' the set. The verifier recomputes the fingerprint from the prediction and the\n      nonce. If they match, the prediction was not edited afterwards. If a single character\n      changed, the fingerprint cannot match.':
+        ' la serie. El verificador vuelve a calcular la huella a partir de la predicción y el nonce.\n      Si coinciden, la predicción no se editó después. Si cambió un solo carácter, la huella no\n      puede coincidir.',
+    'It does not prove when the commitment was made.':
+        'No prueba cuándo se hizo el compromiso.',
+    ' That needs a published\n      daily anchor, which does not exist yet. Until it does, this page proves the prediction was\n      not rewritten and says nothing about the timestamp. That limit is stated here rather than\n      left for you to discover. Progress on the anchor is on\n      ':
+        ' Eso necesita un ancla diaria publicada, que todavía no existe. Hasta que exista, esta\n      página prueba que la predicción no fue reescrita y no dice nada sobre la marca de tiempo.\n      Ese límite se declara aquí en vez de dejarte descubrirlo. El avance del ancla está en\n      ',
+}
+
+
+# ── Text nodes split by inline <code> runs. Keyed exactly as they appear in source. ──────
+FRAGMENTS2 = {
+    ', not a confidence score invented to look\n          reassuring. One session is not enough to know you and the screen says so.':
+        ', no un puntaje de confianza inventado para tranquilizar.\n          Una sesión no alcanza para conocerte y la pantalla lo dice.',
+    'Fatigue and recovery are marked ': 'La fatiga y la recuperación están marcadas ',
+    ', a population estimate.\n          They are not claims about your body, and they are not allowed to pretend to be.':
+        ', una estimación poblacional.\n          No son afirmaciones sobre tu cuerpo, y no tienen permitido fingir que lo son.',
+    "The app's own line, on the screen: the intelligence surfaces\n          ":
+        'La propia línea de la app, en pantalla: las superficies de inteligencia\n          ',
+    '. True of the pace. Not true of everything: a few\n          deep reads will not speak below fifteen sessions however hard you train, because the\n          sample is too small to mean anything. Both halves are here because only one flatters\n          us.':
+        '. Cierto del ritmo. No cierto de todo: algunas\n          lecturas profundas no hablan por debajo de quince sesiones por muy duro que entrenes,\n          porque la muestra es demasiado pequeña para significar algo. Las dos mitades están aquí\n          porque solo una nos favorece.',
+    ' The middle ring says ': ' El anillo del medio dice ',
+    ' and shows no number, because one session is not calibration. The strongest thing on record is a ':
+        ' y no muestra número, porque una sesión no es calibración. Lo más fuerte registrado es una ',
+    ", which is what a beginner's first weeks actually weigh.":
+        ', que es lo que de verdad pesan las primeras semanas de un principiante.',
+    'The same screen, the same athlete, ': 'La misma pantalla, el mismo atleta, ',
+    '. The strongest thing on record is now a ': '. Lo más fuerte registrado ahora es una ',
+    ', and the middle ring has filled: ': ', y el anillo del medio se llenó: ',
+    '. Read that one carefully, because it is narrower than it looks. It scores how consistently you report your own effort, not how well Jerry knows you, and this athlete is a test fixture who reports his with machine regularity. A human is less tidy and will sit lower. Fatigue and recovery are still stamped ':
+        '. Lee ese con cuidado, porque es más estrecho de lo que parece. Puntúa qué tan consistente eres al reportar tu propio esfuerzo, no qué tan bien te conoce Jerry, y este atleta es una prueba automatizada que reporta con regularidad de máquina. Un humano es menos prolijo y quedará más abajo. La fatiga y la recuperación siguen marcadas ',
+    ', and the screen says what would change that.':
+        ', y la pantalla dice qué cambiaría eso.',
+    'The same athlete and the same hundred sessions as the frame beside it, with one difference: he told Jerry how sore he was the day after training. The two sublabels that said population estimate now read ':
+        'El mismo atleta y las mismas cien sesiones que la imagen de al lado, con una diferencia: le dijo a Jerry qué tan adolorido estaba el día después de entrenar. Las dos subetiquetas que decían estimación poblacional ahora dicen ',
+    ', and the line at the top becomes ': ', y la línea de arriba pasa a ser ',
+    '. Said plainly rather than staged: the test suite handed the app that soreness through the same door your own answer uses, and nothing else was changed.':
+        '. Dicho sin rodeos en vez de montado: la suite de pruebas le entregó a la app ese dolor por la misma puerta que usa tu propia respuesta, y no se cambió nada más.',
+    ' Then it does, by name: ': ' Y entonces lo hace, por su nombre: ',
+    ', and what would close each.': ', y qué cerraría cada una.',
+    ' (chat answers, only with Respuestas en la Nube on). They process it to return the result and we do not authorise them to use it for their own purposes.':
+        ' (respuestas de chat, solo con Respuestas en la Nube encendido). Lo procesan para devolver el resultado y no los autorizamos a usarlo para sus propios fines.',
+    'Tu entrenamiento se calcula en tu dispositivo. There is no account, so there is no name, email\n    or password of yours held anywhere, and nothing to delete later except the app. What does and\n    does not leave your phone,\n    including the four things that can and the one of those we are removing, is set out in the\n    ':
+        'Tu entrenamiento se calcula en tu dispositivo. No hay cuenta, así que no hay ningún nombre,\n    correo ni contraseña tuya guardada en ningún lado, y nada que borrar después salvo la app.\n    Qué sale y qué no sale de tu teléfono,\n    incluidas las cuatro cosas que pueden y la que estamos quitando, está detallado en la\n    ',
+    ' turns off the daily usage summary. Respuestas en la Nube is off unless you switched it on. Turning the spoken voice off stops the voice requests. Apple Health access is revoked in the Apple Health app. One path has no switch yet, the set submission described in point 4 of the ':
+        ' apaga el resumen diario de uso. Respuestas en la Nube está apagado a menos que lo hayas encendido. Apagar la voz hablada detiene las solicitudes de voz. El acceso a Apple Health se revoca en la app Apple Health. Un camino todavía no tiene interruptor, el envío de series descrito en el punto 4 de la ',
+}
+
+
+# ── The three keys I originally copied from the BUILT page instead of the English source ──
+# 🔒 A KEY TAKEN FROM THE OUTPUT CAN NEVER MATCH THE INPUT. All three of these contained
+# Spanish words ("Tu entrenamiento", "Respuestas en la Nube") because I lifted them from the
+# half-translated es page rather than from the English file the builder actually reads. They
+# matched nothing, silently, and only the language gate noticed.
+FRAGMENTS3 = {
+    'Your training is computed on your device. There is no account, so there is no name, email\n    or password of yours held anywhere, and nothing to delete later except the app. What does and\n    does not leave your phone,\n    including the four things that can and the one of those we are removing, is set out in the\n    ':
+        'Tu entrenamiento se calcula en tu dispositivo. No hay cuenta, así que no hay ningún nombre,\n    correo ni contraseña tuya guardada en ningún lado, y nada que borrar después salvo la app.\n    Qué sale y qué no sale de tu teléfono,\n    incluidas las cuatro cosas que pueden y la que estamos quitando, está detallado en la\n    ',
+    ' turns off the daily usage summary. Cloud Answers is off unless you switched it on. Turning the spoken voice off stops the voice requests. Apple Health access is revoked in the Apple Health app. One path has no switch yet, the set submission described in point 4 of the ':
+        ' apaga el resumen diario de uso. Respuestas en la Nube está apagado a menos que lo hayas encendido. Apagar la voz hablada detiene las solicitudes de voz. El acceso a Apple Health se revoca en la app Apple Health. Un camino todavía no tiene interruptor, el envío de series descrito en el punto 4 de la ',
+    ' (chat answers, only with Cloud Answers on). They process it to return the result and we do not authorise them to use it for their own purposes.':
+        ' (respuestas de chat, solo con Respuestas en la Nube encendido). Lo procesan para devolver el resultado y no los autorizamos a usarlo para sus propios fines.',
+}
+
+
+# ── Emphasised single words. Scoped with their markup: bare "before" would match inside
+#    prose. These are the last two English words visible on the Spanish pages, and both are
+#    the load-bearing word of their sentence, styled in the accent colour so the eye lands
+#    on them first. An English word in accent teal on a Spanish page is the most visible
+#    possible place to leave one.
+EMPHASIS = {
+    '<em>before</em>': '<em>antes</em>',
+}

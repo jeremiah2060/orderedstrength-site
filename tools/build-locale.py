@@ -111,8 +111,8 @@ def build(src_rel, out_rel, text_map, code_map, lang='es-419', link_prefix='/es'
     # 3b. THE LANGUAGE SWITCHER POINTS THE OTHER WAY, and it has to be flipped AFTER the link
     #     rewrite above or it gets dragged into /es/ with every other page link, leaving the
     #     Spanish site with a button to itself labelled "Español".
-    s = s.replace('<a href="/es/" class="opt" hreflang="es" lang="es" translate="no">Espa&ntilde;ol</a>',
-                  '<a href="/" class="opt" hreflang="en" lang="en" translate="no">English</a>')
+    s = s.replace('<a href="/es/" hreflang="es" lang="es" translate="no">Espa&ntilde;ol</a>',
+                  '<a href="/" hreflang="en" lang="en" translate="no">English</a>')
 
     # 4. hreflang, so a search engine and a browser both know the pair exists.
     canon = '/' + out_rel.replace('es/', '', 1).replace('index.html', '')

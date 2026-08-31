@@ -62,7 +62,6 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
     <a href="/es/stronger/" class="opt">Más fuerte</a>
     <a href="/es/record/" class="opt">El registro</a>
     <a href="/es/verify/" aria-current="page">Verificar</a>
-    <a href="/" class="opt" hreflang="en" lang="en" translate="no">English</a>
     <a href="/es/join/" class="cta">Únete a la prueba</a>
   </nav>
   <div class="prog" aria-hidden="true"></div>
@@ -88,15 +87,16 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
     <div id="out" translate="no" aria-live="polite"></div>
 
     <details class="limits">
-      <summary>What this proves, and what it does not</summary>
-      <p>A receipt carries a prediction, a random nonce, and a SHA-256 fingerprint committed
-      <em>before</em> the set. The verifier recomputes the fingerprint from the prediction and the
-      nonce. If they match, the prediction was not edited afterwards. If a single character
-      changed, the fingerprint cannot match.</p>
-      <p><strong>It does not prove when the commitment was made.</strong> That needs a published
-      daily anchor, which does not exist yet. Until it does, this page proves the prediction was
-      not rewritten and says nothing about the timestamp. That limit is stated here rather than
-      left for you to discover. Progress on the anchor is on
+      <summary>Qué prueba esto, y qué no</summary>
+      <p>Un comprobante lleva una predicción, un nonce aleatorio, y una huella SHA-256 comprometida
+      
+      <em>antes</em>  la serie. El verificador vuelve a calcular la huella a partir de la predicción y el nonce.
+      Si coinciden, la predicción no se editó después. Si cambió un solo carácter, la huella no
+      puede coincidir.</p>
+      <p><strong>No prueba cuándo se hizo el compromiso.</strong>  Eso necesita un ancla diaria publicada, que todavía no existe. Hasta que exista, esta
+      página prueba que la predicción no fue reescrita y no dice nada sobre la marca de tiempo.
+      Ese límite se declara aquí en vez de dejarte descubrirlo. El avance del ancla está en
+      
       <a href="/es/record/">el registro</a>.</p>
     </details>
   </section>
@@ -119,6 +119,10 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
       <p class="foot__label">El registro</p>
       <a href="/es/record/">Anclas publicadas</a>
       <a href="/es/verify/">Verificar un comprobante</a>
+    </nav>
+    <nav class="foot__col" aria-label="Language">
+      <p class="foot__label">Language</p>
+      <a href="/" hreflang="en" lang="en" translate="no">English</a>
     </nav>
     <nav class="foot__col" aria-label="La letra chica">
       <p class="foot__label">La letra chica</p>
