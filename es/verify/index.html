@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es-419">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.className="js";</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verificar un comprobante · OrderedStrength</title>
+<meta name="description" content="Pega un comprobante copiado desde OrderedStrength y revisa si la predicción que lleva dentro es, byte por byte, la que se selló antes de la serie.">
+<meta property="og:title" content="Verificar un comprobante · OrderedStrength">
+<meta property="og:description" content="Pega un comprobante copiado desde OrderedStrength y revisa si la predicción que lleva dentro es, byte por byte, la que se selló antes de la serie.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OrderedStrength">
+<meta property="og:image" content="/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: a coach who writes it down before you lift.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="/assets/og.jpg">
+<meta name="theme-color" content="#060709">
+<link rel="preload" href="/assets/fonts/public-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/archivo-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/verify/">
+<link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/verify/">
+<link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/verify/">
+<link rel="stylesheet" href="/assets/site.css?v=8b051bd229">
+<style>
+/* An input is a place things go INTO, so it is sunk: inset shadow at the top edge, lit
+   hairline at the bottom. Every raised surface on this site is the exact inverse, and
+   the inversion is the whole reason you can tell at a glance which is which. */
+textarea{width:100%;max-width:52rem;display:block;margin:0;min-height:11rem;
+         background-color:var(--e0);color:var(--ink);
+         box-shadow:inset 0 2px 6px -2px rgba(0,0,0,.9), inset 0 1px 0 rgba(0,0,0,.7),
+                    inset 0 -1px 0 rgba(233,241,255,.05);
+  border:1px solid var(--line);border-radius:10px;padding:.875rem;
+  font-family:var(--mono);font-size:.8125rem;line-height:1.55;resize:vertical}
+textarea:focus{outline:none;border-color:var(--teal)}
+.actions{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:flex-start;margin:.875rem 0 0;max-width:52rem}
+#out{margin:1.75rem 0 0;display:grid;gap:.625rem;max-width:52rem}
+.res{background:var(--surface);border-radius:10px;padding:.9375rem 1.0625rem;
+     border-left:3px solid var(--line)}
+.res.ok{border-left-color:var(--teal)} .res.bad{border-left-color:var(--red)}
+.res .v{font-family:var(--mono);font-size:.8125rem;font-weight:500;letter-spacing:.06em}
+.res.ok .v{color:var(--teal)} .res.bad .v{color:var(--red)}
+.res .idx{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);margin-left:.5rem}
+.res .why{font-size:.875rem;color:var(--ink2);margin:.3125rem 0 0;line-height:1.5}
+.res code{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);word-break:break-all;
+          display:block;margin-top:.375rem}
+details.limits{margin:2.5rem 0 0;max-width:52rem;border-top:1px solid var(--line);padding-top:1.5rem}
+details.limits summary{font-size:.875rem;color:var(--ink2);cursor:pointer}
+details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-width:44rem}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <a class="wordmark" translate="no" href="/es/"><span class="led" id="led" translate="no" aria-hidden="true"></span>OrderedStrength</a>
+  <nav>
+    <a href="/es/how-it-works/">Cómo funciona</a>
+    <a href="/es/stronger/" class="opt">Más fuerte</a>
+    <a href="/es/record/" class="opt">El registro</a>
+    <a href="/es/verify/" aria-current="page">Verificar</a>
+    <a href="/es/join/" class="cta">Únete a la prueba</a>
+  </nav>
+  <div class="prog" aria-hidden="true"></div>
+</div>
+
+<main>
+  <section class="scene">
+    <div class="pagehead">
+      <p class="eyebrow">Verificador</p>
+      <h1>Revisa un comprobante.</h1>
+      <p class="sub">Pega un comprobante copiado desde OrderedStrength. Esto revisa si la predicción que lleva dentro es, byte por byte, la que se selló antes de hacer la serie. Sin cuenta, sin iniciar sesión, y nada de lo que pegues se guarda.</p>
+    </div>
+
+    <div style="margin-top:2rem">
+      <label for="in" class="ilabel">JSON del comprobante</label>
+      <textarea id="in" translate="no" spellcheck="false" placeholder='Paste the receipt here, including the outer brackets'></textarea>
+      <div class="actions">
+        <button class="btn" id="go">Revisarlo</button>
+        <button class="btn ghost" id="demo">Usar un comprobante de ejemplo</button>
+      </div>
+    </div>
+
+    <div id="out" translate="no" aria-live="polite"></div>
+
+    <details class="limits">
+      <summary>What this proves, and what it does not</summary>
+      <p>A receipt carries a prediction, a random nonce, and a SHA-256 fingerprint committed
+      <em>before</em> the set. The verifier recomputes the fingerprint from the prediction and the
+      nonce. If they match, the prediction was not edited afterwards. If a single character
+      changed, the fingerprint cannot match.</p>
+      <p><strong>It does not prove when the commitment was made.</strong> That needs a published
+      daily anchor, which does not exist yet. Until it does, this page proves the prediction was
+      not rewritten and says nothing about the timestamp. That limit is stated here rather than
+      left for you to discover. Progress on the anchor is on
+      <a href="/es/record/">el registro</a>.</p>
+    </details>
+  </section>
+</main>
+
+<footer>
+  <div class="foot">
+    <div class="foot__mark">
+      <a class="wordmark" translate="no" href="/es/">OrderedStrength</a>
+      <p>Un coach de fuerza para iPhone que anota cada sesión antes de que levantes, y después
+      se califica a sí mismo con lo que escribió.</p>
+    </div>
+    <nav class="foot__col" aria-label="El producto">
+      <p class="foot__label">El producto</p>
+      <a href="/es/how-it-works/">Cómo funciona</a>
+      <a href="/es/stronger/">Ponerse más fuerte</a>
+      <a href="/es/join/">Únete a la prueba</a>
+    </nav>
+    <nav class="foot__col" aria-label="El registro">
+      <p class="foot__label">El registro</p>
+      <a href="/es/record/">Anclas publicadas</a>
+      <a href="/es/verify/">Verificar un comprobante</a>
+    </nav>
+    <nav class="foot__col" aria-label="La letra chica">
+      <p class="foot__label">La letra chica</p>
+      <a href="/es/app-privacy/">Privacidad</a>
+      <a href="/es/support/">Soporte</a>
+    </nav>
+  </div>
+  <div class="foot__panel">
+    <span>Compilación <b class="stamp" translate="no">8b051bd229</b></span>
+    <span>iPhone &middot; en pruebas</span>
+    <span>Tu entrenamiento se calcula en tu dispositivo</span>
+  </div>
+</footer>
+
+<script src="/assets/site.js?v=5fd125c32d" defer></script>
+<script>
+(function(){
+'use strict';
+// UNAUTHENTICATED BY DESIGN: a skeptic does not have an account.
+var ENDPOINT = 'https://api.orderedstrength.com/api/v1/verify';
+var SAMPLE = {
+  scheme:'os-commit-v1-sha256',
+  commitmentHex:'28168c46d4cffa65957c2d3bd3f6494fbf2ac1933a67248bd1c5a51d2db46915',
+  nonceHex:'412cabcd699f0a2a4cc22cfa1871753bd48789a2cc736aa97b517da656d5aec6',
+  fields:[{key:'kind',value:'session-forecast'},{key:'exercise',value:'Barbell Back Squat'},
+          {key:'bandLowKg',value:'1025000'},{key:'bandHighKg',value:'1125000'},
+          {key:'naiveBaselineKg',value:'1000000'},{key:'sealedFor',value:'1755916800'}]
+};
+var REASONS = {
+  mismatch:'The fingerprint does not match the prediction. Either the prediction was changed after it was sealed, or this is not a genuine receipt.',
+  unsupported_scheme:'This receipt uses a scheme this verifier does not understand. It was not refused on its contents.',
+  malformed_nonce:'The nonce is not a valid 32 byte hex value, so no fingerprint can be recomputed.',
+  malformed_commitment:'The sealed fingerprint is not a valid 32 byte hex value.',
+  malformed_fields:'The prediction fields are missing or empty, so there is nothing to hash.',
+  malformed_body:'This is not a receipt this verifier can read.',
+  too_many_receipts:'Too many receipts in one paste. Send fewer.'
+};
+var $ = function(id){ return document.getElementById(id); };
+function render(html){ $('out').innerHTML = html; }
+function card(cls, verdict, idx, why, computed){
+  return '<div class="res '+cls+'"><span class="v">'+verdict+'</span>'+
+    (idx!=null?'<span class="idx">receipt '+idx+'</span>':'')+
+    '<p class="why">'+why+'</p>'+
+    (computed?'<code translate="no">calculada '+computed+'</code>':'')+'</div>';
+}
+function row(i, r){
+  var ok = r.verified === true;
+  return card(ok?'ok':'bad', ok?'VERIFIED':'NOT VERIFIED', i+1,
+    ok ? 'La huella coincide. Esta predicción es, byte por byte, la que se selló.'
+       : (REASONS[r.reason] || 'Este comprobante no se verificó.'),
+    r.computed);
+}
+
+$('demo').addEventListener('click', function(){
+  $('in').value = JSON.stringify(SAMPLE, null, 2);
+  render('');
+  $('in').focus();
+});
+
+$('go').addEventListener('click', async function(){
+  var raw = $('in').value.trim();
+  if (!raw){ render(card('bad','NOTHING PASTED',null,'Pega un comprobante en el cuadro de arriba, o presiona el botón de ejemplo.')); return; }
+  var body;
+  try { body = JSON.parse(raw); }
+  catch(e){ render(card('bad','NOT VALID JSON',null,'Pega el comprobante exactamente como se copió, incluyendo las llaves exteriores.')); return; }
+  $('go').disabled = true;
+  render('<div class="res"><span class="v" style="color:var(--ink3)">CHECKING</span></div>');
+  try{
+    var res = await fetch(ENDPOINT, {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(body)});
+    // A 404 means the verifier is not deployed. Say THAT, never "not verified": reporting a
+    // deployment gap as a failed receipt would accuse an honest receipt.
+    if (res.status === 404){
+      render(card('bad','VERIFIER UNAVAILABLE',null,'El servicio de verificación no está disponible en esta dirección. Esto no dice nada sobre tu comprobante.'));
+      $('led').className='led down'; return;
+    }
+    var data = await res.json();
+    var list = Array.isArray(data.results) ? data.results : [data];
+    render(list.map(row).join(''));
+    $('led').className='led up';
+  } catch(e){
+    render(card('bad','COULD NOT REACH THE VERIFIER',null,'La solicitud no se completó. Esto no dice nada sobre tu comprobante.'));
+    $('led').className='led down';
+  } finally { $('go').disabled = false; }
+});
+})();
+</script>
+</body>
+</html>

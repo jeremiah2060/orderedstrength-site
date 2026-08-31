@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es-419">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.className="js";</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El registro · OrderedStrength</title>
+<meta name="description" content="El registro público de precisión. Qué contendrá, qué prueba, y una declaración honesta de que todavía no empieza.">
+<meta property="og:title" content="El registro · OrderedStrength">
+<meta property="og:description" content="El registro público de precisión. Qué contendrá, qué prueba, y una declaración honesta de que todavía no empieza.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OrderedStrength">
+<meta property="og:image" content="/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: a coach who writes it down before you lift.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="/assets/og.jpg">
+<meta name="theme-color" content="#060709">
+<link rel="preload" href="/assets/fonts/public-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/archivo-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/record/">
+<link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/record/">
+<link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/record/">
+<link rel="stylesheet" href="/assets/site.css?v=8b051bd229">
+<style>
+.ledger{margin:2rem 0 0;max-width:64rem;background-color:var(--e1);border-radius:12px;overflow:hidden;overflow:clip;box-shadow:var(--shadow-3)}
+.lhead{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.875rem 1.125rem;
+       border-bottom:1px solid var(--line);background:var(--raised)}
+.lhead .lbl{font-family:var(--mono);font-size:.6875rem;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3)}
+.lstate{font-family:var(--mono);font-size:.75rem;padding:.25rem .625rem;border-radius:100px;
+        background:rgba(245,158,11,.15);color:var(--amber);white-space:nowrap}
+.lstate.live{background:var(--teal-dim);color:var(--teal)}
+.lbody{padding:1.5rem 1.125rem}
+.empty{text-align:left;max-width:48rem;margin:0}
+.empty h3{color:var(--ink);margin-bottom:.5rem}
+.empty p{font-size:.875rem;color:var(--ink3);margin:0 0 .875rem}
+.anchor{display:grid;grid-template-columns:7rem 1fr;gap:1rem;padding:.75rem 0;
+        border-top:1px solid var(--line-soft);align-items:baseline}
+.anchor .d{font-family:var(--mono);font-size:.8125rem;color:var(--ink2)}
+.anchor .h{font-family:var(--mono);font-size:.75rem;color:var(--teal);word-break:break-all}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:2rem 0 0;max-width:64rem}
+.two .card p{font-size:.875rem;color:var(--ink3);margin:0}
+.two .card h3{color:var(--ink)}
+.two .card .yes{color:var(--teal)} .two .card .no{color:var(--amber)}
+@media (max-width:40rem){.two{grid-template-columns:1fr}.anchor{grid-template-columns:1fr;gap:.125rem}}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <a class="wordmark" translate="no" href="/es/"><span class="led up" aria-hidden="true"></span>OrderedStrength</a>
+  <nav>
+    <a href="/es/how-it-works/">Cómo funciona</a>
+    <a href="/es/stronger/" class="opt">Más fuerte</a>
+    <a href="/es/record/" class="opt" aria-current="page">El registro</a>
+    <a href="/es/verify/">Verificar</a>
+    <a href="/es/join/" class="cta">Únete a la prueba</a>
+  </nav>
+  <div class="prog" aria-hidden="true"></div>
+</div>
+
+<main>
+
+  <section class="scene reading">
+    <div class="pagehead">
+      <p class="eyebrow">El registro</p>
+      <h1>Cada decisión que toma, calificada. Incluidas las que erró.</h1>
+      <p class="sub">No hemos encontrado otra app en este mercado que publique con qué frecuencia acertó. Si
+    existe alguna, dínoslo y la enlazamos. Esta página es donde va el nuestro, y se publica antes
+    de cobrarle a nadie.</p>
+    </div>
+  </section>
+
+  <section class="scene tight">
+    <div class="ledger">
+      <div class="lhead">
+        <span class="lbl">Anclas diarias de compromiso</span>
+        <span class="lstate" id="lstate">consultando</span>
+      </div>
+      <div class="lbody" id="lbody">
+        <div class="empty">
+          <h3>Todavía no empieza.</h3>
+          <p>Leyendo el repositorio público.</p>
+        </div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:1rem">Fuente:
+      <a href="https://github.com/jeremiah2060/orderedstrength-receipts" style="color:var(--teal)">github.com/jeremiah2060/orderedstrength-receipts</a>.
+      Se lee en vivo desde GitHub cada vez que carga esta página, así que lo que ves aquí es lo
+      que el repositorio realmente contiene y no un número que escribimos nosotros.</p>
+  </section>
+
+  <section class="scene reading">
+    <p class="eyebrow">Dos afirmaciones distintas</p>
+    <h2>Lo que prueba un comprobante, y lo que solo el ancla puede probar.</h2>
+    <div class="two">
+      <div class="card">
+        <h3>¿Se editó después?</h3>
+        <p class="yes" style="font-family:var(--mono);font-size:.75rem;margin-bottom:.5rem">SE PUEDE RESPONDER HOY</p>
+        <p>Un comprobante lleva la predicción, un nonce aleatorio y una huella tomada sobre ambos. Vuelve a calcularla y sabrás si se movió un solo carácter. Puedes hacerlo ahora mismo en el  <a href="/es/verify/" style="color:var(--teal)">verificador</a>, or break one yourself on the <a href="/es/#seal" style="color:var(--teal)">página principal</a>.</p>
+      </div>
+      <div class="card">
+        <h3>¿De verdad se hizo antes?</h3>
+        <p class="no" style="font-family:var(--mono);font-size:.75rem;margin-bottom:.5rem">TODAVÍA NO SE PUEDE RESPONDER</p>
+        <p>Eso necesita una marca de tiempo que no controlamos. Publicar un hash raíz por día en un repositorio público la da: las fechas de los commits vienen de GitHub, no de nosotros. Hasta que aterrice la primera ancla, lo decimos en vez de insinuar una prueba que no tenemos.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene reading">
+    <p class="eyebrow">Por qué empieza vacío</p>
+    <h2>Rellenarlo hacia atrás destruiría lo único para lo que sirve.</h2>
+    <p>Podríamos generar anclas para cada predicción ya sellada en un teléfono y publicarlas hoy.
+    La página se vería establecida. También sería inútil, porque un registro armado después de
+    conocer los resultados no prueba nada sobre cuándo se decidió cada cosa.</p>
+    <p>Así que el registro empieza el día que empieza, y el vacío anterior se declara en vez de
+    esconderse. Ese es el producto entero en una sola decisión.</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot">
+    <div class="foot__mark">
+      <a class="wordmark" translate="no" href="/es/">OrderedStrength</a>
+      <p>Un coach de fuerza para iPhone que anota cada sesión antes de que levantes, y después
+      se califica a sí mismo con lo que escribió.</p>
+    </div>
+    <nav class="foot__col" aria-label="El producto">
+      <p class="foot__label">El producto</p>
+      <a href="/es/how-it-works/">Cómo funciona</a>
+      <a href="/es/stronger/">Ponerse más fuerte</a>
+      <a href="/es/join/">Únete a la prueba</a>
+    </nav>
+    <nav class="foot__col" aria-label="El registro">
+      <p class="foot__label">El registro</p>
+      <a href="/es/record/">Anclas publicadas</a>
+      <a href="/es/verify/">Verificar un comprobante</a>
+    </nav>
+    <nav class="foot__col" aria-label="La letra chica">
+      <p class="foot__label">La letra chica</p>
+      <a href="/es/app-privacy/">Privacidad</a>
+      <a href="/es/support/">Soporte</a>
+    </nav>
+  </div>
+  <div class="foot__panel">
+    <span>Compilación <b class="stamp" translate="no">8b051bd229</b></span>
+    <span>iPhone &middot; en pruebas</span>
+    <span>Tu entrenamiento se calcula en tu dispositivo</span>
+  </div>
+</footer>
+
+<script src="/assets/site.js?v=5fd125c32d" defer></script>
+<script>
+(function(){
+'use strict';
+var API = 'https://api.github.com/repos/jeremiah2060/orderedstrength-receipts/contents/anchors';
+var state = document.getElementById('lstate');
+var body = document.getElementById('lbody');
+
+function empty(reason){
+  state.textContent = 'ninguna todavía';
+  body.innerHTML =
+    '<div class="empty"><h3>Todavía no hay anclas publicadas.</h3>' +
+    '<p>' + reason + '</p>' +
+    '<p>When the first one lands, this list fills with one line per day: the date, and the root ' +
+    'raíz que cubre cada predicción sellada ese día. Nada más, para siempre.</p></div>';
+}
+
+fetch(API, { headers: { 'accept': 'application/vnd.github+json' } })
+  .then(function(r){
+    if (r.status === 404) { empty('El repositorio existe y la carpeta de anclas todavía no se ha creado, que es el estado honesto al ' + new Date().toISOString().slice(0,10) + '.'); return null; }
+    if (!r.ok) throw new Error('http ' + r.status);
+    return r.json();
+  })
+  .then(function(list){
+    if (!list) return;
+    var files = list.filter(function(f){ return f.type === 'file' && /\.txt$|\.json$/.test(f.name); });
+    if (!files.length){ empty('La carpeta de anclas existe pero todavía no contiene raíces publicadas.'); return; }
+    files.sort(function(a,b){ return a.name < b.name ? 1 : -1; });
+    state.textContent = files.length + ' publicadas';
+    state.className = 'lstate live';
+    body.innerHTML = files.slice(0, 60).map(function(f){
+      return '<div class="anchor"><span class="d">' + f.name.replace(/\.(txt|json)$/,'') +
+             '</span><a class="h" href="' + f.html_url + '">' + f.sha.slice(0,40) + '</a></div>';
+    }).join('');
+  })
+  .catch(function(){
+    state.textContent = 'inalcanzable';
+    body.innerHTML = '<div class="empty"><h3>No se pudo leer el repositorio.</h3>' +
+      '<p>GitHub no respondió, así que esta página no va a adivinar un número. ' +
+      '<a href="https://github.com/jeremiah2060/orderedstrength-receipts" style="color:var(--teal)">' +
+      'Abre el repositorio directamente</a> y léelo tú mismo.</p></div>';
+  });
+})();
+</script>
+</body>
+</html>
