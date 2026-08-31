@@ -74,7 +74,14 @@ SEEDED_LIFTS = {
 # must still audit a capture directory on a machine that has only the website checked out.
 APP_FIXTURE = os.path.expanduser(
     '~/Desktop/OrderedStrength22/OrderedStrength2/Jerry/JerryEnvironment.swift')
-SEEDED_RESERVE = 2                    # the reserve the seeder logs on every working set
+# 🔒 THE RESERVE IS READ FROM THE FIXTURE TOO, AND IT WAS A CONSTANT HERE UNTIL 2026-08-31.
+# This file called itself self-deriving while pinning `SEEDED_RESERVE = 2` beside a comment
+# saying "the reserve the seeder logs on every working set". The seeder stopped doing that at
+# bd042841, when the reserve began riding the rep scheme (sixes at 1, eights at 2, tens at 3).
+# The pinned 2 would not have gone red. It would have computed a worst case from a reserve the
+# fixture no longer uses and printed it with two decimal places, which is the failure this
+# whole file exists to stop being: CONFIDENTLY WRONG BEATS RED, AND THAT IS THE PROBLEM.
+SEEDED_RESERVE_FALLBACK = 2           # used only when the helper cannot be read at all
 BAND_REFERENCE_BODYWEIGHT_KG = 82.0   # the athlete the ceiling is expressed for
 
 
@@ -101,6 +108,23 @@ def seeded_rep_counts(src=None):
                        src, re.S)
     return sorted({int(x) for x in re.findall(r'(?:reps:|row\.reps\s*=)\s*(\d+)',
                                               (region.group(0) if region else src))})
+
+
+def seeded_reserve_for(reps, src=None):
+    """The reserve the seeder logs for a given rep count, read out of the fixture's helper.
+
+    `coldStartReserveForReps` is `reps <= A ? X : (reps >= B ? Y : Z)`. Parsed rather than
+    copied, for the same reason the rep cycle is.
+    """
+    src = src if src is not None else _fixture_source()
+    if src is None:
+        return SEEDED_RESERVE_FALLBACK
+    m = re.search(r'func coldStartReserveForReps[^\n]*\n\s*reps <= (\d+) \? (\d+) : '
+                  r'\(reps >= (\d+) \? (\d+) : (\d+)\)', src)
+    if not m:
+        return SEEDED_RESERVE_FALLBACK
+    lo, lov, hi, hiv, mid = (int(m.group(i)) for i in range(1, 6))
+    return lov if reps <= lo else (hiv if reps >= hi else mid)
 
 
 def _e1rm(w, reps):
@@ -150,9 +174,10 @@ def required_ceiling(src=None):
     for f in fr:
         for r in reps:
             per_bw = (f + nudge(r)) * (1.0 + career)      # deep-session load asymptote
-            est = _e1rm(per_bw, r + SEEDED_RESERVE)       # per kg of bodyweight
+            est = _e1rm(per_bw, r + seeded_reserve_for(r, src))   # per kg of bodyweight
             if est > worst:
-                worst, where = est, f'fraction {f} at {r} reps'
+                worst, where = est, (f'fraction {f} at {r} reps, reserve '
+                                     f'{seeded_reserve_for(r, src)}')
     return worst, where
 
 
