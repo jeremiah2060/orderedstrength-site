@@ -323,7 +323,7 @@ HOME = {
         'Una bitácora recuerda. Un plan te entrega un programa y deja de escuchar. Jerry elige el ejercicio, fija la carga, y después cambia el resto de la sesión en cuanto tu reserva le dice que el día no va como esperaba.',
     'He holds the load, asks for one more rep, and adds the plate once you have earned it.':
         'Mantiene la carga, te pide una repetición más, y agrega el disco una vez que te lo ganaste.',
-    'Back Squat': 'Sentadilla trasera',
+    '>Back Squat': '>Sentadilla trasera',
     'set 3 of 4': 'serie 3 de 4',
     'Set 1': 'Serie 1', 'Set 2': 'Serie 2', 'Set 3': 'Serie 3', 'Set 4': 'Serie 4',
     # 🔒 SCOPED, NOT BARE. These are mockup labels and each is also a common English word
@@ -809,4 +809,186 @@ FRAGMENTS3 = {
 #    possible place to leave one.
 EMPHASIS = {
     '<em>before</em>': '<em>antes</em>',
+}
+
+
+# ── EVERYTHING THE FIRST TEN GATES COULD NOT SEE ─────────────────────────────────────────
+# The CEO screenshotted the seal console and found English in it. Every string below was
+# invisible to lang-gate because it is SHORT (under six words), lives in an element the gate
+# did not scan, sits in an alt attribute, or is built by JavaScript at runtime. All four are
+# now covered by the gate; these are the fixes.
+SEAL = {
+    # The console's own labels.
+    '>Exercise<': '>Ejercicio<',
+    '>and at most<': '>y como máximo<',
+    'kg &middot; last session repeated': 'kg &middot; última sesión repetida',
+    '>Put it back<': '>Devuélvelo<',
+    'Nothing here is stored by us. The arithmetic ran on your machine.':
+        'Nosotros no guardamos nada de esto. La aritmética corrió en tu máquina.',
+    '>unchanged since session 1<': '>sin cambios desde la sesión 1<',
+}
+
+SEAL_SCRIPT = {
+    # 🔒 THE STATIC HTML WAS ALREADY SPANISH AND THE SCRIPT OVERWROTE IT ON LOAD. `recompute()`
+    # runs on every keystroke AND once at startup, so the reader never sees the translated
+    # markup: the page renders Spanish, then paints these two English words over it before the
+    # first frame. Verified by reading index.html:759-761.
+    "ok ? 'VERIFIED' : 'NOT VERIFIED'": "ok ? 'VERIFICADO' : 'NO VERIFICADO'",
+    "ok ? 'matches the seal' : 'diverges from the seal'":
+        "ok ? 'coincide con el sello' : 'no coincide con el sello'",
+    "'NOT VERIFIED'": "'NO VERIFICADO'",
+    "'diverges from the seal'": "'no coincide con el sello'",
+    "'You changed the '": "'Cambiaste '",
+    "'. Every character after the first difference is wrong, and only the original value puts it back.'":
+        "'. Cada carácter después de la primera diferencia está mal, y solo el valor original lo devuelve.'",
+    "'This page and the live verifier computed the same fingerprint independently.'":
+        "'Esta página y el verificador en vivo calcularon la misma huella de forma independiente.'",
+    "'The verifier accepted the receipt but this page computed a different fingerprint. Trust the server, not this page.'":
+        "'El verificador aceptó el comprobante pero esta página calculó una huella distinta. Confía en el servidor, no en esta página.'",
+    "'The verifier did not confirm this receipt. It reported:'":
+        "'El verificador no confirmó este comprobante. Reportó:'",
+}
+
+VERIFY_SCRIPT2 = {
+    "'VERIFIER UNAVAILABLE'": "'VERIFICADOR NO DISPONIBLE'",
+    "'COULD NOT REACH THE VERIFIER'": "'NO SE PUDO ALCANZAR EL VERIFICADOR'",
+    "'CHECKING'": "'COMPROBANDO'",
+}
+
+# ── ALT TEXT. Every one was English. A screen reader on a Spanish page was being read to in
+#    English, and a search engine indexing /es/ saw English descriptions of every image.
+#    🔒 "Back Squat" IS A SUBSTRING OF "Barbell Back Squat", and translating the short one
+#    produced "Barbell Sentadilla trasera" inside two of these. Keyed whole.
+ALT = {
+    'alt="The Trust Intelligence screen, badged Población, listing open investigations and naming the evidence each one still needs before it will make a claim."':
+        'alt="La pantalla de Inteligencia de Confianza, con la insignia Población, que enumera las investigaciones abiertas y nombra la evidencia que cada una todavía necesita antes de afirmar algo."',
+    'alt="The OrderedStrength dashboard after one logged session. The mode badge reads Building, the fatigue and recovery rings are labelled Pop. Est. at 6 and 95 percent, and the Calibration ring carries no number at all."':
+        'alt="El panel de OrderedStrength después de una sesión registrada. La insignia de modo dice Construyendo, los anillos de fatiga y recuperación están marcados Est. pobl. en 6 y 95 por ciento, y el anillo de Calibración no lleva ningún número."',
+    'alt="The OrderedStrength dashboard after one logged session, showing an Intelligence Mode badge reading Building, fatigue and recovery rings labelled Pop. Est., and a line reading that all five intelligence surfaces open on evidence, not time."':
+        'alt="El panel de OrderedStrength después de una sesión registrada, con la insignia de Modo de inteligencia en Construyendo, los anillos de fatiga y recuperación marcados Est. pobl., y una línea que dice que las cinco superficies de inteligencia se abren con evidencia, no con el tiempo."',
+    'alt="The dashboard after one logged session. Fatigue reads 6 percent and recovery 95 percent, both labelled Pop. Est., the Calibration ring carries no number, and the best lift on record is a Barbell Back Squat at an estimated one-rep maximum of 56.3 kilograms."':
+        'alt="El panel después de una sesión registrada. La fatiga marca 6 por ciento y la recuperación 95 por ciento, ambas etiquetadas Est. pobl., el anillo de Calibración no lleva número, y lo más fuerte registrado es una Sentadilla Trasera con Barra con un máximo estimado de una repetición de 56,3 kilogramos."',
+    'alt="The same dashboard after one hundred logged sessions. The headline says the load now comes from the athlete\'s own sets rather than population averages, the best lift on record is a Barbell Back Squat at Estimated 1RM 129.2 kg, and the Calibration ring now reads 84 percent labelled Your RIR."':
+        'alt="El mismo panel después de cien sesiones registradas. El titular dice que la carga ahora viene de las propias series del atleta y no de promedios poblacionales, lo más fuerte registrado es una Sentadilla Trasera con Barra con 1RM estimado de 129,2 kg, y el anillo de Calibración ahora marca 84 por ciento con la etiqueta Tu RIR."',
+    'alt="The same dashboard after one hundred sessions, this time with the athlete\'s soreness reported. Fatigue and recovery are both labelled Your Data, recovery reads 75%, and the headline says his load and his recovery rate are both measured from him now."':
+        'alt="El mismo panel después de cien sesiones, esta vez con el dolor muscular del atleta reportado. La fatiga y la recuperación están etiquetadas Tus datos, la recuperación marca 75 por ciento, y el titular dice que su carga y su tasa de recuperación ahora se miden a partir de él."',
+    'alt="The Trust Intelligence screen, listing open investigations and the evidence each one still needs before it will make a claim."':
+        'alt="La pantalla de Inteligencia de Confianza, que enumera las investigaciones abiertas y la evidencia que cada una todavía necesita antes de afirmar algo."',
+}
+
+PRIVACY2 = {
+    '>If you enable<': '>Si activas<',
+    ' (speech synthesis) and ': ' (síntesis de voz) y ',
+}
+
+
+# ── FINAL PASS. Exact source forms, each verified by reading the byte context first. ──────
+# Four of my previous keys missed for four DIFFERENT reasons, and every one is a lesson:
+#   * "kg &middot;" vs "kg ·"          the source uses the literal character, not the entity
+#   * "badged Población"               I keyed off the BUILT page again, so it held Spanish
+#   * "It reported:'"                  the real string has a TRAILING SPACE before the quote
+#   * ">If you enable<"                the node ends at an <em>, so it is "If you enable "
+FINAL = {
+    'kg · last session repeated': 'kg · última sesión repetida',
+    'alt="The Trust Intelligence screen, badged Population, listing open investigations and naming the evidence each one still needs before it will make a claim."':
+        'alt="La pantalla de Inteligencia de Confianza, con la insignia Población, que enumera las investigaciones abiertas y nombra la evidencia que cada una todavía necesita antes de afirmar algo."',
+    '<p>If you enable ': '<p>Si activas ',
+}
+
+FINAL_SCRIPT = {
+    "'unchanged since session 1' + (n > 1 ? ' · ' + n + ' sessions later' :":
+        "'sin cambios desde la sesión 1' + (n > 1 ? ' · ' + n + ' sesiones después' :",
+    "? 'Nothing here is stored by us. The arithmetic ran on your machine.'":
+        "? 'Nosotros no guardamos nada de esto. La aritmética corrió en tu máquina.'",
+    "'The verifier did not confirm this receipt. It reported: '":
+        "'El verificador no confirmó este comprobante. Reportó: '",
+    "' and the '": "' y '",
+}
+
+
+# ── THE EVIDENCE DIAL'S LIVE TEXT. Built entirely in JavaScript, so every gate that reads
+#    markup was blind to it, and it is the interactive centrepiece of the home page: the
+#    sentence changes as the reader drags the slider. Four strings, all user-facing prose.
+DIAL_SCRIPT = {
+    "' sessions later'": "' sesiones después'",
+    "' of your sessions, blended with population research. Confidence: building.'":
+        "' de tus sesiones, combinado con investigación poblacional. Confianza: construyendo.'",
+    "' sessions: your top set lands between <b>'":
+        "' sesiones: tu serie más pesada cae entre <b>'",
+    "' kg</b>, nineteen times out of twenty.'":
+        "' kg</b>, diecinueve veces de cada veinte.'",
+    "'Basis: your own logged sets. I sealed this range before the session and I will grade myself against it afterwards.'":
+        "'Base: tus propias series registradas. Sellé este rango antes de la sesión y me voy a calificar contra él después.'",
+}
+
+# The privacy controls list. Source capitalisation is sentence case, not Title Case, and my
+# earlier keys used the app's Title Case, so none of them matched.
+PRIVACY3 = {
+    '<strong>Back up everything</strong> and <strong>restore</strong>':
+        '<strong>Respaldar todo</strong> y <strong>restaurar</strong>',
+    '<strong>Delete all training data</strong>': '<strong>Borrar todos los datos de entrenamiento</strong>',
+    '<strong>Turn off usage sharing</strong>': '<strong>Apagar el envío de uso</strong>',
+    '<strong>Turn off Cloud Answers</strong>': '<strong>Apagar las Respuestas en la Nube</strong>',
+    '<strong>Revoke Apple Health access</strong>': '<strong>Revocar el acceso a Apple Health</strong>',
+    '<strong>Delete the app</strong>': '<strong>Borrar la app</strong>',
+}
+
+
+# ── The last four. A standalone <b>ruled out</b> pull-quote and the verifier's four verdict
+#    words, which are the entire answer that page exists to give.
+LAST = { '>ruled out<': '>descartado<' }
+
+VERIFY_SCRIPT3 = {
+    "'NOT VERIFIED'": "'NO VERIFICADO'",
+    "'NOTHING PASTED'": "'NO PEGASTE NADA'",
+    "'NOT VALID JSON'": "'JSON NO VÁLIDO'",
+    "'VERIFIED'": "'VERIFICADO'",
+}
+
+
+# ── THE VERIFIER'S REASONS. Every message it can give a reader who pasted something that did
+#    not verify, plus the input placeholder. This page exists to give exactly one answer, and
+#    the answer was in English on the Spanish site.
+VERIFY_REASONS = {
+    "'Paste the receipt here, including the outer brackets'":
+        "'Pega el comprobante aquí, incluyendo las llaves exteriores'",
+    "'The fingerprint does not match the prediction. Either the prediction was changed after it was sealed, or this is not a genuine receipt.'":
+        "'La huella no coincide con la predicción. O la predicción se cambió después de sellarla, o este no es un comprobante genuino.'",
+    "'This receipt uses a scheme this verifier does not understand. It was not refused on its contents.'":
+        "'Este comprobante usa un esquema que este verificador no entiende. No fue rechazado por su contenido.'",
+    "'The nonce is not a valid 32 byte hex value, so no fingerprint can be recomputed.'":
+        "'El nonce no es un valor hexadecimal válido de 32 bytes, así que no se puede recalcular ninguna huella.'",
+    "'The sealed fingerprint is not a valid 32 byte hex value.'":
+        "'La huella sellada no es un valor hexadecimal válido de 32 bytes.'",
+    "'The prediction fields are missing or empty, so there is nothing to hash.'":
+        "'Los campos de la predicción faltan o están vacíos, así que no hay nada que hashear.'",
+    "'This is not a receipt this verifier can read.'":
+        "'Este no es un comprobante que este verificador pueda leer.'",
+    "'Too many receipts in one paste. Send fewer.'":
+        "'Demasiados comprobantes en un solo pegado. Envía menos.'",
+}
+
+
+# ── The last real misses: text nodes that sit BEFORE an inline <code>, so my earlier keys
+#    (which started after it) never covered them.
+LEADS = {
+    '<span>The badge reads ': '<span>La insignia dice ',
+    '<span>Fatigue and recovery are marked ': '<span>La fatiga y la recuperación están marcadas ',
+    '<span>Fatigue ': '<span>Fatiga ',
+    ' and recovery ': ' y recuperación ',
+    ', both stamped ': ', ambas estampadas ',
+}
+
+
+# ── The receipt-card <dt> labels on /how-it-works/ and the last Settings reference. These are
+#    three-to-nine character labels: too short for a function-word test, which is exactly the
+#    class the gate's second arm exists for.
+DT_LABELS = {
+    '<dt>from</dt>': '<dt>de</dt>',
+    '<dt>declines</dt>': '<dt>se niega</dt>',
+    '<dt>refuses</dt>': '<dt>rechaza</dt>',
+    '<dt>if unsure</dt>': '<dt>si no está seguro</dt>',
+    '<dt>ruled out</dt>': '<dt>descartado</dt>',
+    # The app's own Spanish for its Settings screen, from Localizable.xcstrings.
+    ', in Settings.': ', en Configuración.',
 }

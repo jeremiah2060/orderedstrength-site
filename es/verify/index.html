@@ -152,13 +152,13 @@ var SAMPLE = {
           {key:'naiveBaselineKg',value:'1000000'},{key:'sealedFor',value:'1755916800'}]
 };
 var REASONS = {
-  mismatch:'The fingerprint does not match the prediction. Either the prediction was changed after it was sealed, or this is not a genuine receipt.',
-  unsupported_scheme:'This receipt uses a scheme this verifier does not understand. It was not refused on its contents.',
-  malformed_nonce:'The nonce is not a valid 32 byte hex value, so no fingerprint can be recomputed.',
-  malformed_commitment:'The sealed fingerprint is not a valid 32 byte hex value.',
-  malformed_fields:'The prediction fields are missing or empty, so there is nothing to hash.',
-  malformed_body:'This is not a receipt this verifier can read.',
-  too_many_receipts:'Too many receipts in one paste. Send fewer.'
+  mismatch:'La huella no coincide con la predicción. O la predicción se cambió después de sellarla, o este no es un comprobante genuino.',
+  unsupported_scheme:'Este comprobante usa un esquema que este verificador no entiende. No fue rechazado por su contenido.',
+  malformed_nonce:'El nonce no es un valor hexadecimal válido de 32 bytes, así que no se puede recalcular ninguna huella.',
+  malformed_commitment:'La huella sellada no es un valor hexadecimal válido de 32 bytes.',
+  malformed_fields:'Los campos de la predicción faltan o están vacíos, así que no hay nada que hashear.',
+  malformed_body:'Este no es un comprobante que este verificador pueda leer.',
+  too_many_receipts:'Demasiados comprobantes en un solo pegado. Envía menos.'
 };
 var $ = function(id){ return document.getElementById(id); };
 function render(html){ $('out').innerHTML = html; }
@@ -170,7 +170,7 @@ function card(cls, verdict, idx, why, computed){
 }
 function row(i, r){
   var ok = r.verified === true;
-  return card(ok?'ok':'bad', ok?'VERIFIED':'NOT VERIFIED', i+1,
+  return card(ok?'ok':'bad', ok?'VERIFICADO':'NO VERIFICADO', i+1,
     ok ? 'La huella coincide. Esta predicción es, byte por byte, la que se selló.'
        : (REASONS[r.reason] || 'Este comprobante no se verificó.'),
     r.computed);
@@ -184,10 +184,10 @@ $('demo').addEventListener('click', function(){
 
 $('go').addEventListener('click', async function(){
   var raw = $('in').value.trim();
-  if (!raw){ render(card('bad','NOTHING PASTED',null,'Pega un comprobante en el cuadro de arriba, o presiona el botón de ejemplo.')); return; }
+  if (!raw){ render(card('bad','NO PEGASTE NADA',null,'Pega un comprobante en el cuadro de arriba, o presiona el botón de ejemplo.')); return; }
   var body;
   try { body = JSON.parse(raw); }
-  catch(e){ render(card('bad','NOT VALID JSON',null,'Pega el comprobante exactamente como se copió, incluyendo las llaves exteriores.')); return; }
+  catch(e){ render(card('bad','JSON NO VÁLIDO',null,'Pega el comprobante exactamente como se copió, incluyendo las llaves exteriores.')); return; }
   $('go').disabled = true;
   render('<div class="res"><span class="v" style="color:var(--ink3)">CHECKING</span></div>');
   try{
@@ -195,7 +195,7 @@ $('go').addEventListener('click', async function(){
     // A 404 means the verifier is not deployed. Say THAT, never "not verified": reporting a
     // deployment gap as a failed receipt would accuse an honest receipt.
     if (res.status === 404){
-      render(card('bad','VERIFIER UNAVAILABLE',null,'El servicio de verificación no está disponible en esta dirección. Esto no dice nada sobre tu comprobante.'));
+      render(card('bad','VERIFICADOR NO DISPONIBLE',null,'El servicio de verificación no está disponible en esta dirección. Esto no dice nada sobre tu comprobante.'));
       $('led').className='led down'; return;
     }
     var data = await res.json();
@@ -203,7 +203,7 @@ $('go').addEventListener('click', async function(){
     render(list.map(row).join(''));
     $('led').className='led up';
   } catch(e){
-    render(card('bad','COULD NOT REACH THE VERIFIER',null,'La solicitud no se completó. Esto no dice nada sobre tu comprobante.'));
+    render(card('bad','NO SE PUDO ALCANZAR EL VERIFICADOR',null,'La solicitud no se completó. Esto no dice nada sobre tu comprobante.'));
     $('led').className='led down';
   } finally { $('go').disabled = false; }
 });
