@@ -19,6 +19,14 @@
 #                    was already on the page: answered.webp shows that same athlete WITH
 #                    soreness reported and the ring still empty. Sentence-scoped, so a
 #                    caption may still discuss both, just not in one breath.
+#   voice-gate.py    A SELLING PAGE TALKS TO THE LIFTER, NOT ABOUT ITSELF. Commit b8755c8
+#                    closed this on 2026-08-23 ("the site stops describing itself"), and
+#                    /stronger/ reopened it seven days later with "We spend most of these
+#                    pages proving that Jerry is honest ... This page is the other half".
+#                    Two arms: the OPENING may carry zero site-subject sentences, and page
+#                    wide the reader must outnumber the site. 🔒 THE FIRST DRAFT HAD ONLY
+#                    THE SECOND ARM AND COULD NOT GO RED ON THE REAL PARAGRAPH (6 to 2 on a
+#                    page with ten reader sentences). Falsification caught that, not review.
 #   contrast-gate.py what the EYE cannot judge on a dark screen in a dark room: every
 #                    ink-on-surface pair, computed against WCAG 2.1, read out of the
 #                    stylesheet's own tokens so it cannot go stale.
@@ -54,6 +62,8 @@ echo
 python3 tools/shot-gate.py || fail=1
 echo
 python3 tools/ring-cause-gate.py || fail=1
+echo
+python3 tools/voice-gate.py || fail=1
 echo
 python3 tools/contrast-gate.py | tail -3 || fail=1
 
