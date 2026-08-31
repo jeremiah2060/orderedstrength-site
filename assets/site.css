@@ -640,7 +640,7 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
    faked with a stock photograph: you either have three honest states of your own
    product or you do not. Each device is sized by WIDTH here, because unlike the hero
    this section has no fold to fit inside. */
-.states{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1.5rem,3vw,2.75rem);align-items:start}
+.states{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(1.5rem,3vw,2.75rem);align-items:start}
 .states > *{min-width:0}
 .state{margin:0;display:grid;gap:1.25rem;justify-items:stretch}
 .state .device{width:min(12rem,100%);height:auto;justify-self:center}
