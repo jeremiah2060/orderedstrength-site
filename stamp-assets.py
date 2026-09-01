@@ -58,7 +58,10 @@ for f in PAGES:
     s = re.sub(r'(<b class="stamp"[^>]*>)[^<]*(</b>)', r'\g<1>' + build + r'\g<2>', s)
     if s != src:
         open(f, 'w', encoding='utf-8').write(s); stamped_build += 1
-print(f"build stamp {build} written into {stamped_build} page(s)")
+# The footer display was removed 2026-09-01; this substitution is kept so a page that
+# still carries one cannot drift, and it now reports honestly when there are none.
+print(f"build stamp {build} written into {stamped_build} page(s)"
+      if stamped_build else f"build {build} (no page displays it, by design)")
 
 print(f"stamped {len(assets)} assets into {changed} page(s)")
 for a, v in assets.items(): print(f"  {a}?v={v}")

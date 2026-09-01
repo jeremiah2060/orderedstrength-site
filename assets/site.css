@@ -91,6 +91,10 @@
   --body:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --bar:5rem; --gut:clamp(1.25rem,3.5vw,3rem); --wide:min(80rem,100vw);
+  /* The hero, and ONLY the hero, runs one step wider than the grid. 92rem rather
+     than 100vw because the shot is height-bound and cannot fill more than this;
+     past it the widening buys air, not product. Measured, not chosen. */
+  --hero-wide:min(92rem,100vw);
   --rail:clamp(0px, calc((100vw - var(--wide)) / 2), 7.5rem);
 
   /* MOTION HAS TWO JOBS AND THEY NEED DIFFERENT CURVES. Something arriving should settle
@@ -224,7 +228,7 @@ main{padding-top:var(--bar)}
    margin exists it simply is not built. */
 .rail{position:fixed;left:0;top:var(--bar);bottom:0;width:var(--rail);z-index:60;
       pointer-events:none;display:none;
-      font-family:var(--mono);font-size:.625rem;letter-spacing:.18em;text-transform:uppercase}
+      font-family:var(--mono);font-size:.75rem;letter-spacing:.18em;text-transform:uppercase}
 @media (min-width:95rem){.js .rail{display:block}}
 .rail__line{position:absolute;left:50%;top:2rem;bottom:2rem;width:1px;transform:translateX(-.5px);
       background:linear-gradient(180deg,transparent 0,var(--line) 9%,var(--line) 91%,transparent 100%)}
@@ -275,6 +279,25 @@ main > .scene:nth-of-type(even)::before{--pool:66%}
 .hero{min-height:calc(100svh - var(--bar));display:flex;flex-direction:column;
       justify-content:space-between;gap:clamp(2rem,4vw,3rem);
       padding-top:clamp(2.5rem,7vh,5.5rem);padding-bottom:clamp(1.5rem,3vh,2.5rem)}
+/* 🔒 THE HERO IS THE ONE SECTION THAT MAY BE WIDER THAN THE GRID, AND IT WIDENS TO THE RIGHT
+   ONLY. Measured 2026-09-01: every `.scene` caps at --wide, so at 1920px the hero held 1184px
+   of content between 368px rails, and the product shot, which is the single most valuable
+   thing on the page, was rendered smaller than the display could show.
+
+   Widening it SYMMETRICALLY would have been the obvious move and it is the wrong one: the nav
+   wordmark and every section below share one left edge, `align-gate.mjs` enforces that, and it
+   is what makes the page read as ordered rather than as boxes. A centred wider hero puts its
+   left edge OUTSIDE that line, which reads as a broken container rather than as emphasis.
+
+   So the left padding is the SAME expression the nav bar uses, to the pixel, and only the
+   right side runs out to the viewport. The eye tracks the left edge; that edge does not move. */
+.scene.hero{max-width:none;margin-left:0;margin-right:0;
+      padding-left:max(var(--gut), calc((100vw - var(--wide)) / 2 + var(--gut)));
+      padding-right:max(var(--gut), calc((100vw - var(--hero-wide)) / 2 + var(--gut)))}
+/* The headline still wraps on its own measure (17ch), so widening gives the room to the shot
+   rather than stretching the sentence into an unreadable line. */
+.scene.hero .hero-grid{grid-template-columns:minmax(0, 34rem) minmax(0, 1fr)}
+@media (max-width:56rem){.scene.hero .hero-grid{grid-template-columns:1fr}}
 .hero-grid{flex:1;align-content:center}
 .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);
            align-items:center;width:100%}
@@ -320,7 +343,7 @@ main > .scene:nth-of-type(even)::before{--pool:66%}
    against its own text as "RECEIPT JSON02" AND consumed a number, which silently pushed
    every real section on that page one out of step. Anything that wants the small engraved
    mono treatment without being a section uses .ilabel. */
-.ilabel{font-family:var(--mono);font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;
+.ilabel{font-family:var(--mono);font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;
         color:var(--ink3);margin:0 0 .75rem;display:block;text-shadow:0 1px 0 rgba(0,0,0,.6)}
 /* and a page with exactly one section has nothing to number */
 .eyebrow--bare{counter-increment:none}
@@ -406,7 +429,7 @@ hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0}
 .grid.c2{grid-template-columns:repeat(2,1fr)}
 @media (max-width:44rem){.grid.c3,.grid.c2{grid-template-columns:1fr}}
 
-.tag{display:inline-block;font-family:var(--mono);font-size:.6875rem;letter-spacing:.09em;
+.tag{display:inline-block;font-family:var(--mono);font-size:.75rem;letter-spacing:.09em;
      text-transform:uppercase;padding:.1875rem .5rem;border-radius:100px;font-weight:500}
 .tag.pop{background:rgba(192,168,127,.16);color:var(--stone)}
 .tag.bld{background:rgba(77,157,240,.16);color:var(--azure)}
@@ -449,7 +472,7 @@ hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0}
       min-width:8.5rem;padding:.8125rem 1.125rem .75rem;border-radius:10px;
       background-color:var(--e2);background-image:var(--grain);background-size:160px 160px;
       box-shadow:var(--shadow-2);
-      font-family:var(--mono);font-size:.625rem;letter-spacing:.17em;text-transform:uppercase;
+      font-family:var(--mono);font-size:.75rem;letter-spacing:.17em;text-transform:uppercase;
       color:var(--ink3);text-shadow:0 1px 0 rgba(0,0,0,.6)}
 .chip b{order:-1;font-family:var(--mono);font-weight:500;font-size:1.1875rem;letter-spacing:-.008em;
         text-transform:none;color:var(--ink);text-shadow:none}
@@ -516,7 +539,7 @@ hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0}
    The closing edge is scribed rather than ruled, lit where the light falls and dark where
    it does not, like every other edge on this page. */
 footer{border-top:0;max-width:var(--wide);margin:0 auto;position:relative;
-       padding:3.25rem var(--gut) 3rem;font-size:.8125rem;color:var(--ink3)}
+       padding:3.25rem var(--gut) 3rem;font-size:.875rem;color:var(--ink3)}
 footer::before{content:"";position:absolute;inset:0 var(--gut) auto;height:1px;
        background:linear-gradient(90deg,rgba(233,241,255,.16) 0,var(--line) 8%,
                   rgba(35,43,55,.4) 68%,transparent 100%)}
@@ -524,14 +547,14 @@ footer::before{content:"";position:absolute;inset:0 var(--gut) auto;height:1px;
       gap:clamp(1.75rem,3vw,3rem);align-items:start}
 .foot__mark .wordmark{font-size:1.25rem;margin-bottom:.75rem}
 .foot__mark p{font-size:.875rem;color:var(--ink3);max-width:30ch;margin:0;line-height:1.55}
-.foot__label{font-size:.625rem;letter-spacing:.17em;margin-bottom:.875rem}
+.foot__label{font-size:.75rem;letter-spacing:.17em;margin-bottom:.875rem}
 .foot__col{display:flex;flex-direction:column;align-items:flex-start;gap:.5625rem}
 .foot__col a{font-size:.9375rem;color:var(--ink2);transition:color .2s var(--ease)}
 .foot__col a:hover{color:var(--ink)}
 /* the stamped strip along the bottom edge */
 .foot__panel{display:flex;flex-wrap:wrap;gap:.75rem 2.25rem;align-items:center;
       margin-top:clamp(2.25rem,4vw,3.25rem);padding-top:1.125rem;position:relative;
-      font-family:var(--mono);font-size:.6875rem;letter-spacing:.11em;text-transform:uppercase;
+      font-family:var(--mono);font-size:.75rem;letter-spacing:.11em;text-transform:uppercase;
       color:var(--ink3);text-shadow:0 1px 0 rgba(0,0,0,.6)}
 .foot__panel::before{content:"";position:absolute;inset:0 0 auto;height:1px;
       background:linear-gradient(90deg,var(--line),rgba(35,43,55,.25) 70%,transparent)}
@@ -642,7 +665,7 @@ ol.loop::before{content:"";position:absolute;left:.4375rem;top:1.9rem;bottom:1.9
 ol.loop li{position:relative;counter-increment:s;display:grid;grid-template-columns:3.25rem 1fr;gap:1.125rem;
            padding:1.375rem 0;border-top:1px solid var(--line-soft)}
 ol.loop li:first-child{border-top:0}
-ol.loop li::before{content:counter(s,decimal-leading-zero);font-family:var(--mono);font-size:.8125rem;
+ol.loop li::before{content:counter(s,decimal-leading-zero);font-family:var(--mono);font-size:.875rem;
                    color:var(--teal);padding-top:.25rem;text-align:right;
                    text-shadow:0 1px 0 rgba(0,0,0,.6)}
 ol.loop li::after{content:"";position:absolute;left:.25rem;top:1.9rem;width:.4375rem;height:.4375rem;
@@ -683,7 +706,10 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
    floating card fell below the fold, which is why you could not see it properly. Height
    first, width derived from the aspect ratio, so it can never outgrow its own hero. */
 .hero-shot{position:relative;display:flex;justify-content:center;align-items:center;
-  --device-h:clamp(19rem, calc(100svh - 21rem), 36rem);
+  /* Ceiling raised 36rem -> 40rem with the hero widening: the shot is the most
+     valuable thing on this page and it was capped below what a 1080px display can
+     show. The clamp still yields to short viewports, so nothing overflows the fold. */
+  --device-h:clamp(19rem, calc(100svh - 21rem), 40rem);
   --device-w:calc(var(--device-h) * 0.47768);   /* 1295 / 2711 */
   height:var(--device-h)}
 .devices{position:relative;height:100%;width:100%}
@@ -704,7 +730,7 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
   box-shadow:0 1.75rem 4.5rem rgba(0,0,0,.85),0 0 0 1px var(--line)}
 .hero-shot .appcard.float .cap{margin-bottom:.75rem}
 .hero-shot .appcard.float .lift{padding:.375rem 0}
-.hero-shot .appcard.float .nm{font-size:.8125rem}
+.hero-shot .appcard.float .nm{font-size:.875rem}
 .hero-shot .appcard.float .vd{font-size:.75rem}
 @media (max-width:72rem){
   .hero-shot{height:auto;flex-direction:column;gap:1rem}
@@ -879,7 +905,7 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
 /* ENGRAVED, NOT PRINTED. A one-pixel dark line under a small caption on a dark panel is
    how a legend milled into an instrument's face catches light. It applies ONLY to the
    mono instrument labels, never to body copy, where it would only smear the text. */
-.appcard .cap,.callout .n{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;
+.appcard .cap,.callout .n{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;
               color:var(--ink3);margin:0 0 .875rem;text-shadow:0 1px 0 rgba(0,0,0,.6)}
 .callout .n{margin:0;text-transform:none}
 .appcard .said{font-size:.875rem;color:var(--ink2);line-height:1.5;margin:.875rem 0 0;

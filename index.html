@@ -28,20 +28,20 @@
 <meta property="og:locale:alternate" content="es_419">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/assets/site.css?v=110c5b0919">
+<link rel="stylesheet" href="/assets/site.css?v=f760500b85">
 <style>
 /* ── the coaching stack: real app UI, rendered rather than screenshotted ── */
 .hero .appcard{padding:1.625rem 1.75rem}
 .hero .lift{padding:.6875rem 0}
 .hero .lift .nm{font-size:.9375rem}
-.hero .lift .vd{font-size:.8125rem}
-.hero .hero .appcard .cap{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;
+.hero .lift .vd{font-size:.875rem}
+.hero .hero .appcard .cap{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;
               color:var(--ink3);margin:0 0 .75rem}
 .setline{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;padding:.4375rem 0}
 .setline + .setline{border-top:1px solid var(--line-soft)}
 .setline .n{font-family:var(--mono);font-size:.75rem;color:var(--ink3);flex:none;width:3.25rem}
 @media (max-width:34rem){.setline .n{width:2.375rem}.setline .v{font-size:.75rem}}
-.setline .v{font-family:var(--mono);font-size:.8125rem;color:var(--ink);font-weight:500;
+.setline .v{font-family:var(--mono);font-size:.875rem;color:var(--ink);font-weight:500;
              flex:1;text-align:left}
 .setline .s{font-size:.75rem;flex:none}
 .setline .s.done{color:var(--teal)} .setline .s.cut{color:var(--amber)}
@@ -53,7 +53,7 @@
 .dot.ok::after{content:"";position:absolute;inset:0;margin:auto;width:.3125rem;height:.5rem;
                border:solid var(--ground);border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
 .dot.miss{border-color:var(--amber)}
-.lift .nm{flex:1;font-size:.8125rem;color:var(--ink2);line-height:1.35}
+.lift .nm{flex:1;font-size:.875rem;color:var(--ink2);line-height:1.35}
 .lift .vd{font-size:.75rem;font-weight:600;white-space:nowrap}
 .vd.inr{color:var(--teal)} .vd.outr{color:var(--amber)}
 
@@ -73,14 +73,14 @@ input[type=range]::-moz-range-thumb{width:1.125rem;height:1.125rem;border:0;bord
   background:var(--teal);box-shadow:0 0 0 5px rgba(0,212,177,.14)}
 .versus{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:1.25rem}
 .side.them{opacity:.82}
-.side .whoi{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;
+.side .whoi{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;
             color:var(--ink3);margin:0 0 .875rem}
 .side .claim{font-size:.9375rem;color:var(--ink);line-height:1.5;margin:0 0 .75rem;flex:1}
 .side .claim b{color:var(--teal);font-weight:600}
 .side.them .claim b{color:var(--ink)}
 .side .basis{font-size:.75rem;color:var(--ink3);line-height:1.45;
              margin:auto 0 0;padding-top:.875rem;border-top:1px solid var(--line-soft)}
-.frozen{font-family:var(--mono);font-size:.6875rem;color:var(--amber);margin:.625rem 0 0}
+.frozen{font-family:var(--mono);font-size:.75rem;color:var(--amber);margin:.625rem 0 0}
 @media (max-width:40rem){.versus{grid-template-columns:1fr}}
 
 /* ── the console ── */
@@ -94,7 +94,7 @@ input[type=range]::-moz-range-thumb{width:1.125rem;height:1.125rem;border:0;bord
 .chead{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.9375rem 1.25rem;
        border-bottom:1px solid rgba(0,0,0,.5);background-color:var(--e3);
        box-shadow:inset 0 1px 0 rgba(233,241,255,.07)}
-.chead .lbl{font-family:var(--mono);font-size:.6875rem;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3)}
+.chead .lbl{font-family:var(--mono);font-size:.75rem;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3)}
 .verdict{font-family:var(--mono);font-size:.75rem;font-weight:500;letter-spacing:.08em;
          padding:.3125rem .625rem;border-radius:100px;white-space:nowrap;transition:background .2s,color .2s}
 .verdict{display:flex;align-items:center;gap:.4375rem}
@@ -107,9 +107,9 @@ input[type=range]::-moz-range-thumb{width:1.125rem;height:1.125rem;border:0;bord
                   inset 0 -1px 0 rgba(233,241,255,.045)}
 .hrow{display:grid;grid-template-columns:11rem 1fr;gap:.5rem 1rem;padding:.5625rem 0;align-items:center}
 .hrow + .hrow{border-top:1px solid var(--line-soft)}
-.hrow label{font-size:.8125rem;color:var(--ink3)}
+.hrow label{font-size:.875rem;color:var(--ink3)}
 .hrow .ctl{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
-.hrow input[type=text],.hrow input[type=number]{font-family:var(--mono);font-size:.8125rem;color:var(--ink);
+.hrow input[type=text],.hrow input[type=number]{font-family:var(--mono);font-size:.875rem;color:var(--ink);
   background:transparent;border:0;border-bottom:1px dashed rgba(0,212,177,.5);padding:.1875rem .125rem;
   font-weight:500;border-radius:2px;transition:border-color .2s,background .2s;min-width:0}
 .hrow input[type=text]{width:100%;max-width:15rem}
@@ -121,7 +121,7 @@ input[type=range]::-moz-range-thumb{width:1.125rem;height:1.125rem;border:0;bord
 .hashwrap{margin-top:1.125rem;padding:.9375rem 1rem;border-radius:8px;
           background-color:rgba(0,0,0,.32);
           box-shadow:inset 0 1px 3px rgba(0,0,0,.7), inset 0 -1px 0 rgba(233,241,255,.04)}
-.hlabel{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);
+.hlabel{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);
         margin:0 0 .5rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
 .hash{font-family:var(--mono);font-size:.75rem;line-height:1.7;word-break:break-all;color:var(--ink2);margin:0}
 .hash b{color:var(--teal);font-weight:500;text-shadow:0 0 .75rem rgba(0,212,177,.35)}
@@ -129,16 +129,16 @@ input[type=range]::-moz-range-thumb{width:1.125rem;height:1.125rem;border:0;bord
 .cfoot{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between;
        padding:.9375rem 1.25rem;border-top:1px solid rgba(233,241,255,.05);background-color:var(--e3)}
 .cfoot p{margin:0;font-size:.75rem;color:var(--ink3);max-width:40ch;line-height:1.45}
-.reset{font-size:.8125rem;font-weight:600;background:var(--teal);color:#03110E;border:0;border-radius:100px;
+.reset{font-size:.875rem;font-weight:600;background:var(--teal);color:#03110E;border:0;border-radius:100px;
        padding:.4375rem .9375rem;cursor:pointer;font-family:var(--body);white-space:nowrap;transition:filter .2s,opacity .2s}
 .reset:hover{filter:brightness(1.08)}
 .reset[disabled]{opacity:.32;cursor:default}
 details.raw{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line)}
-details.raw summary{font-family:var(--mono);font-size:.6875rem;letter-spacing:.09em;text-transform:uppercase;
+details.raw summary{font-family:var(--mono);font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;
                     color:var(--ink3);cursor:pointer}
-details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);overflow-x:auto;
+details.raw pre{font-family:var(--mono);font-size:.75rem;color:var(--ink3);overflow-x:auto;
                 margin:.75rem 0 0;line-height:1.6}
-.selftest{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);padding:0 1.125rem 1rem;margin:0}
+.selftest{font-family:var(--mono);font-size:.75rem;color:var(--ink3);padding:0 1.125rem 1rem;margin:0}
 @media (max-width:36rem){.hrow{grid-template-columns:1fr;gap:.25rem}}
 </style>
 </head>
@@ -573,7 +573,6 @@ field   sealedFor = 1755916800</pre>
     </nav>
   </div>
   <div class="foot__panel">
-    <span>Build <b class="stamp" translate="no">110c5b0919</b></span>
     <span>iPhone &middot; in testing</span>
     <span>Your training is computed on your device</span>
   </div>

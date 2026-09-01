@@ -208,16 +208,20 @@ for f in pages:
     iss = []
     refs = set(re.findall(r'/assets/site\.css\?v=([0-9a-f]+)', s))
     if refs and refs != {real}: iss.append(f'stylesheet version {"/".join(sorted(refs))}, build is {real}')
-    # 🔒 THIS CHECK WAS DECORATIVE FOR THE SAME REASON THE STAMPER WAS BROKEN: one regex,
-    # copied into both files, that stopped matching the day `translate="no"` was added to the
-    # element. `stamps` came back EMPTY, and `if stamps and ...` reads an empty set as nothing
-    # to check rather than as a failure to look. So the footer build number drifted from the
-    # stylesheet it names and the gate written to prevent exactly that reported OK, on the site
-    # whose argument is that its numbers can be checked.
-    # 🔒 AN ABSENCE IS NOT A PASS. A page that carries NO stamp now fails too.
+    # 🔒 THE FOOTER ARM IS GONE BECAUSE THE FOOTER NUMBER IS GONE (2026-09-01, CEO asked
+    # "what is this: Build 110c5b0919, do we even need it really?"). It was a ten-character
+    # hex on a page for lifters, and nothing a reader could act on: the verifiability this
+    # product actually offers lives at /verify/ and /record/, which are real and checkable.
+    # What that arm protected is NOT lost. The load-bearing invariant is the one above: every
+    # page's stylesheet ?v= must equal the stylesheet's real hash, which is what stops a page
+    # being left behind on a stale cached build. That is the defect that actually happened
+    # (three pages shipped one build old), and the footer number was only its symptom.
+    # 🔒 SO DO NOT RE-ADD A DISPLAY ARM WITHOUT RE-ADDING A DISPLAY. An absence check for an
+    # element that is deliberately absent fails every page forever, which is how a gate gets
+    # switched off.
     stamps = set(re.findall(r'<b class="stamp"[^>]*>([^<]*)</b>', s))
-    if not stamps: iss.append('no footer build stamp found on this page')
-    elif stamps != {real}: iss.append(f'footer stamp {"/".join(sorted(stamps))}, build is {real}')
+    if stamps and stamps != {real}:
+        iss.append(f'footer stamp {"/".join(sorted(stamps))}, build is {real}')
     print(f"  {f:28} {'OK' if not iss else '; '.join(iss)}")
     fail += len(iss)
 

@@ -78,6 +78,13 @@
 #                    pages stood 10 to 20% short mid-sentence. Valid CSS, aligned, wrapped,
 #                    legible, and reading as a different smaller typeface. Nothing else here
 #                    could see it.
+#   type-floor-gate.mjs THE RENDERED TYPE FLOOR. Fourteen gates and not one of them looked at
+#                    a font SIZE: type-gate compares an inline literal's optical size to its
+#                    sentence, contrast reads colour, align reads edges, measure reads
+#                    wrapping. So 10px uppercase mono shipped to twenty pages and the CEO
+#                    found it. 🔒 IT MEASURES THE RENDER, NOT THE STYLESHEET: an `em` chain
+#                    compounds, a media query shrinks at one width only, and an inline style
+#                    is in no stylesheet at all. Exemptions are BY NAME, never by pattern.
 #   align-gate.mjs   what the BROWSER does: every stacked block inside a section starts on
 #                    the same left edge, that edge is the nav wordmark's, and no page
 #                    scrolls sideways. Run across the widths people actually use.
@@ -119,6 +126,8 @@ if ! curl -sf -o /dev/null "http://127.0.0.1:${PORT}/"; then
   server=$!; trap 'kill $server 2>/dev/null' EXIT
   for _ in $(seq 40); do curl -sf -o /dev/null "http://127.0.0.1:${PORT}/" && break; sleep .25; done
 fi
+echo
+BASE="http://127.0.0.1:${PORT}" node tools/type-floor-gate.mjs || fail=1
 echo
 BASE="http://127.0.0.1:${PORT}" node tools/align-gate.mjs $WIDTHS || fail=1
 echo
