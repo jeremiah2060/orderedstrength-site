@@ -91,10 +91,6 @@
   --body:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --bar:5rem; --gut:clamp(1.25rem,3.5vw,3rem); --wide:min(80rem,100vw);
-  /* The hero, and ONLY the hero, runs one step wider than the grid. 92rem rather
-     than 100vw because the shot is height-bound and cannot fill more than this;
-     past it the widening buys air, not product. Measured, not chosen. */
-  --hero-wide:min(92rem,100vw);
   --rail:clamp(0px, calc((100vw - var(--wide)) / 2), 7.5rem);
 
   /* MOTION HAS TWO JOBS AND THEY NEED DIFFERENT CURVES. Something arriving should settle
@@ -311,25 +307,6 @@ main > .scene:nth-of-type(even)::before{--pool:66%}
 
    So the left padding is the SAME expression the nav bar uses, to the pixel, and only the
    right side runs out to the viewport. The eye tracks the left edge; that edge does not move. */
-/* ⚠️ MEASURED AND REVERTED, TWICE, AND THE REASON IS WORTH MORE THAN THE CSS.
-   The hero was capped with every other section at --wide, so at 1920px it held 1184px between
-   368px rails and the shot was smaller than the display could show. Two widenings were built:
-     1. WIDER TO THE RIGHT ONLY, left edge pinned to the nav's own expression. Measured perfect
-        at four widths. The CEO looked at it and said it "looks creepy": a content block flush
-        left and running to the right edge reads as a mistake, not as emphasis.
-     2. WIDER AND CENTRED. Symmetric and balanced in itself, and it puts the hero's left edge
-        96px LEFT of the nav wordmark at 1920px.
-   And (2) is the one that cannot be fixed by moving the nav, because the nav's alignment to the
-   container edge IS a fix, made 2026-08-23 after measuring an 80px disagreement on every page:
-   "the misalignment you notice first, because it is at the top". A hero wider than the content
-   and a nav aligned to the content cannot both be true.
-   So the grid wins, which is this site's actual identity, and the hero gets its presence from
-   the SHOT instead: --device-h's ceiling went 36rem -> 40rem in the same round and stayed. */
-
-/* The headline still wraps on its own measure (17ch), so widening gives the room to the shot
-   rather than stretching the sentence into an unreadable line. */
-.scene.hero .hero-grid{grid-template-columns:minmax(0, 34rem) minmax(0, 1fr)}
-@media (max-width:56rem){.scene.hero .hero-grid{grid-template-columns:1fr}}
 .hero-grid{flex:1;align-content:center}
 .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);
            align-items:center;width:100%}
@@ -745,10 +722,7 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
    floating card fell below the fold, which is why you could not see it properly. Height
    first, width derived from the aspect ratio, so it can never outgrow its own hero. */
 .hero-shot{position:relative;display:flex;justify-content:center;align-items:center;
-  /* Ceiling raised 36rem -> 40rem with the hero widening: the shot is the most
-     valuable thing on this page and it was capped below what a 1080px display can
-     show. The clamp still yields to short viewports, so nothing overflows the fold. */
-  --device-h:clamp(19rem, calc(100svh - 21rem), 40rem);
+  --device-h:clamp(19rem, calc(100svh - 21rem), 36rem);
   --device-w:calc(var(--device-h) * 0.47768);   /* 1295 / 2711 */
   height:var(--device-h)}
 .devices{position:relative;height:100%;width:100%}
