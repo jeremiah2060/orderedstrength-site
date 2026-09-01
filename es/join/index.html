@@ -56,7 +56,7 @@
 
   <section class="scene tight">
     <div class="chips" style="margin-top:.5rem">
-      <a class="btn" href="mailto:jeremiah@orderedstrength.com?subject=Prueba%20de%20vuelo%20de%20OrderedStrength&amp;body=%C2%BFCu%C3%A1nto%20tiempo%20llevas%20levantando%2C%20m%C3%A1s%20o%20menos%3F%0A%0A%C2%BFEn%20qu%C3%A9%20entrenas%2C%20y%20cu%C3%A1ntos%20d%C3%ADas%20a%20la%20semana%3F%0A%0A%C2%BFQu%C3%A9%20app%20usas%20ahora%2C%20si%20usas%20alguna%3F%0A%0A">Escríbenos</a>
+      <a class="btn" href="mailto:jeremiah@orderedstrength.com?subject=OrderedStrength%20%C2%B7%20TestFlight&amp;body=%C2%BFCu%C3%A1nto%20tiempo%20llevas%20levantando%2C%20m%C3%A1s%20o%20menos%3F%0A%0A%C2%BFEn%20qu%C3%A9%20entrenas%2C%20y%20cu%C3%A1ntos%20d%C3%ADas%20a%20la%20semana%3F%0A%0A%C2%BFQu%C3%A9%20app%20usas%20ahora%2C%20si%20usas%20alguna%3F%0A%0A">Escríbenos</a>
       <a class="btn ghost" href="/es/how-it-works/">Primero lee cómo funciona</a>
     </div>
   </section>
@@ -82,7 +82,7 @@
     
     <a href="/es/app-privacy/" style="color:var(--teal)">política de privacidad</a>.</p>
     <p>Tu correo existe en un solo lugar, que es el mensaje que enviaste, en una bandeja de entrada. No está en una herramienta de envíos, no está en una base de datos de clientes, y no se sincroniza a ningún lado. Si prefieres que no esté ahí en absoluto, dilo en el mensaje y se va.</p>
-    <p class="small">La app está en pruebas en iPhone. Todavía no está en la App Store. Cuando salga, el precio es 199 dólares al año, o 29.99 al mes, y el registro de precisión se publica antes de cobrarle a nadie.</p>
+    <p class="small">La app está en pruebas en iPhone. Todavía no está en la App Store. Cuando salga, el precio es 199 dólares estadounidenses al año, o 29.99 al mes, y el registro de precisión se publica antes de cobrarle a nadie.</p>
   </section>
 
 </main>
@@ -124,48 +124,5 @@
 </footer>
 
 <script src="/assets/site.js?v=5fd125c32d" defer></script>
-<script>
-(function(){
-'use strict';
-var API = 'https://api.github.com/repos/jeremiah2060/orderedstrength-receipts/contents/anchors';
-var state = document.getElementById('lstate');
-var body = document.getElementById('lbody');
-
-function empty(reason){
-  state.textContent = 'ninguna todavía';
-  body.innerHTML =
-    '<div class="empty"><h3>Todavía no hay anclas publicadas.</h3>' +
-    '<p>' + reason + '</p>' +
-    '<p>Cuando llegue la primera, esta lista se llena con una línea por día: la fecha, y la ' +
-    'raíz que cubre cada predicción sellada ese día. Nada más, para siempre.</p></div>';
-}
-
-fetch(API, { headers: { 'accept': 'application/vnd.github+json' } })
-  .then(function(r){
-    if (r.status === 404) { empty('El repositorio existe y la carpeta de anclas todavía no se ha creado, que es el estado honesto al ' + new Date().toISOString().slice(0,10) + '.'); return null; }
-    if (!r.ok) throw new Error('http ' + r.status);
-    return r.json();
-  })
-  .then(function(list){
-    if (!list) return;
-    var files = list.filter(function(f){ return f.type === 'file' && /\.txt$|\.json$/.test(f.name); });
-    if (!files.length){ empty('La carpeta de anclas existe pero todavía no contiene raíces publicadas.'); return; }
-    files.sort(function(a,b){ return a.name < b.name ? 1 : -1; });
-    state.textContent = files.length + ' publicadas';
-    state.className = 'lstate live';
-    body.innerHTML = files.slice(0, 60).map(function(f){
-      return '<div class="anchor"><span class="d">' + f.name.replace(/\.(txt|json)$/,'') +
-             '</span><a class="h" href="' + f.html_url + '">' + f.sha.slice(0,40) + '</a></div>';
-    }).join('');
-  })
-  .catch(function(){
-    state.textContent = 'inalcanzable';
-    body.innerHTML = '<div class="empty"><h3>No se pudo leer el repositorio.</h3>' +
-      '<p>GitHub no respondió, así que esta página no va a adivinar un número. ' +
-      '<a href="https://github.com/jeremiah2060/orderedstrength-receipts" style="color:var(--teal)">' +
-      'Abre el repositorio directamente</a> y léelo tú mismo.</p></div>';
-  });
-})();
-</script>
 </body>
 </html>

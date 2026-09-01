@@ -80,7 +80,7 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
 
     <div style="margin-top:2rem">
       <label for="in" class="ilabel">JSON del comprobante</label>
-      <textarea id="in" translate="no" spellcheck="false" placeholder='Paste the receipt here, including the outer brackets'></textarea>
+      <textarea id="in" translate="no" spellcheck="false" placeholder='Pega aquí el comprobante, incluidas las llaves exteriores'></textarea>
       <div class="actions">
         <button class="btn" id="go">Revisarlo</button>
         <button class="btn ghost" id="demo">Usar un comprobante de ejemplo</button>
@@ -91,12 +91,12 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
 
     <details class="limits">
       <summary>Qué prueba esto, y qué no</summary>
-      <p>Un comprobante lleva una predicción, un nonce aleatorio, y una huella SHA-256 comprometida
+      <p>Un comprobante lleva una predicción, un nonce aleatorio, y una huella SHA-256 sellada
       
-      <em>antes</em>  la serie. El verificador vuelve a calcular la huella a partir de la predicción y el nonce.
+      <em>antes</em> de la serie. El verificador vuelve a calcular la huella a partir de la predicción y el nonce.
       Si coinciden, la predicción no se editó después. Si cambió un solo carácter, la huella no
       puede coincidir.</p>
-      <p><strong>No prueba cuándo se hizo el compromiso.</strong>  Eso necesita un ancla diaria publicada, que todavía no existe. Hasta que exista, esta
+      <p><strong>No prueba cuándo se hizo el sello.</strong>  Eso necesita un ancla diaria publicada, que todavía no existe. Hasta que exista, esta
       página prueba que la predicción no fue reescrita y no dice nada sobre la marca de tiempo.
       Ese límite se declara aquí en vez de dejarte descubrirlo. El avance del ancla está en
       

@@ -136,48 +136,5 @@
 </footer>
 
 <script src="/assets/site.js?v=5fd125c32d" defer></script>
-<script>
-(function(){
-'use strict';
-var API = 'https://api.github.com/repos/jeremiah2060/orderedstrength-receipts/contents/anchors';
-var state = document.getElementById('lstate');
-var body = document.getElementById('lbody');
-
-function empty(reason){
-  state.textContent = 'none yet';
-  body.innerHTML =
-    '<div class="empty"><h3>No anchors published yet.</h3>' +
-    '<p>' + reason + '</p>' +
-    '<p>When the first one lands, this list fills with one line per day: the date, and the root ' +
-    'hash covering every prediction sealed that day. Nothing else, forever.</p></div>';
-}
-
-fetch(API, { headers: { 'accept': 'application/vnd.github+json' } })
-  .then(function(r){
-    if (r.status === 404) { empty('The repository exists and the anchor folder has not been created yet, which is the honest state on ' + new Date().toISOString().slice(0,10) + '.'); return null; }
-    if (!r.ok) throw new Error('http ' + r.status);
-    return r.json();
-  })
-  .then(function(list){
-    if (!list) return;
-    var files = list.filter(function(f){ return f.type === 'file' && /\.txt$|\.json$/.test(f.name); });
-    if (!files.length){ empty('The anchor folder exists but holds no published roots yet.'); return; }
-    files.sort(function(a,b){ return a.name < b.name ? 1 : -1; });
-    state.textContent = files.length + ' published';
-    state.className = 'lstate live';
-    body.innerHTML = files.slice(0, 60).map(function(f){
-      return '<div class="anchor"><span class="d">' + f.name.replace(/\.(txt|json)$/,'') +
-             '</span><a class="h" href="' + f.html_url + '">' + f.sha.slice(0,40) + '</a></div>';
-    }).join('');
-  })
-  .catch(function(){
-    state.textContent = 'unreachable';
-    body.innerHTML = '<div class="empty"><h3>Could not read the repository.</h3>' +
-      '<p>GitHub did not answer, so this page will not guess at a number. ' +
-      '<a href="https://github.com/jeremiah2060/orderedstrength-receipts" style="color:var(--teal)">' +
-      'Open the repository directly</a> and read it yourself.</p></div>';
-  });
-})();
-</script>
 </body>
 </html>

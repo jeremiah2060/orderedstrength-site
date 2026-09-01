@@ -7,7 +7,7 @@
 <title>OrderedStrength &middot; A strength coach for iPhone that grades itself</title>
 <meta name="description" content="A strength coach for iPhone that changes your session while you are in it, writes down what it expected before you lift, and can be checked. Seal a prediction, then try to change it.">
 <meta property="og:title" content="OrderedStrength">
-<meta property="og:description" content="He writes the next set while you are still breathing hard from the last one, cuts the session when you are fading, and writes down what he expected before you lift so you can check him after.">
+<meta property="og:description" content="He writes the next set while you are still breathing hard from the last one, cuts the remaining sets when you are fading, and writes down what he expected before you lift so you can check him after.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="OrderedStrength">
 <meta property="og:image" content="https://www.orderedstrength.com/assets/og.jpg">
@@ -166,7 +166,7 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
         <h1>He changes your workout in the middle of it.</h1>
         <p class="sub">Most apps hand you a program and stop listening. Jerry, the coach inside
         the app, writes the next set while you are still breathing hard from the last one. He cuts
-        the session when you are fading, and adds the plate the day you earn it. He writes down what
+        the remaining sets when you are fading, and adds the plate the day you earn it. He writes down what
         he expects from you <em>before</em> you touch the bar, so you can check him on it after.</p>
         <div class="chips reveal" style="margin-top:2rem">
           <a class="btn" href="#coach">See him cut a set</a>
@@ -180,7 +180,7 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
           <div class="device device--back">
             <div class="device__body"><div class="device__glass">
               <div class="device__screenwrap">
-                <img class="device__screen" src="/assets/shots/evidence.webp?v=11f2a19e01" width="1206" height="2622" loading="lazy" decoding="async"
+                <img class="device__screen" src="/assets/shots/evidence.webp?v=fe6047b750" width="1206" height="2622" loading="lazy" decoding="async"
                      alt="The Trust Intelligence screen, badged Population, listing open investigations and naming the evidence each one still needs before it will make a claim.">
               </div>
               <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
@@ -478,7 +478,7 @@ field   sealedFor = 1755916800</pre>
         <div class="device">
           <div class="device__body"><div class="device__glass">
             <div class="device__screenwrap">
-              <img class="device__screen" src="/assets/shots/evidence.webp?v=11f2a19e01" width="1206" height="2622" loading="lazy" decoding="async"
+              <img class="device__screen" src="/assets/shots/evidence.webp?v=fe6047b750" width="1206" height="2622" loading="lazy" decoding="async"
                    alt="The Trust Intelligence screen, listing open investigations and the evidence each one still needs before it will make a claim.">
             </div>
             <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
@@ -524,8 +524,9 @@ field   sealedFor = 1755916800</pre>
     </div>
     <p class="small" style="margin-top:1.25rem">Logging, your plan, Jerry's spoken voice and the
     accuracy record are free and stay free. Pro opens the depth: the full analytical vault, your
-    complete history export, and the weekly report as a file you can send.</p>
-    <p class="small" style="margin-top:.75rem">A strength coach costs 200 to 400 US dollars a
+    complete history export, importing another training log after the first one, and the
+    weekly report as a file you can send.</p>
+    <p class="small" style="margin-top:.75rem">Human strength coaching from the best-known programmes runs 350 to 600 US dollars a
     month. This is 199 a year, which is about 16.58 a month, or 29.99 if you would rather pay
     monthly and stop whenever you like. It renews until you cancel it, you cancel it in your own
     Apple settings, and the accuracy record is published before anyone is charged. The
@@ -611,8 +612,8 @@ if (sess){
     } else {
       var lo = (102.5 + Math.min(10, (n - 20) * 0.25)).toFixed(1);
       var hi = (112.5 + Math.min(10, (n - 20) * 0.25)).toFixed(1);
-      tag.textContent = 'Yours'; tag.className = 'tag you';
-      claim.innerHTML = 'From your ' + n + ' sessions: your top set lands between <b>' + lo + ' kg</b> and <b>' + hi + ' kg</b>, nineteen times out of twenty.';
+      tag.textContent = 'Individual'; tag.className = 'tag you';
+      claim.innerHTML = 'From your ' + n + ' sessions: your top set lands between <b>' + lo + ' kg</b> and <b>' + hi + ' kg</b>, four times out of five.';
       basis.textContent = 'Basis: your own logged sets. I sealed this range before the session and I will grade myself against it afterwards.';
     }
   }

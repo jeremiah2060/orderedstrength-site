@@ -82,7 +82,7 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
 
     <div style="margin-top:2rem">
       <label for="in" class="ilabel">Receipt JSON</label>
-      <textarea id="in" translate="no" spellcheck="false" placeholder='Paste the receipt here, including the outer brackets'></textarea>
+      <textarea id="in" translate="no" spellcheck="false" placeholder='Paste the receipt here, including the outer braces'></textarea>
       <div class="actions">
         <button class="btn" id="go">Check it</button>
         <button class="btn ghost" id="demo">Use a sample receipt</button>
@@ -192,7 +192,7 @@ $('go').addEventListener('click', async function(){
   if (!raw){ render(card('bad','NOTHING PASTED',null,'Paste a receipt into the box above, or press the sample button.')); return; }
   var body;
   try { body = JSON.parse(raw); }
-  catch(e){ render(card('bad','NOT VALID JSON',null,'Paste the receipt exactly as it was copied, including the outer brackets.')); return; }
+  catch(e){ render(card('bad','NOT VALID JSON',null,'Paste the receipt exactly as it was copied, including the outer braces.')); return; }
   $('go').disabled = true;
   render('<div class="res"><span class="v" style="color:var(--ink3)">CHECKING</span></div>');
   try{
