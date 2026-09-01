@@ -24,6 +24,13 @@
 #                    shot-gate STRIPS `style="..."` before reading claims, so those numbers
 #                    were the only figures on this site checked by nobody. A number that
 #                    positions something over a photograph is a claim about it.
+#   icon-gate.py     THE FAVICON MUST BE THE PRODUCT'S OWN MARK, NOT A DRAWING OF IT. I drew
+#                    one: a teal ring with a bar through the top, correct palette, valid SVG,
+#                    on all twenty pages, and a picture of a power button. The real mark is a
+#                    generated "OS" monogram whose own README says the S is a real SF Pro glyph
+#                    "NOT a hand-drawn bezier". 🔒 NOTHING HERE COULD SEE IT: every gate on this
+#                    site reads THIS SITE, and the mark it should be checked against lives in
+#                    the app's repo. Measured 0.64 for a true downscale, 33.36 for my drawing.
 #   pair-gate.py     THE TWO LANGUAGES MUST PHOTOGRAPH THE SAME ATHLETE. Every other gate
 #                    here reads ONE PAGE AT A TIME, so a Spanish frame showing a 6% ring under
 #                    a Spanish caption saying 6% is internally perfect and passes all of them.
@@ -94,6 +101,8 @@ echo
 python3 tools/ring-cause-gate.py || fail=1
 echo
 python3 tools/pin-gate.py || fail=1
+echo
+python3 tools/icon-gate.py || fail=1
 echo
 python3 tools/pair-gate.py || fail=1
 echo
