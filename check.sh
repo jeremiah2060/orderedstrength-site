@@ -24,6 +24,12 @@
 #                    shot-gate STRIPS `style="..."` before reading claims, so those numbers
 #                    were the only figures on this site checked by nobody. A number that
 #                    positions something over a photograph is a claim about it.
+#   pair-gate.py     THE TWO LANGUAGES MUST PHOTOGRAPH THE SAME ATHLETE. Every other gate
+#                    here reads ONE PAGE AT A TIME, so a Spanish frame showing a 6% ring under
+#                    a Spanish caption saying 6% is internally perfect and passes all of them.
+#                    The CEO opened the two home pages side by side on 2026-09-01 and saw two
+#                    different lifters. 🔒 A SET OF PER-PAGE GATES CANNOT SEE A DEFECT THAT IS
+#                    A RELATIONSHIP BETWEEN PAGES. Also refuses one photograph published twice.
 #   voice-gate.py    A SELLING PAGE TALKS TO THE LIFTER, NOT ABOUT ITSELF. Commit b8755c8
 #                    closed this on 2026-08-23 ("the site stops describing itself"), and
 #                    /stronger/ reopened it seven days later with "We spend most of these
@@ -88,6 +94,8 @@ echo
 python3 tools/ring-cause-gate.py || fail=1
 echo
 python3 tools/pin-gate.py || fail=1
+echo
+python3 tools/pair-gate.py || fail=1
 echo
 python3 tools/voice-gate.py || fail=1
 echo

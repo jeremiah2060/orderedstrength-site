@@ -49,7 +49,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # first cut set both axes to roughly the same tolerance and immediately failed that pin for being
 # 19% to the right of text it correctly marks. Tightening a real design into a red is how a gate
 # gets switched off, so this axis only catches a pin that has left the frame entirely.
-TOL_X, TOL_Y = 0.35, 0.08
+# 🔒 8% WAS TOO LOOSE AND IT PASSED TWO PINS THAT WERE POINTING AT THE WRONG THING.
+# An independent sweep found English pin 2 sitting at 67.5% while its label spans
+# 61.5-63.2%: a 4.3-point miss, comfortably inside an 8% budget, and in the render it
+# physically covered the '56.3 kg' the caption quotes. Pin 3 was 3.5 points past its line,
+# in blank space. Both were wrong WHEN AUTHORED, not stale from a re-shoot: the pre-shoot
+# frame has identical element positions.
+# 3% of frame height is about 79px, roughly one line of body text: enough slack for a
+# marker to sit beside its subject, not enough for it to sit on the next control.
+TOL_X, TOL_Y = 0.35, 0.03
 
 # Which page, which frame, and what each pin claims to be pointing at. The phrase is matched
 # against the OCR the same way shot-gate matches a caption, so a phrase that moves in the app
