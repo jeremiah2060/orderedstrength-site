@@ -96,8 +96,8 @@ ASSETS = {
     # what already reads from your data versus what is still population, and the Unlock Map that
     # names what is missing. Every caption is authored from those frames' own pixels.
     # When a Spanish arm for either English screen exists, publish it and repoint the row.
-    '/assets/shots/answered.webp':  '/assets/shots/es-mixed.webp',
-    '/assets/shots/evidence.webp':  '/assets/shots/es-unlocks.webp',
+    '/assets/shots/answered.webp':  '/assets/shots/es-answered.webp',
+    '/assets/shots/evidence.webp':  '/assets/shots/es-evidence.webp',
 }
 
 
