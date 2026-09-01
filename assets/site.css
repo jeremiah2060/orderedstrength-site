@@ -196,7 +196,13 @@ img{max-width:100%;height:auto}
 .bar nav{display:flex;gap:2.25rem;font-size:1.125rem;color:var(--ink2);font-weight:600;letter-spacing:-.01em}
 .bar nav a{transition:color .2s}
 .bar nav a:hover,.bar nav a:focus-visible,.bar nav a[aria-current]{color:var(--ink)}
-@media (max-width:44rem){.wordmark{font-size:1.25rem}.bar nav{gap:1.125rem;font-size:.9375rem}.bar nav .opt{display:none}}
+/* 🔒 45.5rem, NOT 44rem. At 44rem (704px) the two .opt links come BACK one pixel above the
+   breakpoint into a bar that has no room for them yet: measured over CDP in English, the
+   wordmark and the nav touch at gap 0.0px at 708px and stay under 10px to 720px, clearing
+   only at 724. A collision band fifteen pixels wide is still a collision, and it is the one
+   component that is on every screen of this site. 45.5rem (728px) is the first width the
+   measurement clears with room, and it matches the Spanish rules below at 17.8px. */
+@media (max-width:45.5rem){.wordmark{font-size:1.25rem}.bar nav{gap:1.125rem;font-size:.9375rem}.bar nav .opt{display:none}}
 /* 🔒 THE BAR COLLIDES WITH ITS OWN WORDMARK ON A PHONE, AND SPANISH HITS IT THREE WIDTHS
    EARLIER. Measured over CDP: the gap between the wordmark's right edge and the nav's left
    edge is 0px at 320 and 360 in BOTH languages, and 0px at 375 and 390 in Spanish only,
@@ -207,6 +213,20 @@ img{max-width:100%;height:auto}
    Spanish still clears the wordmark by 22px with the link present, which is the same progressive disclosure rather than a new idea. The page stays
    reachable: /how-it-works/ is in the footer of every page and linked from the body copy. */
 @media (max-width:25rem){.bar nav .opt2{display:none}}
+
+/* 🔒 THOSE BREAKPOINTS ARE TUNED TO ENGLISH LABEL WIDTHS, AND SPANISH IS ABOUT A THIRD WIDER.
+   Measured over CDP with Range.getClientRects (a box height cannot tell you a label wrapped,
+   because padding raises it too): on /es/ the wordmark's right edge and the nav's left edge
+   touch at gap 0 and three links break onto two lines from 704px to 768px, and at 896px the
+   CTA returns into a bar that cannot hold it, so all four links AND the button wrap, through
+   to 980px. 768 is iPad portrait. English is clear at every width from 320 to 2560, which is
+   why every gate here was green: they all read the English DOM, and the two that drive a
+   browser measure left EDGES and line LENGTH, never whether the one component on every screen
+   of the site collides with itself. Same progressive disclosure, moved to where the Spanish
+   measurement says it is needed, plus nowrap so a longer string can never reopen this. */
+html[lang^="es"] .bar nav a{white-space:nowrap}
+@media (max-width:50rem){html[lang^="es"] .bar nav .opt{display:none}}
+@media (max-width:61.25rem){html[lang^="es"] .bar nav .cta{display:none}}
 
 
 main{padding-top:var(--bar)}
@@ -571,6 +591,13 @@ footer::before{content:"";position:absolute;inset:0 var(--gut) auto;height:1px;
       box-shadow:0 1px 0 rgba(255,255,255,.28) inset,0 6px 18px -8px rgba(0,212,177,.6);
       transition:filter .2s var(--ease),transform .35s var(--spring)}
 .bar nav .cta:hover{color:#03110E;filter:brightness(1.07);transform:translateY(-1px)}
+/* 🔒 THE CURRENT-PAGE RULE ABOVE (.bar nav a[aria-current]) IS (0,2,2) AND BEAT THE CTA'S
+   OWN (0,2,1) colour, so on /join/ and /es/join/, the ONE page the whole site funnels to,
+   the filled teal button rendered its label in --ink: 1.80:1 against the fill, down from
+   10.16:1. contrast-gate.py pairs the stylesheet's :root TOKENS and cannot see a cascade
+   outcome on a real element, so it was green. The label on a filled button is dark, in
+   every state, including the state where that button points at the page you are on. */
+.bar nav .cta[aria-current]{color:#03110E}
 @media (max-width:56rem){.bar nav .cta{display:none}}
 
 @media (prefers-reduced-motion:reduce){

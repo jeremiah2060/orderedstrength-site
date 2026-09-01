@@ -28,7 +28,7 @@
 <meta property="og:locale:alternate" content="es_419">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/assets/site.css?v=f760500b85">
+<link rel="stylesheet" href="/assets/site.css?v=0b322e06c0">
 </head>
 <body>
 
@@ -49,10 +49,10 @@
     <div class="prose">
 <p class="eyebrow eyebrow--bare">Privacy</p>
 <h1>OrderedStrength Privacy Policy</h1>
-<p><strong>Last updated: 17 August 2026.</strong> This policy covers the <strong>OrderedStrength iPhone app</strong>. It does not cover any other service.</p>
+<p><strong>Last updated: 1 September 2026.</strong> This policy covers the <strong>OrderedStrength iPhone app</strong>. It does not cover any other service.</p>
 
 <h2>The short version</h2>
-<p>Your training lives on your phone. We have no account system, so we do not know who you are. <strong>Four things can leave your device, and one of them should not be there.</strong> Point 4 is a set-submission left over from an earlier server design: it sent the sets you log, it contradicted what the rest of this page promises, and it was removed from the code rather than kept and explained. It stops on your phone when you next update. It is written here because you should not have to find it in a network log.</p>
+<p>Your training lives on your phone. We have no account system, so we do not know who you are. <strong>Five things can leave your device, and one of them should not be there.</strong> Point 4 is a set-submission left over from an earlier server design: it sent the sets you log, it contradicted what the rest of this page promises, and it was removed from the code rather than kept and explained. It stops on your phone when you next update. It is written here because you should not have to find it in a network log.</p>
 
 <h2>What stays on your device</h2>
 <p>All of this is stored on your iPhone. Nothing here is sent to us except where points 1, 2 and 4 below say otherwise:</p>
@@ -66,9 +66,9 @@
 
 <h2>Apple Health</h2>
 <p>Only if you grant permission, the app <strong>reads</strong>: heart rate variability, resting heart rate, heart rate, sleep analysis, active energy, step count, respiratory rate, body mass, your completed workouts, and walking, running, cycling and swimming distance. It <strong>writes</strong> completed workouts and active energy back to Health so they appear alongside your other activity.</p>
-<p>Health data is used on your device to inform recovery and readiness. <strong>It is never transmitted to us or to anyone else.</strong> You can revoke access at any time in Apple Health, and the app keeps working without it.</p>
+<p>Health data is used on your device to inform recovery and readiness. <strong>Raw Apple Health records never leave your phone.</strong> The one exception is point 2: if you turn Cloud Answers on, the training context sent with your question can include a line derived from that data, such as your sleep debt in hours, or how many days of heart-rate variability Jerry has seen. You can revoke access at any time in Apple Health, and the app keeps working without it.</p>
 
-<h2>The four things that can leave your device</h2>
+<h2>The five things that can leave your device</h2>
 
 <h3>1. Jerry's voice &middot; on when the spoken coaching voice is on</h3>
 <p>To speak in a natural voice rather than the built-in system voice, the <em>text of the sentence Jerry is about to say</em> is sent to our server, which forwards it to Microsoft Azure to turn into audio. Jerry's lines are a bounded set of templates, and each distinct line is fetched once and then stored on your phone and replayed from there forever.</p>
@@ -94,7 +94,11 @@
 <h3>4. Your logged sets &middot; removed from the code, gone the moment you update</h3>
 <p>When you finished a freestyle workout, the app sent each set you logged to our server: the exercise, the weight, the reps, and the reserve you reported. It was tied to a random identifier created on your device and never to your name, and it was not sold, shared or used to advertise to you.</p>
 <p><strong>We never defended this one.</strong> It was left over from an earlier design in which the coaching engine ran on a server, and it survived the move onto the phone. It contradicted the promise at the top of this page, so it was removed rather than kept and explained away, and it was removed rather than given a switch, because a switch would have meant defending it.</p>
-<p><strong>Read this next part carefully, because it is the part that applies to you.</strong> The code is gone, and the next build carries no set upload at all. If you are running an earlier build, it is still in the one on your phone until you update, which is why this section is still here rather than deleted. It will be deleted when the last build that had it is gone.</p>
+<p><strong>Read this next part carefully, because it is the part that applies to you.</strong> The call is gone: nothing in the app reaches that upload any more, and no build of it sends a set. If you are running an earlier build, it is still in the one on your phone until you update, which is why this section is still here rather than deleted. It will be deleted when the last build that had it is gone.</p>
+
+<h3>5. A push notification token &middot; on, so a notification can reach you</h3>
+<p>To send you a notification at all, Apple has to give the app a device token, and we have to know where to send it. When the app starts it registers with Apple and sends that token, along with the language your phone is set to, to our server. The token identifies a copy of the app on one device, not you: it carries no name, no email and nothing about your training, and Apple reissues it.</p>
+<p>This is the plumbing behind Jerry's notes about your recovery and your weekly report. If you never allow notifications, nothing is ever delivered to it.</p>
 
 <h2>What we never do</h2>
 <ul>

@@ -28,7 +28,7 @@
 <meta property="og:locale:alternate" content="en_US">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/assets/site.css?v=f760500b85">
+<link rel="stylesheet" href="/assets/site.css?v=0b322e06c0">
 </head>
 <body>
 
@@ -49,10 +49,10 @@
     <div class="prose">
 <p class="eyebrow eyebrow--bare">Privacidad</p>
 <h1>Política de Privacidad de OrderedStrength</h1>
-<p><strong>Última actualización: 17 de agosto de 2026.</strong>  Esta política cubre la  <strong>app OrderedStrength para iPhone</strong>. No cubre ningún otro servicio.</p>
+<p><strong>Última actualización: 1 de septiembre de 2026.</strong>  Esta política cubre la  <strong>app OrderedStrength para iPhone</strong>. No cubre ningún otro servicio.</p>
 
 <h2>La versión corta</h2>
-<p>Tu entrenamiento vive en tu teléfono. No tenemos sistema de cuentas, así que no sabemos quién eres.  <strong>Cuatro cosas pueden salir de tu dispositivo, y una de ellas no debería estar ahí.</strong>  El punto 4 es un envío de series que quedó de un diseño anterior con servidor: mandaba las series que registras, contradecía lo que promete el resto de esta página, y se quitó del código en vez de conservarlo y explicarlo. Deja de pasar en tu teléfono cuando actualices. Está escrito aquí porque no deberías tener que encontrarlo en un registro de red.</p>
+<p>Tu entrenamiento vive en tu teléfono. No tenemos sistema de cuentas, así que no sabemos quién eres.  <strong>Cinco cosas pueden salir de tu dispositivo, y una de ellas no debería estar ahí.</strong>  El punto 4 es un envío de series que quedó de un diseño anterior con servidor: mandaba las series que registras, contradecía lo que promete el resto de esta página, y se quitó del código en vez de conservarlo y explicarlo. Deja de pasar en tu teléfono cuando actualices. Está escrito aquí porque no deberías tener que encontrarlo en un registro de red.</p>
 
 <h2>Lo que se queda en tu dispositivo</h2>
 <p>Todo esto se guarda en tu iPhone. Nada de esto se nos envía salvo donde los puntos 1, 2 y 4 de abajo digan lo contrario:</p>
@@ -66,9 +66,9 @@
 
 <h2>Apple Health</h2>
 <p>Solo si das permiso, la app  <strong>lee</strong>: variabilidad de la frecuencia cardiaca, frecuencia cardiaca en reposo, frecuencia cardiaca, análisis del sueño, energía activa, conteo de pasos, frecuencia respiratoria, masa corporal, tus entrenamientos completados, y distancia caminando, corriendo, en bicicleta y nadando.  <strong>Escribe</strong>  los entrenamientos completados y la energía activa de vuelta a Health para que aparezcan junto a tu otra actividad.</p>
-<p>Los datos de Health se usan en tu dispositivo para informar la recuperación y la disposición.  <strong>Nunca se nos transmite ni a nosotros ni a nadie más.</strong>  Puedes revocar el acceso en cualquier momento en Apple Health, y la app sigue funcionando sin eso.</p>
+<p>Los datos de Health se usan en tu dispositivo para informar la recuperación y la disposición.  <strong>Los registros originales de Apple Health nunca salen de tu teléfono. La única excepción es el punto 2: si activas las Respuestas en la Nube, el contexto de entrenamiento que acompaña a tu pregunta puede incluir una línea derivada de esos datos, como tu deuda de sueño en horas, o cuántos días de variabilidad de la frecuencia cardiaca ha visto Jerry.</strong>  Puedes revocar el acceso en cualquier momento en Apple Health, y la app sigue funcionando sin eso.</p>
 
-<h2>Las cuatro cosas que pueden salir de tu dispositivo</h2>
+<h2>Las cinco cosas que pueden salir de tu dispositivo</h2>
 
 <h3>1. La voz de Jerry &middot; encendida cuando la voz hablada del coach está encendida</h3>
 <p>Para hablar con una voz natural en vez de la voz del sistema,  <em>el texto de la frase que Jerry está a punto de decir</em>  se envía a nuestro servidor, que lo reenvía a Microsoft Azure para convertirlo en audio. Las frases de Jerry son un conjunto acotado de plantillas, y cada frase distinta se descarga una vez y después se guarda en tu teléfono y se reproduce desde ahí para siempre.</p>
@@ -94,7 +94,11 @@
 <h3>4. Las series que registras &middot; quitadas del código, y fuera en cuanto actualices</h3>
 <p>Cuando terminabas un entrenamiento libre, la app enviaba a nuestro servidor cada serie que registraste: el ejercicio, el peso, las repeticiones, y la reserva que reportaste. Estaba ligado a un identificador aleatorio creado en tu dispositivo y nunca a tu nombre, y no se vendía, no se compartía ni se usaba para mostrarte publicidad.</p>
 <p><strong>Nunca defendimos esta.</strong> Quedó de un diseño anterior en el que el motor de coaching corría en un servidor, y sobrevivió a la mudanza al teléfono. Contradecía la promesa que encabeza esta página, así que se quitó en vez de conservarla y explicarla, y se quitó en vez de darle un interruptor, porque un interruptor habría significado defenderla.</p>
-<p><strong>Lee esta parte con atención, porque es la que te aplica a ti.</strong> El código ya no está, y la próxima versión no envía ninguna serie. Si estás en una versión anterior, sigue en la que tienes en el teléfono hasta que actualices, y por eso esta sección sigue aquí en vez de borrada. Se borrará cuando ya no quede ninguna versión que la tuviera.</p>
+<p><strong>Lee esta parte con atención, porque es la que te aplica a ti.</strong> La llamada ya no está: nada en la app llega a esa subida, y ninguna versión envía una serie. Si estás en una versión anterior, sigue en la que tienes en el teléfono hasta que actualices, y por eso esta sección sigue aquí en vez de borrada. Se borrará cuando ya no quede ninguna versión que la tuviera.</p>
+
+<h3>5. Un token de notificaciones &middot; activo, para que una notificación pueda llegarte</h3>
+<p>Para poder enviarte una notificación, Apple tiene que darle a la app un token de dispositivo, y nosotros tenemos que saber a dónde mandarla. Cuando la app arranca se registra con Apple y envía ese token, junto con el idioma en que tienes configurado tu teléfono, a nuestro servidor. El token identifica una copia de la app en un dispositivo, no a ti: no lleva nombre, ni correo, ni nada de tu entrenamiento, y Apple lo reemplaza cada cierto tiempo.</p>
+<p>Esta es la plomería detrás de las notas de Jerry sobre tu recuperación y de tu reporte semanal. Si nunca permites las notificaciones, nunca se entrega nada a ese token.</p>
 
 <h2>Lo que nunca hacemos</h2>
 <ul>
