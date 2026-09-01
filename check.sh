@@ -19,6 +19,11 @@
 #                    was already on the page: answered.webp shows that same athlete WITH
 #                    soreness reported and the ring still empty. Sentence-scoped, so a
 #                    caption may still discuss both, just not in one breath.
+#   pin-gate.py      THE CALLOUT PINS, AGAINST THE PIXELS THEY POINT AT. The gallery overlays
+#                    three numbered pins on a screenshot at hard-coded percentages, and
+#                    shot-gate STRIPS `style="..."` before reading claims, so those numbers
+#                    were the only figures on this site checked by nobody. A number that
+#                    positions something over a photograph is a claim about it.
 #   voice-gate.py    A SELLING PAGE TALKS TO THE LIFTER, NOT ABOUT ITSELF. Commit b8755c8
 #                    closed this on 2026-08-23 ("the site stops describing itself"), and
 #                    /stronger/ reopened it seven days later with "We spend most of these
@@ -81,6 +86,8 @@ echo
 python3 tools/shot-gate.py || fail=1
 echo
 python3 tools/ring-cause-gate.py || fail=1
+echo
+python3 tools/pin-gate.py || fail=1
 echo
 python3 tools/voice-gate.py || fail=1
 echo

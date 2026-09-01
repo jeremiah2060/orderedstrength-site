@@ -4,25 +4,29 @@
 <meta charset="utf-8">
 <script>document.documentElement.className="js";</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OrderedStrength</title>
+<title>OrderedStrength &middot; A strength coach for iPhone that grades itself</title>
 <meta name="description" content="A strength coach for iPhone that changes your session while you are in it, writes down what it expected before you lift, and can be checked. Seal a prediction, then try to change it.">
 <meta property="og:title" content="OrderedStrength">
 <meta property="og:description" content="He writes the next set while you are still breathing hard from the last one, cuts the session when you are fading, and writes down what he expected before you lift so you can check him after.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="OrderedStrength">
-<meta property="og:image" content="/assets/og.jpg">
+<meta property="og:image" content="https://www.orderedstrength.com/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: a coach who writes it down before you lift.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="/assets/og.jpg">
+<meta name="twitter:image" content="https://www.orderedstrength.com/assets/og.jpg">
 <meta name="theme-color" content="#060709">
 <link rel="preload" href="/assets/fonts/public-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/archivo-700-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/">
 <link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/">
 <link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/">
-<link rel="stylesheet" href="/assets/site.css?v=8b051bd229">
+<link rel="canonical" href="https://www.orderedstrength.com/">
+<meta property="og:url" content="https://www.orderedstrength.com/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="es_419">
+<link rel="stylesheet" href="/assets/site.css?v=110c5b0919">
 <style>
 /* ── the coaching stack: real app UI, rendered rather than screenshotted ── */
 .hero .appcard{padding:1.625rem 1.75rem}
@@ -141,7 +145,7 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
 <div class="bar">
   <a class="wordmark" translate="no" href="/"><span class="led" id="led" aria-hidden="true"></span>OrderedStrength</a>
   <nav>
-    <a href="/how-it-works/">How it works</a>
+    <a href="/how-it-works/" class="opt2">How it works</a>
     <a href="/stronger/" class="opt">Stronger</a>
     <a href="/record/" class="opt">The record</a>
     <a href="/verify/">Verify</a>
@@ -160,8 +164,8 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
         <h1>He changes your workout in the middle of it.</h1>
         <p class="sub">Most apps hand you a program and stop listening. Jerry, the coach inside
         the app, writes the next set while you are still breathing hard from the last one. He cuts
-        the session when you are fading, adds the plate the day you earn it, and writes down what
-        he expected from you <em>before</em> you touch the bar, so you can check him on it after.</p>
+        the session when you are fading, and adds the plate the day you earn it. He writes down what
+        he expects from you <em>before</em> you touch the bar, so you can check him on it after.</p>
         <div class="chips reveal" style="margin-top:2rem">
           <a class="btn" href="#coach">See him cut a set</a>
           <a class="btn ghost" href="/how-it-works/">How it works</a>
@@ -174,8 +178,8 @@ details.raw pre{font-family:var(--mono);font-size:.6875rem;color:var(--ink3);ove
           <div class="device device--back">
             <div class="device__body"><div class="device__glass">
               <div class="device__screenwrap">
-                <img class="device__screen" src="/assets/shots/evidence.webp?v=7f031d6a7e" width="1206" height="2622" loading="lazy" decoding="async"
-                     alt="The Trust Intelligence screen, badged Population, listing open investigations and naming the evidence each one still needs before it will make a claim.">
+                <img class="device__screen" src="/assets/shots/answered.webp?v=3213c94da2" width="1206" height="2622" loading="lazy" decoding="async"
+                     alt="The same dashboard after the athlete answered one question about how sore he was. The fatigue and recovery sublabels now read Your Data, recovery reads 73 percent, and the line above says his load and his recovery rate are both measured from him now.">
               </div>
               <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
             </div></div>
@@ -392,6 +396,12 @@ field   sealedFor = 1755916800</pre>
         <button class="reset" id="reset" disabled>Put it back</button>
       </div>
       <p class="selftest" id="selftest">Checking this page against the live verifier.</p>
+      <div class="chips" style="margin-top:1.75rem;gap:.75rem">
+        <a class="btn" href="/join/">Join the test</a>
+        <a class="btn ghost" href="/verify/">Verify a real receipt</a>
+      </div>
+      <p class="small" style="margin-top:.875rem">That arithmetic just ran on your machine, not ours.
+      Every prediction the app makes is sealed the same way, before the set.</p>
     </div>
   </section>
 
@@ -416,11 +426,11 @@ field   sealedFor = 1755916800</pre>
   <section class="scene" id="states">
     <div class="head reveal">
       <div><p class="eyebrow">The pressure test</p>
-        <h2>Four things most apps never show you.</h2></div>
-      <div><p class="sub">The same screen on day one, the same screen after a hundred logged
-    sessions, that screen again once the athlete answered one question, and the sheet behind it.
-    Each one admits something. Real captures from the test suite, nothing retouched. Where anything
-    was handed to the app rather than earned by it, the caption underneath says so.</p></div>
+        <h2>Two screens most apps never show you.</h2></div>
+      <div><p class="sub">The same screen on day one, and the same screen after a hundred logged
+    sessions. One athlete, one hundred sessions apart. Both admit something. Real captures from the
+    test suite, nothing retouched. Where anything was handed to the app rather than earned by it,
+    the caption underneath says so.</p></div>
     </div>
     <div class="states reveal">
             <figure class="state">
@@ -448,32 +458,6 @@ field   sealedFor = 1755916800</pre>
           <span class="device__key device__key--act" aria-hidden="true"></span><span class="device__key device__key--vup" aria-hidden="true"></span><span class="device__key device__key--vdn" aria-hidden="true"></span><span class="device__key device__key--pwr" aria-hidden="true"></span><span class="device__key device__key--cam" aria-hidden="true"></span>
         </div>
         <figcaption><b>What changed by a hundred</b><span>The same screen, the same athlete, <code translate="no">Session 100</code>. The strongest thing on record is now a <code translate="no">Barbell Back Squat</code> at <code translate="no">Estimated 1RM 129.2 kg</code>, and the middle ring has filled: <code translate="no">84%</code>, stamped <code translate="no">Calibration (Your RIR)</code>. Read that one carefully, because it is narrower than it looks. It scores how consistently you report your own effort, not how well Jerry knows you, and this athlete is a test fixture who reports his with machine regularity. A human is less tidy and will sit lower. Fatigue and recovery are still stamped <code translate="no">Pop. Est.</code>, and the screen says what would change that.</span></figcaption>
-      </figure>
-      <figure class="state">
-        <div class="device">
-          <div class="device__body"><div class="device__glass">
-            <div class="device__screenwrap">
-              <img class="device__screen" src="/assets/shots/answered.webp?v=3213c94da2" width="1206" height="2622" loading="lazy" decoding="async"
-                   alt="The same dashboard after one hundred sessions, this time with the athlete's soreness reported. Fatigue and recovery are both labelled Your Data, recovery reads 73%, and the headline says his load and his recovery rate are both measured from him now.">
-            </div>
-            <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
-          </div></div>
-          <span class="device__key device__key--act" aria-hidden="true"></span><span class="device__key device__key--vup" aria-hidden="true"></span><span class="device__key device__key--vdn" aria-hidden="true"></span><span class="device__key device__key--pwr" aria-hidden="true"></span><span class="device__key device__key--cam" aria-hidden="true"></span>
-        </div>
-        <figcaption><b>What changes when you answer</b><span>The same athlete and the same hundred sessions as the frame beside it, with one difference: he told Jerry how sore he was the day after training. The two sublabels that said population estimate now read <code translate="no">Your Data</code>, recovery reads <code translate="no">73%</code>, and the line at the top becomes <code translate="no">Your load and your recovery rate are both measured from you now</code>. Said plainly rather than staged: the test suite handed the app that soreness through the same door your own answer uses, and nothing else was changed.</span></figcaption>
-      </figure>
-      <figure class="state">
-        <div class="device">
-          <div class="device__body"><div class="device__glass">
-            <div class="device__screenwrap">
-              <img class="device__screen" src="/assets/shots/evidence.webp?v=7f031d6a7e" width="1206" height="2622" loading="lazy" decoding="async"
-                   alt="The Trust Intelligence screen, listing open investigations and the evidence each one still needs before it will make a claim.">
-            </div>
-            <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
-          </div></div>
-          <span class="device__key device__key--act" aria-hidden="true"></span><span class="device__key device__key--vup" aria-hidden="true"></span><span class="device__key device__key--vdn" aria-hidden="true"></span><span class="device__key device__key--pwr" aria-hidden="true"></span><span class="device__key device__key--cam" aria-hidden="true"></span>
-        </div>
-        <figcaption><b>What it still needs</b><span><code translate="no">Each one names the evidence I still need.</code> Then it does, by name: <code translate="no">Metabolic Phenotype</code>, <code translate="no">Individual Recovery Fingerprint</code>, and what would close each.</span></figcaption>
       </figure>
     </div>
     <p class="small" style="margin-top:1.5rem">Every one of these was photographed automatically
@@ -508,10 +492,16 @@ field   sealedFor = 1755916800</pre>
     <div class="chips reveal" style="margin-top:1.75rem">
       <span class="chip"><b>iPhone</b>in testing</span>
       <span class="chip"><b>199 US dollars</b> per year</span>
-      <span class="chip"><b>14 days</b> free</span>
+      <span class="chip"><b>29.99</b> per month</span>
     </div>
-    <p class="small" style="margin-top:1.25rem">A strength coach costs 200 to 400 US dollars a
-    month. This is 199 a year, and the accuracy record is published before anyone is charged.</p>
+    <p class="small" style="margin-top:1.25rem">Logging, your plan, Jerry's spoken voice and the
+    accuracy record are free and stay free. Pro opens the depth: the full analytical vault, your
+    complete history export, and the weekly report as a file you can send.</p>
+    <p class="small" style="margin-top:.75rem">A strength coach costs 200 to 400 US dollars a
+    month. This is 199 a year, which is about 16.58 a month, or 29.99 if you would rather pay
+    monthly and stop whenever you like. It renews until you cancel it, you cancel it in your own
+    Apple settings, and the accuracy record is published before anyone is charged. The
+    <a href="/terms/" style="color:var(--teal)">terms</a> say the rest in the same plain words.</p>
     <div class="chips reveal" style="margin-top:1.75rem;gap:.75rem">
       <a class="btn" href="/join/">Join the test</a>
       <a class="btn ghost" href="/how-it-works/">How it works</a>
@@ -549,11 +539,12 @@ field   sealedFor = 1755916800</pre>
     <nav class="foot__col" aria-label="The small print">
       <p class="foot__label">The small print</p>
       <a href="/app-privacy/">Privacy</a>
+      <a href="/terms/">Terms</a>
       <a href="/support/">Support</a>
     </nav>
   </div>
   <div class="foot__panel">
-    <span>Build <b class="stamp" translate="no">8b051bd229</b></span>
+    <span>Build <b class="stamp" translate="no">110c5b0919</b></span>
     <span>iPhone &middot; in testing</span>
     <span>Your training is computed on your device</span>
   </div>

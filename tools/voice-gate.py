@@ -37,7 +37,7 @@ only reason this one is not still documentation is that the falsification step w
 rather than assumed.
 
 WHY THE OTHER PAGES ARE EXEMPT, each named rather than waved at. /record/ is a page about
-our own published record, so "we" IS its subject. /app-privacy/ and /support/ are legal and
+our own published record, so "we" IS its subject. /app-privacy/, /terms/ and /support/ are legal and
 utility pages where first-person plural is what a policy is written in. /verify/ is a tool.
 /404.html has two sentences. Gating those would be a checker inventing a defect, which is as
 useless as one that misses the real thing and fails in the direction that gets checkers

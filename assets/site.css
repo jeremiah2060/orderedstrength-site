@@ -193,6 +193,16 @@ img{max-width:100%;height:auto}
 .bar nav a{transition:color .2s}
 .bar nav a:hover,.bar nav a:focus-visible,.bar nav a[aria-current]{color:var(--ink)}
 @media (max-width:44rem){.wordmark{font-size:1.25rem}.bar nav{gap:1.125rem;font-size:.9375rem}.bar nav .opt{display:none}}
+/* 🔒 THE BAR COLLIDES WITH ITS OWN WORDMARK ON A PHONE, AND SPANISH HITS IT THREE WIDTHS
+   EARLIER. Measured over CDP: the gap between the wordmark's right edge and the nav's left
+   edge is 0px at 320 and 360 in BOTH languages, and 0px at 375 and 390 in Spanish only,
+   because "Cómo funciona" renders 102px against "How it works" at 78px. This is the one
+   component on every screen of the site, so it fails on every page at once.
+   The rule above already drops two links at 44rem; this drops the longest remaining one at
+   25rem (400px), which is where the measurement says it is needed and no earlier: at 414px
+   Spanish still clears the wordmark by 22px with the link present, which is the same progressive disclosure rather than a new idea. The page stays
+   reachable: /how-it-works/ is in the footer of every page and linked from the body copy. */
+@media (max-width:25rem){.bar nav .opt2{display:none}}
 
 
 main{padding-top:var(--bar)}
@@ -482,7 +492,18 @@ hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0}
    Back Up Everything", and they were set with arrows, which this project bans in user copy
    and which its own checker could not see because they were written as &rarr; entities.
    Set as a mono path they need no arrow to be read as a route. */
-.prose em{font-style:normal;letter-spacing:.01em;white-space:nowrap}
+/* 🔒 nowrap INSIDE A CLIPPED SECTION DELETES TEXT RATHER THAN WRAPPING IT. `.prose em` marks
+   an in-app path like "Profile / Data & Privacy / Delete All Training Data", and nowrap was
+   protecting it from splitting across lines. But `section.scene` carries overflow-x:clip, so
+   at 390px the run is simply CUT at the section edge: no ellipsis, no horizontal scroll, and
+   nothing to tell the reader anything is missing. MEASURED 2026-09-01 at 390px: the Spanish
+   "Perfil / Datos y privacidad / Eliminar todos los datos de entrenamiento" needs 624px and
+   loses 254px of itself, mid-phrase. That is the instruction for deleting your own data,
+   truncated, in a legal document. Three more strings clip by 17 to 87px.
+   Wrapping is the correct escalation: these paths already contain spaces around every
+   separator, so normal wrapping breaks them at the slashes and keeps every word on screen.
+   overflow-wrap is the backstop for a single long token that no space can break. */
+.prose em{font-style:normal;letter-spacing:.01em;overflow-wrap:anywhere}
 .prose .lede{font-size:1.0625rem;color:var(--ink2)}
 .prose .stamp{font-family:var(--mono);font-size:.75rem;color:var(--ink3);margin-bottom:2rem}
 

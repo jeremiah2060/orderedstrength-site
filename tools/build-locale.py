@@ -44,7 +44,7 @@ def _protect(s):
 
 
 def build(src_rel, out_rel, text_map, code_map, lang='es-419', link_prefix='/es',
-          script_map=None):
+          script_map=None, asset_map=None):
     src = open(os.path.join(REPO, src_rel), encoding='utf-8').read()
     s = src
 
@@ -119,7 +119,33 @@ def build(src_rel, out_rel, text_map, code_map, lang='es-419', link_prefix='/es'
     alt = (f'<link rel="alternate" hreflang="en" href="https://www.orderedstrength.com{canon}">\n'
            f'<link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es{canon}">\n'
            f'<link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com{canon}">\n')
+    # 🔒 REPLACE, DO NOT PREPEND. This line read `s.replace('<link rel="stylesheet"', alt + ...)`
+    # and the ENGLISH source already carries its own hreflang block, so every Spanish page
+    # shipped with the trio emitted TWICE into one head. Harmless to a reader, wrong to a
+    # crawler, and a tell that a builder step runs on output it did not check. Strip whatever
+    # the skeleton brought with it, then insert exactly one set.
+    s = re.sub(r'<link rel="alternate" hreflang="[^"]+" href="[^"]+">\n?', '', s)
     s = s.replace('<link rel="stylesheet"', alt + '<link rel="stylesheet"', 1)
+
+    # 4b. CANONICAL AND og:url POINT AT THE LOCALE, not at the English page they were copied
+    #     from. Carrying the skeleton's canonical into /es/ tells a search engine the Spanish
+    #     page is a duplicate of the English one and should not be indexed at all.
+    s = re.sub(r'<link rel="canonical" href="[^"]*">',
+               f'<link rel="canonical" href="https://www.orderedstrength.com/es{canon}">', s)
+    s = re.sub(r'<meta property="og:url" content="[^"]*">',
+               f'<meta property="og:url" content="https://www.orderedstrength.com/es{canon}">', s)
+    s = s.replace('<meta property="og:locale" content="en_US">',
+                  f'<meta property="og:locale" content="{lang.replace("-", "_")}">')
+    s = s.replace('<meta property="og:locale:alternate" content="es_419">',
+                  '<meta property="og:locale:alternate" content="en_US">')
+
+    # 4c. LANGUAGE-SPECIFIC ASSETS. Everything under /assets/ is shared between locales on
+    #     purpose (rewriting them would 404 every font and stylesheet), with exactly one
+    #     exception: SCREENSHOTS are photographs of the app running in a language. Passing a
+    #     map here is the only way an asset moves, so a Spanish page cannot silently inherit an
+    #     English photograph the way it did until 2026-09-01.
+    for en_asset, es_asset in (asset_map or {}).items():
+        s = re.sub(re.escape(en_asset) + r'(\?v=[0-9a-f]+)?', es_asset, s)
 
     os.makedirs(os.path.dirname(os.path.join(REPO, out_rel)), exist_ok=True)
     open(os.path.join(REPO, out_rel), 'w', encoding='utf-8').write(s)

@@ -38,14 +38,47 @@ NATIVE = (1206, 2622)
 # with them, and until it does the gate says so rather than vouching for a screen it can no
 # longer vouch for. tools/audit-captures.py carries the same list for the upstream pass.
 SEEDED_LIFTS = {
-    'overhead press', 'barbell row', 'barbell bench press',
-    'lat pulldown', 'romanian deadlift', 'barbell back squat',
+    'en': {
+        'overhead press', 'barbell row', 'barbell bench press',
+        'lat pulldown', 'romanian deadlift', 'barbell back squat',
+    },
+    # The same six as the app's own catalog renders them in Spanish. norm() folds accents, so
+    # these are written the way norm LEAVES them: `sentadilla trasera con barra`, not `Sentadilla`.
+    'es': {
+        'press militar', 'remo con barra', 'press de banca con barra',
+        'jalon al pecho', 'peso muerto rumano', 'sentadilla trasera con barra',
+    },
+}
+
+# 🔒 THIS GATE READ ONE PAGE WHILE THE SITE SHIPPED TWO (2026-09-01). `main()` opened
+# `index.html` and nothing else, so /es/ published four photographs and twenty-one claims about
+# them that NOTHING had ever compared against a pixel. That is not a gap in coverage, it is the
+# gate's entire subject missing: the Spanish page is the one whose captions were hardest to
+# write, because its author does not read the language the screenshots are in.
+PAGES = [('index.html', 'en'), ('es/index.html', 'es')]
+
+# The two content checks above the claim loop are LANGUAGE-SPECIFIC and were written as English
+# literals. Left that way they would silently pass on every Spanish frame: a Spanish permission
+# sheet does not contain "health access", and the "Best on record" guard would never fire, so the
+# one check that proves the photograph is of the RIGHT ATHLETE would have been decorative on /es/.
+PERMISSION_SHEET = {
+    'en': ('health access', 'access your health data'),
+    'es': ('acceso a salud', 'acceder a tus datos de salud'),
+}
+BEST_ON_RECORD = {
+    'en': r'best on record[:/\s]+(.+?)(?:\s*[/|-]\s*estimated|\s+estimated|$)',
+    'es': r'mejor registrado[:/\s]+(.+?)(?:\s*[/|-]\s*1rm|\s+1rm|$)',
 }
 
 
-def ocr(path):
-    out = subprocess.run(['swift', os.path.join(ROOT, 'tools', 'ocr.swift'), path],
-                         capture_output=True, text=True, cwd=ROOT)
+OCR_LANG = {'en': 'en-US', 'es': 'es-ES'}
+
+
+def ocr(path, lang='en'):
+    cmd = ['swift', os.path.join(ROOT, 'tools', 'ocr.swift'), path]
+    if lang != 'en':
+        cmd += ['--lang', OCR_LANG[lang]]
+    out = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT)
     if out.returncode != 0:
         raise SystemExit(f"OCR failed for {path}: {out.stderr.strip()}")
     return out.stdout
@@ -53,13 +86,26 @@ def ocr(path):
 
 def norm(s):
     """Fold the differences that are transcription noise rather than meaning: OCR renders
-    the middle dot as a bullet, splits lines mid-sentence, and varies on quote glyphs."""
+    the middle dot as a bullet, splits lines mid-sentence, and varies on quote glyphs.
+
+    🔒 ACCENTS ARE FOLDED TO THEIR BASE LETTER, AND THE OLD BEHAVIOUR WAS WORSE THAN NO RULE
+    (2026-09-01, when this gate first had to read Spanish). The character class below is
+    `[^a-z0-9%/'". ]`, which does not admit a single accented letter, so every one of them was
+    replaced by a SPACE: `día` became `d a` and `Calibración` became `calibraci n`. That is
+    survivable while both sides carry the same accent, and it fails the moment they do not,
+    which is routine: this repo's own OCR reads the SAME frame as "Buenos dias" and "ausente 3
+    días" in one pass. So a true caption passed or failed on whether Vision happened to see a
+    diacritic. Folding to the base letter makes both spellings converge instead of diverge, and
+    it is a no-op on English, which carries no accents to fold."""
     s = unicodedata.normalize('NFKC', s)
     s = (s.replace('·', '/').replace('•', '/').replace('‧', '/')
            .replace('’', "'").replace('‘', "'")
            .replace('“', '"').replace('”', '"'))
     s = re.sub(r'&middot;', '/', s)
     s = re.sub(r'<[^>]+>', ' ', s)
+    # Decompose, then drop the combining marks: á -> a, ñ -> n, ü -> u.
+    s = ''.join(c for c in unicodedata.normalize('NFKD', s)
+                if not unicodedata.combining(c))
     s = re.sub(r'[^a-z0-9%/\'". ]+', ' ', s.lower())
     return re.sub(r'\s+', ' ', s).strip()
 
@@ -77,23 +123,43 @@ def claims(text):
     # that misses them, and it fails in the direction that gets checkers switched off.
     text = re.sub(r'\sstyle="[^"]*"', ' ', text)
     body = re.sub(r'<code[^>]*>.*?</code>', ' ', text, flags=re.S)
-    for n in re.findall(r'\b(\d{1,3})\s*(?:percent|%)', body):
-        out.append(('number', n + '%'))
+    # 🔒 TWO DEFECTS IN ONE LINE, AND THE SECOND ONE HID BEHIND THE FIX FOR THE FIRST.
+    #
+    # (1) THE UNIT WAS ENGLISH-ONLY. The pattern was `(?:percent|%)`, and Spanish alt text says
+    #     "por ciento", so every prose number on /es/ was asserted by nothing at all.
+    #
+    # (2) AND IT ONLY EVER SAW THE LAST NUMBER OF A LIST, IN BOTH LANGUAGES. Adding the Spanish
+    #     unit was not enough: in "9 y 92 por ciento" (and equally in "6 and 95 percent") only
+    #     the number ADJACENT to the unit matches, so the first value of every pair this site
+    #     writes has never been checked. I proved the incomplete fix by injecting
+    #     "9 y 92" -> "41 y 92" and watching the gate stay GREEN, which is exactly the
+    #     shape of check that runs correctly and answers an adjacent question.
+    #
+    # So: match the whole numeric chain that ENDS in a unit, and claim every number in it.
+    for chain in re.finditer(
+            r'\b(\d{1,3}(?:\s*(?:,|y|and|&)\s*\d{1,3})*)\s*(?:percent|per\s*cent|por\s*ciento|%)',
+            body, re.I):
+        for n in re.findall(r'\d{1,3}', chain.group(1)):
+            out.append(('number', n + '%'))
     return [c for c in out if c[1]]
 
 
-def main():
-    html = open(os.path.join(ROOT, 'index.html'), encoding='utf-8').read()
+_cache = {}
+
+
+def check_page(page, lang):
+    """Every claim ONE page makes about its photographs, against those pixels."""
+    html = open(os.path.join(ROOT, page), encoding='utf-8').read()
     fail = 0
-    cache = {}
 
     def text_of(src):
         path = os.path.join(ROOT, src.split('?')[0].lstrip('/'))
-        if path not in cache:
+        key = (path, lang)
+        if key not in _cache:
             if not os.path.exists(path):
                 print(f"  MISSING  {src}"); return None
-            cache[path] = norm(ocr(path))
-        return cache[path]
+            _cache[key] = norm(ocr(path, lang))
+        return _cache[key]
 
     # every capture the page publishes, with the block that talks about it
     blocks = []
@@ -118,7 +184,6 @@ def main():
         for dm in re.finditer(r'<img class="device__screen" src="([^"]+)"[^>]*alt="([^"]*)"', hero.group(1), re.S):
             blocks.append(('hero', dm.group(1), dm.group(2)))
 
-    print("SCREENSHOTS")
     seen = set()
     for where, src, said in blocks:
         t = text_of(src)
@@ -131,12 +196,12 @@ def main():
             im = Image.open(os.path.join(ROOT, src.split('?')[0].lstrip('/')))
             if im.size != NATIVE:
                 issues.append(f"not native resolution: {im.size[0]}x{im.size[1]}, expected {NATIVE[0]}x{NATIVE[1]}")
-            if 'health access' in t or 'access your health data' in t:
+            if any(p in t for p in PERMISSION_SHEET[lang]):
                 issues.append("this is a system permission sheet, not the product")
-            m_best = re.search(r'best on record[:/\s]+(.+?)(?:\s*[/|-]\s*estimated|\s+estimated|$)', t)
+            m_best = re.search(BEST_ON_RECORD[lang], t)
             if m_best:
                 movement = re.sub(r'\s+', ' ', m_best.group(1)).strip(" .,:-/'\"")
-                if movement and movement not in SEEDED_LIFTS:
+                if movement and movement not in SEEDED_LIFTS[lang]:
                     issues.append(f'"Best on record: {movement}" names a movement the fixture '
                                   f'does not seed, so this photograph is of an athlete the app '
                                   f'never built')
@@ -148,6 +213,34 @@ def main():
             print(f"  {'':26} {'':14} {extra}")
         fail += len(issues)
 
+    return len(blocks), fail
+
+
+# The minimum number of captures each page is known to publish. A page that suddenly claims
+# fewer has not become cleaner: its markup has moved and this gate has stopped finding it.
+EXPECTED_BLOCKS = {'index.html': 5, 'es/index.html': 5}
+
+
+def main():
+    fail = 0
+    print("SCREENSHOTS")
+    for page, lang in PAGES:
+        print(f"  -- {page} ({lang}) " + "-" * (44 - len(page) - len(lang)))
+        n, page_fail = check_page(page, lang)
+        fail += page_fail
+        # 🔒 A CHECK THAT COVERS ZERO ITEMS REPORTS GREEN, AND THIS ONE DID. Renaming the three
+        # container classes on es/index.html (`figure class="state"`, `gallery`, `hero-shot`)
+        # produced the section header, ZERO rows, and exit 0. The gate had just been widened to
+        # read a second page under a lock marker reading "THIS GATE READ ONE PAGE WHILE THE SITE
+        # SHIPPED TWO", and it had no defence against the successor failure: read the page, find
+        # nothing in it, and call that success. An absence reads as all-clear unless something
+        # is counting.
+        want = EXPECTED_BLOCKS.get(page)
+        if want is not None and n < want:
+            print(f"  {'':26} {'':14} FOUND {n} capture(s), expected at least {want}. "
+                  f"The markup this gate matches on has moved, so it is now checking less "
+                  f"than the page publishes.")
+            fail += 1
     print(f"\nSCREENSHOT FAILURES: {fail}")
     return 1 if fail else 0
 

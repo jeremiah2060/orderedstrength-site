@@ -1,4 +1,19 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
+<!doctype html>
+<!-- 🔒 THIS FILE POINTED AT TWO SCREENSHOTS THAT NO LONGER EXIST (found 2026-09-01).
+     `dashboard-session1.webp` and `dashboard-session3.webp` were renamed out of assets/shots
+     long ago, so `node tools/gen-og.mjs` would have rendered the share card with two empty
+     image slots. Nothing caught it: check-site.py walks the published PAGES, and this is a
+     generator input living under tools/. The card currently shipped is a stale artefact from
+     23 August that could not be rebuilt. Repointed at the two frames the home page publishes.
+     🔒 AND IT WROTE A FILE THE SITE DOES NOT SERVE. `gen-og.mjs` rendered to `assets/og.png`
+     while every page has always referenced `assets/og.jpg`, and no step converted one to the
+     other. So even with working screenshots the generator could not have updated the published
+     card. Two independent breaks, one artefact, and the only reason nobody noticed is that
+     nobody had cause to re-render it since 23 August.
+
+     LOCALES: this template renders BOTH cards from one source, switched by `?lang=es`, so the
+     English and Spanish share images cannot drift apart. A Spanish share previously showed an
+     English screenshot under English copy. --><html lang="en"><head><meta charset="utf-8">
 <link rel="stylesheet" href="/assets/site.css">
 <style>
   /* THE SHARE CARD IS BUILT FROM THE SITE'S OWN STYLESHEET, so it cannot drift from the
@@ -33,20 +48,33 @@
 </style></head><body><div class="card">
   <div>
     <div class="og-mark"><i></i>OrderedStrength</div>
-    <p class="eyebrow" style="margin-bottom:20px">Strength coaching for iPhone</p>
-    <h1>A coach who writes it down before you lift.</h1>
-    <p>He records what he expected from you before you touch the bar, then grades himself on it
+    <p class="eyebrow" id="og-eyebrow" style="margin-bottom:20px">Strength coaching for iPhone</p>
+    <h1 id="og-title">A coach who writes it down before you lift.</h1>
+    <p id="og-sub">He records what he expected from you before you touch the bar, then grades himself on it
     and keeps the misses.</p>
   </div>
   <div class="og-shot">
     <div class="device device--back"><div class="device__body"><div class="device__glass">
-      <div class="device__screenwrap"><img class="device__screen" src="/assets/shots/dashboard-session1.webp" alt=""></div>
+      <div class="device__screenwrap"><img class="device__screen" src="/assets/shots/dashboard.webp" alt=""></div>
       <span class="device__island"></span><span class="device__sheen"></span></div></div>
       <span class="device__key device__key--pwr"></span></div>
     <div class="device device--front"><div class="device__body"><div class="device__glass">
-      <div class="device__screenwrap"><img class="device__screen" src="/assets/shots/dashboard-session3.webp" alt=""></div>
+      <div class="device__screenwrap"><img class="device__screen" src="/assets/shots/hundred.webp" alt=""></div>
       <span class="device__island"></span><span class="device__sheen"></span></div></div>
       <span class="device__key device__key--act"></span><span class="device__key device__key--vup"></span>
       <span class="device__key device__key--vdn"></span><span class="device__key device__key--pwr"></span></div>
   </div>
-</div></body></html>
+</div><script>
+(() => {
+  if (new URLSearchParams(location.search).get('lang') !== 'es') return;
+  document.documentElement.lang = 'es-419';
+  document.getElementById('og-eyebrow').textContent = 'Coaching de fuerza para iPhone';
+  document.getElementById('og-title').textContent = 'Un coach que lo anota antes de que levantes.';
+  document.getElementById('og-sub').textContent =
+    'Anota lo que esperaba de ti antes de que toques la barra, después se califica con eso y se queda con los fallos.';
+  // The Spanish card shows the app running in Spanish. Same two states as the English card.
+  for (const [en, es] of [['dashboard.webp', 'es-dashboard.webp'], ['hundred.webp', 'es-hundred.webp']])
+    for (const img of document.querySelectorAll(`img[src*="${en}"]`))
+      img.src = img.src.replace(en, es);
+})();
+</script></body></html>

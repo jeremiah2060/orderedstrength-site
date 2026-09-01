@@ -10,22 +10,23 @@
 <meta property="og:description" content="Pega un comprobante copiado desde OrderedStrength y revisa si la predicción que lleva dentro es, byte por byte, la que se selló antes de la serie.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="OrderedStrength">
-<meta property="og:image" content="/assets/og.jpg">
+<meta property="og:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: un coach que lo anota antes de que levantes.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="/assets/og.jpg">
+<meta name="twitter:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
 <meta name="theme-color" content="#060709">
 <link rel="preload" href="/assets/fonts/public-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/archivo-700-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/verify/">
 <link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/verify/">
 <link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/verify/">
-<link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/verify/">
-<link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/verify/">
-<link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/verify/">
-<link rel="stylesheet" href="/assets/site.css?v=8b051bd229">
+<link rel="canonical" href="https://www.orderedstrength.com/es/verify/">
+<meta property="og:url" content="https://www.orderedstrength.com/es/verify/">
+<meta property="og:locale" content="es_419">
+<meta property="og:locale:alternate" content="en_US">
+<link rel="stylesheet" href="/assets/site.css?v=110c5b0919">
 <style>
 /* An input is a place things go INTO, so it is sunk: inset shadow at the top edge, lit
    hairline at the bottom. Every raised surface on this site is the exact inverse, and
@@ -58,7 +59,7 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
 <div class="bar">
   <a class="wordmark" translate="no" href="/es/"><span class="led" id="led" translate="no" aria-hidden="true"></span>OrderedStrength</a>
   <nav>
-    <a href="/es/how-it-works/">Cómo funciona</a>
+    <a href="/es/how-it-works/" class="opt2">Cómo funciona</a>
     <a href="/es/stronger/" class="opt">Más fuerte</a>
     <a href="/es/record/" class="opt">El registro</a>
     <a href="/es/verify/" aria-current="page">Verificar</a>
@@ -122,16 +123,17 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
     </nav>
     <nav class="foot__col" aria-label="Language">
       <p class="foot__label">Language</p>
-      <a href="/" hreflang="en" lang="en" translate="no">English</a>
+      <a href="/verify/" hreflang="en" lang="en" translate="no">English</a>
     </nav>
     <nav class="foot__col" aria-label="La letra chica">
       <p class="foot__label">La letra chica</p>
       <a href="/es/app-privacy/">Privacidad</a>
+      <a href="/es/terms/">Términos</a>
       <a href="/es/support/">Soporte</a>
     </nav>
   </div>
   <div class="foot__panel">
-    <span>Compilación  <b class="stamp" translate="no">8b051bd229</b></span>
+    <span>Compilación  <b class="stamp" translate="no">110c5b0919</b></span>
     <span>iPhone &middot; en pruebas</span>
     <span>Tu entrenamiento se calcula en tu dispositivo</span>
   </div>
@@ -164,7 +166,7 @@ var $ = function(id){ return document.getElementById(id); };
 function render(html){ $('out').innerHTML = html; }
 function card(cls, verdict, idx, why, computed){
   return '<div class="res '+cls+'"><span class="v">'+verdict+'</span>'+
-    (idx!=null?'<span class="idx">receipt '+idx+'</span>':'')+
+    (idx!=null?'<span class="idx">comprobante '+idx+'</span>':'')+
     '<p class="why">'+why+'</p>'+
     (computed?'<code translate="no">calculada '+computed+'</code>':'')+'</div>';
 }
@@ -189,7 +191,7 @@ $('go').addEventListener('click', async function(){
   try { body = JSON.parse(raw); }
   catch(e){ render(card('bad','JSON NO VÁLIDO',null,'Pega el comprobante exactamente como se copió, incluyendo las llaves exteriores.')); return; }
   $('go').disabled = true;
-  render('<div class="res"><span class="v" style="color:var(--ink3)">CHECKING</span></div>');
+  render('<div class="res"><span class="v" style="color:var(--ink3)">COMPROBANDO</span></div>');
   try{
     var res = await fetch(ENDPOINT, {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(body)});
     // A 404 means the verifier is not deployed. Say THAT, never "not verified": reporting a

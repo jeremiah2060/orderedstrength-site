@@ -13,44 +13,89 @@ auto-translate produced and the reason this file exists.
 
 # ── What the APP says, taken from Localizable.xcstrings, never invented here ────────────
 #
-# 🔒 NOT IN USE YET, AND THE REASON IS THE SHOT GATE DOING ITS JOB. Every <code> run on this
-# site is asserted against the PIXELS of a published screenshot. The Spanish captures are
-# currently broken: `ColdStart_Session1_es419` and `ColdStart_Session100_es419` both photograph
-# the DAY ZERO screen ("Aún sin sesiones", "Población", "Comienza Tu Primera Sesión"), because
-# the fixture looks its six lifts up by ENGLISH name and the Spanish arm's session-count
-# assertion was deliberately disabled. So the Spanish pages publish the ENGLISH photographs,
-# and a caption quoting "Calibración (Construyendo)" over a picture that says
-# "Calibration (Building)" would be a lie the gate would correctly refuse to ship.
+# 🔒 IN USE SINCE 2026-09-01, AND THE COMMENT THAT USED TO SIT HERE OUTLIVED ITS FACTS BY ONE
+# EVENING. It said the Spanish captures were broken, that `ColdStart_Session1_es419` and
+# `ColdStart_Session100_es419` both photographed the DAY ZERO screen, and that the Spanish arm's
+# session-count assertion was disabled. All three were true when written and none of them were
+# true a few hours later: the es camera fix landed, the arm now waits on the mode badge by
+# locale-independent identifier, and both frames photograph a correctly seeded athlete. The site
+# went on publishing ENGLISH photographs to Spanish readers for a reason that had already been
+# repaired, because the note recording the reason had no way to notice.
 #
-# THEREFORE: quoted app strings stay ENGLISH on the Spanish pages, the prose around them is
-# Spanish, and one line tells the reader the app itself runs in Spanish and these frames are
-# the English build. The moment trustworthy es captures exist, the images and this map get
-# swapped in the SAME commit, and shot-gate proves the pair.
-APP_WHEN_ES_CAPTURES_EXIST = {
+# 🔒 A BLOCKER'S EXPIRY IS A FACT ABOUT THE WORLD, SO GO AND LOOK RATHER THAN RE-READING YOUR
+# OWN NOTE. Two minutes of OCR on the baseline frames refuted the whole paragraph.
+#
+# WHAT IS PUBLISHED NOW: /es/ carries four Spanish photographs (`assets/shots/es-*.webp`, lifted
+# from the approved baseline at 76a43aed) and quotes the Spanish app. `shot-gate.py` reads both
+# home pages and proves every one of these against its pixels, so this map can no longer drift
+# from the screen without a red gate.
+#
+# ⚠️ EVERY VALUE BELOW IS TRANSCRIBED FROM `tools/quotable.py` OUTPUT ON THE PUBLISHED SPANISH
+# FRAMES, NOT TRANSLATED. The previous version of this map proves why that matters: it carried
+# `open on evidence, not time` -> `se abren con evidencia, no con el tiempo`, and the app's
+# actual Spanish says `no con tiempo`, with no article. Written from the map, that caption would
+# have been a false quotation about a photograph on the front page, in the language the author
+# does not read.
+APP = {
+    # Verified present in the published Spanish frames.
     'Barbell Back Squat':              'Sentadilla Trasera con Barra',
     'Building':                        'Construyendo',
-    'Calibration (Building)':          'Calibración (Construyendo)',
-    'Calibration (Your RIR)':          'Calibración (Tu RIR)',
-    'Individual Recovery Fingerprint': 'Huella individual de recuperación',
-    'Metabolic Phenotype':             'Fenotipo metabólico',
-    'Pop. Est.':                       'Est. pobl.',
-    'Your Data':                       'Tus datos',
-    # Composed at runtime in the app, so no single catalog row exists. Rendered from the
-    # Spanish captures once those are trustworthy; until then these are the app's own
-    # published es wording for the same surfaces, transcribed rather than translated.
+    'Calibration (Building)':          '(Construyendo)',
+    'Calibration (Your RIR)':          '(Tu RIR)',
+    'Pop. Est.':                       '(Est. pobl.)',
     'Session 100':                     'Sesión 100',
     'Session 1':                       'Sesión 1',
     '100 sessions logged':             '100 sesiones registradas',
+    'open on evidence, not time':      'se abren con evidencia, no con tiempo',
+    'Estimated 1RM 56.3 kg':           '1RM estimado 56.3 kg',
+    'Estimated 1RM 129.2 kg':          '1RM estimado 129.2 kg',
+}
+
+# 🔒 NOT IN THIS MAP, AND THE ABSENCE IS THE POINT. These four appear on the ENGLISH home page
+# and have no Spanish frame that shows them, because no Spanish test arm captures the
+# answered-soreness dashboard or the Full Intelligence sheet. Quoting them on /es/ would be a
+# claim about a photograph that does not exist, so the Spanish page makes two NEIGHBOURING
+# arguments instead, from frames the app really did produce in Spanish: what is already read
+# from your data versus what is still population, and the Unlock Map that names what is missing.
+# Restore these to APP only in the same commit that publishes a Spanish frame containing them.
+APP_NEEDS_A_SPANISH_FRAME = {
+    'Your Data':                       'Tus datos',
+    'Individual Recovery Fingerprint': 'Huella individual de recuperación',
+    'Metabolic Phenotype':             'Fenotipo metabólico',
     'Each one names the evidence I still need.':
         'Cada una nombra la evidencia que todavía necesito.',
-    'open on evidence, not time':      'se abren con evidencia, no con el tiempo',
     'Your load and your recovery rate are both measured from you now':
         'Tu carga y tu tasa de recuperación ahora se miden a partir de ti',
 }
 
+# What the Spanish frames say that the English gallery never shows. Quoted, not translated.
+APP_ES_ONLY = {
+    'Ahora entreno 3 de tus áreas de entrenamiento con tus propios datos',
+    '3 de 6',
+    'A partir de tus datos',
+    'Población',
+    '100 sesiones / base poblacional',
+    'Mostrar razonamiento',
+    'Mapa de Desbloqueos',
+    'Qué sigue y qué hace falta para abrirlo',
+    'Tu ritmo es normal',
+    'de tus series registradas / últimas 6 semanas',
+}
 
-# Until then, no <code> run is translated.
-APP = {}
+# 🔒 ASSETS ARE SHARED BETWEEN LOCALES BY DEFAULT AND THESE FOUR ARE NOT. `build-locale.py`
+# deliberately refuses to rewrite /assets/ paths, because rewriting them would 404 every font
+# and stylesheet. Screenshots are the one asset class that IS language-specific, so they are
+# named here and nowhere else.
+ASSETS = {
+    '/assets/shots/dashboard.webp': '/assets/shots/es-dashboard.webp',
+    '/assets/shots/hundred.webp':   '/assets/shots/es-hundred.webp',
+    # ⚠️ `answered.webp` HAS NO SPANISH TWIN and deliberately stays English-frame-free: the
+    # Spanish hero shows es-hundred behind es-dashboard instead. There is no Spanish test arm
+    # capturing the answered-soreness dashboard, so the honest options were an English photograph
+    # under Spanish prose (refused) or a different Spanish frame (taken). Add a row here only in
+    # the same commit that publishes a Spanish capture of that screen.
+}
+
 
 # ── Chrome shared by every page ─────────────────────────────────────────────────────────
 CHROME = {

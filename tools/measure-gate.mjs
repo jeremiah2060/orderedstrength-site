@@ -23,7 +23,26 @@
 import { withPage } from './measure.mjs';
 
 const BASE  = process.env.BASE || 'http://127.0.0.1:8899';
-const PAGES_EN = ['/', '/how-it-works/', '/stronger/', '/join/', '/record/', '/verify/', '/support/', '/app-privacy/', '/404.html'];
+import { readdirSync, existsSync } from 'node:fs';
+
+// 🔒 THE THIRD COPY OF A HAND-TYPED PAGE LIST, AND THE ONE THAT WAS MISSED. align-gate and
+// type-gate were both moved onto a derived list on 2026-09-01 under a lock marker naming the
+// defect ("/terms/ landed, this array did not change, and a page carrying a legal document
+// required by App Store review was measured by nothing"). This file was the same nine-entry
+// array and was not touched, so the fix was two-thirds applied and a fourth reader of the same
+// stale list went on reporting green about 18 pages of a 20-page site.
+// 🔒 FIXING A DUPLICATED CONSTANT MEANS GREPPING FOR ITS OTHER COPIES, NOT FIXING THE COPIES
+// YOU HAPPENED TO OPEN.
+const ROOT = new URL('..', import.meta.url).pathname;
+const PAGES_EN = [
+  '/',
+  ...readdirSync(ROOT, { withFileTypes: true })
+    .filter(d => d.isDirectory() && !['assets', 'tools', 'es', '.git'].includes(d.name))
+    .filter(d => existsSync(ROOT + d.name + '/index.html'))
+    .map(d => '/' + d.name + '/')
+    .sort(),
+  '/404.html',
+];
 // The locale pages are DERIVED from the English list, never retyped: a second
 // hand-maintained list is a list that goes stale the first time a page is added.
 const PAGES = [...PAGES_EN, ...PAGES_EN.map(p => p === '/404.html' ? '/es/404.html' : '/es' + p)];

@@ -17,10 +17,28 @@
 import { withPage } from './measure.mjs';
 
 const BASE  = process.env.BASE || 'http://127.0.0.1:8899';
-const PAGES_EN = ['/', '/how-it-works/', '/stronger/', '/join/', '/record/', '/verify/', '/support/', '/app-privacy/', '/404.html'];
+import { readdirSync, existsSync } from 'node:fs';
+
+// 🔒 DERIVE THE PAGE LIST FROM THE FILESYSTEM, NEVER RETYPE IT. This was a hand-typed array,
+// and the comment three lines below it recorded the LAST time that went wrong: "IT COVERS 8
+// PAGES, NOT 7. This line said 7 until 2026-08-23, when /join/ made it 8 and nobody
+// re-counted." It happened again on 2026-09-01: /terms/ landed, this array did not change, and
+// a page carrying a legal document required by App Store review was measured by nothing. A
+// stale list does not fail. It reports green about a smaller site than the one that ships.
+const ROOT = new URL('..', import.meta.url).pathname;
+const PAGES_EN = [
+  '/',
+  ...readdirSync(ROOT, { withFileTypes: true })
+    .filter(d => d.isDirectory() && !['assets', 'tools', 'es', '.git'].includes(d.name))
+    .filter(d => existsSync(ROOT + d.name + '/index.html'))
+    .map(d => '/' + d.name + '/')
+    .sort(),
+  '/404.html',
+];
 // The locale pages are DERIVED from the English list, never retyped: a second
 // hand-maintained list is a list that goes stale the first time a page is added.
-const PAGES = [...PAGES_EN, ...PAGES_EN.map(p => p === '/404.html' ? '/es/404.html' : '/es' + p)];
+const PAGES = [...PAGES_EN, ...PAGES_EN.map(p => p === '/404.html' ? '/es/404.html' : '/es' + p)]
+  .filter(p => existsSync(ROOT + p.replace(/^\//, '').replace(/\/$/, '/index.html') || p));
 const WIDTHS = process.argv.slice(2).map(Number).filter(Boolean);
 const TOL = 1.5;
 

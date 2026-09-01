@@ -83,7 +83,21 @@ def selectors(css):
                 out.add(part)
     return out
 
-pages = sorted(glob.glob('*.html') + glob.glob('*/index.html') + glob.glob('*/*/index.html'))
+# 🔒 `es/404.html` MATCHED NONE OF THESE PATTERNS AND SO WAS GATED BY NOTHING.
+# `*.html` is root-only, `*/index.html` and `*/*/index.html` both require the name
+# `index.html`. A locale's 404 page is the one file that is neither, so it silently sat
+# outside every source gate: on 2026-09-01 it was found carrying a duplicated hreflang
+# trio, a relative og:image pointing at the ENGLISH share card, no og:locale and no terms
+# link, every one of which had been fixed on all nineteen of its siblings. A page nothing
+# reads is not a page with no defects. `*/*.html` closes it; the set dedupes the overlap.
+
+# `tools/` holds GENERATOR INPUTS, not published pages: tools/og.html is the share-card
+# template and is rendered to a JPEG, never served. Widening the glob to reach es/404.html
+# swept it in, and gating a template as though it were a page is how a gate earns the
+# reputation that gets it switched off.
+pages = sorted(p for p in set(glob.glob('*.html') + glob.glob('*/*.html')
+                    + glob.glob('*/*/index.html'))
+                    if not p.startswith(('tools/', 'assets/')))
 shared = open('assets/site.css', encoding='utf-8').read()
 shared_sel = selectors(shared)
 fail = 0
@@ -194,8 +208,16 @@ for f in pages:
     iss = []
     refs = set(re.findall(r'/assets/site\.css\?v=([0-9a-f]+)', s))
     if refs and refs != {real}: iss.append(f'stylesheet version {"/".join(sorted(refs))}, build is {real}')
-    stamps = set(re.findall(r'<b class="stamp">([^<]*)</b>', s))
-    if stamps and stamps != {real}: iss.append(f'footer stamp {"/".join(sorted(stamps))}, build is {real}')
+    # 🔒 THIS CHECK WAS DECORATIVE FOR THE SAME REASON THE STAMPER WAS BROKEN: one regex,
+    # copied into both files, that stopped matching the day `translate="no"` was added to the
+    # element. `stamps` came back EMPTY, and `if stamps and ...` reads an empty set as nothing
+    # to check rather than as a failure to look. So the footer build number drifted from the
+    # stylesheet it names and the gate written to prevent exactly that reported OK, on the site
+    # whose argument is that its numbers can be checked.
+    # 🔒 AN ABSENCE IS NOT A PASS. A page that carries NO stamp now fails too.
+    stamps = set(re.findall(r'<b class="stamp"[^>]*>([^<]*)</b>', s))
+    if not stamps: iss.append('no footer build stamp found on this page')
+    elif stamps != {real}: iss.append(f'footer stamp {"/".join(sorted(stamps))}, build is {real}')
     print(f"  {f:28} {'OK' if not iss else '; '.join(iss)}")
     fail += len(iss)
 
