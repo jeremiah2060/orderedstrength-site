@@ -89,11 +89,15 @@ APP_ES_ONLY = {
 ASSETS = {
     '/assets/shots/dashboard.webp': '/assets/shots/es-dashboard.webp',
     '/assets/shots/hundred.webp':   '/assets/shots/es-hundred.webp',
-    # ⚠️ `answered.webp` HAS NO SPANISH TWIN and deliberately stays English-frame-free: the
-    # Spanish hero shows es-hundred behind es-dashboard instead. There is no Spanish test arm
-    # capturing the answered-soreness dashboard, so the honest options were an English photograph
-    # under Spanish prose (refused) or a different Spanish frame (taken). Add a row here only in
-    # the same commit that publishes a Spanish capture of that screen.
+    # ⚠️ THESE TWO ARE NOT TRANSLATIONS OF THEIR ENGLISH SLOTS, AND THE CAPTIONS SAY SO.
+    # There is no Spanish test arm capturing the answered-soreness dashboard, and none capturing
+    # the Full Intelligence sheet. So slots 3 and 4 carry SCROLLED frames of the same
+    # hundred-session screen, which make neighbouring arguments the English gallery never shows:
+    # what already reads from your data versus what is still population, and the Unlock Map that
+    # names what is missing. Every caption is authored from those frames' own pixels.
+    # When a Spanish arm for either English screen exists, publish it and repoint the row.
+    '/assets/shots/answered.webp':  '/assets/shots/es-mixed.webp',
+    '/assets/shots/evidence.webp':  '/assets/shots/es-unlocks.webp',
 }
 
 

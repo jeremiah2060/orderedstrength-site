@@ -218,7 +218,7 @@ def check_page(page, lang):
 
 # The minimum number of captures each page is known to publish. A page that suddenly claims
 # fewer has not become cleaner: its markup has moved and this gate has stopped finding it.
-EXPECTED_BLOCKS = {'index.html': 5, 'es/index.html': 5}
+EXPECTED_BLOCKS = {'index.html': 7, 'es/index.html': 7}
 
 
 def main():
