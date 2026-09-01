@@ -311,9 +311,21 @@ main > .scene:nth-of-type(even)::before{--pool:66%}
 
    So the left padding is the SAME expression the nav bar uses, to the pixel, and only the
    right side runs out to the viewport. The eye tracks the left edge; that edge does not move. */
-.scene.hero{max-width:none;margin-left:0;margin-right:0;
-      padding-left:max(var(--gut), calc((100vw - var(--wide)) / 2 + var(--gut)));
-      padding-right:max(var(--gut), calc((100vw - var(--hero-wide)) / 2 + var(--gut)))}
+/* ⚠️ MEASURED AND REVERTED, TWICE, AND THE REASON IS WORTH MORE THAN THE CSS.
+   The hero was capped with every other section at --wide, so at 1920px it held 1184px between
+   368px rails and the shot was smaller than the display could show. Two widenings were built:
+     1. WIDER TO THE RIGHT ONLY, left edge pinned to the nav's own expression. Measured perfect
+        at four widths. The CEO looked at it and said it "looks creepy": a content block flush
+        left and running to the right edge reads as a mistake, not as emphasis.
+     2. WIDER AND CENTRED. Symmetric and balanced in itself, and it puts the hero's left edge
+        96px LEFT of the nav wordmark at 1920px.
+   And (2) is the one that cannot be fixed by moving the nav, because the nav's alignment to the
+   container edge IS a fix, made 2026-08-23 after measuring an 80px disagreement on every page:
+   "the misalignment you notice first, because it is at the top". A hero wider than the content
+   and a nav aligned to the content cannot both be true.
+   So the grid wins, which is this site's actual identity, and the hero gets its presence from
+   the SHOT instead: --device-h's ceiling went 36rem -> 40rem in the same round and stayed. */
+
 /* The headline still wraps on its own measure (17ch), so widening gives the room to the shot
    rather than stretching the sentence into an unreadable line. */
 .scene.hero .hero-grid{grid-template-columns:minmax(0, 34rem) minmax(0, 1fr)}
