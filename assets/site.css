@@ -447,7 +447,44 @@ main > .scene:nth-of-type(even)::before{--pool:66%}
    left edge OUTSIDE that line, which reads as a broken container rather than as emphasis.
 
    So the left padding is the SAME expression the nav bar uses, to the pixel, and only the
-   right side runs out to the viewport. The eye tracks the left edge; that edge does not move. */
+   right side runs out to the viewport. The eye tracks the left edge; that edge does not move.
+
+   🔒 AND FOR A DAY THIS COMMENT DESCRIBED A RULE THAT WAS NOT HERE. It arrived with commit
+   8c18d74 ("the hero is the one section allowed to run wide"), the implementation was reverted
+   the next day by e9691e0 ("moving it left broke the one alignment this page is built on")
+   BECAUSE THE FIRST ATTEMPT WIDENED SYMMETRICALLY, and the paragraph above stayed behind to
+   describe a thing the stylesheet no longer did. The CEO asked for it three times. A comment
+   with no rule under it is worse than no comment: it reads as done.
+
+   Measured before the second attempt, at 1440px: the section's content ran 128 to 1312 while
+   the rightmost device ended at 1234, so the product shot stopped 78px short of the text below
+   it and 206px short of the screen. Two separate causes, and fixing either one alone leaves the
+   other: the SECTION capped at --wide, and the device group CENTRED inside its own column, which
+   means widening the column pushes the group's centre right and adds slack to both sides.
+
+   So: the section runs wider to the right, by at most 12rem so it cannot get silly on a 2560px
+   display, and the device group stands on that right edge instead of floating in the middle of
+   it. The hero's own text and its three facts keep the page's measure, because a headline that
+   runs wider than every heading under it is the thing that would actually read as broken. */
+@media (min-width:72.0625rem){
+  .hero{
+    --hero-left:max(var(--gut), calc((100vw - var(--wide)) / 2 + var(--gut)));
+    max-width:none;
+    padding-left:var(--hero-left);
+    padding-right:max(var(--gut),
+                      calc(100vw - var(--hero-left) - var(--wide) - 12rem));
+  }
+  /* the measure of the page, kept, so only the product shot runs wide */
+  .hero > .facts{max-width:calc(var(--wide) - 2 * var(--gut))}
+  /* 0.7482 is how far the group reaches RIGHT of its own centre, in units of the front
+     device's width: the back device sits at translateX(-14%) of its own box and is 87% as
+     tall, so 0.14 left of centre plus its full 0.87 width lands at 0.86 * 0.87. Deriving it
+     rather than typing a pixel means it holds at every device height. */
+  .hero-shot .devices{transform:translateX(calc(50% - 0.7482 * var(--device-w)))}
+  /* and the card follows the front device instead of a centre that no longer exists:
+     the group is 1.4682 device-widths across (0.72 left of centre plus 0.7482 right). */
+  .hero-shot .appcard.float{left:calc(100% - 1.4682 * var(--device-w) - 2.25rem)}
+}
 .hero-grid{flex:1;align-content:center}
 .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);
            align-items:center;width:100%}
@@ -916,7 +953,12 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
   bottom:-3.25rem;
   width:min(16rem, calc(var(--device-w) + 3rem));
   box-shadow:0 1.75rem 4.5rem rgba(0,0,0,.85),0 0 0 1px var(--line)}
+/* 🔒 THE DISCLOSURE IS ITS OWN LINE, NOT A SUFFIX ON THE LABEL. It was
+   "Prediction accuracy &middot; example" for one build, and at 12px uppercase mono with .1em
+   tracking that is 278px of label in a 256px card, so it wrapped and read as a mistake rather
+   than as a disclosure. A sentence says it once, in full, and cannot wrap into nonsense. */
 .hero-shot .appcard.float .cap{margin-bottom:.75rem}
+.appcard .egnote{font-size:.75rem;color:var(--ink3);margin:.625rem 0 0;line-height:1.4}
 .hero-shot .appcard.float .lift{padding:.375rem 0}
 .hero-shot .appcard.float .nm{font-size:.875rem}
 .hero-shot .appcard.float .vd{font-size:.75rem}

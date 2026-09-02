@@ -29,7 +29,7 @@
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
 <link rel="manifest" href="/es/site.webmanifest">
-<link rel="stylesheet" href="/assets/site.css?v=0f14b51105">
+<link rel="stylesheet" href="/assets/site.css?v=ee23c76d86">
 <style>
 .ledger{margin:2rem 0 0;max-width:64rem;background-color:var(--e1);border-radius:12px;overflow:hidden;overflow:clip;box-shadow:var(--shadow-3)}
 .lhead{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.875rem 1.125rem;
@@ -51,6 +51,30 @@
 .two .card h3{color:var(--ink)}
 .two .card .yes{color:var(--teal)} .two .card .no{color:var(--amber)}
 @media (max-width:40rem){.two{grid-template-columns:1fr}.anchor{grid-template-columns:1fr;gap:.125rem}}
+/* ══ THE SCOREBOARD AT ZERO ═══════════════════════════════════════════════════════════
+   A record that does not exist yet is still an instrument, and it should read ZERO rather
+   than read as a paragraph promising an instrument. Three counters and an empty plot with
+   its target line drawn: a visitor can see the shape of the thing that will fill, and can
+   see that today it holds nothing. Every number here is DERIVED from record/anchors.json,
+   so none of them can be typed, and the day the first root lands they move on their own. */
+.score{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:0 0 1.5rem;
+       background:var(--line);border-radius:10px;overflow:hidden;overflow:clip}
+.score > div{background-color:var(--e2);padding:1rem 1.125rem}
+.score b{display:block;font-family:var(--display);font-weight:700;font-size:2rem;line-height:1.04;
+         letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums}
+.score b.none{color:var(--ink3);font-size:1.25rem;line-height:1.66}
+.score span{display:block;font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;
+            text-transform:uppercase;color:var(--ink3);margin-top:.375rem}
+.calib{margin:0 0 1.5rem;padding:0}
+.calib .ilabel{margin-bottom:.75rem}
+.calibplot{display:block;width:100%;height:auto}
+.calibplot .cx line{stroke:var(--line);stroke-width:1}
+.calibplot .cg line{stroke:var(--line-soft);stroke-width:1}
+.calibplot .ctarget{stroke:var(--teal);stroke-width:1.5;stroke-dasharray:5 5;opacity:.7}
+.calibplot text{font-family:var(--mono);font-size:14px;fill:var(--ink3);letter-spacing:.08em}
+.calibplot .ctlab{fill:var(--teal)}
+.calib .small{margin:.875rem 0 0;color:var(--ink3)}
+@media (max-width:40rem){.score{grid-template-columns:1fr}.score b{font-size:1.75rem}}
 </style>
 </head>
 <body>
@@ -96,17 +120,51 @@
         <span class="lbl">Anclas diarias de compromiso</span>
         <span class="lstate" id="lstate">consultando</span>
       </div>
-      <div class="lbody" id="lbody">
+      <div class="lbody">
+        <div class="score">
+          <div><b id="scAnchors">0</b><span>anclas publicadas</span></div>
+          <div><b id="scDays">0</b><span>días cubiertos</span></div>
+          <div><b id="scFirst" class="none">todavía no</b><span>primera ancla</span></div>
+        </div>
+        <figure class="calib">
+          <figcaption class="ilabel">Cobertura contra el objetivo</figcaption>
+        <svg class="calibplot" viewBox="0 0 1024 300" role="img" aria-label="Un gráfico de cobertura vacío. La línea del objetivo está en 80 por ciento, que es cuatro de cada cinco. Todavía no se ha calificado ningún mes, así que no hay nada trazado.">
+          <g class="cx">
+            <line x1="96" y1="20" x2="96" y2="248" />
+            <line x1="96" y1="248" x2="1000" y2="248" />
+          </g>
+          <g class="cg">
+            <line x1="96" y1="20" x2="1000" y2="20" />
+            <line x1="96" y1="77" x2="1000" y2="77" />
+            <line x1="96" y1="134" x2="1000" y2="134" />
+            <line x1="96" y1="191" x2="1000" y2="191" />
+          </g>
+          <line class="ctarget" x1="96" y1="65.6" x2="1000" y2="65.6" />
+          <text class="ctlab" x="1000" y="55" text-anchor="end">OBJETIVO 80%</text>
+          <g class="clab">
+            <text x="82" y="25" text-anchor="end">100%</text>
+            <text x="82" y="82" text-anchor="end">75%</text>
+            <text x="82" y="139" text-anchor="end">50%</text>
+            <text x="82" y="196" text-anchor="end">25%</text>
+            <text x="82" y="253" text-anchor="end">0</text>
+            <text x="96" y="278" text-anchor="start">DESDE EL PRIMER MES CALIFICADO</text>
+          </g>
+        </svg>
+          <p class="small">Cada punto será un mes de predicciones selladas: la parte cuyo resultado cayó dentro del rango que Jerry dijo antes de la serie. La línea es el objetivo al que apunta la app, cuatro de cada cinco. No hay nada trazado porque nada se ha calificado.</p>
+        </figure>
+        <div id="lbody">
         <div class="empty">
           <h3>Todavía no empieza.</h3>
           <p>Leyendo el repositorio público.</p>
+        </div>
         </div>
       </div>
     </div>
     <p class="small" style="margin-top:1rem">Fuente:
       <a href="https://github.com/jeremiah2060/orderedstrength-receipts" style="color:var(--teal)">github.com/jeremiah2060/orderedstrength-receipts</a>.
-      Se lee en vivo desde GitHub cada vez que carga esta página, así que lo que ves aquí es lo
-      que el repositorio realmente contiene y no un número que escribimos nosotros.</p>
+      Se copió en esta página cuando se construyó, el <span id="lmirror">una fecha anterior</span>,
+      así que esta página responde conteste GitHub o no. El repositorio es donde revisar el estado
+      de ahora mismo, y las raíces de ahí siempre serán las mismas raíces.</p>
   </section>
 
   <section class="scene reading">
@@ -188,6 +246,24 @@ var API = '/record/anchors.json';
 var state = document.getElementById('lstate');
 var body = document.getElementById('lbody');
 
+/* Every figure on this page is READ OUT OF THE MIRROR, never written into the markup. A
+   scoreboard whose zeroes are typed is a scoreboard that will still say zero on the day it
+   should say one. */
+function score(doc){
+  var anchors = (doc && doc.anchors) || [];
+  var seen = {}, i;
+  for (i = 0; i < anchors.length; i++) if (anchors[i].date) seen[anchors[i].date] = 1;
+  var days = 0, k; for (k in seen) if (Object.prototype.hasOwnProperty.call(seen, k)) days++;
+  document.getElementById('scAnchors').textContent = String(anchors.length);
+  document.getElementById('scDays').textContent = String(days);
+  var f = document.getElementById('scFirst');
+  var first = anchors.length ? anchors[anchors.length - 1].date : null;
+  f.textContent = first || f.textContent;
+  f.className = first ? '' : 'none';
+  var mirrored = document.getElementById('lmirror');
+  if (mirrored && doc && doc.mirrored) mirrored.textContent = doc.mirrored;
+}
+
 function empty(reason){
   state.textContent = 'ninguna todavía';
   body.innerHTML =
@@ -200,6 +276,7 @@ function empty(reason){
 fetch(API, { headers: { 'accept': 'application/json' } })
   .then(function(r){ if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
   .then(function(doc){
+    score(doc);
     var anchors = (doc && doc.anchors) || [];
     if (!anchors.length){
       empty(doc && doc.state === 'no-folder'
