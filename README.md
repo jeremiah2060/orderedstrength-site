@@ -30,10 +30,21 @@ rebuild from the English skeleton is not currently a command anyone can run.
 
 ## Where the wording comes from
 
-The source of truth for the privacy and support wording lives in the main app repo at
-`docs/legal/privacy.html` and `docs/legal/support.html`, and the verifier at `docs/verify/index.html`.
-When those change, copy the update here and push. Never edit the wording here first: the app repo
-runs `scripts/check_legal_links.sh` against these URLs.
+**THE APP LINKS TO THIS SITE, SO THIS SITE IS THE PUBLISHED POLICY.** `LegalLinks.swift` ships
+`https://www.orderedstrength.com/app-privacy`, which means what is served here is what a user and
+an App Store reviewer actually read. The app repo's `docs/legal/privacy.html` and
+`docs/legal/support.html` are a COPY kept for reference, and the direction is: change it here,
+publish, then copy it back there.
+
+⚠️ **THIS PARAGRAPH USED TO SAY THE OPPOSITE**, that the app repo was the source of truth and that
+the wording must never be edited here first. Nobody was copying in either direction, and on
+2026-09-02 the two had been apart for weeks: the app repo said "Three things can leave your device
+... none of them is your training log" while the truth, checked against the Swift, is five, and one
+of them WAS the training log. The rule pointed at the stale copy, which is worse than having no
+rule, because it makes the wrong file look authoritative. Both were brought into agreement that day.
+
+The verifier page at `docs/verify/index.html` in the app repo is unchanged by this: it is a tool,
+not published wording.
 
 ## Domain, and which host actually serves it
 
