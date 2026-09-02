@@ -18,13 +18,26 @@
 set -uo pipefail
 
 check() {
-  local d="$1" fail=0 v
+  local d="$1" fail=0 v ns at
+
+  # 🔒 ASK THE DOMAIN'S OWN NAMESERVERS, NEVER THE LOCAL RESOLVER. Measured 2026-09-02, live:
+  # the SPF record was added at the registrar, was visible within fifteen seconds on 8.8.8.8,
+  # and this script reported it MISSING for the next four hours. Nothing was wrong with the
+  # record. The apex TXT had been queried earlier the same day, the answer had no SPF in it,
+  # and the local resolver was serving that cached answer for the zone's 4-hour TTL.
+  #
+  # A verification tool that reads a cache is not verifying, it is remembering, and it fails in
+  # the WORST direction: it tells you the thing you just did did not work, so you go and do it
+  # again, and the second attempt is how a domain ends up with two SPF records, which is a
+  # permanent error and the exact failure this script warns about further down.
+  ns=$(dig +short NS "$d" 2>/dev/null | head -1)
+  at=${ns:+@$ns}
 
   # ── SPF ────────────────────────────────────────────────────────────────────────────────
   # 🔒 MORE THAN ONE spf1 RECORD IS WORSE THAN NONE. RFC 7208 says a domain publishing two
   # results in PermError, and receivers treat that as no policy at all, so a well-meant second
   # record silently disables the first.
-  v=$(dig +short TXT "$d" | tr -d '"' | grep -c 'v=spf1' || true)
+  v=$(dig +short TXT "$d" $at | tr -d '"' | grep -c 'v=spf1' || true)
   if [ "$v" -eq 0 ]; then
     echo "  SPF     MISSING     nothing authorises a server to send as $d"
     echo "          fix   TXT  @   v=spf1 include:_spf.google.com ~all"
@@ -33,7 +46,7 @@ check() {
     echo "  SPF     $v RECORDS   two spf1 records is a permanent error and counts as none"
     fail=1
   else
-    v=$(dig +short TXT "$d" | tr -d '"' | grep 'v=spf1')
+    v=$(dig +short TXT "$d" $at | tr -d '"' | grep 'v=spf1')
     if echo "$v" | grep -q '_spf.google.com'; then
       echo "  SPF     OK          $v"
     else
@@ -46,7 +59,7 @@ check() {
   # ── DKIM ───────────────────────────────────────────────────────────────────────────────
   # The selector is Google Workspace's default. It cannot be typed by hand: the key is
   # GENERATED in the Admin console and the TXT value is what that screen gives you.
-  v=$(dig +short TXT "google._domainkey.$d" | tr -d '"' | tr -d ' ')
+  v=$(dig +short TXT "google._domainkey.$d" $at | tr -d '"' | tr -d ' ')
   if [ -z "$v" ]; then
     echo "  DKIM    MISSING     mail is not signed, so a receiver cannot tell a forgery from you"
     echo "          fix   admin.google.com > Apps > Google Workspace > Gmail > Authenticate email"
@@ -100,7 +113,7 @@ check() {
   fi
 
   # ── DMARC ──────────────────────────────────────────────────────────────────────────────
-  v=$(dig +short TXT "_dmarc.$d" | tr -d '"')
+  v=$(dig +short TXT "_dmarc.$d" $at | tr -d '"')
   if [ -z "$v" ]; then
     echo "  DMARC   MISSING     nothing tells a receiver what to do with a forgery"
     echo "          fix   TXT  _dmarc   v=DMARC1; p=quarantine; rua=mailto:jeremiah@$d"
@@ -139,6 +152,7 @@ fi
 
 D="${1:-orderedstrength.com}"
 echo "MAIL AUTHENTICATION for $D  ($(date '+%Y-%m-%d %H:%M'))"
+echo "  asked $(dig +short NS "$D" 2>/dev/null | head -1), the domain's own nameserver, not a cache"
 check "$D"
 rc=$?
 echo
