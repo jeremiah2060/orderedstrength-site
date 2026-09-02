@@ -218,7 +218,17 @@ def check_page(page, lang):
 
 # The minimum number of captures each page is known to publish. A page that suddenly claims
 # fewer has not become cleaner: its markup has moved and this gate has stopped finding it.
-EXPECTED_BLOCKS = {'index.html': 7, 'es/index.html': 7}
+#
+# 🔒 THIS NUMBER MOVES DOWN ONLY BESIDE A DELIBERATE REMOVAL, NAMED IN THE SAME COMMIT, AND
+# NEVER TO MAKE A RED GO AWAY. It went 7 -> 6 on 2026-09-02 when the hero's second device was
+# removed: it was a duplicate phone dimmed to 52% brightness showing a DIFFERENT screen from
+# the one the headline is about, and the whole point of this gate is that a published
+# photograph has to support the sentence beside it. The gate did exactly what it exists for,
+# which is refuse to quietly check six things where it used to check seven. If you are reading
+# this because it went red and you are about to edit this line, the question to answer first
+# is WHICH capture went and WHY, and if the answer is "I don't know", the markup moved and the
+# fix is in the page, not here.
+EXPECTED_BLOCKS = {'index.html': 6, 'es/index.html': 6}
 
 
 def main():

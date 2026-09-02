@@ -624,10 +624,15 @@ hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0}
      box-shadow:0 1px 0 rgba(255,255,255,.28) inset, 0 2px 6px rgba(0,0,0,.5),
                 0 10px 26px -10px rgba(0,212,177,.5);
      transition:filter .22s var(--ease),transform .4s var(--spring),box-shadow .3s var(--ease)}
-.btn:hover{filter:brightness(1.07);transform:translateY(-2px);
+/* The button keeps a PRESS, because a button is a thing you press: it brightens on approach
+   and sinks under the finger. What it no longer does is float upward at a pointer it may never
+   see. Same light, one direction, and the sunk state is reachable by touch. */
+.btn:hover{filter:brightness(1.07);
      box-shadow:0 1px 0 rgba(255,255,255,.34) inset, 0 3px 8px rgba(0,0,0,.5),
                 0 16px 34px -12px rgba(0,212,177,.6)}
-.btn:active{transform:translateY(0)}
+.btn:active{filter:brightness(.96);transform:translateY(1px);
+     box-shadow:0 1px 0 rgba(255,255,255,.2) inset, 0 1px 3px rgba(0,0,0,.55),
+                0 6px 16px -10px rgba(0,212,177,.5)}
 .btn.ghost{background-color:var(--e2);color:var(--ink);
      box-shadow:var(--shadow-2)}
 .btn.ghost::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;padding:1px;
@@ -761,12 +766,15 @@ footer::before{content:"";position:absolute;inset:0 var(--gut) auto;height:1px;
   .hero .chips{animation:rise .7s var(--ease) .18s both}
   .hero .stack{animation:rise .8s var(--ease) .24s both}
   .hero .facts{animation:rise .8s var(--ease) .32s both}
-  /* A CONTROL YOU TOUCH ANSWERS WITH OVERSHOOT, because a real one has mass and a spring.
-     A surface that merely arrives settles without one. Two curves, two jobs. */
+  /* 🔒 A LIFT ON HOVER IS A STATE ONLY A MOUSE CAN REACH, and these are cards, not controls:
+     nothing happens when you press one, so the animation was promising an affordance that does
+     not exist, to the half of the audience holding a phone. What replaces it is the light: the
+     surface brightens and its edge takes the accent, which reads on a pointer, under a finger,
+     and on a keyboard, and says "this is the one you are on" instead of "press me". */
   .appcard,.side,.chip,.facts div{
-    transition:transform .42s var(--spring),box-shadow .42s var(--ease),background-color .3s var(--ease)}
-  .appcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-4)}
-  .chip:hover{transform:translateY(-2px);box-shadow:var(--shadow-2)}
+    transition:box-shadow .42s var(--ease),background-color .3s var(--ease),border-color .3s var(--ease)}
+  .appcard:hover,.appcard:focus-within{box-shadow:var(--shadow-4);background-color:var(--e3)}
+  .chip:hover,.chip:focus-within{box-shadow:var(--shadow-2);background-color:var(--e3)}
   .row{transition:background-color .28s var(--ease)}
   .row:hover{background-color:rgba(146,180,232,.035)}
 }
@@ -869,12 +877,13 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
   height:var(--device-h)}
 .devices{position:relative;height:100%;width:100%}
 .devices .device{position:absolute;top:0;left:50%;height:100%}
-/* the front device sits left of centre so the second one reads from behind it on the
-   right: the offset, not a rotation, is what sells the depth. */
-.devices .device--front{transform:translateX(-72%);z-index:2}
-.devices .device--back {transform:translateX(-14%);height:87%;top:9%;z-index:1;opacity:.94}
-.devices .device--back .device__glass{filter:brightness(.52) saturate(.9) contrast(.97)}
-.devices .device--back .device__body{filter:brightness(.78)}
+/* 🔒 ONE DEVICE, CENTRED (2026-09-02). The front one sat at -72% so a SECOND phone could
+   read from behind it on the right, dimmed to 52% brightness. Two objections, and the second
+   is the one that decides it: a darkened duplicate is decoration, and the darkened screen was
+   a different part of the app from the claim the headline makes. A product shot argues for the
+   sentence above it or it argues for nothing. The offset went with the second plane, because
+   -72% is only correct when something fills the space it leaves. */
+.devices .device--front{transform:translateX(-50%);z-index:2}
 
 /* The third plane WAS a hand-drawn "Prediction accuracy" card floating over the two real
    captures: three lifts, two Within and one Outside, written in HTML by me. It came off the
@@ -1014,8 +1023,7 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
   background:linear-gradient(270deg,#8b95a2 0%,#5a6470 45%,#363d47 100%)}
 @media (prefers-reduced-motion:no-preference){
   .device{transition:transform .6s var(--ease)}
-  .hero-shot:hover .device--front{transform:translateX(-72%) translateY(-.5rem)}
-  .hero-shot:hover .device--back{transform:translateX(-14%) translateY(-.25rem)}
+  .hero-shot:hover .device--front{transform:translateX(-50%) translateY(-.5rem)}
 }
 
 /* ══ THE MACHINED SURFACE ═════════════════════════════════════════════════════
