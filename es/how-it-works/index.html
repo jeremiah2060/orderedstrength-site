@@ -52,6 +52,19 @@
          color:var(--ink3);margin-top:.75rem}
 .receipt dt{font-family:var(--mono);color:var(--ink3)}
 .receipt dd{margin:0;color:var(--ink2)}
+/* 🔒 A nowrap LABEL COLUMN IS A LANGUAGE-DEPENDENT LAYOUT, AND SPANISH IS THE LANGUAGE THAT
+   FINDS IT. `grid-template-columns:auto 1fr` sizes the first column to the longest label, and
+   these labels carry white-space:nowrap so they cannot give any of it back. Measured at 320px
+   on 2026-09-02: English resolves to 65px + 157px and Spanish to 122px + 100px, because
+   "si no esta seguro" is twice the width of "if unsure". The VALUE column, which holds the
+   running text, was the one paying. Below 26rem the pair stacks instead, which is the same
+   move .anchor already makes on /record/ at 40rem. Found by running measure-gate at 320px,
+   a width check.sh does not run by default. */
+@media (max-width:26rem){
+  .refuse,.receipt{grid-template-columns:1fr;gap:.125rem}
+  .refuse dt,.receipt dt{margin-top:.5rem}
+  .refuse dt:first-child,.receipt dt:first-child{margin-top:0}
+}
 
 </style>
 </head>

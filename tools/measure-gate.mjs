@@ -81,6 +81,22 @@ const PROBE = `(() => {
     const lines = Math.max(1, Math.round((r.height - notText) / lh));
     if (lines < 2) return;
     const perLine = text.length / lines;
+    /* 🔒 A NARROW SCREEN IS NOT A BROKEN COLUMN, AND ONLY ONE OF THEM IS A DEFECT. The floor
+       is 18 characters, which is calibrated on ENGLISH word lengths, so at 320px three Spanish
+       blocks failed while their English twins passed IN BOXES OF EXACTLY THE SAME WIDTH: the
+       callout lead-in is 204px in both languages and the join step is 210px in both. Nothing
+       had been squeezed; Spanish simply spends more characters saying the same thing.
+       What this gate is actually for is a box that something else took the space from, and
+       that has a signature the character count does not: the box is a small fraction of the
+       first ancestor wider than it. The real defect it was written after was a 52px column in
+       a full-width parent. The dd on /es/how-it-works/ found the same day was 100px inside a
+       232px list, 43%, because a nowrap label column had taken the rest. Both are caught. A
+       block using most of the room available to it is just a block on a small screen. */
+    let host = el.parentElement, hops = 0;
+    while (host && host.getBoundingClientRect().width <= r.width && hops++ < 4) host = host.parentElement;
+    const room = host ? host.getBoundingClientRect().width : r.width;
+    const share = room > 0 ? r.width / room : 1;
+    if (share >= 0.6) return;
     if (perLine < ${MIN_CHARS_PER_LINE})
       bad.push({ sel: sel(el), chars: text.length, lines, perLine: +perLine.toFixed(1),
                  w: +r.width.toFixed(0), sample: text.slice(0, 46) });
