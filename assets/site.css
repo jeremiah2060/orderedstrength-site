@@ -466,16 +466,23 @@ main > .scene:nth-of-type(even)::before{--pool:66%}
    display, and the device group stands on that right edge instead of floating in the middle of
    it. The hero's own text and its three facts keep the page's measure, because a headline that
    runs wider than every heading under it is the thing that would actually read as broken. */
+/* 🔒 AND THEN THE SECTION WENT BACK TO THE PAGE'S OWN WIDTH, WHICH IS THE SECOND HALF OF
+   THE LESSON. Widening it and standing the devices on the new edge worked, and the CEO looked
+   at the result and asked whether the back phone should line up with the card beneath it
+   instead. He is right, for a reason the original comment got wrong: the hero was widened
+   because "the product shot was rendered smaller than the display could show", and it was NOT.
+   The device is sized by HEIGHT (`--device-h: clamp(19rem, 100svh - 21rem, 36rem)`), so a wider
+   section buys the phone no pixels at all. It only moves it sideways.
+
+   Which left the back phone's right edge lining up with nothing: 80px past the card below it
+   and 48px short of the screen, neither measured nor bleeding, which is the one position that
+   reads as an accident. On a page whose identity is an engineering drawing, the shot shares the
+   right edge with everything under it, exactly as everything shares the left edge with the nav.
+
+   WHAT ACTUALLY FIXED THE COMPLAINT was never the section width: it was that the device group
+   is CENTRED in its own column, so it sat 78px inside the column's own right edge. That is the
+   rule below, and it is the one that stayed. */
 @media (min-width:72.0625rem){
-  .hero{
-    --hero-left:max(var(--gut), calc((100vw - var(--wide)) / 2 + var(--gut)));
-    max-width:none;
-    padding-left:var(--hero-left);
-    padding-right:max(var(--gut),
-                      calc(100vw - var(--hero-left) - var(--wide) - 12rem));
-  }
-  /* the measure of the page, kept, so only the product shot runs wide */
-  .hero > .facts{max-width:calc(var(--wide) - 2 * var(--gut))}
   /* 0.7482 is how far the group reaches RIGHT of its own centre, in units of the front
      device's width: the back device sits at translateX(-14%) of its own box and is 87% as
      tall, so 0.14 left of centre plus its full 0.87 width lands at 0.86 * 0.87. Deriving it
