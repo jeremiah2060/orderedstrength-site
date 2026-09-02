@@ -5,9 +5,9 @@
 <script>document.documentElement.className="js";</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Política de Privacidad · OrderedStrength</title>
-<meta name="description" content="Qué guarda la app OrderedStrength para iPhone en tu dispositivo, las cinco cosas que pueden salir de él, cómo apagar cada una, y la que no debería estar ahí.">
+<meta name="description" content="Qué guarda la app OrderedStrength para iPhone en tu dispositivo, las seis cosas que pueden salir de él, cómo apagar cada una, y la que no debería estar ahí.">
 <meta property="og:title" content="Política de Privacidad · OrderedStrength">
-<meta property="og:description" content="Qué guarda la app OrderedStrength para iPhone en tu dispositivo, las cinco cosas que pueden salir de él, cómo apagar cada una, y la que no debería estar ahí.">
+<meta property="og:description" content="Qué guarda la app OrderedStrength para iPhone en tu dispositivo, las seis cosas que pueden salir de él, cómo apagar cada una, y la que no debería estar ahí.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="OrderedStrength">
 <meta property="og:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
@@ -64,7 +64,7 @@
 <p><strong>Última actualización: 1 de septiembre de 2026.</strong>  Esta política cubre la  <strong>app OrderedStrength para iPhone</strong>. No cubre ningún otro servicio.</p>
 
 <h2>La versión corta</h2>
-<p>Tu entrenamiento vive en tu teléfono. No tenemos sistema de cuentas, así que no sabemos quién eres.  <strong>Cinco cosas pueden salir de tu dispositivo, y una de ellas no debería estar ahí.</strong>  El punto 4 es un envío de series que quedó de un diseño anterior con servidor: mandaba las series que registras, contradecía lo que promete el resto de esta página, y se quitó del código en vez de conservarlo y explicarlo. Deja de pasar en tu teléfono cuando actualices. Está escrito aquí porque no deberías tener que encontrarlo en un registro de red.</p>
+<p>Tu entrenamiento vive en tu teléfono. No tenemos sistema de cuentas, así que no sabemos quién eres.  <strong>Seis cosas pueden salir de tu dispositivo, y una de ellas no debería estar ahí.</strong>  El punto 4 es un envío de series que quedó de un diseño anterior con servidor: mandaba las series que registras, contradecía lo que promete el resto de esta página, y se quitó del código en vez de conservarlo y explicarlo. Deja de pasar en tu teléfono cuando actualices. Está escrito aquí porque no deberías tener que encontrarlo en un registro de red.</p>
 
 <h2>Lo que se queda en tu dispositivo</h2>
 <p>Todo esto se guarda en tu iPhone. Nada de esto se nos envía salvo donde los puntos 1, 2 y 4 de abajo digan lo contrario:</p>
@@ -80,7 +80,7 @@
 <p>Solo si das permiso, la app  <strong>lee</strong>: variabilidad de la frecuencia cardiaca, frecuencia cardiaca en reposo, frecuencia cardiaca, análisis del sueño, energía activa, conteo de pasos, frecuencia respiratoria, masa corporal, tus entrenamientos completados, y distancia caminando, corriendo, en bicicleta y nadando.  <strong>Escribe</strong>  los entrenamientos completados y la energía activa de vuelta a Health para que aparezcan junto a tu otra actividad.</p>
 <p>Los datos de Health se usan en tu dispositivo para informar la recuperación y la disposición.  <strong>Los registros originales de Apple Health nunca salen de tu teléfono. La única excepción es el punto 2: si activas las Respuestas en la Nube, el contexto de entrenamiento que acompaña a tu pregunta puede incluir una línea derivada de esos datos, como tu deuda de sueño en horas, o cuántos días de variabilidad de la frecuencia cardiaca ha visto Jerry.</strong>  Puedes revocar el acceso en cualquier momento en Apple Health, y la app sigue funcionando sin eso.</p>
 
-<h2>Las cinco cosas que pueden salir de tu dispositivo</h2>
+<h2>Las seis cosas que pueden salir de tu dispositivo</h2>
 
 <h3>1. La voz de Jerry &middot; encendida cuando la voz hablada del coach está encendida</h3>
 <p>Para hablar con una voz natural en vez de la voz del sistema,  <em>el texto de la frase que Jerry está a punto de decir</em>  se envía a nuestro servidor, que lo reenvía a Microsoft Azure para convertirlo en audio. Las frases de Jerry son un conjunto acotado de plantillas, y cada frase distinta se descarga una vez y después se guarda en tu teléfono y se reproduce desde ahí para siempre.</p>
@@ -115,6 +115,11 @@ de notificaciones push de Apple, así que el registro falla y no se envía ning�
 escrito aquí porque el camino existe en el código y empezará a funcionar el día que se habiliten las
 notificaciones, y deberías leerlo antes de que pase y no después.</p>
 <p>Esta es la plomería detrás de las notas de Jerry sobre tu recuperación y de tu reporte semanal. Si nunca permites las notificaciones, nunca se entrega nada a ese token.</p>
+
+<h3>6. Una huella de cada predicción sellada &middot; activa, y no lleva ningún identificador</h3>
+<p>Antes de una serie, Jerry anota lo que espera de ti y lo sella: un SHA-256 tomado sobre esa predicción junto con un número aleatorio de 32 bytes que nunca sale de tu teléfono. Esa huella, y nada más, va a nuestro servidor, que publica una raíz combinada por día en un repositorio público. La fecha del commit ahí viene de GitHub y no de nosotros, que es lo que convierte "lo escribió antes de la serie" de nuestra palabra en algo que puedes comprobar.</p>
+<p>Sin el número aleatorio la huella no se puede revertir ni adivinar, así que no dice nada del ejercicio, del peso, de las repeticiones ni de ti. <strong>Es lo único que esta app envía sin ningún identificador:</strong> sin nombre, sin correo, sin cuenta, y ni siquiera el identificador aleatorio de instalación que llevan los puntos 3 y 5. No hay aquí nada que se pueda ligar a una persona, a un dispositivo ni a una sesión.</p>
+<p><strong>En la versión que puedes instalar hoy, esto no pasa.</strong> Todavía nada en la app lo envía y el lado que lo recibe está escrito pero aún no está corriendo. Está escrito aquí primero, para que nada de lo que sale de tu teléfono cambie antes de que hayas podido leerlo.</p>
 
 <h2>Lo que nunca hacemos</h2>
 <ul>

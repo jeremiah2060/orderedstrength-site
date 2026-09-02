@@ -277,8 +277,15 @@ AUTH = [('app-privacy/index.html', r'The (\w+) things that can leave your device
 # gate that calls that a privacy-count defect is a gate that teaches you to skim its output.
 # The relative clause is the discriminator: this count is always followed by what those
 # things DO, "that can leave", "that could", "que pueden", "que podian".
-CLAIMS = re.compile(r'\b(four|five|six)\s+things\s+that\s+c|'
-                    r'\b(cuatro|cinco|seis)\s+cosas\s+que\s+p', re.I)
+# 🔒 AND THE FIRST SCOPING WAS TOO TIGHT, WHICH IS THE OTHER WAY THIS GATE CAN LIE. It required
+# the relative clause, "things THAT can leave", "cosas QUE pueden", and on 2026-09-02 the count
+# went from five to six and this reported every page clean while the Spanish policy's own
+# opening sentence still read "Cinco cosas pueden salir de tu dispositivo". No relative clause,
+# same claim, invisible. A gate that is scoped narrowly enough to avoid false positives can be
+# scoped narrowly enough to miss the real thing, and the only way to know which is to write the
+# sentence out and check the pattern against it.
+CLAIMS = re.compile(r'\b(four|five|six)\s+things\s+(?:that\s+c|can\s+leave)|'
+                    r'\b(cuatro|cinco|seis)\s+cosas\s+(?:que\s+p|pueden)', re.I)
 for auth_page, auth_rx in AUTH:
     lang = 'es/' if auth_page.startswith('es/') else ''
     src = open(auth_page, encoding='utf-8').read()
