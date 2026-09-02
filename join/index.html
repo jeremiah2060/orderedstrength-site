@@ -13,7 +13,7 @@
 <meta property="og:image" content="https://www.orderedstrength.com/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: a coach who writes it down before you lift.">
+<meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: he changes your workout in the middle of it.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.orderedstrength.com/assets/og.jpg">
 <meta name="theme-color" content="#060709">
@@ -28,9 +28,11 @@
 <meta property="og:locale:alternate" content="es_419">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/assets/site.css?v=96214f52d5">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="/assets/site.css?v=37ac5b6724">
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
 <div class="bar">
   <a class="wordmark" translate="no" href="/"><span class="led up" aria-hidden="true"></span>OrderedStrength</a>
@@ -39,12 +41,22 @@
     <a href="/stronger/" class="opt">Stronger</a>
     <a href="/record/" class="opt">The record</a>
     <a href="/verify/">Verify</a>
-    <a href="/join/" class="cta" aria-current="page">Join the test</a>
+    <a href="/join/" class="cta" aria-current="page"><span class="cta__long">Join the test</span><span class="cta__short">Join</span></a>
+    <details class="menu">
+      <summary>Menu</summary>
+      <div class="menu__panel">
+        <a href="/how-it-works/">How it works</a>
+        <a href="/stronger/">Stronger</a>
+        <a href="/record/">The record</a>
+        <a href="/verify/">Verify</a>
+        <a href="/join/" aria-current="page">Join the test</a>
+      </div>
+    </details>
   </nav>
   <div class="prog" aria-hidden="true"></div>
 </div>
 
-<main>
+<main id="main">
 
   <section class="scene reading">
     <div class="pagehead">
@@ -87,14 +99,15 @@
     <p>Your training is computed on your device. There is no account, so there is no name, email
     or password of yours held by us, and nothing to delete later except the app. What does and
     does not leave your phone,
-    including the four things that could and the one of those we have removed, is set out in the
+    including the five things that could and the one of those we have removed, is set out in the
     <a href="/app-privacy/" style="color:var(--teal)">privacy policy</a>.</p>
     <p>Your email address exists in one place, which is the message you sent, in an inbox. It is not
     in a mailing tool, it is not in a customer database, and it is not synced anywhere. If you would
     rather it were not there at all, say so in the message and it goes.</p>
-    <p class="small">The app is in testing on iPhone. It is not on the App Store yet. When it ships,
-    the price is 199 US dollars per year, or 29.99 per month, and the accuracy record is published before
-    anyone is charged.</p>
+    <p class="small">The app is in testing on iPhone. It is not on the App Store yet. While it is in
+    testing everything is open, so testers have the full vault, the exports and the weekly report at no
+    cost. When it ships, the price is 199 US dollars per year, or 29.99 per month, and the accuracy
+    record is published before anyone is charged.</p>
   </section>
 
 </main>
@@ -134,6 +147,6 @@
   </div>
 </footer>
 
-<script src="/assets/site.js?v=5fd125c32d" defer></script>
+<script src="/assets/site.js?v=7ac4d3867f" defer></script>
 </body>
 </html>

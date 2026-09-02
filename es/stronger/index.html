@@ -13,7 +13,7 @@
 <meta property="og:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: un coach que lo anota antes de que levantes.">
+<meta property="og:image:alt" content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: te cambia el entrenamiento a la mitad.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
 <meta name="theme-color" content="#060709">
@@ -28,7 +28,8 @@
 <meta property="og:locale:alternate" content="en_US">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/assets/site.css?v=96214f52d5">
+<link rel="manifest" href="/es/site.webmanifest">
+<link rel="stylesheet" href="/assets/site.css?v=37ac5b6724">
 <style>
 .beats{margin:2rem 0 0;max-width:64rem;display:grid;gap:.75rem}
 .beat{background-color:var(--e1);border-radius:12px;box-shadow:var(--shadow-3);padding:1.5rem 1.5rem 1.625rem}
@@ -53,6 +54,7 @@
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Ir al contenido</a>
 
 <div class="bar">
   <a class="wordmark" translate="no" href="/es/"><span class="led up" aria-hidden="true"></span>OrderedStrength</a>
@@ -61,12 +63,22 @@
     <a href="/es/stronger/" class="opt" aria-current="page">Más fuerte</a>
     <a href="/es/record/" class="opt">El registro</a>
     <a href="/es/verify/">Verificar</a>
-    <a href="/es/join/" class="cta">Únete a la prueba</a>
+    <a href="/es/join/" class="cta"><span class="cta__long">Únete a la prueba</span><span class="cta__short">Únete</span></a>
+    <details class="menu">
+      <summary>Menú</summary>
+      <div class="menu__panel">
+        <a href="/es/how-it-works/">Cómo funciona</a>
+        <a href="/es/stronger/" aria-current="page">Más fuerte</a>
+        <a href="/es/record/">El registro</a>
+        <a href="/es/verify/">Verificar</a>
+        <a href="/es/join/">Únete a la prueba</a>
+      </div>
+    </details>
   </nav>
   <div class="prog" aria-hidden="true"></div>
 </div>
 
-<main>
+<main id="main">
 
   <section class="scene reading">
     <div class="pagehead">
@@ -78,7 +90,7 @@
 
   <section class="scene reading">
     <p class="eyebrow">Tres escalas de tiempo</p>
-    <h2>La fuerza se construye en una serie, en una semana y en una racha de meses. Él trabaja las tres.</h2>
+    <h2>La fuerza se construye en una serie, en una semana y en un tramo de meses. Él trabaja las tres.</h2>
     <div class="beats">
 
       <!-- 🔒 WHAT MOVES A KILOGRAM MID-SESSION, VERIFIED AT THE CALL SITES, NOT AT THE
@@ -171,6 +183,6 @@
   </div>
 </footer>
 
-<script src="/assets/site.js?v=5fd125c32d" defer></script>
+<script src="/assets/site.js?v=7ac4d3867f" defer></script>
 </body>
 </html>

@@ -13,7 +13,7 @@
 <meta property="og:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: un coach que lo anota antes de que levantes.">
+<meta property="og:image:alt" content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: te cambia el entrenamiento a la mitad.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
 <meta name="theme-color" content="#060709">
@@ -28,7 +28,8 @@
 <meta property="og:locale:alternate" content="en_US">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/assets/site.css?v=96214f52d5">
+<link rel="manifest" href="/es/site.webmanifest">
+<link rel="stylesheet" href="/assets/site.css?v=37ac5b6724">
 <style>
 /* ── the coaching stack: real app UI, rendered rather than screenshotted ── */
 .hero .appcard{padding:1.625rem 1.75rem}
@@ -109,7 +110,12 @@ input[type=range]::-moz-range-thumb{width:1.125rem;height:1.125rem;border:0;bord
 .hrow + .hrow{border-top:1px solid var(--line-soft)}
 .hrow label{font-size:.875rem;color:var(--ink3)}
 .hrow .ctl{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
-.hrow input[type=text],.hrow input[type=number]{font-family:var(--mono);font-size:.875rem;color:var(--ink);
+/* 🔒 16px IS A FLOOR ON A CONTROL FOR A REASON THAT IS NOT LEGIBILITY. iOS Safari zooms
+   the page when a text control under 16px takes focus, so the one thing this site invites a
+   visitor to do, break the seal with their thumb, fought the browser every time. type-floor
+   owns legibility at 12px and passed this at 14px, correctly: different question, different
+   floor. check-site.py now carries the rule. */
+.hrow input[type=text],.hrow input[type=number]{font-family:var(--mono);font-size:1rem;color:var(--ink);
   background:transparent;border:0;border-bottom:1px dashed rgba(0,212,177,.5);padding:.1875rem .125rem;
   font-weight:500;border-radius:2px;transition:border-color .2s,background .2s;min-width:0}
 .hrow input[type=text]{width:100%;max-width:15rem}
@@ -126,6 +132,13 @@ input[type=range]::-moz-range-thumb{width:1.125rem;height:1.125rem;border:0;bord
 .hash{font-family:var(--mono);font-size:.75rem;line-height:1.7;word-break:break-all;color:var(--ink2);margin:0}
 .hash b{color:var(--teal);font-weight:500;text-shadow:0 0 .75rem rgba(0,212,177,.35)}
 .hash i{color:var(--red);font-style:normal;font-weight:500}
+.cacts{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.preset{font-size:.875rem;font-weight:600;background:transparent;color:var(--ink2);
+        border:1px solid var(--line);border-radius:100px;padding:.4375rem .875rem;cursor:pointer;
+        font-family:var(--body);white-space:nowrap;
+        transition:color .2s,border-color .2s,background-color .2s}
+.preset:hover{color:var(--ink);border-color:var(--teal)}
+.preset:active{background-color:var(--e4)}
 .cfoot{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between;
        padding:.9375rem 1.25rem;border-top:1px solid rgba(233,241,255,.05);background-color:var(--e3)}
 .cfoot p{margin:0;font-size:.75rem;color:var(--ink3);max-width:40ch;line-height:1.45}
@@ -143,6 +156,7 @@ details.raw pre{font-family:var(--mono);font-size:.75rem;color:var(--ink3);overf
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Ir al contenido</a>
 
 <div class="bar">
   <a class="wordmark" translate="no" href="/es/"><span class="led" id="led" aria-hidden="true"></span>OrderedStrength</a>
@@ -151,12 +165,22 @@ details.raw pre{font-family:var(--mono);font-size:.75rem;color:var(--ink3);overf
     <a href="/es/stronger/" class="opt">Más fuerte</a>
     <a href="/es/record/" class="opt">El registro</a>
     <a href="/es/verify/">Verificar</a>
-    <a href="/es/join/" class="cta">Únete a la prueba</a>
+    <a href="/es/join/" class="cta"><span class="cta__long">Únete a la prueba</span><span class="cta__short">Únete</span></a>
+    <details class="menu">
+      <summary>Menú</summary>
+      <div class="menu__panel">
+        <a href="/es/how-it-works/">Cómo funciona</a>
+        <a href="/es/stronger/">Más fuerte</a>
+        <a href="/es/record/">El registro</a>
+        <a href="/es/verify/">Verificar</a>
+        <a href="/es/join/">Únete a la prueba</a>
+      </div>
+    </details>
   </nav>
   <div class="prog" aria-hidden="true"></div>
 </div>
 
-<main>
+<main id="main">
 
   <!-- HERO: owns the screen, and shows the product rather than describing it -->
   <section class="scene hero">
@@ -164,10 +188,9 @@ details.raw pre{font-family:var(--mono);font-size:.75rem;color:var(--ink3);overf
       <div>
         <p class="eyebrow">Coaching de fuerza para iPhone</p>
         <h1>Te cambia el entrenamiento a la mitad.</h1>
-        <p class="sub">La mayoría de las apps te entregan un programa y dejan de escuchar. Jerry, el coach dentro
-        de la app, escribe la siguiente serie mientras todavía respiras fuerte de la anterior.
-        Recorta las series que quedan cuando estás cayendo, y agrega el disco el día que te lo ganas. Anota lo
-        que espera de ti  <em>antes</em>  de que toques la barra, para que puedas revisarlo después.</p>
+        <p class="sub">Todavía respiras fuerte de la serie anterior cuando él escribe la siguiente.
+        Ves las series que quedan recortadas cuando caes, el disco agregado el día que te lo ganas, y lo
+        que esperaba de ti anotado  <em>antes</em>  de que tocaras la barra.</p>
         <div class="chips reveal" style="margin-top:2rem">
           <a class="btn" href="#coach">Míralo recortar una serie</a>
           <a class="btn ghost" href="/es/how-it-works/">Cómo funciona</a>
@@ -180,7 +203,9 @@ details.raw pre{font-family:var(--mono);font-size:.75rem;color:var(--ink3);overf
           <div class="device device--back">
             <div class="device__body"><div class="device__glass">
               <div class="device__screenwrap">
-                <img class="device__screen" src="/assets/shots/es-evidence.webp?v=47c0b1539e" width="1206" height="2622" loading="lazy" decoding="async"
+                <img class="device__screen" src="/assets/shots/es-evidence.webp?v=47c0b1539e"
+                     srcset="/assets/shots/es-evidence-402.webp?v=f69506fe44 402w, /assets/shots/es-evidence-804.webp?v=61f3101115 804w, /assets/shots/es-evidence.webp?v=47c0b1539e 1206w"
+                     sizes="256px" width="1206" height="2622" loading="lazy" decoding="async"
                      alt="La hoja de Inteligencia completa en español, en la pestaña Biológico. Se titula Inteligencia de confianza, lleva la insignia Población, y enumera las investigaciones abiertas nombrando la evidencia que cada una todavía necesita.">
               </div>
               <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
@@ -190,19 +215,15 @@ details.raw pre{font-family:var(--mono);font-size:.75rem;color:var(--ink3);overf
           <div class="device device--front">
             <div class="device__body"><div class="device__glass">
               <div class="device__screenwrap">
-                <img class="device__screen" src="/assets/shots/es-session3.webp?v=9d9dc74aa8" width="1206" height="2622" fetchpriority="high" decoding="async"
+                <img class="device__screen" src="/assets/shots/es-session3.webp?v=9d9dc74aa8"
+                     srcset="/assets/shots/es-session3-402.webp?v=983422bed1 402w, /assets/shots/es-session3-804.webp?v=f72858c6b2 804w, /assets/shots/es-session3.webp?v=9d9dc74aa8 1206w"
+                     sizes="256px" width="1206" height="2622" fetchpriority="high" decoding="async"
                      alt="El panel de OrderedStrength en español después de tres sesiones registradas. La insignia de modo dice Construyendo, la fatiga y la recuperación están marcadas Est. pobl. en 15 y 88 por ciento, y el titular dice que el modelo individual se construye con cada una.">
               </div>
               <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
             </div></div>
             <span class="device__key device__key--act" aria-hidden="true"></span><span class="device__key device__key--vup" aria-hidden="true"></span><span class="device__key device__key--vdn" aria-hidden="true"></span><span class="device__key device__key--pwr" aria-hidden="true"></span><span class="device__key device__key--cam" aria-hidden="true"></span>
           </div>
-        </div>
-        <div class="appcard float">
-          <p class="cap">Precisión de la predicción</p>
-          <div class="lift"><span class="dot ok"></span><span class="nm">Sentadilla Búlgara</span><span class="vd inr">Dentro</span></div>
-          <div class="lift"><span class="dot miss"></span><span class="nm">Peso Muerto Rumano</span><span class="vd outr">Fuera</span></div>
-          <div class="lift"><span class="dot ok"></span><span class="nm">Press Inclinado con Barra</span><span class="vd inr">Dentro</span></div>
         </div>
       </div>
     </div>
@@ -293,11 +314,13 @@ details.raw pre{font-family:var(--mono);font-size:.75rem;color:var(--ink3);overf
       <div class="device">
         <div class="device__body"><div class="device__glass">
           <div class="device__screenwrap">
-            <img class="device__screen" src="/assets/shots/es-dashboard.webp?v=2ed466cf3c" width="1206" height="2622" loading="lazy" decoding="async"
+            <img class="device__screen" src="/assets/shots/es-dashboard.webp?v=2ed466cf3c"
+                     srcset="/assets/shots/es-dashboard-402.webp?v=ca34e9493e 402w, /assets/shots/es-dashboard-804.webp?v=51806a5e2a 804w, /assets/shots/es-dashboard.webp?v=2ed466cf3c 1206w"
+                     sizes="256px" width="1206" height="2622" loading="lazy" decoding="async"
                  alt="El panel de OrderedStrength en español después de una sesión registrada, con la insignia de Modo de inteligencia en Construyendo, los anillos de fatiga y recuperación marcados Est. pobl., y una línea que dice que las cinco superficies de inteligencia se abren con evidencia, no con tiempo.">
-        <span class="pin" style="left:93.5%;top:38.5%" data-pin="0">1</span>
-        <span class="pin" style="left:6.5%;top:68%" data-pin="1">2</span>
-        <span class="pin" style="left:88%;top:80.5%" data-pin="2">3</span>
+        <button class="pin" style="left:93.5%;top:38.5%" data-pin="0" type="button" aria-pressed="false" aria-label="Anotación 1">1</button>
+        <button class="pin" style="left:6.5%;top:68%" data-pin="1" type="button" aria-pressed="false" aria-label="Anotación 2">2</button>
+        <button class="pin" style="left:88%;top:80.5%" data-pin="2" type="button" aria-pressed="false" aria-label="Anotación 3">3</button>
           </div>
           <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
         </div></div>
@@ -323,8 +346,10 @@ details.raw pre{font-family:var(--mono);font-size:.75rem;color:var(--ink3);overf
           <span>La propia línea de la app, en pantalla: las superficies de inteligencia
           
           <code translate="no">se abren con evidencia, no con tiempo</code>. Cierto del ritmo. No cierto de todo: tres
-          lecturas profundas no hablan por debajo de quince sesiones por muy duro que entrenes,
-          porque la muestra es demasiado pequeña para significar algo. Las dos mitades están aquí
+          lecturas profundas esperan quince sesiones de evidencia, y la evidencia se acumula como
+          mucho dos veces al día y diez veces por semana, así que el camino honesto más rápido las
+          abre en tu octavo día de entrenamiento a lo largo de dos semanas. Por debajo de eso la
+          muestra es demasiado pequeña para significar algo. Las dos mitades están aquí
           porque solo una nos favorece.</span></span>
         </li>
       </ul>
@@ -383,8 +408,12 @@ field   sealedFor = 1755916800</pre>
         </details>
       </div>
       <div class="cfoot">
-        <p id="cnote">Nosotros no guardamos nada de esto. La aritmética corrió en tu máquina.</p>
-        <button class="reset" id="reset" disabled>Devuélvelo</button>
+        <p id="cnote">Nada de lo que cambies aquí sale de tu navegador. La aritmética corrió en tu máquina.</p>
+        <div class="cacts">
+          <button type="button" class="preset" id="pwide">Ensancha el rango 10 kg</button>
+          <button type="button" class="preset" id="plift">Cambia el ejercicio</button>
+          <button class="reset" id="reset" disabled>Devuélvelo</button>
+        </div>
       </div>
       <p class="selftest" id="selftest">Comprobando esta página contra el verificador en vivo.</p>
       <div class="chips" style="margin-top:1.75rem;gap:.75rem">
@@ -392,7 +421,7 @@ field   sealedFor = 1755916800</pre>
         <a class="btn ghost" href="/es/verify/">Verifica un comprobante real</a>
       </div>
       <p class="small" style="margin-top:.875rem">Esa aritmética acaba de correr en tu máquina, no en la
-      nuestra. Cada predicción que hace la app se sella igual, antes de la serie.</p>
+      nuestra. Cada pronóstico de sesión se sella así antes de la serie. El sobre de 30 días y el registro previo de un experimento se sellan sobre sus propios campos.</p>
     </div>
   </section>
 
@@ -429,7 +458,9 @@ field   sealedFor = 1755916800</pre>
         <div class="device">
           <div class="device__body"><div class="device__glass">
             <div class="device__screenwrap">
-              <img class="device__screen" src="/assets/shots/es-dashboard.webp?v=2ed466cf3c" width="1206" height="2622" loading="lazy" decoding="async"
+              <img class="device__screen" src="/assets/shots/es-dashboard.webp?v=2ed466cf3c"
+                     srcset="/assets/shots/es-dashboard-402.webp?v=ca34e9493e 402w, /assets/shots/es-dashboard-804.webp?v=51806a5e2a 804w, /assets/shots/es-dashboard.webp?v=2ed466cf3c 1206w"
+                     sizes="180px" width="1206" height="2622" loading="lazy" decoding="async"
                    alt="El panel en español después de una sesión registrada. La fatiga marca 10 por ciento y la recuperación 92 por ciento, ambas etiquetadas Est. pobl., el anillo de Calibración no lleva número, y lo más fuerte registrado es una Sentadilla Trasera con Barra con 1RM estimado 56.3 kg.">
             </div>
             <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
@@ -442,7 +473,9 @@ field   sealedFor = 1755916800</pre>
         <div class="device">
           <div class="device__body"><div class="device__glass">
             <div class="device__screenwrap">
-              <img class="device__screen" src="/assets/shots/es-hundred.webp?v=1d1e0e4643" width="1206" height="2622" loading="lazy" decoding="async"
+              <img class="device__screen" src="/assets/shots/es-hundred.webp?v=1d1e0e4643"
+                     srcset="/assets/shots/es-hundred-402.webp?v=0e467f6e50 402w, /assets/shots/es-hundred-804.webp?v=6083734143 804w, /assets/shots/es-hundred.webp?v=1d1e0e4643 1206w"
+                     sizes="180px" width="1206" height="2622" loading="lazy" decoding="async"
                    alt="El mismo panel en español después de cien sesiones registradas. El titular dice que la carga ahora viene de las propias series del atleta y no de promedios poblacionales, lo más fuerte registrado es una Sentadilla Trasera con Barra con 1RM estimado 129.2 kg, y el anillo de Calibración ahora marca 84 por ciento con la etiqueta Tu RIR.">
             </div>
             <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
@@ -455,7 +488,9 @@ field   sealedFor = 1755916800</pre>
         <div class="device">
           <div class="device__body"><div class="device__glass">
             <div class="device__screenwrap">
-              <img class="device__screen" src="/assets/shots/es-answered.webp?v=9363c71d13" width="1206" height="2622" loading="lazy" decoding="async"
+              <img class="device__screen" src="/assets/shots/es-answered.webp?v=9363c71d13"
+                     srcset="/assets/shots/es-answered-402.webp?v=212903913d 402w, /assets/shots/es-answered-804.webp?v=d92c7fc83c 804w, /assets/shots/es-answered.webp?v=9363c71d13 1206w"
+                     sizes="180px" width="1206" height="2622" loading="lazy" decoding="async"
                    alt="El mismo panel en español después de cien sesiones, esta vez con el dolor muscular del atleta reportado. La fatiga y la recuperación están etiquetadas Tus datos, la recuperación marca 73 por ciento, y el titular dice que su carga y su tasa de recuperación ahora se miden a partir de él.">
             </div>
             <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
@@ -468,7 +503,9 @@ field   sealedFor = 1755916800</pre>
         <div class="device">
           <div class="device__body"><div class="device__glass">
             <div class="device__screenwrap">
-              <img class="device__screen" src="/assets/shots/es-evidence.webp?v=47c0b1539e" width="1206" height="2622" loading="lazy" decoding="async"
+              <img class="device__screen" src="/assets/shots/es-evidence.webp?v=47c0b1539e"
+                     srcset="/assets/shots/es-evidence-402.webp?v=f69506fe44 402w, /assets/shots/es-evidence-804.webp?v=61f3101115 804w, /assets/shots/es-evidence.webp?v=47c0b1539e 1206w"
+                     sizes="180px" width="1206" height="2622" loading="lazy" decoding="async"
                    alt="La hoja de Inteligencia completa en español, en la pestaña Biológico. Se titula Inteligencia de confianza, lleva la insignia Población, y enumera las investigaciones abiertas nombrando la evidencia que cada una todavía necesita.">
             </div>
             <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
@@ -510,7 +547,7 @@ field   sealedFor = 1755916800</pre>
     registro de precisión son gratis y siguen siendo gratis. Pro abre la profundidad: la bóveda
     analítica completa, la exportación completa de tu historial, importar otro registro de
     entrenamiento después del primero, y el reporte semanal como archivo que puedes enviar.</p>
-    <p class="small" style="margin-top:.75rem">El coaching humano de fuerza de los programas más conocidos cuesta entre 350 y 600 dólares estadounidenses al mes. Este cuesta 199 al año, que son
+    <p class="small" style="margin-top:.75rem">El coaching humano de fuerza cuesta entre 200 y 600 dólares estadounidenses al mes: Barbell Logic 199, Future 199, Reactive Training Systems 220, Juggernaut uno a uno desde 297, Renaissance Periodization 350 y 600. Este cuesta 199 al año, que son
     unos 16.58 al mes, o 29.99 si prefieres pagar mes a mes y parar cuando quieras. Se renueva
     hasta que lo canceles, lo cancelas en tu propia Configuración de Apple, y el registro de precisión
     se publica antes de cobrarle a nadie. Los <a href="/es/terms/" style="color:var(--teal)">términos</a>
@@ -519,8 +556,8 @@ field   sealedFor = 1755916800</pre>
       <a class="btn" href="/es/join/">Únete a la prueba</a>
       <a class="btn ghost" href="/es/how-it-works/">Cómo funciona</a>
     </div>
-    <p class="small" style="margin-top:1.5rem">Todavía no está en la App Store, y no hay lista de correos, porque no existe un sistema de
-    cuentas que pueda sostener una.
+    <p class="small" style="margin-top:1.5rem">Todavía no está en la App Store, y no hay lista de correos. Podríamos tener una y elegimos
+    no tenerla.
     
     <a href="mailto:jeremiah@orderedstrength.com?subject=Av%C3%ADsame%20cuando%20salga%20OrderedStrength"
        style="color:var(--teal)">Escríbenos</a>  y sabrás de una persona cuando salga.</p>
@@ -563,7 +600,7 @@ field   sealedFor = 1755916800</pre>
   </div>
 </footer>
 
-<script src="/assets/site.js?v=5fd125c32d" defer></script>
+<script src="/assets/site.js?v=7ac4d3867f" defer></script>
 <script>
 (function(){
 'use strict';
@@ -597,7 +634,7 @@ if (sess){
       var lo = (102.5 + Math.min(10, (n - 20) * 0.25)).toFixed(1);
       var hi = (112.5 + Math.min(10, (n - 20) * 0.25)).toFixed(1);
       tag.textContent = 'Individual'; tag.className = 'tag you';
-      claim.innerHTML = 'De tus ' + n + ' sesiones: pongo tu máximo estimado de una repetición entre <b>' + lo + ' kg</b> y <b>' + hi + ' kg</b>. De todos mis rangos, cuatro de cada cinco contienen el resultado.';
+      claim.innerHTML = 'De tus ' + n + ' sesiones: pongo tu máximo estimado de una repetición entre <b>' + lo + ' kg</b> y <b>' + hi + ' kg</b>. Mis rangos están hechos para contener el resultado cuatro de cada cinco veces. Si de verdad lo hacen se cuenta en el registro, que todavía está vacío.';
       basis.textContent = 'Base: tus propias series registradas. Sellé este rango antes de la sesión y me voy a calificar contra él después.';
     }
   }
@@ -768,7 +805,7 @@ async function recompute(){
   var moved = [];
   live.forEach(function(f,i){ if (f.value !== RECEIPT.fields[i].value && LABEL[i]) moved.push(LABEL[i]); });
   $('cnote').textContent = ok
-    ? 'Nosotros no guardamos nada de esto. La aritmética corrió en tu máquina.'
+    ? 'Nada de lo que cambies aquí sale de tu navegador. La aritmética corrió en tu máquina.'
     : 'Cambiaste ' + moved.join(' y ') + '. Cada carácter después de la primera diferencia está mal, y solo el valor original lo devuelve.';
   $('rawdump').textContent =
     'scheme  ' + RECEIPT.scheme + '\n' +
@@ -809,7 +846,29 @@ async function selfTest(){
 
 if (window.crypto && crypto.subtle && window.TextEncoder && typeof BigInt !== 'undefined'){
   $('reset').addEventListener('click', reset);
-  wire(); recompute(); selfTest();
+  /* ONE TAP, BECAUSE A THUMB SHOULD NOT HAVE TO TYPE INTO A MONOSPACE FIELD to find out
+     that the fingerprint moves. Both write through the same 'input' event the fields fire,
+     so there is one path into recompute and no second copy of the rule. */
+  var tap = function(el, v){ el.value = v; el.dispatchEvent(new Event('input', {bubbles:true})); };
+  $('pwide').addEventListener('click', function(){
+    tap($('hi'), (Math.round((parseFloat($('hi').value) + 10) * 10) / 10).toFixed(1));
+  });
+  $('plift').addEventListener('click', function(){
+    var sealed = RECEIPT.fields[IDX.exercise].value;
+    tap($('ex'), $('ex').value === sealed ? 'Front Squat' : sealed);
+  });
+  wire(); recompute();
+  /* 🔒 THE SELF-TEST RUNS WHEN THE CONSOLE IS SEEN, NOT WHEN THE PAGE LOADS. It POSTs the
+     page's own sample receipt to our verifier, so every visitor to the home page made a
+     request for a proof most of them never scrolled to. It is still the same proof and the
+     same request, moved to the moment the reader can actually read the answer. */
+  var box = document.getElementById('selftest');
+  if ('IntersectionObserver' in window && box){
+    var seen = new IntersectionObserver(function(en){
+      if (en.some(function(e){ return e.isIntersecting; })){ seen.disconnect(); selfTest(); }
+    }, {rootMargin: '200px'});
+    seen.observe(box);
+  } else { selfTest(); }
 } else {
   $('selftest').textContent = 'Este navegador no puede calcular la huella localmente.';
   $('cnote').textContent = 'Abre la página del verificador para comprobar un comprobante.';
@@ -825,13 +884,29 @@ if (window.crypto && crypto.subtle && window.TextEncoder && typeof BigInt !== 'u
     if(pins[i]) pins[i].setAttribute('data-active', on?'true':'false');
     if(outs[i]) outs[i].setAttribute('data-active', on?'true':'false');
   }
+  /* 🔒 mouseenter AND mouseleave ARE THE TWO EVENTS A PHONE NEVER SENDS. Three numbered pins
+     sat on a photograph, and the only way to light one was to hover it, so on every touch
+     device and for every keyboard reader the annotation simply did not exist. The pins are
+     <button> now: a tap toggles, focus shows, and aria-pressed says which is on. Hover still
+     previews on a mouse, because that was never the defect. */
+  var held = -1;
+  function hold(i){
+    held = (held === i) ? -1 : i;
+    pins.forEach(function(pn,k){
+      pn.setAttribute('aria-pressed', k === held ? 'true' : 'false');
+      set(k, k === held);
+    });
+  }
   outs.forEach(function(o,i){
-    o.addEventListener('mouseenter',function(){set(i,true);});
-    o.addEventListener('mouseleave',function(){set(i,false);});
+    o.addEventListener('mouseenter',function(){ if(held<0) set(i,true); });
+    o.addEventListener('mouseleave',function(){ if(held<0) set(i,false); });
   });
   pins.forEach(function(pn,i){
-    pn.addEventListener('mouseenter',function(){set(i,true);});
-    pn.addEventListener('mouseleave',function(){set(i,false);});
+    pn.addEventListener('mouseenter',function(){ if(held<0) set(i,true); });
+    pn.addEventListener('mouseleave',function(){ if(held<0) set(i,false); });
+    pn.addEventListener('focus',function(){ if(held<0) set(i,true); });
+    pn.addEventListener('blur',function(){ if(held<0) set(i,false); });
+    pn.addEventListener('click',function(){ hold(i); });
   });
 })();
 </script>

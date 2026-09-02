@@ -13,7 +13,7 @@
 <meta property="og:image" content="https://www.orderedstrength.com/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: a coach who writes it down before you lift.">
+<meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: he changes your workout in the middle of it.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.orderedstrength.com/assets/og.jpg">
 <meta name="theme-color" content="#060709">
@@ -28,7 +28,8 @@
 <meta property="og:locale:alternate" content="es_419">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/assets/site.css?v=96214f52d5">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="/assets/site.css?v=37ac5b6724">
 <style>
 .beats{margin:2rem 0 0;max-width:64rem;display:grid;gap:.75rem}
 .beat{background-color:var(--e1);border-radius:12px;box-shadow:var(--shadow-3);padding:1.5rem 1.5rem 1.625rem}
@@ -53,6 +54,7 @@
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
 <div class="bar">
   <a class="wordmark" translate="no" href="/"><span class="led up" aria-hidden="true"></span>OrderedStrength</a>
@@ -61,12 +63,22 @@
     <a href="/stronger/" class="opt" aria-current="page">Stronger</a>
     <a href="/record/" class="opt">The record</a>
     <a href="/verify/">Verify</a>
-    <a href="/join/" class="cta">Join the test</a>
+    <a href="/join/" class="cta"><span class="cta__long">Join the test</span><span class="cta__short">Join</span></a>
+    <details class="menu">
+      <summary>Menu</summary>
+      <div class="menu__panel">
+        <a href="/how-it-works/">How it works</a>
+        <a href="/stronger/" aria-current="page">Stronger</a>
+        <a href="/record/">The record</a>
+        <a href="/verify/">Verify</a>
+        <a href="/join/">Join the test</a>
+      </div>
+    </details>
   </nav>
   <div class="prog" aria-hidden="true"></div>
 </div>
 
-<main>
+<main id="main">
 
   <section class="scene reading">
     <div class="pagehead">
@@ -171,6 +183,6 @@
   </div>
 </footer>
 
-<script src="/assets/site.js?v=5fd125c32d" defer></script>
+<script src="/assets/site.js?v=7ac4d3867f" defer></script>
 </body>
 </html>

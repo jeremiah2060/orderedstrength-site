@@ -1,0 +1,15 @@
+{
+  "name": "OrderedStrength",
+  "short_name": "OrderedStrength",
+  "description": "A strength coach for iPhone that writes down what it expects from you before you lift, then grades itself on it.",
+  "lang": "en",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#05070B",
+  "theme_color": "#060709",
+  "icons": [
+    { "src": "/favicon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

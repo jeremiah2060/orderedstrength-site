@@ -11,6 +11,11 @@
      card. Two independent breaks, one artefact, and the only reason nobody noticed is that
      nobody had cause to re-render it since 23 August.
 
+     🔒 THE CARD CARRIES THE PAGE'S OWN h1 (2026-09-02). It said "A coach who writes it down
+     before you lift" while /index.html said "He changes your workout in the middle of it", so a
+     link shared anywhere promised one thing and the page it opened promised another. A share
+     card is the first sentence most people read; it is not a second campaign.
+
      LOCALES: this template renders BOTH cards from one source, switched by `?lang=es`, so the
      English and Spanish share images cannot drift apart. A Spanish share previously showed an
      English screenshot under English copy. --><html lang="en"><head><meta charset="utf-8">
@@ -49,7 +54,7 @@
   <div>
     <div class="og-mark"><i></i>OrderedStrength</div>
     <p class="eyebrow" id="og-eyebrow" style="margin-bottom:20px">Strength coaching for iPhone</p>
-    <h1 id="og-title">A coach who writes it down before you lift.</h1>
+    <h1 id="og-title">He changes your workout in the middle of it.</h1>
     <p id="og-sub">He records what he expected from you before you touch the bar, then grades himself on it
     and keeps the misses.</p>
   </div>
@@ -69,7 +74,7 @@
   if (new URLSearchParams(location.search).get('lang') !== 'es') return;
   document.documentElement.lang = 'es-419';
   document.getElementById('og-eyebrow').textContent = 'Coaching de fuerza para iPhone';
-  document.getElementById('og-title').textContent = 'Un coach que lo anota antes de que levantes.';
+  document.getElementById('og-title').textContent = 'Te cambia el entrenamiento a la mitad.';
   document.getElementById('og-sub').textContent =
     'Anota lo que esperaba de ti antes de que toques la barra, después se califica con eso y se queda con los fallos.';
   // The Spanish card shows the app running in Spanish. Same two states as the English card.

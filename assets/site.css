@@ -90,7 +90,7 @@
   --display:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --body:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  --bar:5rem; --gut:clamp(1.25rem,3.5vw,3rem); --wide:min(80rem,100vw);
+  --bar:5rem; --barscale-h:0rem; --gut:clamp(1.25rem,3.5vw,3rem); --wide:min(80rem,100vw);
   --rail:clamp(0px, calc((100vw - var(--wide)) / 2), 7.5rem);
 
   /* MOTION HAS TWO JOBS AND THEY NEED DIFFERENT CURVES. Something arriving should settle
@@ -99,6 +99,25 @@
   --ease:cubic-bezier(.2,.7,.3,1);
   --spring:cubic-bezier(.22,1.18,.36,1);
   --grain:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='160'%20height='160'%3E%3Cfilter%20id='g'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='1.05'%20numOctaves='2'%20stitchTiles='stitch'%20seed='7'/%3E%3CfeColorMatrix%20type='matrix'%20values='0%200%200%200%20.80%20%200%200%200%200%20.84%20%200%200%200%200%20.94%20%20.30%200%200%200%20-.205'/%3E%3C/filter%3E%3Crect%20width='160'%20height='160'%20filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* ══ WHEN THE READER HAS ASKED FOR MORE CONTRAST ══════════════════════════════════════
+   The page answers `prefers-contrast: more` by lifting the two dimmed inks and the hairline,
+   and nothing else: no colour changes hue, no component changes shape, so a reader who has
+   asked the OS for more contrast gets exactly that and not a different design.
+
+   🔒 THIS IS NOT THE LIGHT SCHEME, AND IT IS NOT A SUBSTITUTE FOR ONE. A paper scheme for the
+   document pages is a separate decision about what this product looks like, which is the
+   CEO's to make and is recorded as open. This is the part that needs no such decision because
+   it can only ever raise contrast, never lower it.
+   🔒 AND contrast-gate.py DOES NOT READ THIS BLOCK: it pairs the tokens on the bare :root. The
+   direction is what makes that safe here (every value moves away from the background), and it
+   would NOT be safe for a scheme that changes the background itself. */
+@media (prefers-contrast: more){
+  :root{
+    --ink2:rgba(247,249,250,.93); --ink3:rgba(247,249,250,.80);
+    --line:#3C4859; --line-soft:rgba(196,214,240,.13);
+  }
 }
 *{box-sizing:border-box}
 /* THE SCROLLBAR MAKES TWO DIFFERENT BOXES, AND THE BAR AND THE CONTENT LIVE IN
@@ -162,8 +181,15 @@ img{max-width:100%;height:auto}
 .bar{position:fixed;inset:0 0 auto;height:var(--bar);z-index:80;display:flex;align-items:center;
      justify-content:space-between;
      padding:0 max(var(--gut), calc((100vw - var(--wide)) / 2 + var(--gut)));
-     background:rgba(5,7,11,.7);backdrop-filter:saturate(160%) blur(22px);
-     -webkit-backdrop-filter:saturate(170%) blur(20px)}
+     padding-bottom:var(--barscale-h);
+     background:var(--e0)}
+/* 🔒 OPAQUE, AND THE GLASS WAS NOT A STYLE CHOICE TO DEFEND (2026-09-02). It was
+   `rgba(5,7,11,.7)` over `backdrop-filter: blur(22px)`, which is three costs for one look:
+   the compositor re-blurs the region behind a FIXED element on every scroll frame, which is
+   the one thing a phone GPU should never be asked to do while a page is moving; text passing
+   under it renders through a translucent wash rather than disappearing; and this site's own
+   argument is a machined front panel, which is opaque. The hairline below still appears on
+   scroll, so the bar still says "you have left the top" without a single blurred pixel. */
 .bar::after{content:"";position:absolute;inset:auto 0 0 0;height:1px;background:var(--line);
             opacity:0;transition:opacity .3s}
 .bar.stuck::after{opacity:1}
@@ -198,7 +224,7 @@ img{max-width:100%;height:auto}
    only at 724. A collision band fifteen pixels wide is still a collision, and it is the one
    component that is on every screen of this site. 45.5rem (728px) is the first width the
    measurement clears with room, and it matches the Spanish rules below at 17.8px. */
-@media (max-width:45.5rem){.wordmark{font-size:1.25rem}.bar nav{gap:1.125rem;font-size:.9375rem}.bar nav .opt{display:none}}
+@media (max-width:45.5rem){.wordmark{font-size:1.25rem}.bar nav{gap:1.125rem;font-size:.9375rem}}
 /* 🔒 THE BAR COLLIDES WITH ITS OWN WORDMARK ON A PHONE, AND SPANISH HITS IT THREE WIDTHS
    EARLIER. Measured over CDP: the gap between the wordmark's right edge and the nav's left
    edge is 0px at 320 and 360 in BOTH languages, and 0px at 375 and 390 in Spanish only,
@@ -208,7 +234,7 @@ img{max-width:100%;height:auto}
    25rem (400px), which is where the measurement says it is needed and no earlier: at 414px
    Spanish still clears the wordmark by 22px with the link present, which is the same progressive disclosure rather than a new idea. The page stays
    reachable: /how-it-works/ is in the footer of every page and linked from the body copy. */
-@media (max-width:25rem){.bar nav .opt2{display:none}}
+@media (max-width:23rem){.wordmark{font-size:1.0625rem}.bar nav{gap:.5rem}}
 
 /* 🔒 THOSE BREAKPOINTS ARE TUNED TO ENGLISH LABEL WIDTHS, AND SPANISH IS ABOUT A THIRD WIDER.
    Measured over CDP with Range.getClientRects (a box height cannot tell you a label wrapped,
@@ -221,11 +247,115 @@ img{max-width:100%;height:auto}
    of the site collides with itself. Same progressive disclosure, moved to where the Spanish
    measurement says it is needed, plus nowrap so a longer string can never reopen this. */
 html[lang^="es"] .bar nav a{white-space:nowrap}
-@media (max-width:50rem){html[lang^="es"] .bar nav .opt{display:none}}
-@media (max-width:61.25rem){html[lang^="es"] .bar nav .cta{display:none}}
+
+/* ══ THE COLLAPSE, AND WHAT REPLACES WHAT WAS BEING THROWN AWAY ═══════════════════════
+   🔒 THE RULES THIS SUPERSEDES HID LINKS AND PUT NOTHING IN THEIR PLACE. Measured on
+   2026-09-02 at 390px in English: the bar held the wordmark and the word "Verify", because
+   `.opt` went at 45.5rem, `.opt2` at 25rem and the CTA at 56rem, and Spanish lost the CTA
+   at 61.25rem. Four of the five destinations on this site, including the only page it asks
+   anyone to visit, were unreachable from the header on every phone. Nothing was broken and
+   no gate could see it: they all measure the elements that ARE there.
+
+   🔒 THE BREAKPOINTS THEMSELVES WERE RIGHT AND ARE KEPT. 56rem in English and 61.25rem in
+   Spanish are where the CDP measurement said the full nav stops fitting, and Spanish is a
+   third wider because "Cómo funciona" renders 102px against "How it works" at 78px. What
+   changes is only what happens at those widths: the plain links move into a disclosure the
+   reader can open, and the call to action shortens instead of vanishing.
+
+   🔒 AND IT IS <details>, SO IT WORKS WITH NO SCRIPT. site.js may fail, be blocked, or be
+   turned off, and a header that needs it to navigate is a header that can strand a reader
+   on one page. The browser owns the open state. */
+.menu{position:relative;display:none}
+.menu > summary{list-style:none;cursor:pointer;
+      font-family:var(--mono);font-size:.875rem;letter-spacing:.1em;text-transform:uppercase;
+      font-weight:500;color:var(--ink2);padding:.4375rem .6875rem;border-radius:.5rem;
+      border:1px solid var(--line);background:var(--e2);white-space:nowrap;
+      transition:color .2s,border-color .2s,background-color .2s}
+.menu > summary::-webkit-details-marker{display:none}
+.menu > summary::marker{content:""}
+.menu > summary:hover,.menu[open] > summary{color:var(--ink);border-color:var(--teal)}
+.menu__panel{position:absolute;right:0;top:calc(100% + .625rem);min-width:12.5rem;
+      display:flex;flex-direction:column;gap:.125rem;padding:.4375rem;
+      background:var(--e2);border:1px solid var(--line);border-radius:.75rem;
+      box-shadow:var(--shadow-3)}
+.menu__panel a{display:block;padding:.5625rem .75rem;border-radius:.5rem;font-size:1rem;
+      font-weight:600;color:var(--ink2);white-space:nowrap;transition:color .2s,background-color .2s}
+.menu__panel a:hover,.menu__panel a:focus-visible{background:var(--e3);color:var(--ink)}
+.menu__panel a[aria-current]{color:var(--teal)}
+/* The pill keeps its place and changes its label. Two spans, no script: a width cannot
+   rewrite text, and the alternative was a button that disappeared. */
+.cta__short{display:none}
+@media (max-width:56rem){
+  .bar nav > a:not(.cta){display:none}
+  .menu{display:block}
+  .bar nav .cta{font-size:.875rem;padding:.4375rem .875rem}
+  .cta__long{display:none}
+  .cta__short{display:inline}
+}
+@media (max-width:61.25rem){
+  html[lang^="es"] .bar nav > a:not(.cta){display:none}
+  html[lang^="es"] .menu{display:block}
+  html[lang^="es"] .bar nav .cta{font-size:.875rem;padding:.4375rem .875rem}
+  html[lang^="es"] .cta__long{display:none}
+  html[lang^="es"] .cta__short{display:inline}
+}
+
+/* ══ THE SCALE, ON A PHONE ════════════════════════════════════════════════════════════
+   🔒 THE SECOND SIGNATURE OF THIS SITE RENDERED FOR NOBODY. `.js .rail` is gated at
+   min-width 95rem (1520px), so the margin scale never appeared on a 1440px laptop, let
+   alone a phone: measured absent in the 1440px capture on 2026-09-02. Below that width the
+   page had a 2px progress line and no answer to "which section is this".
+
+   This is the same instrument laid on its side, built from the same items array, so there
+   is still no second list to keep in sync. THE ONE-COORDINATE-SPACE LAW TRAVELS WITH IT: a
+   tick sits at the scroll progress at which its section becomes ACTIVE, never at its
+   proportional position in the document, so "the needle is level with this tick" and "this
+   is the section you are reading" remain the same statement. */
+.barscale{position:absolute;inset:auto 0 0 0;height:var(--barscale-h);display:none;
+      align-items:center;gap:.625rem;
+      padding:0 max(var(--gut), calc((100vw - var(--wide)) / 2 + var(--gut)));
+      font-family:var(--mono);font-size:.8125rem;letter-spacing:.14em;text-transform:uppercase}
+.barscale__n{color:var(--teal);font-weight:500;flex:none;font-variant-numeric:tabular-nums}
+.barscale__lab{color:var(--ink3);font-style:normal;font-weight:500;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;min-width:0}
+/* The scale keeps a legible minimum and the LABEL gives way first: a name truncated to an
+   ellipsis is still a name, a gauge squeezed to a stub is no longer a gauge. Tracking eases
+   on narrow screens because 0.14em on 28 uppercase mono characters is most of a phone. */
+.barscale__track{position:relative;flex:1 0 5.5rem;min-width:5.5rem;height:.5rem}
+@media (max-width:40rem){.barscale{letter-spacing:.07em;gap:.5rem}}
+.barscale__track::before{content:"";position:absolute;inset:50% 0 auto 0;height:1px;
+      margin-top:-.5px;background:var(--line)}
+.barscale__tick{position:absolute;top:0;bottom:0;width:1px;background:var(--line);
+      transition:background-color .3s var(--ease)}
+.barscale__tick.on{background:var(--teal)}
+.barscale__needle{position:absolute;top:-.125rem;bottom:-.125rem;width:2px;border-radius:2px;
+      background:var(--teal);box-shadow:0 0 .5rem rgba(0,212,177,.65);
+      transition:left .1s linear}
+/* Both conditions, never the class alone: `has-rail` says the script BUILT the scale and
+   the query says the margin is too narrow to SHOW the vertical one. This is the same pair
+   the .bar .prog rule above is written on, and for the same reason. */
+@media (max-width:95rem){
+  .has-rail{--barscale-h:1.625rem; --bar:5.5rem}
+  .has-rail .barscale{display:flex}
+}
+@media (max-width:56rem){.has-rail{--bar:4.75rem}}
 
 
 main{padding-top:var(--bar)}
+
+/* ══ REACHING THINGS WITHOUT A MOUSE ══════════════════════════════════════════════════
+   🔒 TWO focus-visible RULES EXISTED FOR THE WHOLE SITE, both on nav links, so a keyboard
+   reader tabbing through the seal console, the gallery pins or the footer got whatever the
+   browser's default happened to be against a near-black ground, which on a dark page is
+   frequently nothing at all. :where() keeps this at zero specificity on purpose: it is a
+   floor every component inherits, and any component that wants its own ring still wins. */
+:where(a,button,summary,input,textarea,select,[tabindex]):focus-visible{
+  outline:2px solid var(--teal);outline-offset:3px;border-radius:3px}
+/* And the first thing tab reaches on every page is the way past the header. */
+.skip{position:absolute;left:.75rem;top:-4rem;z-index:120;
+      padding:.625rem 1rem;border-radius:.5rem;font-weight:600;font-size:1rem;
+      background:var(--teal);color:#03110E;transition:top .18s var(--ease)}
+.skip:focus{top:.75rem}
 
 /* ══ THE SCALE ════════════════════════════════════════════════════════════════
    A linear gauge down the left margin: a hairline, one tick per section at its true
@@ -587,7 +717,12 @@ footer::before{content:"";position:absolute;inset:0 var(--gut) auto;height:1px;
    outcome on a real element, so it was green. The label on a filled button is dark, in
    every state, including the state where that button points at the page you are on. */
 .bar nav .cta[aria-current]{color:#03110E}
-@media (max-width:56rem){.bar nav .cta{display:none}}
+/* 🔒 THE RULE THAT USED TO SIT HERE HID THIS BUTTON ON EVERY PHONE, and it survived the first
+   pass of the fix that was supposed to remove it, because the collapse block lives 300 lines
+   below and this one line does not look like part of it. Measured in the 390px capture: the
+   bar rendered the wordmark and the word MENU, and the only page this site asks anyone to
+   visit was still not in it. THE PILL SHORTENS AT 56rem, IT DOES NOT DISAPPEAR: see the
+   collapse block. */
 
 @media (prefers-reduced-motion:reduce){
   .js .r{opacity:1;transform:none;transition:none}
@@ -649,7 +784,14 @@ footer::before{content:"";position:absolute;inset:0 var(--gut) auto;height:1px;
 .gallery .device{justify-self:center;width:min(17rem,70vw);height:auto}
 
 
-.pin{position:absolute;width:1.375rem;height:1.375rem;border-radius:50%;background:var(--teal);
+/* 🔒 A <button>, NOT A <span>, SINCE 2026-09-02. These were hover-only markers, and hover is
+   the one interaction a phone cannot perform, so the annotation on the site's one annotated
+   photograph was unreachable on every touch device and by every keyboard. The appearance is
+   unchanged on purpose: it was never the appearance that was wrong. tools/pin-gate.py reads
+   `class="pin" style="left:..%;top:..%"` and no longer names the tag, so the element can be
+   the right one without blinding the only gate that checks where these sit. */
+.pin{position:absolute;-webkit-appearance:none;appearance:none;border:0;padding:0;cursor:pointer;
+     width:1.375rem;height:1.375rem;border-radius:50%;background:var(--teal);
      color:#03110E;font-family:var(--mono);font-size:.75rem;font-weight:500;display:flex;
      align-items:center;justify-content:center;transform:translate(-50%,-50%);z-index:4;
      box-shadow:0 0 0 4px rgba(0,212,177,.22),0 0 1rem rgba(0,212,177,.5);
@@ -734,28 +876,23 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
 .devices .device--back .device__glass{filter:brightness(.52) saturate(.9) contrast(.97)}
 .devices .device--back .device__body{filter:brightness(.78)}
 
-/* the third plane. Anchored to the FRONT device's own left edge, in the device's units,
-   so the overlap holds at every device height instead of drifting with a fixed offset. */
-.hero-shot .appcard.float{position:absolute;z-index:5;padding:.9375rem 1.0625rem;
-  left:calc(50% - .72 * var(--device-w) - 2.25rem);
-  bottom:-3.25rem;
-  width:min(16rem, calc(var(--device-w) + 3rem));
-  box-shadow:0 1.75rem 4.5rem rgba(0,0,0,.85),0 0 0 1px var(--line)}
-.hero-shot .appcard.float .cap{margin-bottom:.75rem}
-.hero-shot .appcard.float .lift{padding:.375rem 0}
-.hero-shot .appcard.float .nm{font-size:.875rem}
-.hero-shot .appcard.float .vd{font-size:.75rem}
+/* The third plane WAS a hand-drawn "Prediction accuracy" card floating over the two real
+   captures: three lifts, two Within and one Outside, written in HTML by me. It came off the
+   page on 2026-09-02 and its rules came off with it. On a site whose argument is that its
+   numbers can be checked, a receipt nobody can check is the one thing on the front page a
+   competitor could screenshot and call a lie. Replacing it with a real capture of the graded
+   card needs the simulator; deleting it needed nothing, and was true either way. */
 @media (max-width:72rem){
   .hero-shot{height:auto;flex-direction:column;gap:1rem}
   .hero-shot .devices{height:var(--device-h)}
-  /* 🔒 `position:relative`, NEVER `position:static`, ON ANYTHING CARRYING A BEVEL RING.
-     The ring is an absolutely positioned ::after at inset:0, so it anchors to the nearest
-     POSITIONED ancestor. Setting the card static to drop it back into flow un-anchored
-     that ring, which then resolved against .hero-shot and drew a 1px rounded rectangle
-     across the entire hero: 390px wide, corners and all, on every phone and on no desktop.
-     Diagnosed by pixel diff, not by reading the rule. `relative` with no offsets lays out
-     exactly like `static` and keeps the ring on its own card. */
-  .hero-shot .appcard.float{position:relative;inset:auto;width:100%;margin-top:1rem}
+  /* 🔒 THE NARROW-WIDTH RULE FOR THE FLOATING CARD LIVED HERE, WITH THE HARDEST-WON COMMENT
+     ON THIS PAGE: an absolutely positioned card set `static` un-anchored a ::before ring,
+     which then resolved against .hero-shot and drew a 1px rounded rectangle across the whole
+     hero, 390px wide, on every phone and no desktop, diagnosed by pixel diff. The card is
+     gone (it was a hand-drawn receipt) and so is the rule, but the LESSON is not about that
+     card: `position:relative` with no offsets lays out exactly like `static` and keeps a
+     ring on its own element. Anything that drops an absolutely positioned child back into
+     flow here owes that check. */
 
   /* THE STAGE. The accidental rectangle above was the right instinct in the wrong place:
      at this width the devices fill the column and read better standing ON something than

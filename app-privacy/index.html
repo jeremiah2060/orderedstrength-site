@@ -5,15 +5,15 @@
 <script>document.documentElement.className="js";</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacy Policy · OrderedStrength</title>
-<meta name="description" content="What the OrderedStrength iPhone app stores on your device, the four things that can leave it, how to switch each one off, and the one that should not be there.">
+<meta name="description" content="What the OrderedStrength iPhone app stores on your device, the five things that can leave it, how to switch each one off, and the one that should not be there.">
 <meta property="og:title" content="Privacy Policy · OrderedStrength">
-<meta property="og:description" content="What the OrderedStrength iPhone app stores on your device, the four things that can leave it, how to switch each one off, and the one that should not be there.">
+<meta property="og:description" content="What the OrderedStrength iPhone app stores on your device, the five things that can leave it, how to switch each one off, and the one that should not be there.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="OrderedStrength">
 <meta property="og:image" content="https://www.orderedstrength.com/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: a coach who writes it down before you lift.">
+<meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: he changes your workout in the middle of it.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.orderedstrength.com/assets/og.jpg">
 <meta name="theme-color" content="#060709">
@@ -28,9 +28,11 @@
 <meta property="og:locale:alternate" content="es_419">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/assets/site.css?v=96214f52d5">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="/assets/site.css?v=37ac5b6724">
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
 <div class="bar">
   <a class="wordmark" translate="no" href="/"><span class="led up" aria-hidden="true"></span>OrderedStrength</a>
@@ -39,12 +41,22 @@
     <a href="/stronger/" class="opt">Stronger</a>
     <a href="/record/" class="opt">The record</a>
     <a href="/verify/">Verify</a>
-    <a href="/join/" class="cta">Join the test</a>
+    <a href="/join/" class="cta"><span class="cta__long">Join the test</span><span class="cta__short">Join</span></a>
+    <details class="menu">
+      <summary>Menu</summary>
+      <div class="menu__panel">
+        <a href="/how-it-works/">How it works</a>
+        <a href="/stronger/">Stronger</a>
+        <a href="/record/">The record</a>
+        <a href="/verify/">Verify</a>
+        <a href="/join/">Join the test</a>
+      </div>
+    </details>
   </nav>
   <div class="prog" aria-hidden="true"></div>
 </div>
 
-<main>
+<main id="main">
   <section class="scene">
     <div class="prose">
 <p class="eyebrow eyebrow--bare">Privacy</p>
@@ -98,6 +110,10 @@
 
 <h3>5. A push notification token &middot; on, so a notification can reach you</h3>
 <p>To send you a notification at all, Apple has to give the app a device token, and we have to know where to send it. When the app starts it registers with Apple and sends that token, along with the language your phone is set to, to our server. The token identifies a copy of the app on one device, not you: it carries no name, no email and nothing about your training, and Apple reissues it.</p>
+<p><strong>In the build you can install today, this does not happen.</strong> The app has no push
+entitlement from Apple, so the registration fails and no token is sent to anyone. It is written here
+because the code path exists and will start working the day notifications are provisioned, and you
+should read about it before it does rather than after.</p>
 <p>This is the plumbing behind Jerry's notes about your recovery and your weekly report. If you never allow notifications, nothing is ever delivered to it.</p>
 
 <h2>What we never do</h2>
@@ -114,7 +130,7 @@
   <li><strong>Back up everything</strong> and <strong>restore</strong> a backup, in <em>Profile / Data &amp; Privacy</em>. The file is yours.</li>
   <li><strong>Delete All Training Data</strong>, in the same place. This is immediate and cannot be undone.</li>
   <li><strong>Turn off usage sharing</strong>, in the same place.</li>
-  <li><strong>Turn off Cloud Answers</strong>, in Settings.</li>
+  <li><strong>Turn off Cloud Answers</strong>, in <em>Profile / Apple Health</em>.</li>
   <li><strong>Revoke Apple Health access</strong>, in the Apple Health app.</li>
   <li><strong>Delete the app</strong>, which removes everything stored on the device.</li>
 </ul>
@@ -169,6 +185,6 @@
   </div>
 </footer>
 
-<script src="/assets/site.js?v=5fd125c32d" defer></script>
+<script src="/assets/site.js?v=7ac4d3867f" defer></script>
 </body>
 </html>

@@ -5,15 +5,15 @@
 <script>document.documentElement.className="js";</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Política de Privacidad · OrderedStrength</title>
-<meta name="description" content="Qué guarda la app OrderedStrength para iPhone en tu dispositivo, las cuatro cosas que pueden salir de él, cómo apagar cada una, y la que no debería estar ahí.">
+<meta name="description" content="Qué guarda la app OrderedStrength para iPhone en tu dispositivo, las cinco cosas que pueden salir de él, cómo apagar cada una, y la que no debería estar ahí.">
 <meta property="og:title" content="Política de Privacidad · OrderedStrength">
-<meta property="og:description" content="Qué guarda la app OrderedStrength para iPhone en tu dispositivo, las cuatro cosas que pueden salir de él, cómo apagar cada una, y la que no debería estar ahí.">
+<meta property="og:description" content="Qué guarda la app OrderedStrength para iPhone en tu dispositivo, las cinco cosas que pueden salir de él, cómo apagar cada una, y la que no debería estar ahí.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="OrderedStrength">
 <meta property="og:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: un coach que lo anota antes de que levantes.">
+<meta property="og:image:alt" content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: te cambia el entrenamiento a la mitad.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
 <meta name="theme-color" content="#060709">
@@ -28,9 +28,11 @@
 <meta property="og:locale:alternate" content="en_US">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/assets/site.css?v=96214f52d5">
+<link rel="manifest" href="/es/site.webmanifest">
+<link rel="stylesheet" href="/assets/site.css?v=37ac5b6724">
 </head>
 <body>
+<a class="skip" href="#main">Ir al contenido</a>
 
 <div class="bar">
   <a class="wordmark" translate="no" href="/es/"><span class="led up" aria-hidden="true"></span>OrderedStrength</a>
@@ -39,12 +41,22 @@
     <a href="/es/stronger/" class="opt">Más fuerte</a>
     <a href="/es/record/" class="opt">El registro</a>
     <a href="/es/verify/">Verificar</a>
-    <a href="/es/join/" class="cta">Únete a la prueba</a>
+    <a href="/es/join/" class="cta"><span class="cta__long">Únete a la prueba</span><span class="cta__short">Únete</span></a>
+    <details class="menu">
+      <summary>Menú</summary>
+      <div class="menu__panel">
+        <a href="/es/how-it-works/">Cómo funciona</a>
+        <a href="/es/stronger/">Más fuerte</a>
+        <a href="/es/record/">El registro</a>
+        <a href="/es/verify/">Verificar</a>
+        <a href="/es/join/">Únete a la prueba</a>
+      </div>
+    </details>
   </nav>
   <div class="prog" aria-hidden="true"></div>
 </div>
 
-<main>
+<main id="main">
   <section class="scene">
     <div class="prose">
 <p class="eyebrow eyebrow--bare">Privacidad</p>
@@ -98,6 +110,10 @@
 
 <h3>5. Un token de notificaciones &middot; activo, para que una notificación pueda llegarte</h3>
 <p>Para poder enviarte una notificación, Apple tiene que darle a la app un token de dispositivo, y nosotros tenemos que saber a dónde mandarla. Cuando la app arranca se registra con Apple y envía ese token, junto con el idioma en que tienes configurado tu teléfono, a nuestro servidor. El token identifica una copia de la app en un dispositivo, no a ti: no lleva nombre, ni correo, ni nada de tu entrenamiento, y Apple lo reemplaza cada cierto tiempo.</p>
+<p><strong>En la versión que puedes instalar hoy, esto no pasa.</strong> La app no tiene el permiso
+de notificaciones push de Apple, así que el registro falla y no se envía ningún token a nadie. Está
+escrito aquí porque el camino existe en el código y empezará a funcionar el día que se habiliten las
+notificaciones, y deberías leerlo antes de que pase y no después.</p>
 <p>Esta es la plomería detrás de las notas de Jerry sobre tu recuperación y de tu reporte semanal. Si nunca permites las notificaciones, nunca se entrega nada a ese token.</p>
 
 <h2>Lo que nunca hacemos</h2>
@@ -114,7 +130,7 @@
   <li><strong>Respaldar todo</strong> y <strong>restaurar</strong> una copia, en <em>Perfil / Datos y privacidad</em>. El archivo es tuyo.</li>
   <li><strong>Borrar todos los datos de entrenamiento</strong>, en el mismo lugar. Esto es inmediato y no se puede deshacer.</li>
   <li><strong>Apagar el envío de uso</strong>, en el mismo lugar.</li>
-  <li><strong>Apagar las Respuestas en la Nube</strong>, en Configuración.</li>
+  <li><strong>Apagar las Respuestas en la Nube</strong>, en <em>Perfil / Apple Health</em>.</li>
   <li><strong>Revocar el acceso a Apple Health</strong>, en la app Apple Health.</li>
   <li><strong>Borrar la app</strong>, lo que elimina todo lo guardado en el dispositivo.</li>
 </ul>
@@ -169,6 +185,6 @@
   </div>
 </footer>
 
-<script src="/assets/site.js?v=5fd125c32d" defer></script>
+<script src="/assets/site.js?v=7ac4d3867f" defer></script>
 </body>
 </html>

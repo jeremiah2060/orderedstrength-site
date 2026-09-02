@@ -13,7 +13,7 @@
 <meta property="og:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: un coach que lo anota antes de que levantes.">
+<meta property="og:image:alt" content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: te cambia el entrenamiento a la mitad.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
 <meta name="theme-color" content="#060709">
@@ -28,7 +28,8 @@
 <meta property="og:locale:alternate" content="en_US">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/assets/site.css?v=96214f52d5">
+<link rel="manifest" href="/es/site.webmanifest">
+<link rel="stylesheet" href="/assets/site.css?v=37ac5b6724">
 <style>
 /* An input is a place things go INTO, so it is sunk: inset shadow at the top edge, lit
    hairline at the bottom. Every raised surface on this site is the exact inverse, and
@@ -38,7 +39,7 @@ textarea{width:100%;max-width:52rem;display:block;margin:0;min-height:11rem;
          box-shadow:inset 0 2px 6px -2px rgba(0,0,0,.9), inset 0 1px 0 rgba(0,0,0,.7),
                     inset 0 -1px 0 rgba(233,241,255,.05);
   border:1px solid var(--line);border-radius:10px;padding:.875rem;
-  font-family:var(--mono);font-size:.875rem;line-height:1.55;resize:vertical}
+  font-family:var(--mono);font-size:1rem;line-height:1.55;resize:vertical}
 textarea:focus{outline:none;border-color:var(--teal)}
 .actions{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:flex-start;margin:.875rem 0 0;max-width:52rem}
 #out{margin:1.75rem 0 0;display:grid;gap:.625rem;max-width:52rem}
@@ -57,6 +58,7 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Ir al contenido</a>
 
 <div class="bar">
   <a class="wordmark" translate="no" href="/es/"><span class="led" id="led" translate="no" aria-hidden="true"></span>OrderedStrength</a>
@@ -65,12 +67,22 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
     <a href="/es/stronger/" class="opt">Más fuerte</a>
     <a href="/es/record/" class="opt">El registro</a>
     <a href="/es/verify/" aria-current="page">Verificar</a>
-    <a href="/es/join/" class="cta">Únete a la prueba</a>
+    <a href="/es/join/" class="cta"><span class="cta__long">Únete a la prueba</span><span class="cta__short">Únete</span></a>
+    <details class="menu">
+      <summary>Menú</summary>
+      <div class="menu__panel">
+        <a href="/es/how-it-works/">Cómo funciona</a>
+        <a href="/es/stronger/">Más fuerte</a>
+        <a href="/es/record/">El registro</a>
+        <a href="/es/verify/" aria-current="page">Verificar</a>
+        <a href="/es/join/">Únete a la prueba</a>
+      </div>
+    </details>
   </nav>
   <div class="prog" aria-hidden="true"></div>
 </div>
 
-<main>
+<main id="main">
   <section class="scene">
     <div class="pagehead">
       <p class="eyebrow">Verificador</p>
@@ -140,7 +152,7 @@ details.limits p{font-size:.875rem;color:var(--ink3);margin-top:.875rem;max-widt
   </div>
 </footer>
 
-<script src="/assets/site.js?v=5fd125c32d" defer></script>
+<script src="/assets/site.js?v=7ac4d3867f" defer></script>
 <script>
 (function(){
 'use strict';

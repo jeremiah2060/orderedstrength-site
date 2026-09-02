@@ -48,6 +48,27 @@ if (bar){
   var ticks = items.map(function(){
     var t = document.createElement('span'); t.className = 'rail__tick'; rail.appendChild(t); return t;
   });
+  /* THE SAME INSTRUMENT, LAID ON ITS SIDE, for every width the margin cannot reach. Built
+     from `items` above, so there is still exactly one list of sections on this page. The
+     stylesheet shows it only below 95rem AND only once `has-rail` says it was built. */
+  var head = document.querySelector('.bar');
+  var strip = null, sNum = null, sLab = null, sTicks = [], sNeedle = null;
+  if (head){
+    strip = document.createElement('div');
+    strip.className = 'barscale'; strip.setAttribute('aria-hidden', 'true');
+    sNum = document.createElement('b'); sNum.className = 'barscale__n';
+    sLab = document.createElement('em'); sLab.className = 'barscale__lab';
+    var sTrack = document.createElement('span'); sTrack.className = 'barscale__track';
+    sTicks = items.map(function(){
+      var t = document.createElement('i'); t.className = 'barscale__tick';
+      sTrack.appendChild(t); return t;
+    });
+    sNeedle = document.createElement('span'); sNeedle.className = 'barscale__needle';
+    sTrack.appendChild(sNeedle);
+    strip.appendChild(sNum); strip.appendChild(sLab); strip.appendChild(sTrack);
+    head.appendChild(strip);
+  }
+
   var needle = document.createElement('span'); needle.className = 'rail__needle';
   var bar = document.createElement('i'), num = document.createElement('b'), lab = document.createElement('em');
   needle.appendChild(bar); needle.appendChild(num); needle.appendChild(lab);
@@ -81,6 +102,8 @@ if (bar){
     });
     items.forEach(function(it, i){
       ticks[i].style.top = (railTop + marks[i] * railH) + 'px';
+      /* the SAME mark, so the two scales cannot disagree about where a section starts */
+      if (sTicks[i]) sTicks[i].style.left = (marks[i] * 100) + '%';
     });
     paint();
   }
@@ -110,6 +133,15 @@ if (bar){
       lab.style.top = mode === 'bottom' ? 'auto' : '0';
       lab.style.bottom = mode === 'bottom' ? '0' : 'auto';
       lab.style.transform = mode ? 'rotate(180deg)' : 'translateY(-50%) rotate(180deg)';
+    }
+
+    if (strip){
+      sNum.textContent = num.textContent;
+      if (sLab.textContent !== it.label) sLab.textContent = it.label;
+      sNeedle.style.left = (prog * 100) + '%';
+      for (var s = 0; s < sTicks.length; s++){
+        sTicks[s].className = 'barscale__tick' + (s === active ? ' on' : '');
+      }
     }
 
     for (var k = 0; k < ticks.length; k++){

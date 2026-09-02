@@ -55,9 +55,28 @@ def build():
     return out
 
 
+WEB_ICON = os.path.join(ROOT, "assets", "icon-512.png")
+
+
+def build_at(side):
+    """The same master and the same squircle at any size.
+
+    🔒 THE WEB MANIFEST'S ICON IS NOT A SECOND DRAWING. Adding a manifest (2026-09-02) meant
+    adding a 512px icon, and the obvious move, exporting one from anywhere else, is exactly
+    the error this file was written after: a mark that is a picture of the mark. It comes off
+    the same 1024 master through the same mask, so icon-gate's argument covers it too."""
+    master = Image.open(MASTER).convert("RGB").resize((side, side), Image.LANCZOS)
+    out = master.convert("RGBA")
+    out.putalpha(squircle_mask(side))
+    return out
+
+
 def main():
     if not os.path.exists(MASTER):
         sys.stderr.write(f"missing {MASTER}\n"); return 2
+    if "--check" not in sys.argv:
+        build_at(512).save(WEB_ICON)
+        print("assets/icon-512.png written for the web manifest")
     built = build()
     if "--check" in sys.argv:
         if not os.path.exists(OUT):

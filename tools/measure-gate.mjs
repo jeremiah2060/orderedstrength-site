@@ -69,7 +69,16 @@ const PROBE = `(() => {
     const r = el.getBoundingClientRect();
     if (r.width < 40 || r.height < 8) return;
     const lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.4;
-    const lines = Math.max(1, Math.round(r.height / lh));
+    /* 🔒 PADDING IS NOT A LINE OF TEXT, AND COUNTING IT AS ONE INVENTS DEFECTS. The border
+       box was divided by the line height, so any padded block reported one more line than it
+       has, and the characters-per-line average was pushed down by exactly that much. Measured
+       2026-09-02: p#selftest is two lines of 12px in a 19.2px rhythm with 16px of bottom
+       padding, so 38.4px of text in a 54.4px box read as THREE lines, and a 45-character
+       sentence scored 15 per line against a floor of 18. The paragraph was correct, the page
+       was correct, and this gate said otherwise. Subtract what is not text. */
+    const notText = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0)
+                  + (parseFloat(cs.borderTopWidth) || 0) + (parseFloat(cs.borderBottomWidth) || 0);
+    const lines = Math.max(1, Math.round((r.height - notText) / lh));
     if (lines < 2) return;
     const perLine = text.length / lines;
     if (perLine < ${MIN_CHARS_PER_LINE})

@@ -113,7 +113,12 @@ def main():
         if not gal:
             print(f"  {page:24} no gallery section found"); fail += 1; continue
         img = re.search(r'device__screen" src="([^"?]+)', gal.group(0))
-        found = re.findall(r'<span class="pin" style="left:([\d.]+)%;top:([\d.]+)%"', gal.group(0))
+        # 🔒 TAG-AGNOSTIC ON PURPOSE (2026-09-02). This read `<span class="pin" ...` and the
+        # pins became `<button>` the day they were made reachable by touch and keyboard. The
+        # count check below would have caught it loudly, which is the only reason that change
+        # was safe to make; a gate keyed to a tag name is a gate keyed to something that is
+        # allowed to change. What identifies a pin is its class and the two percentages.
+        found = re.findall(r'class="pin" style="left:([\d.]+)%;top:([\d.]+)%"', gal.group(0))
         if not img or len(found) != len(pins):
             print(f"  {page:24} expected {len(pins)} pin(s), found {len(found)}"); fail += 1; continue
 

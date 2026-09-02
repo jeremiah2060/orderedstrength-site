@@ -36,7 +36,24 @@ cannot go red on the defect it was written for is documentation, not protection,
 only reason this one is not still documentation is that the falsification step was run
 rather than assumed.
 
-WHY THE OTHER PAGES ARE EXEMPT, each named rather than waved at. /record/ is a page about
+ARM 3, VOCABULARY, ADDED 2026-09-02, AND IT RUNS ON EVERY PAGE RATHER THAN THE SELLING FOUR.
+The app has forbidden five coaching words since June and enforces them at EDIT TIME with
+.claude/hooks/guard-strings.py, in English and in es-419. Nothing enforced them on the site,
+in either language, and on 2026-09-02 /es/stronger/ was found selling "una racha de meses":
+racha is streak, the word the product refuses to use about a body, printed in a headline on
+the page whose whole subject is a body. Fourteen gates read that page and not one of them
+owned a dictionary.
+
+  🔒 THE FAMILY IS COPIED FROM THE APP'S HOOK, NOT INVENTED HERE. A second hand-written list
+  drifts from the first, and the drift is silent because both are green. When the app's list
+  changes this one is updated from it deliberately, and the docstring says where it came from.
+
+  🔒 AND IT GATES ALL TWENTY PAGES, NOT THE SELLING FOUR. Arms 1 and 2 are about the voice a
+  SELLING page uses, so exempting a policy page is right. A banned coaching word is banned
+  wherever a reader can see it, and the one that actually shipped was on /stronger/, which is
+  in the selling set only in Spanish by accident of which arm you ask.
+
+WHY THE OTHER PAGES ARE EXEMPT FROM ARMS 1 AND 2, each named rather than waved at. /record/ is a page about
 our own published record, so "we" IS its subject. /app-privacy/, /terms/ and /support/ are legal and
 utility pages where first-person plural is what a policy is written in. /verify/ is a tool.
 /404.html has two sentences. Gating those would be a checker inventing a defect, which is as
@@ -64,6 +81,76 @@ READER = re.compile(
 SITE   = re.compile(
     r'^(we\b|this (page|site)\b|these pages\b|the (page|site)\b|our (site|pages)\b'
     r'|nosotros\b|esta (p[aá]gina|web|secci[oó]n)\b|estas p[aá]ginas\b|nuestro sitio\b|este sitio\b)', re.I)
+
+
+# ── ARM 3: the forbidden coaching vocabulary ────────────────────────────────────────────
+# 🔒 TRANSCRIBED FROM THE APP'S OWN HOOK, .claude/hooks/guard-strings.py FORBIDDEN[], on
+# 2026-09-02. Same concepts, same two languages. If that list moves, move this one and say so.
+BANNED = [
+    (r"\bmissed\b",                    "missed"),
+    (r"\bskipped\b",                   "skipped"),
+    (r"\bstreak\b",                    "streak"),
+    (r"\bdenied\b",                    "denied"),
+    (r"cannot log",                     "cannot log"),
+    (r"\bperdiste\b",                  "perdiste (missed)"),
+    (r"\bfaltaste\b",                  "faltaste (missed)"),
+    (r"\bfallaste\b",                  "fallaste (failed)"),
+    (r"\bsaltaste\b",                  "saltaste (skipped)"),
+    (r"\bomitiste\b",                  "omitiste (skipped)"),
+    (r"\bracha\b",                     "racha (streak)"),
+    (r"\bdenegad[oa]\b",               "denegado (denied)"),
+    (r"no (?:puedes|se puede) registrar", "no puedes registrar (cannot log)"),
+]
+BANNED = [(re.compile(p, re.I), label) for p, label in BANNED]
+
+
+def all_pages(root):
+    """Every published page. Derived by walking, never hand-listed.
+
+    🔒 tools/ IS A GENERATOR DIRECTORY, NOT A PAGE DIRECTORY. tools/og.html is rendered to a
+    JPEG and never served, and gating a template as though it were a page is how a gate earns
+    the reputation that gets it switched off. check-site.py excludes it for the same reason."""
+    out = []
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = [d for d in dirnames
+                       if d not in ('tools', 'assets', 'node_modules', '.git')]
+        for fn in filenames:
+            if fn.endswith('.html'):
+                out.append(os.path.relpath(os.path.join(dirpath, fn), root))
+    return sorted(out)
+
+
+def visible_text(path):
+    """What a reader can see. Script, style, HTML comments and attributes are not prose.
+
+    🔒 ATTRIBUTES ARE STRIPPED WITH THE TAGS ON PURPOSE. A meta description IS read, by a
+    person, in a search result, so it is checked separately below rather than dropped."""
+    s = open(path, encoding='utf-8').read()
+    s = re.sub(r'<(script|style)[^>]*>.*?</\1>', ' ', s, flags=re.S | re.I)
+    s = re.sub(r'<!--.*?-->', ' ', s, flags=re.S)
+    metas = ' '.join(re.findall(r'<meta[^>]+content="([^"]*)"', s, re.I))
+    body = re.sub(r'<[^>]+>', ' ', s)
+    return _html.unescape(body + ' ' + metas)
+
+
+def banned_words(root):
+    """No page may print a word the product refuses to say about a body."""
+    print("\nVOCABULARY")
+    fails = 0
+    for name in all_pages(root):
+        txt = visible_text(os.path.join(root, name))
+        hits = []
+        for rx, label in BANNED:
+            m = rx.search(txt)
+            if m:
+                lo = max(0, m.start() - 45)
+                hits.append(f'{label}: "...{" ".join(txt[lo:m.end() + 45].split())}..."')
+        print(f"  {name:28} {'OK' if not hits else hits[0]}")
+        for extra in hits[1:]:
+            print(f"  {'':28} {extra}")
+        fails += len(hits)
+    print(f"\nVOCABULARY FAILURES: {fails}")
+    return fails
 
 
 def prose(path):
@@ -117,6 +204,7 @@ def main():
         else:
             print(f"  {name:28} OK   opening clean, reader {len(reader)}, site {len(site)}")
     print(f"\nVOICE FAILURES: {fails}")
+    fails += banned_words(root)
     return 1 if fails else 0
 
 

@@ -13,7 +13,7 @@
 <meta property="og:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: un coach que lo anota antes de que levantes.">
+<meta property="og:image:alt" content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: te cambia el entrenamiento a la mitad.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
 <meta name="theme-color" content="#060709">
@@ -28,7 +28,8 @@
 <meta property="og:locale:alternate" content="en_US">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/assets/site.css?v=96214f52d5">
+<link rel="manifest" href="/es/site.webmanifest">
+<link rel="stylesheet" href="/assets/site.css?v=37ac5b6724">
 <style>
 .ledger{margin:2rem 0 0;max-width:64rem;background-color:var(--e1);border-radius:12px;overflow:hidden;overflow:clip;box-shadow:var(--shadow-3)}
 .lhead{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.875rem 1.125rem;
@@ -53,6 +54,7 @@
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Ir al contenido</a>
 
 <div class="bar">
   <a class="wordmark" translate="no" href="/es/"><span class="led up" aria-hidden="true"></span>OrderedStrength</a>
@@ -61,12 +63,22 @@
     <a href="/es/stronger/" class="opt">Más fuerte</a>
     <a href="/es/record/" class="opt" aria-current="page">El registro</a>
     <a href="/es/verify/">Verificar</a>
-    <a href="/es/join/" class="cta">Únete a la prueba</a>
+    <a href="/es/join/" class="cta"><span class="cta__long">Únete a la prueba</span><span class="cta__short">Únete</span></a>
+    <details class="menu">
+      <summary>Menú</summary>
+      <div class="menu__panel">
+        <a href="/es/how-it-works/">Cómo funciona</a>
+        <a href="/es/stronger/">Más fuerte</a>
+        <a href="/es/record/" aria-current="page">El registro</a>
+        <a href="/es/verify/">Verificar</a>
+        <a href="/es/join/">Únete a la prueba</a>
+      </div>
+    </details>
   </nav>
   <div class="prog" aria-hidden="true"></div>
 </div>
 
-<main>
+<main id="main">
 
   <section class="scene reading">
     <div class="pagehead">
@@ -161,11 +173,18 @@
   </div>
 </footer>
 
-<script src="/assets/site.js?v=5fd125c32d" defer></script>
+<script src="/assets/site.js?v=7ac4d3867f" defer></script>
 <script>
 (function(){
 'use strict';
-var API = 'https://api.github.com/repos/jeremiah2060/orderedstrength-receipts/contents/anchors';
+/* 🔒 THE LISTING IS MIRRORED INTO THIS SITE AT BUILD TIME, NOT READ FROM GITHUB HERE.
+   This line was an unauthenticated fetch to api.github.com from the reader's browser, and
+   GitHub allows 60 an hour per IP, shared behind any carrier NAT. Measured on 2026-09-02:
+   403, and this page told a stranger who had come to check our honesty that it "could not
+   read the repository". A public record that depends on a third party's rate limit is not a
+   public record. tools/mirror-anchors.py writes record/anchors.json; the repository link
+   below stays, so the source is still one click away and still checkable by hand. */
+var API = '/record/anchors.json';
 var state = document.getElementById('lstate');
 var body = document.getElementById('lbody');
 
@@ -178,28 +197,29 @@ function empty(reason){
     'raíz que cubre cada predicción sellada ese día. Nada más, para siempre.</p></div>';
 }
 
-fetch(API, { headers: { 'accept': 'application/vnd.github+json' } })
-  .then(function(r){
-    if (r.status === 404) { empty('El repositorio existe y la carpeta de anclas todavía no se ha creado, que es el estado honesto al ' + new Date().toISOString().slice(0,10) + '.'); return null; }
-    if (!r.ok) throw new Error('http ' + r.status);
-    return r.json();
-  })
-  .then(function(list){
-    if (!list) return;
-    var files = list.filter(function(f){ return f.type === 'file' && /\.txt$|\.json$/.test(f.name); });
-    if (!files.length){ empty('La carpeta de anclas existe pero todavía no contiene raíces publicadas.'); return; }
-    files.sort(function(a,b){ return a.name < b.name ? 1 : -1; });
-    state.textContent = files.length + ' publicadas';
+fetch(API, { headers: { 'accept': 'application/json' } })
+  .then(function(r){ if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+  .then(function(doc){
+    var anchors = (doc && doc.anchors) || [];
+    if (!anchors.length){
+      empty(doc && doc.state === 'no-folder'
+        ? 'El repositorio existe y la carpeta de anclas todavía no se ha creado, que era el estado cuando se construyó esta página, el ' + doc.mirrored + '.'
+        : 'La carpeta de anclas existe pero no contenía raíces publicadas cuando se construyó esta página, el ' + ((doc && doc.mirrored) || 'una fecha anterior') + '.');
+      return;
+    }
+    state.textContent = anchors.length + ' publicadas';
     state.className = 'lstate live';
-    body.innerHTML = files.slice(0, 60).map(function(f){
-      return '<div class="anchor"><span class="d">' + f.name.replace(/\.(txt|json)$/,'') +
-             '</span><a class="h" href="' + f.html_url + '">' + f.sha.slice(0,40) + '</a></div>';
+    body.innerHTML = anchors.slice(0, 60).map(function(a){
+      return '<div class="anchor"><span class="d">' + a.date +
+             '</span><a class="h" href="' + a.url + '">' + a.sha.slice(0,40) + '</a></div>';
     }).join('');
   })
   .catch(function(){
-    state.textContent = 'inalcanzable';
-    body.innerHTML = '<div class="empty"><h3>No se pudo leer el repositorio.</h3>' +
-      '<p>GitHub no respondió, así que esta página no va a adivinar un número. ' +
+    /* This can now only mean our own file is missing from our own deploy, so it says that
+       rather than blaming a third party the page no longer talks to. */
+    state.textContent = 'no publicada';
+    body.innerHTML = '<div class="empty"><h3>Falta el listado replicado en esta versión.</h3>' +
+      '<p>Esta página no va a adivinar un número. ' +
       '<a href="https://github.com/jeremiah2060/orderedstrength-receipts" style="color:var(--teal)">' +
       'Abre el repositorio directamente</a> y léelo tú mismo.</p></div>';
   });

@@ -278,7 +278,7 @@ STRONGER = {
         'No viniste aquí a auditar a un coach. Viniste porque quieres levantar más de lo que levantaste el mes pasado. Jerry trabaja en tres escalas de tiempo para llevarte ahí: la serie que tienes delante, la semana en la que estás, y los meses que llevas.',
     'Three time scales': 'Tres escalas de tiempo',
     'Strength is built across a set, a week and a run of months. He works all three.':
-        'La fuerza se construye en una serie, en una semana y en una racha de meses. Él trabaja las tres.',
+        'La fuerza se construye en una serie, en una semana y en un tramo de meses. Él trabaja las tres.',
     'Inside one set': 'Dentro de una serie',
     'He watches the reps land, then writes the next one.':
         'Mira cómo caen las repeticiones, y después escribe la siguiente serie.',
@@ -1054,8 +1054,8 @@ META = {
         'content="Un coach de fuerza para iPhone que cambia tu sesión mientras estás en ella, anota lo que esperaba antes de que levantes, y se puede comprobar. Sella una predicción, y después intenta cambiarla."',
     'content="He writes the next set while you are still breathing hard from the last one, cuts the session when you are fading, and writes down what he expected before you lift so you can check him after."':
         'content="Escribe la siguiente serie mientras todavía respiras fuerte de la anterior, recorta la sesión cuando estás cayendo, y anota lo que esperaba antes de que levantes para que puedas revisarlo después."',
-    'content="Two iPhones showing the OrderedStrength dashboard beside the line: a coach who writes it down before you lift."':
-        'content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: un coach que lo anota antes de que levantes."',
+    'content="Two iPhones showing the OrderedStrength dashboard beside the line: he changes your workout in the middle of it."':
+        'content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: te cambia el entrenamiento a la mitad."',
 }
 
 MAILTO = {

@@ -13,7 +13,7 @@
 <meta property="og:image" content="https://www.orderedstrength.com/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: a coach who writes it down before you lift.">
+<meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: he changes your workout in the middle of it.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.orderedstrength.com/assets/og.jpg">
 <meta name="theme-color" content="#060709">
@@ -28,7 +28,8 @@
 <meta property="og:locale:alternate" content="es_419">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/assets/site.css?v=96214f52d5">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="/assets/site.css?v=37ac5b6724">
 <style>
 /* ── the coaching stack: real app UI, rendered rather than screenshotted ── */
 .hero .appcard{padding:1.625rem 1.75rem}
@@ -109,7 +110,12 @@ input[type=range]::-moz-range-thumb{width:1.125rem;height:1.125rem;border:0;bord
 .hrow + .hrow{border-top:1px solid var(--line-soft)}
 .hrow label{font-size:.875rem;color:var(--ink3)}
 .hrow .ctl{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
-.hrow input[type=text],.hrow input[type=number]{font-family:var(--mono);font-size:.875rem;color:var(--ink);
+/* 🔒 16px IS A FLOOR ON A CONTROL FOR A REASON THAT IS NOT LEGIBILITY. iOS Safari zooms
+   the page when a text control under 16px takes focus, so the one thing this site invites a
+   visitor to do, break the seal with their thumb, fought the browser every time. type-floor
+   owns legibility at 12px and passed this at 14px, correctly: different question, different
+   floor. check-site.py now carries the rule. */
+.hrow input[type=text],.hrow input[type=number]{font-family:var(--mono);font-size:1rem;color:var(--ink);
   background:transparent;border:0;border-bottom:1px dashed rgba(0,212,177,.5);padding:.1875rem .125rem;
   font-weight:500;border-radius:2px;transition:border-color .2s,background .2s;min-width:0}
 .hrow input[type=text]{width:100%;max-width:15rem}
@@ -126,6 +132,13 @@ input[type=range]::-moz-range-thumb{width:1.125rem;height:1.125rem;border:0;bord
 .hash{font-family:var(--mono);font-size:.75rem;line-height:1.7;word-break:break-all;color:var(--ink2);margin:0}
 .hash b{color:var(--teal);font-weight:500;text-shadow:0 0 .75rem rgba(0,212,177,.35)}
 .hash i{color:var(--red);font-style:normal;font-weight:500}
+.cacts{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.preset{font-size:.875rem;font-weight:600;background:transparent;color:var(--ink2);
+        border:1px solid var(--line);border-radius:100px;padding:.4375rem .875rem;cursor:pointer;
+        font-family:var(--body);white-space:nowrap;
+        transition:color .2s,border-color .2s,background-color .2s}
+.preset:hover{color:var(--ink);border-color:var(--teal)}
+.preset:active{background-color:var(--e4)}
 .cfoot{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between;
        padding:.9375rem 1.25rem;border-top:1px solid rgba(233,241,255,.05);background-color:var(--e3)}
 .cfoot p{margin:0;font-size:.75rem;color:var(--ink3);max-width:40ch;line-height:1.45}
@@ -143,6 +156,7 @@ details.raw pre{font-family:var(--mono);font-size:.75rem;color:var(--ink3);overf
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
 <div class="bar">
   <a class="wordmark" translate="no" href="/"><span class="led" id="led" aria-hidden="true"></span>OrderedStrength</a>
@@ -151,12 +165,22 @@ details.raw pre{font-family:var(--mono);font-size:.75rem;color:var(--ink3);overf
     <a href="/stronger/" class="opt">Stronger</a>
     <a href="/record/" class="opt">The record</a>
     <a href="/verify/">Verify</a>
-    <a href="/join/" class="cta">Join the test</a>
+    <a href="/join/" class="cta"><span class="cta__long">Join the test</span><span class="cta__short">Join</span></a>
+    <details class="menu">
+      <summary>Menu</summary>
+      <div class="menu__panel">
+        <a href="/how-it-works/">How it works</a>
+        <a href="/stronger/">Stronger</a>
+        <a href="/record/">The record</a>
+        <a href="/verify/">Verify</a>
+        <a href="/join/">Join the test</a>
+      </div>
+    </details>
   </nav>
   <div class="prog" aria-hidden="true"></div>
 </div>
 
-<main>
+<main id="main">
 
   <!-- HERO: owns the screen, and shows the product rather than describing it -->
   <section class="scene hero">
@@ -164,10 +188,9 @@ details.raw pre{font-family:var(--mono);font-size:.75rem;color:var(--ink3);overf
       <div>
         <p class="eyebrow">Strength coaching for iPhone</p>
         <h1>He changes your workout in the middle of it.</h1>
-        <p class="sub">Most apps hand you a program and stop listening. Jerry, the coach inside
-        the app, writes the next set while you are still breathing hard from the last one. He cuts
-        the remaining sets when you are fading, and adds the plate the day you earn it. He writes down what
-        he expects from you <em>before</em> you touch the bar, so you can check him on it after.</p>
+        <p class="sub">You are still breathing hard from the last set when he writes the next one.
+        You see the remaining sets cut when you fade, the plate added the day you earn it, and what he
+        expected from you written down <em>before</em> you touched the bar.</p>
         <div class="chips reveal" style="margin-top:2rem">
           <a class="btn" href="#coach">See him cut a set</a>
           <a class="btn ghost" href="/how-it-works/">How it works</a>
@@ -180,7 +203,9 @@ details.raw pre{font-family:var(--mono);font-size:.75rem;color:var(--ink3);overf
           <div class="device device--back">
             <div class="device__body"><div class="device__glass">
               <div class="device__screenwrap">
-                <img class="device__screen" src="/assets/shots/evidence.webp?v=fe6047b750" width="1206" height="2622" loading="lazy" decoding="async"
+                <img class="device__screen" src="/assets/shots/evidence.webp?v=fe6047b750"
+                     srcset="/assets/shots/evidence-402.webp?v=2efe950a88 402w, /assets/shots/evidence-804.webp?v=06dbf95502 804w, /assets/shots/evidence.webp?v=fe6047b750 1206w"
+                     sizes="256px" width="1206" height="2622" loading="lazy" decoding="async"
                      alt="The Trust Intelligence screen, badged Population, listing open investigations and naming the evidence each one still needs before it will make a claim.">
               </div>
               <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
@@ -190,19 +215,15 @@ details.raw pre{font-family:var(--mono);font-size:.75rem;color:var(--ink3);overf
           <div class="device device--front">
             <div class="device__body"><div class="device__glass">
               <div class="device__screenwrap">
-                <img class="device__screen" src="/assets/shots/session3.webp?v=8ef637f588" width="1206" height="2622" fetchpriority="high" decoding="async"
+                <img class="device__screen" src="/assets/shots/session3.webp?v=8ef637f588"
+                     srcset="/assets/shots/session3-402.webp?v=f8253599df 402w, /assets/shots/session3-804.webp?v=3da1a4db18 804w, /assets/shots/session3.webp?v=8ef637f588 1206w"
+                     sizes="256px" width="1206" height="2622" fetchpriority="high" decoding="async"
                      alt="The OrderedStrength dashboard after three logged sessions. The mode badge reads Building, fatigue and recovery are marked Pop. Est. at 15 and 88 percent, and the headline says the individual model is building from every session.">
               </div>
               <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
             </div></div>
             <span class="device__key device__key--act" aria-hidden="true"></span><span class="device__key device__key--vup" aria-hidden="true"></span><span class="device__key device__key--vdn" aria-hidden="true"></span><span class="device__key device__key--pwr" aria-hidden="true"></span><span class="device__key device__key--cam" aria-hidden="true"></span>
           </div>
-        </div>
-        <div class="appcard float">
-          <p class="cap">Prediction accuracy</p>
-          <div class="lift"><span class="dot ok"></span><span class="nm">Bulgarian Split Squat</span><span class="vd inr">Within</span></div>
-          <div class="lift"><span class="dot miss"></span><span class="nm">Romanian Deadlift</span><span class="vd outr">Outside</span></div>
-          <div class="lift"><span class="dot ok"></span><span class="nm">Incline Barbell Press</span><span class="vd inr">Within</span></div>
         </div>
       </div>
     </div>
@@ -303,11 +324,13 @@ details.raw pre{font-family:var(--mono);font-size:.75rem;color:var(--ink3);overf
       <div class="device">
         <div class="device__body"><div class="device__glass">
           <div class="device__screenwrap">
-            <img class="device__screen" src="/assets/shots/dashboard.webp?v=544dd871d9" width="1206" height="2622" loading="lazy" decoding="async"
+            <img class="device__screen" src="/assets/shots/dashboard.webp?v=544dd871d9"
+                     srcset="/assets/shots/dashboard-402.webp?v=fc7f4a536d 402w, /assets/shots/dashboard-804.webp?v=0c45ae33ce 804w, /assets/shots/dashboard.webp?v=544dd871d9 1206w"
+                     sizes="256px" width="1206" height="2622" loading="lazy" decoding="async"
                  alt="The OrderedStrength dashboard after one logged session, showing an Intelligence Mode badge reading Building, fatigue and recovery rings labelled Pop. Est., and a line reading that all five intelligence surfaces open on evidence, not time.">
-        <span class="pin" style="left:79%;top:36.9%" data-pin="0">1</span>
-        <span class="pin" style="left:6.5%;top:62.4%" data-pin="1">2</span>
-        <span class="pin" style="left:88%;top:74.9%" data-pin="2">3</span>
+        <button class="pin" style="left:79%;top:36.9%" data-pin="0" type="button" aria-pressed="false" aria-label="Callout 1">1</button>
+        <button class="pin" style="left:6.5%;top:62.4%" data-pin="1" type="button" aria-pressed="false" aria-label="Callout 2">2</button>
+        <button class="pin" style="left:88%;top:74.9%" data-pin="2" type="button" aria-pressed="false" aria-label="Callout 3">3</button>
           </div>
           <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
         </div></div>
@@ -332,8 +355,9 @@ details.raw pre{font-family:var(--mono);font-size:.75rem;color:var(--ink3);overf
           <span><b>Evidence moves it, and some of it holds a floor</b>
           <span>The app's own line, on the screen: the intelligence surfaces
           <code translate="no">open on evidence, not time</code>. True of the pace. Not true of everything: three
-          deep reads will not speak below fifteen sessions however hard you train, because the
-          sample is too small to mean anything. Both halves are here because only one flatters
+          deep reads wait for fifteen sessions' worth of evidence, and evidence banks at most twice
+          a day and ten times a week, so the fastest honest path opens them on your eighth training
+          day across two weeks. Below that the sample is too small to mean anything. Both halves are here because only one flatters
           us.</span></span>
         </li>
       </ul>
@@ -394,8 +418,12 @@ field   sealedFor = 1755916800</pre>
         </details>
       </div>
       <div class="cfoot">
-        <p id="cnote">Nothing here is stored by us. The arithmetic ran on your machine.</p>
-        <button class="reset" id="reset" disabled>Put it back</button>
+        <p id="cnote">Nothing you change here leaves your browser. The arithmetic ran on your machine.</p>
+        <div class="cacts">
+          <button type="button" class="preset" id="pwide">Widen his range by 10 kg</button>
+          <button type="button" class="preset" id="plift">Change the lift</button>
+          <button class="reset" id="reset" disabled>Put it back</button>
+        </div>
       </div>
       <p class="selftest" id="selftest">Checking this page against the live verifier.</p>
       <div class="chips" style="margin-top:1.75rem;gap:.75rem">
@@ -403,7 +431,7 @@ field   sealedFor = 1755916800</pre>
         <a class="btn ghost" href="/verify/">Verify a real receipt</a>
       </div>
       <p class="small" style="margin-top:.875rem">That arithmetic just ran on your machine, not ours.
-      Every prediction the app makes is sealed the same way, before the set.</p>
+      Every session forecast is sealed this way before the set. The 30-day envelope and an experiment's pre-registration are sealed over their own fields.</p>
     </div>
   </section>
 
@@ -439,7 +467,9 @@ field   sealedFor = 1755916800</pre>
         <div class="device">
           <div class="device__body"><div class="device__glass">
             <div class="device__screenwrap">
-              <img class="device__screen" src="/assets/shots/dashboard.webp?v=544dd871d9" width="1206" height="2622" loading="lazy" decoding="async"
+              <img class="device__screen" src="/assets/shots/dashboard.webp?v=544dd871d9"
+                     srcset="/assets/shots/dashboard-402.webp?v=fc7f4a536d 402w, /assets/shots/dashboard-804.webp?v=0c45ae33ce 804w, /assets/shots/dashboard.webp?v=544dd871d9 1206w"
+                     sizes="180px" width="1206" height="2622" loading="lazy" decoding="async"
                    alt="The dashboard after one logged session. Fatigue reads 10 percent and recovery 92 percent, both labelled Pop. Est., the Calibration ring carries no number, and the best lift on record is a Barbell Back Squat at an estimated one-rep maximum of 56.3 kilograms.">
             </div>
             <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
@@ -452,7 +482,9 @@ field   sealedFor = 1755916800</pre>
         <div class="device">
           <div class="device__body"><div class="device__glass">
             <div class="device__screenwrap">
-              <img class="device__screen" src="/assets/shots/hundred.webp?v=90c38681d9" width="1206" height="2622" loading="lazy" decoding="async"
+              <img class="device__screen" src="/assets/shots/hundred.webp?v=90c38681d9"
+                     srcset="/assets/shots/hundred-402.webp?v=d557683329 402w, /assets/shots/hundred-804.webp?v=3f84865168 804w, /assets/shots/hundred.webp?v=90c38681d9 1206w"
+                     sizes="180px" width="1206" height="2622" loading="lazy" decoding="async"
                    alt="The same dashboard after one hundred logged sessions. The headline says the load now comes from the athlete's own sets rather than population averages, the best lift on record is a Barbell Back Squat at Estimated 1RM 129.2 kg, and the Calibration ring now reads 84 percent labelled Your RIR.">
             </div>
             <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
@@ -465,7 +497,9 @@ field   sealedFor = 1755916800</pre>
         <div class="device">
           <div class="device__body"><div class="device__glass">
             <div class="device__screenwrap">
-              <img class="device__screen" src="/assets/shots/answered.webp?v=aa181ce283" width="1206" height="2622" loading="lazy" decoding="async"
+              <img class="device__screen" src="/assets/shots/answered.webp?v=aa181ce283"
+                     srcset="/assets/shots/answered-402.webp?v=b6c57f1281 402w, /assets/shots/answered-804.webp?v=61cc02c9c0 804w, /assets/shots/answered.webp?v=aa181ce283 1206w"
+                     sizes="180px" width="1206" height="2622" loading="lazy" decoding="async"
                    alt="The same dashboard after one hundred sessions, this time with the athlete's soreness reported. Fatigue and recovery are both labelled Your Data, recovery reads 73%, and the headline says his load and his recovery rate are both measured from him now.">
             </div>
             <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
@@ -478,7 +512,9 @@ field   sealedFor = 1755916800</pre>
         <div class="device">
           <div class="device__body"><div class="device__glass">
             <div class="device__screenwrap">
-              <img class="device__screen" src="/assets/shots/evidence.webp?v=fe6047b750" width="1206" height="2622" loading="lazy" decoding="async"
+              <img class="device__screen" src="/assets/shots/evidence.webp?v=fe6047b750"
+                     srcset="/assets/shots/evidence-402.webp?v=2efe950a88 402w, /assets/shots/evidence-804.webp?v=06dbf95502 804w, /assets/shots/evidence.webp?v=fe6047b750 1206w"
+                     sizes="180px" width="1206" height="2622" loading="lazy" decoding="async"
                    alt="The Trust Intelligence screen, listing open investigations and the evidence each one still needs before it will make a claim.">
             </div>
             <span class="device__island" aria-hidden="true"></span><span class="device__sheen" aria-hidden="true"></span>
@@ -526,8 +562,9 @@ field   sealedFor = 1755916800</pre>
     accuracy record are free and stay free. Pro opens the depth: the full analytical vault, your
     complete history export, importing another training log after the first one, and the
     weekly report as a file you can send.</p>
-    <p class="small" style="margin-top:.75rem">Human strength coaching from the best-known programmes runs 350 to 600 US dollars a
-    month. This is 199 a year, which is about 16.58 a month, or 29.99 if you would rather pay
+    <p class="small" style="margin-top:.75rem">Human strength coaching runs 200 to 600 US dollars a month: Barbell Logic 199, Future 199,
+    Reactive Training Systems 220, Juggernaut one to one from 297, Renaissance Periodization 350
+    and 600. This is 199 a year, which is about 16.58 a month, or 29.99 if you would rather pay
     monthly and stop whenever you like. It renews until you cancel it, you cancel it in your own
     Apple settings, and the accuracy record is published before anyone is charged. The
     <a href="/terms/" style="color:var(--teal)">terms</a> say the rest in the same plain words.</p>
@@ -536,7 +573,7 @@ field   sealedFor = 1755916800</pre>
       <a class="btn ghost" href="/how-it-works/">How it works</a>
     </div>
     <p class="small" style="margin-top:1.5rem">Not on the App Store yet, and there is no mailing
-    list, because there is no account system to hold one.
+    list. We could keep one and chose not to.
     <a href="mailto:jeremiah@orderedstrength.com?subject=Tell%20me%20when%20OrderedStrength%20ships"
        style="color:var(--teal)">Email us</a> and you will hear from a person when it ships.</p>
   </section>
@@ -578,7 +615,7 @@ field   sealedFor = 1755916800</pre>
   </div>
 </footer>
 
-<script src="/assets/site.js?v=5fd125c32d" defer></script>
+<script src="/assets/site.js?v=7ac4d3867f" defer></script>
 <script>
 (function(){
 'use strict';
@@ -612,7 +649,7 @@ if (sess){
       var lo = (102.5 + Math.min(10, (n - 20) * 0.25)).toFixed(1);
       var hi = (112.5 + Math.min(10, (n - 20) * 0.25)).toFixed(1);
       tag.textContent = 'Individual'; tag.className = 'tag you';
-      claim.innerHTML = 'From your ' + n + ' sessions: I put your estimated one-rep max between <b>' + lo + ' kg</b> and <b>' + hi + ' kg</b>. Across all my ranges, four in five contain the result.';
+      claim.innerHTML = 'From your ' + n + ' sessions: I put your estimated one-rep max between <b>' + lo + ' kg</b> and <b>' + hi + ' kg</b>. My ranges are built to contain the result four times in five. Whether they do is counted on the record, which has nothing in it yet.';
       basis.textContent = 'Basis: your own logged sets. I sealed this range before the session and I will grade myself against it afterwards.';
     }
   }
@@ -783,7 +820,7 @@ async function recompute(){
   var moved = [];
   live.forEach(function(f,i){ if (f.value !== RECEIPT.fields[i].value && LABEL[i]) moved.push(LABEL[i]); });
   $('cnote').textContent = ok
-    ? 'Nothing here is stored by us. The arithmetic ran on your machine.'
+    ? 'Nothing you change here leaves your browser. The arithmetic ran on your machine.'
     : 'You changed the ' + moved.join(' and the ') + '. Every character after the first difference is wrong, and only the original value puts it back.';
   $('rawdump').textContent =
     'scheme  ' + RECEIPT.scheme + '\n' +
@@ -824,7 +861,29 @@ async function selfTest(){
 
 if (window.crypto && crypto.subtle && window.TextEncoder && typeof BigInt !== 'undefined'){
   $('reset').addEventListener('click', reset);
-  wire(); recompute(); selfTest();
+  /* ONE TAP, BECAUSE A THUMB SHOULD NOT HAVE TO TYPE INTO A MONOSPACE FIELD to find out
+     that the fingerprint moves. Both write through the same 'input' event the fields fire,
+     so there is one path into recompute and no second copy of the rule. */
+  var tap = function(el, v){ el.value = v; el.dispatchEvent(new Event('input', {bubbles:true})); };
+  $('pwide').addEventListener('click', function(){
+    tap($('hi'), (Math.round((parseFloat($('hi').value) + 10) * 10) / 10).toFixed(1));
+  });
+  $('plift').addEventListener('click', function(){
+    var sealed = RECEIPT.fields[IDX.exercise].value;
+    tap($('ex'), $('ex').value === sealed ? 'Front Squat' : sealed);
+  });
+  wire(); recompute();
+  /* 🔒 THE SELF-TEST RUNS WHEN THE CONSOLE IS SEEN, NOT WHEN THE PAGE LOADS. It POSTs the
+     page's own sample receipt to our verifier, so every visitor to the home page made a
+     request for a proof most of them never scrolled to. It is still the same proof and the
+     same request, moved to the moment the reader can actually read the answer. */
+  var box = document.getElementById('selftest');
+  if ('IntersectionObserver' in window && box){
+    var seen = new IntersectionObserver(function(en){
+      if (en.some(function(e){ return e.isIntersecting; })){ seen.disconnect(); selfTest(); }
+    }, {rootMargin: '200px'});
+    seen.observe(box);
+  } else { selfTest(); }
 } else {
   $('selftest').textContent = 'This browser cannot compute the fingerprint locally.';
   $('cnote').textContent = 'Open the verifier page to check a receipt instead.';
@@ -840,13 +899,29 @@ if (window.crypto && crypto.subtle && window.TextEncoder && typeof BigInt !== 'u
     if(pins[i]) pins[i].setAttribute('data-active', on?'true':'false');
     if(outs[i]) outs[i].setAttribute('data-active', on?'true':'false');
   }
+  /* 🔒 mouseenter AND mouseleave ARE THE TWO EVENTS A PHONE NEVER SENDS. Three numbered pins
+     sat on a photograph, and the only way to light one was to hover it, so on every touch
+     device and for every keyboard reader the annotation simply did not exist. The pins are
+     <button> now: a tap toggles, focus shows, and aria-pressed says which is on. Hover still
+     previews on a mouse, because that was never the defect. */
+  var held = -1;
+  function hold(i){
+    held = (held === i) ? -1 : i;
+    pins.forEach(function(pn,k){
+      pn.setAttribute('aria-pressed', k === held ? 'true' : 'false');
+      set(k, k === held);
+    });
+  }
   outs.forEach(function(o,i){
-    o.addEventListener('mouseenter',function(){set(i,true);});
-    o.addEventListener('mouseleave',function(){set(i,false);});
+    o.addEventListener('mouseenter',function(){ if(held<0) set(i,true); });
+    o.addEventListener('mouseleave',function(){ if(held<0) set(i,false); });
   });
   pins.forEach(function(pn,i){
-    pn.addEventListener('mouseenter',function(){set(i,true);});
-    pn.addEventListener('mouseleave',function(){set(i,false);});
+    pn.addEventListener('mouseenter',function(){ if(held<0) set(i,true); });
+    pn.addEventListener('mouseleave',function(){ if(held<0) set(i,false); });
+    pn.addEventListener('focus',function(){ if(held<0) set(i,true); });
+    pn.addEventListener('blur',function(){ if(held<0) set(i,false); });
+    pn.addEventListener('click',function(){ hold(i); });
   });
 })();
 </script>

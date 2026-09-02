@@ -43,6 +43,30 @@ def props(decl):
     return out
 
 
+def split_selectors(sel):
+    """Split a selector list on TOP-LEVEL commas only.
+
+    🔒 A NAIVE sel.split(',') TEARS :is(), :where() AND :not() IN HALF, and the halves are
+    plausible selectors, so the damage is silent. Measured 2026-09-02: the shared sheet gained
+    `:where(a,button,summary,input,textarea,select,[tabindex]):focus-visible` and this file
+    immediately reported that /verify/'s `textarea{border-radius:10px}` was shadowing the
+    shared sheet, because the split had manufactured a bare `textarea` rule that sets
+    border-radius. Two pages, one imaginary defect, from a comma inside brackets.
+
+    This file's own docstring says a gate that fires on a non-collision is the fastest way to
+    teach someone to ignore it, so the parser owes the same care as the comparison."""
+    out, depth, buf = [], 0, ''
+    for ch in sel:
+        if ch in '([': depth += 1
+        elif ch in ')]': depth = max(0, depth - 1)
+        if ch == ',' and depth == 0:
+            out.append(buf); buf = ''
+        else:
+            buf += ch
+    out.append(buf)
+    return out
+
+
 def rules(css):
     """(selector, properties) for every declaration in a stylesheet, @media unwrapped."""
     flat = re.sub(r'/\*.*?\*/', ' ', css, flags=re.S)
@@ -52,7 +76,7 @@ def rules(css):
         pr = props(decl)
         if not pr:
             continue
-        for part in sel.split(','):
+        for part in split_selectors(sel):
             part = part.strip()
             if part and not part.startswith('@'):
                 yield part, pr
@@ -77,7 +101,7 @@ def selectors(css):
         flat = re.sub(r'@[a-z-]+[^{}]*\{((?:[^{}]|\{[^{}]*\})*)\}', r'\1', flat)
     out = set()
     for sel, _decl in re.findall(r'([^{}]+)\{([^{}]*)\}', flat):
-        for part in sel.split(','):
+        for part in split_selectors(sel):
             part = part.strip()
             if part and not part.startswith('@'):
                 out.add(part)
@@ -171,13 +195,25 @@ for f in pages:
     # the HTML (which the stamper rewrites) while the src lives inside @font-face in the
     # stylesheet (which it does not), so the two URLs would disagree and the browser would
     # fetch the same glyphs twice. They are served immutable for a year instead.
-    unversioned = [r for r in re.findall(r'(?:href|src)="(/assets/[^"]*)"', s)
+    # 🔒 srcset IS AN ASSET-BEARING ATTRIBUTE AND WAS READ BY NOTHING. This pair of checks
+    # looked at href and src only, so the moment responsive images landed (2026-09-02) two
+    # thirds of every picture on the home page, twenty files, sat outside both the version
+    # check and the existence check. A missing srcset candidate is INVISIBLE by design: the
+    # browser silently falls back to another candidate, so the page still looks right on the
+    # machine that built it and is wrong on somebody's phone.
+    refs = re.findall(r'(?:href|src)="(/assets/[^"]*)"', s)
+    for ss in re.findall(r'srcset="([^"]*)"', s):
+        for cand in ss.split(','):
+            cand = cand.strip().split()
+            if cand and cand[0].startswith('/assets/'):
+                refs.append(cand[0])
+    unversioned = [r for r in refs
                    if '?v=' not in r and not r.startswith('/assets/fonts/')]
     if unversioned: iss.append('unversioned asset: ' + unversioned[0])
     # ...but an asset that does not EXIST is the failure fonts actually risk: a typo in a
     # @font-face src or a preload is invisible, because the page simply falls back to a
     # system face and still looks like a website.
-    missing = [r.split('?')[0] for r in re.findall(r'(?:href|src)="(/assets/[^"]*)"', s)
+    missing = [r.split('?')[0] for r in refs
                if not os.path.exists('.' + r.split('?')[0])]
     if missing: iss.append('missing asset: ' + missing[0])
     if 'scene narrow' in s: iss.append('stale narrow width')
@@ -224,6 +260,119 @@ for f in pages:
         iss.append(f'footer stamp {"/".join(sorted(stamps))}, build is {real}')
     print(f"  {f:28} {'OK' if not iss else '; '.join(iss)}")
     fail += len(iss)
+
+print("\nCOUNTS ACROSS PAGES")
+# 🔒 A NUMBER STATED ON FIVE PAGES IS ONE FACT WITH FIVE PLACES TO BE WRONG. The privacy
+# policy said "The five things that can leave your device" while /join/, /how-it-works/ and
+# the privacy page's OWN meta description said four, in both languages, for two weeks. Every
+# per-page gate was green because every page was internally consistent: the defect is a
+# RELATIONSHIP between pages, which is the same class pair-gate.py exists for on photographs.
+# 🔒 THE TRUTH IS DERIVED, NOT TYPED. The <h2> on the policy is the authority, so correcting
+# the policy corrects the gate, and nobody can satisfy this by editing a constant here.
+WORDS = {'four': 4, 'five': 5, 'six': 6, 'cuatro': 4, 'cinco': 5, 'seis': 6}
+AUTH = [('app-privacy/index.html', r'The (\w+) things that can leave your device'),
+        ('es/app-privacy/index.html', r'Las (\w+) cosas que pueden salir de tu dispositivo')]
+# 🔒 SCOPED TO THE PRIVACY CLAIM, BECAUSE THE FIRST DRAFT WAS NOT AND REPORTED A HEADLINE.
+# The home page says "Four things most apps never show you" about four SCREENSHOTS, and a
+# gate that calls that a privacy-count defect is a gate that teaches you to skim its output.
+# The relative clause is the discriminator: this count is always followed by what those
+# things DO, "that can leave", "that could", "que pueden", "que podian".
+CLAIMS = re.compile(r'\b(four|five|six)\s+things\s+that\s+c|'
+                    r'\b(cuatro|cinco|seis)\s+cosas\s+que\s+p', re.I)
+for auth_page, auth_rx in AUTH:
+    lang = 'es/' if auth_page.startswith('es/') else ''
+    src = open(auth_page, encoding='utf-8').read()
+    m = re.search(auth_rx, src)
+    if not m:
+        print(f"  {auth_page}: the authoritative heading is gone, so this gate cannot vouch for the count")
+        fail += 1
+        continue
+    truth = WORDS.get(m.group(1).lower())
+    print(f"  authority {auth_page:28} {m.group(1).lower()} = {truth}")
+    for f in pages:
+        if (f.startswith('es/')) != (lang == 'es/'):
+            continue
+        text = html.unescape(open(f, encoding='utf-8').read())
+        for hit in CLAIMS.finditer(text):
+            n = WORDS.get((hit.group(1) or hit.group(2)).lower())
+            if n != truth:
+                line = text[:hit.start()].count('\n') + 1
+                print(f"  {f}:{line} says {hit.group(0)!r}, the policy says {truth}")
+                fail += 1
+
+print("\nINPUT SIZE (iOS zooms a focused input below 16px, so tampering fights Safari)")
+# 🔒 THE CONSOLE IS THE ONE THING ON THIS SITE A VISITOR IS INVITED TO BREAK, and on a phone
+# every tap into it zoomed the page, because iOS Safari zooms any focused control whose text
+# is under 16px. Nothing here read a font size: type-floor-gate.mjs measures the RENDER and
+# owns legibility at 12px, which a 14px input passes. This is a different question with a
+# different floor, and it is a source scan because the rule is about the declared size on a
+# control, not about a computed cascade.
+# LIMIT, stated rather than hidden: an `em` chain is not resolved here. An em value on a
+# control is reported as unmeasurable rather than passed, so it cannot hide under the floor.
+CTRL = re.compile(r'\b(input|textarea|select)\b')
+def _px(v):
+    v = v.strip().lower()
+    m = re.fullmatch(r'([\d.]+)(px|rem|em|%)?', v)
+    if not m: return None
+    n = float(m.group(1)); u = m.group(2) or 'px'
+    return n if u == 'px' else n * 16 if u == 'rem' else None
+for f in pages + ['assets/site.css']:
+    s = open(f, encoding='utf-8').read()
+    blocks = re.findall(r'<style[^>]*>(.*?)</style>', s, re.S) if f.endswith('.html') else [s]
+    iss = []
+    for blk in blocks:
+        flat = re.sub(r'/\*.*?\*/', ' ', blk, flags=re.S)
+        for _ in range(6):
+            flat = re.sub(r'@[a-z-]+[^{}]*\{((?:[^{}]|\{[^{}]*\})*)\}', r'\1', flat)
+        for sel, decl in re.findall(r'([^{}]+)\{([^{}]*)\}', flat):
+            if not CTRL.search(sel): continue
+            for name, val in re.findall(r'([a-z-]+)\s*:\s*([^;]+)', decl):
+                if name.strip() != 'font-size': continue
+                px = _px(val)
+                if px is None:
+                    iss.append(f'{sel.strip()} font-size {val.strip()} cannot be resolved here')
+                elif px < 16:
+                    iss.append(f'{sel.strip()} font-size {val.strip()} = {px:g}px, under the 16px floor')
+    print(f"  {f:28} {'OK' if not iss else iss[0]}")
+    for extra in iss[1:]:
+        print(f"  {'':28} {extra}")
+    fail += len(iss)
+
+print("\nTHIRD-PARTY HOSTS (this site makes no request it does not own)")
+# 🔒 A LINK IS NOT A REQUEST, AND CONFLATING THEM WOULD MAKE THIS GATE A LIAR. /record/ links
+# to the receipts repository on github.com on purpose: a reader following it is the whole
+# point of a public record. What is forbidden is a request the PAGE makes on the reader's
+# behalf, which is what api.github.com was: an unauthenticated browser fetch, rate-limited to
+# 60 an hour per IP and therefore shared behind carrier NAT, rendering "Could not read the
+# repository" to a stranger checking our honesty. So <a href> is exempt BY NAME and every
+# other host-bearing position is not.
+ALLOWED = {'www.orderedstrength.com', 'orderedstrength.com', 'api.orderedstrength.com'}
+RESOURCE = re.compile(r'<(?:link|script|img|iframe|video|source|audio|embed|object|form)\b[^>]*?'
+                      r'(?:src|href|action|data)="(https?://[^"]+)"', re.I)
+URL = re.compile(r'https?://([a-zA-Z0-9._-]+)')
+for f in pages:
+    s = open(f, encoding='utf-8').read()
+    hosts = set()
+    for u in RESOURCE.findall(s):
+        hosts.add(URL.match(u).group(1))
+    for blk in re.findall(r'<script[^>]*>(.*?)</script>', s, re.S):
+        # A script that BUILDS an <a href> is still building a link, not making a request.
+        # /record/ writes its "check the repository yourself" link from JS, and reading the
+        # host out of that string would report the honest half of the page as the dishonest
+        # half. Strip anchor markup the script emits, then read what is left.
+        blk = re.sub(r'<a\s[^>]*href=\\?["\']https?://[^"\']+', ' ', blk)
+        hosts.update(URL.findall(blk))
+    bad = sorted(h for h in hosts if h not in ALLOWED)
+    print(f"  {f:28} {'OK' if not bad else 'requests ' + ', '.join(bad)}")
+    fail += len(bad)
+if os.path.exists('_headers'):
+    csp = ''.join(l for l in open('_headers', encoding='utf-8') if 'Content-Security-Policy' in l)
+    # frame-ancestors, form-action and base-uri constrain what may point AT us; they name no
+    # host we contact, so a host there would be a different question.
+    csp = re.sub(r'(frame-ancestors|form-action|base-uri)[^;]*;?', '', csp)
+    bad = sorted(h for h in set(URL.findall(csp)) if h not in ALLOWED)
+    print(f"  {'_headers CSP':28} {'OK' if not bad else 'permits ' + ', '.join(bad)}")
+    fail += len(bad)
 
 print(f"\nFAILURES: {fail}")
 sys.exit(1 if fail else 0)

@@ -1,0 +1,15 @@
+{
+  "name": "OrderedStrength",
+  "short_name": "OrderedStrength",
+  "description": "Un coach de fuerza para iPhone que anota lo que espera de ti antes de que levantes, y después se califica a sí mismo.",
+  "lang": "es-419",
+  "start_url": "/es/",
+  "scope": "/es/",
+  "display": "browser",
+  "background_color": "#05070B",
+  "theme_color": "#060709",
+  "icons": [
+    { "src": "/favicon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

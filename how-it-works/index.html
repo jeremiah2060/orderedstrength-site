@@ -13,7 +13,7 @@
 <meta property="og:image" content="https://www.orderedstrength.com/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: a coach who writes it down before you lift.">
+<meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: he changes your workout in the middle of it.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.orderedstrength.com/assets/og.jpg">
 <meta name="theme-color" content="#060709">
@@ -28,7 +28,8 @@
 <meta property="og:locale:alternate" content="es_419">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/assets/site.css?v=96214f52d5">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="/assets/site.css?v=37ac5b6724">
 <style>
 .quote{margin:1.75rem 0 0;max-width:52rem;padding:1.125rem 1.25rem;background:var(--surface);
        border-left:2px solid var(--amber);border-radius:0 10px 10px 0;font-size:.9375rem;color:var(--ink2)}
@@ -55,6 +56,7 @@
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
 <div class="bar">
   <a class="wordmark" translate="no" href="/"><span class="led up" aria-hidden="true"></span>OrderedStrength</a>
@@ -63,12 +65,22 @@
     <a href="/stronger/" class="opt">Stronger</a>
     <a href="/record/" class="opt">The record</a>
     <a href="/verify/">Verify</a>
-    <a href="/join/" class="cta">Join the test</a>
+    <a href="/join/" class="cta"><span class="cta__long">Join the test</span><span class="cta__short">Join</span></a>
+    <details class="menu">
+      <summary>Menu</summary>
+      <div class="menu__panel">
+        <a href="/how-it-works/" aria-current="page">How it works</a>
+        <a href="/stronger/">Stronger</a>
+        <a href="/record/">The record</a>
+        <a href="/verify/">Verify</a>
+        <a href="/join/">Join the test</a>
+      </div>
+    </details>
   </nav>
   <div class="prog" aria-hidden="true"></div>
 </div>
 
-<main>
+<main id="main">
 
   <section class="scene reading">
     <div class="pagehead">
@@ -106,7 +118,7 @@
 
       <li><b>The weight goes up when you have earned it</b><span>Not on a calendar. He holds the
       load and asks for one more rep, then adds the plate once the reps are there.
-      It runs on what you actually completed, not on how hard you said it felt.</span></li>
+      It runs on what you actually completed. A reserve you typed can hold a step back, never grant one.</span></li>
 
       <li><b>Tell him something and watch it land</b><span>Report an injury and he names the lifts
       he just removed. Say a muscle is sore and he shows the effort buffer he added. Travel, get
@@ -118,8 +130,9 @@
       you log real sets he shifts onto your own body and shows you how far he has moved and how
       sure he is. The pace follows your evidence: dense sessions of real working sets move him
       onto your numbers faster than the calendar does. Three of the deepest reads are the exception and hold a hard
-      floor of fifteen sessions however hard you train, because below that the sample cannot mean
-      anything, and the one that narrates how you have changed waits for two months between your
+      floor of fifteen sessions' worth of evidence, which banks at most twice a day and ten times a
+      week, so the fastest honest path opens them on your eighth training day across two weeks.
+      Below that the sample cannot mean anything, and the one that narrates how you have changed waits for two months between your
       first set and today as well. He says which, by
       name, on the screen where it matters.</span></li>
     </ol>
@@ -184,7 +197,7 @@
           <div class="track"><i></i></div>
           <hr class="rule">
           <p class="said">Squats are out. I am training everything else at full effort. You logged
-          pain at 4 out of 10 on Tuesday, which holds the ramp where it is rather than advancing it.</p>
+          pain at 6 out of 10 on Tuesday, which holds the ramp where it is rather than advancing it.</p>
         </div>
         <div class="appcard hiw-card">
           <p class="cap">Hard truth</p>
@@ -231,7 +244,7 @@
     <p>Losing your history is one of the loudest complaints in this category, and
     making cancellation difficult is what gets an app called a scam. We would rather be the product
     that is easy to leave and hard to replace.</p>
-    <p class="small">Exactly what does and does not leave your phone, including the four things
+    <p class="small">Exactly what does and does not leave your phone, including the five things
     that could and the one of those we have removed, is set out in the
     <a href="/app-privacy/" style="color:var(--teal)">privacy policy</a>.</p>
   </section>
@@ -283,6 +296,6 @@
   </div>
 </footer>
 
-<script src="/assets/site.js?v=5fd125c32d" defer></script>
+<script src="/assets/site.js?v=7ac4d3867f" defer></script>
 </body>
 </html>
