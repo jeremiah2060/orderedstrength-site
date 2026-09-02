@@ -56,7 +56,47 @@ check() {
     echo "  DKIM    BROKEN      a record exists but carries no public key (p=)"
     fail=1
   else
-    echo "  DKIM    OK          $(echo "$v" | cut -c1-58)..."
+    # 🔒 A DKIM RECORD THAT PARSES IS NOT A DKIM RECORD THAT WORKS. The key is a 400-character
+    # base64 blob a human copies out of a WRAPPED box in the Google Admin console, and a record
+    # with the right prefix and some p= value satisfies every "is DKIM set up" checker on the
+    # web while failing every message silently. So decode it and make OpenSSL agree.
+    #
+    # 🔒 AND HERE IS WHAT THIS CANNOT SEE, MEASURED RATHER THAN ASSUMED (2026-09-02). Corrupting
+    # a real published key one way at a time:
+    #     one character DROPPED     REJECTED
+    #     one character ADDED       REJECTED
+    #     TRUNCATED half way        REJECTED
+    #     one character SUBSTITUTED accepted, parses as a valid key of the same size
+    # The rejected three are the LENGTH-SHIFTING class, which is exactly what copying out of a
+    # wrapped box produces: a missed line or a duplicated one. A substitution keeps the DER
+    # structure intact and yields a structurally perfect key that is simply the WRONG key, and
+    # no amount of local parsing can know that, because the right key lives in Google's console
+    # and nowhere else. THE ONLY COMPLETE PROOF IS AN END-TO-END SIGNED MESSAGE: send one mail
+    # to a Gmail address and read Show original. That is not belt and braces, it is the only
+    # arm that closes this gap, which is why it is printed as the last step below.
+    local key bits
+    key=$(echo "$v" | sed -n 's/.*[;[:space:]]p=\([A-Za-z0-9+/=]*\).*/\1/p')
+    if [ -z "$key" ]; then
+      echo "  DKIM    BROKEN      p= is present but empty or not base64"
+      fail=1
+    else
+      bits=$( { echo "-----BEGIN PUBLIC KEY-----"; echo "$key" | fold -w 64; echo "-----END PUBLIC KEY-----"; } \
+              | openssl pkey -pubin -noout -text 2>/dev/null | sed -n 's/.*Public-Key: (\([0-9]*\) bit).*/\1/p')
+      if [ -z "$bits" ]; then
+        echo "  DKIM    CORRUPT     the p= value is not a valid RSA public key."
+        echo "          This is what a copy-paste that lost or gained a character looks like."
+        echo "          Re-copy the TXT value from admin.google.com by SELECTING it, never by retyping,"
+        echo "          and make sure no line breaks came with it."
+        fail=1
+      else
+        if [ "$bits" -lt 2048 ]; then
+          echo "  DKIM    OK          valid RSA public key, $bits bit  (Google offers 2048; prefer it)"
+        else
+          echo "  DKIM    OK          valid RSA public key, $bits bit"
+        fi
+        echo "          well-formed, but only a signed message proves it is the RIGHT key: see below"
+      fi
+    fi
   fi
 
   # ── DMARC ──────────────────────────────────────────────────────────────────────────────
@@ -103,8 +143,10 @@ check "$D"
 rc=$?
 echo
 if [ $rc -eq 0 ]; then
-  echo "ALL THREE PUBLISHED. Send one message to a Gmail address and open"
-  echo "'Show original': SPF, DKIM and DMARC should all read PASS."
+  echo "ALL THREE PUBLISHED, AND ONE STEP REMAINS, because a well-formed key can still be the"
+  echo "wrong key and nothing local can tell. Send one message from this domain to a Gmail"
+  echo "address, open it, and choose Show original. SPF, DKIM and DMARC must all read PASS."
+  echo "Until you have seen that, DKIM is unproven rather than working."
 else
   echo "NOT ALL PUBLISHED. Records live at the registrar: Squarespace Domains,"
   echo "nameservers ns-cloud-d1..d4.googledomains.com."
