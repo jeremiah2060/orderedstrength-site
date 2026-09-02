@@ -228,7 +228,11 @@ def check_page(page, lang):
 # this because it went red and you are about to edit this line, the question to answer first
 # is WHICH capture went and WHY, and if the answer is "I don't know", the markup moved and the
 # fix is in the page, not here.
-EXPECTED_BLOCKS = {'index.html': 6, 'es/index.html': 6}
+# 🔒 BACK TO 7 ON 2026-09-02, THE SAME DAY IT WENT TO 6 AND FOR THE SAME REASON READ THE
+# OTHER WAY: the hero publishes two devices again. The paragraph above is the rule, and this
+# pair of moves is its worked example. The floor followed a deliberate change in both
+# directions and never once moved to silence a red.
+EXPECTED_BLOCKS = {'index.html': 7, 'es/index.html': 7}
 
 
 def main():

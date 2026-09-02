@@ -204,11 +204,22 @@ img{max-width:100%;height:auto}
    It keys off `has-rail`, which the script sets only once the scale is actually BUILT,
    never off the media query alone: if the script fails to load, hiding this on the
    promise of a replacement that never arrived would leave the page with neither. */
-@media (min-width:95rem){.has-rail .bar .prog{opacity:0}}
-/* 🔒 BOTH CONDITIONS, NOT EITHER. `has-rail` says the script BUILT the scale; the query
-   says the margin is wide enough to SHOW it. Keying off the class alone hid this bar at
-   1440px, where the scale is display:none, and left that width with no position
-   indicator of any kind. Measured, not guessed: progOpacity 0 with railShown false. */
+/* 🔒 SUPERSEDED 2026-09-02. The rule was `@media (min-width:95rem){.has-rail .bar .prog}`
+   under this law, which is kept because it is still true of the world it was written in:
+
+     BOTH CONDITIONS, NOT EITHER. `has-rail` says the script BUILT the scale; the query says
+     the margin is wide enough to SHOW it. Keying off the class alone hid this bar at 1440px,
+     where the scale is display:none, and left that width with no position indicator of any
+     kind. Measured, not guessed: progOpacity 0 with railShown false.
+
+   WHAT SUPERSEDED IT: the horizontal scale in the bar covers exactly the widths the margin
+   rail cannot, so `has-rail` now guarantees ONE of the two is on screen and the width has
+   stopped deciding. The condition that made "either" wrong no longer exists.
+   AND THE COST OF NOT UPDATING IT WAS VISIBLE: the CEO opened the preview at about 1000px
+   and found TWO position indicators stacked at the top of his page, the strip's needle and
+   this line, on every screen under 1520px. The law above exists so a replacement is never
+   assumed; this line exists because one arrived. */
+.has-rail .bar .prog{opacity:0}
 .wordmark{display:flex;align-items:center;gap:.625rem;font-family:var(--display);font-weight:700;
           font-size:1.75rem;letter-spacing:-.035em}
 .led{width:.6875rem;height:.6875rem;border-radius:50%;background:var(--ink3);flex:none;
@@ -877,31 +888,47 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
   height:var(--device-h)}
 .devices{position:relative;height:100%;width:100%}
 .devices .device{position:absolute;top:0;left:50%;height:100%}
-/* 🔒 ONE DEVICE, CENTRED (2026-09-02). The front one sat at -72% so a SECOND phone could
-   read from behind it on the right, dimmed to 52% brightness. Two objections, and the second
-   is the one that decides it: a darkened duplicate is decoration, and the darkened screen was
-   a different part of the app from the claim the headline makes. A product shot argues for the
-   sentence above it or it argues for nothing. The offset went with the second plane, because
-   -72% is only correct when something fills the space it leaves. */
-.devices .device--front{transform:translateX(-50%);z-index:2}
+/* the front device sits left of centre so the second one reads from behind it on the
+   right: the offset, not a rotation, is what sells the depth.
+   🔒 THESE FOUR LINES WERE DELETED AND RESTORED ON 2026-09-02, WITHIN HOURS. I removed the
+   second plane calling it decoration, and the CEO put it back. The lesson is not about a
+   phone: A REAL CAPTURE OF A REAL SCREEN MAKES NO FALSE CLAIM, so removing it was never a
+   truth fix, it was my taste presented as one, and taste about what this product looks like
+   is his. The thing in this hero that WAS lying is the card below, and a drawing is fixed by
+   labelling it, not by deleting the composition around it. */
+.devices .device--front{transform:translateX(-72%);z-index:2}
+.devices .device--back {transform:translateX(-14%);height:87%;top:9%;z-index:1;opacity:.94}
+.devices .device--back .device__glass{filter:brightness(.52) saturate(.9) contrast(.97)}
+.devices .device--back .device__body{filter:brightness(.78)}
 
-/* The third plane WAS a hand-drawn "Prediction accuracy" card floating over the two real
-   captures: three lifts, two Within and one Outside, written in HTML by me. It came off the
-   page on 2026-09-02 and its rules came off with it. On a site whose argument is that its
-   numbers can be checked, a receipt nobody can check is the one thing on the front page a
-   competitor could screenshot and call a lie. Replacing it with a real capture of the graded
-   card needs the simulator; deleting it needed nothing, and was true either way. */
+/* the third plane. Anchored to the FRONT device's own left edge, in the device's units,
+   so the overlap holds at every device height instead of drifting with a fixed offset.
+   🔒 THIS CARD IS DRAWN, NOT PHOTOGRAPHED, AND IT NOW SAYS SO. Three lifts, two Within and
+   one Outside, written in HTML by me, floating between two real captures on a site whose
+   whole argument is that its numbers can be checked. I deleted it on 2026-09-02; the CEO's
+   answer was that the composition is worth keeping until we have the real frame, which is
+   right, because the defect was never the card's PRESENCE, it was that nothing told you it
+   was an illustration. Its caption carries the word now, in both languages.
+   ⚠️ WHEN THE SIMULATOR IS FREE this is replaced by a real capture of the graded card
+   through tools/shot-gate.py, and the word comes out with the drawing. */
+.hero-shot .appcard.float{position:absolute;z-index:5;padding:.9375rem 1.0625rem;
+  left:calc(50% - .72 * var(--device-w) - 2.25rem);
+  bottom:-3.25rem;
+  width:min(16rem, calc(var(--device-w) + 3rem));
+  box-shadow:0 1.75rem 4.5rem rgba(0,0,0,.85),0 0 0 1px var(--line)}
+.hero-shot .appcard.float .cap{margin-bottom:.75rem}
+.hero-shot .appcard.float .lift{padding:.375rem 0}
+.hero-shot .appcard.float .nm{font-size:.875rem}
+.hero-shot .appcard.float .vd{font-size:.75rem}
 @media (max-width:72rem){
   .hero-shot{height:auto;flex-direction:column;gap:1rem}
   .hero-shot .devices{height:var(--device-h)}
-  /* 🔒 THE NARROW-WIDTH RULE FOR THE FLOATING CARD LIVED HERE, WITH THE HARDEST-WON COMMENT
-     ON THIS PAGE: an absolutely positioned card set `static` un-anchored a ::before ring,
-     which then resolved against .hero-shot and drew a 1px rounded rectangle across the whole
-     hero, 390px wide, on every phone and no desktop, diagnosed by pixel diff. The card is
-     gone (it was a hand-drawn receipt) and so is the rule, but the LESSON is not about that
-     card: `position:relative` with no offsets lays out exactly like `static` and keeps a
-     ring on its own element. Anything that drops an absolutely positioned child back into
-     flow here owes that check. */
+  /* 🔒 `relative`, NEVER `static`. Setting this card static to drop it back into flow
+     un-anchored a ::before ring, which then resolved against .hero-shot and drew a 1px
+     rounded rectangle across the ENTIRE hero: 390px wide, corners and all, on every phone
+     and on no desktop. Diagnosed by pixel diff, not by reading the rule. `relative` with no
+     offsets lays out exactly like `static` and keeps the ring on its own card. */
+  .hero-shot .appcard.float{position:relative;inset:auto;width:100%;margin-top:1rem}
 
   /* THE STAGE. The accidental rectangle above was the right instinct in the wrong place:
      at this width the devices fill the column and read better standing ON something than
@@ -1023,7 +1050,8 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
   background:linear-gradient(270deg,#8b95a2 0%,#5a6470 45%,#363d47 100%)}
 @media (prefers-reduced-motion:no-preference){
   .device{transition:transform .6s var(--ease)}
-  .hero-shot:hover .device--front{transform:translateX(-50%) translateY(-.5rem)}
+  .hero-shot:hover .device--front{transform:translateX(-72%) translateY(-.5rem)}
+  .hero-shot:hover .device--back{transform:translateX(-14%) translateY(-.25rem)}
 }
 
 /* ══ THE MACHINED SURFACE ═════════════════════════════════════════════════════
