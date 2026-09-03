@@ -208,6 +208,48 @@ five contrast ratios from memory and every one was wrong by about a point. Measu
 `#ffffff`: ink 21.00, ink2 15.20, ink3 8.14, teal 7.54, stone 8.51, azure 8.94, amber 7.48, red
 8.10. The hairline was 1.87:1, which is a hairline nobody sees, and is now `#8b9099` at 3.21:1.
 
+## The last one, and the discipline it produced
+
+🔒 **`check.sh` RUNS AGAINST `python3 -m http.server`, WHICH DOES NOT SEND `_headers`.** All
+twenty-seven programs are therefore blind to every response header: the Content-Security-Policy,
+the cache rules, the redirects Pages performs. The local suite was fully green while production
+refused to run the language diagnostic's inline script.
+
+`csp-hashes.py` derived its page list the way every gate here does, and that list excludes
+`/assets/` on purpose, so the diagnostic cannot drift into the sitemap, the page counts, the
+language pairs or the type ladder. **That exclusion is right for a page gate and wrong for a
+policy.** `assets/lang-check.html` is a page a person is sent to, it carries an inline script,
+and its hash was simply not in `script-src`, so the one tool built to end the guessing about the
+language redirect rendered perfectly and did nothing. `csp-gate.mjs` could not see it either: its
+own walk carried the same exclusion, and nothing local applies the policy at all.
+
+**What found it:** running `lang-redirect-gate` against the live domain. It reported the
+diagnostic predicting STAY while the site redirected, three times, in a suite that was green.
+
+**What now prevents it:** `tools/verify-live.sh`, run after every deploy. It asks the five things
+only the deployed site can answer, and the fifth is the whole language contract driven by a
+browser with a real Spanish locale. Current state, measured: **LIVE OK**, script-src naming 9
+hashes with no `'unsafe-inline'`, one Cache-Control per file, real 404s in both languages, and
+32 of 32 language checks green on production.
+
+🔒 **A DEPLOY IS NOT FINISHED WHEN THE PUSH SUCCEEDS.**
+
+## What the wire actually carries now
+
+Measured on the deployed server, same compression, like for like:
+
+| | before | after |
+|---|---|---|
+| stylesheet, on the wire | 34,812 bytes | **10,099 bytes** |
+| stylesheet, repeat visit | revalidation round trip every navigation | immutable for a year |
+| `script-src` | `'self' 'unsafe-inline'` | `'self'` plus 9 named hashes |
+| printing /terms/ | white on white | a document |
+
+Frame timing was already perfect and still is: 0 dropped frames of 108 on every page and
+viewport measured. First paint moved within run-to-run noise on a single sample in both
+directions, so **no paint claim is made here**; the transfer saving is the number that is real
+and repeatable.
+
 ## Not built, each with its own reason
 
 - **The shareable receipt card** and **the design-notes page** are new user-facing pages, which
