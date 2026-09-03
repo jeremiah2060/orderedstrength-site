@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Language check</title>
+<!-- A DIAGNOSTIC, NOT A PAGE. It lives under /assets/ deliberately: every source gate in this
+     repo excludes that directory, so this cannot drift into the sitemap, the language pairs, the
+     voice count or the type ladder. It exists because "the redirect is not working" has three
+     completely different causes that look identical from the outside, and guessing between them
+     wastes the one person who can actually see the device. -->
+<style>
+  :root{color-scheme:dark}
+  body{margin:0;padding:1.5rem;background:#05070B;color:#F7F9FA;
+       font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+  h1{font-size:1.375rem;margin:0 0 1.25rem;letter-spacing:-.02em}
+  .v{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9375rem;
+     background:#10151D;border:1px solid #232B37;border-radius:8px;padding:.75rem .875rem;
+     margin:0 0 .875rem;word-break:break-all}
+  .v b{display:block;font-family:inherit;font-weight:400;font-size:.75rem;letter-spacing:.1em;
+       text-transform:uppercase;color:rgba(247,249,250,.52);margin-bottom:.375rem}
+  .ok{color:#00D4B1} .no{color:#F59E0B}
+  .verdict{font-size:1.0625rem;padding:1rem;border-radius:10px;background:#10151D;
+           border:1px solid #232B37;margin:1.25rem 0}
+  button{font:inherit;font-weight:600;background:#00D4B1;color:#03110E;border:0;
+         border-radius:100px;padding:.75rem 1.25rem;cursor:pointer}
+  a{color:#00D4B1}
+</style>
+</head>
+<body>
+<h1>Language check</h1>
+<div class="v"><b>What this browser reports</b><span id="lang">…</span></div>
+<div class="v"><b>Full preference list</b><span id="list">…</span></div>
+<div class="v"><b>Is it Spanish, by the site's own rule</b><span id="isEs">…</span></div>
+<div class="v"><b>Can this browser store a choice</b><span id="store">…</span></div>
+<div class="v"><b>Choice already stored</b><span id="saved">…</span></div>
+<div class="verdict" id="verdict">…</div>
+<p><button id="clear">Clear the stored choice</button></p>
+<p><a href="/">Back to the site</a></p>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var lang = navigator.language || '(none)';
+  var list = (navigator.languages || []).join(', ') || '(none)';
+  var first = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+  var isEs = /^es(-|$)/i.test(first);
+
+  var canStore = false, saved = null;
+  try { localStorage.setItem('os-probe', '1'); localStorage.removeItem('os-probe'); canStore = true;
+        saved = localStorage.getItem('os-lang'); } catch (e) { canStore = false; }
+
+  $('lang').textContent = lang;
+  $('list').textContent = list;
+  $('isEs').innerHTML = isEs ? '<span class="ok">YES</span>' : '<span class="no">NO</span>';
+  $('store').innerHTML = canStore ? '<span class="ok">YES</span>'
+    : '<span class="no">NO. Private browsing blocks it, and the redirect will not run.</span>';
+  $('saved').textContent = saved === null ? '(nothing stored yet)' : saved;
+
+  var v;
+  if (!canStore) {
+    v = 'This browser will NOT redirect, because it cannot remember a choice, so the site refuses to send you anywhere it could not send you back from. Turn off private browsing and reload.';
+  } else if (saved !== null) {
+    v = 'This browser will NOT redirect, because a choice is already stored (' + saved + '). Press the button below and reload the home page.';
+  } else if (!isEs) {
+    v = 'This browser will NOT redirect, and that is correct: it is not asking for Spanish. To test, set the device language to Spanish, or open the Spanish site directly at /es/.';
+  } else {
+    v = 'This browser WILL redirect to the Spanish site. If it did not, tell the engineer what this page says.';
+  }
+  $('verdict').textContent = v;
+
+  $('clear').addEventListener('click', function () {
+    try { localStorage.removeItem('os-lang'); } catch (e) {}
+    location.reload();
+  });
+})();
+</script>
+</body>
+</html>
