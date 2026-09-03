@@ -74,3 +74,17 @@ Cloudflare dashboard before assuming any push publishes anything.
 and have nothing to do with this site.
 
 `pt.orderedstrength.com` is a different site entirely (Squarespace) and is not managed here.
+
+## Where the handoffs went
+
+They are not in this repository any more, and the reason is measured rather than assumed: this
+repo is **public on GitHub**, and Cloudflare Pages serves it as the web root, so every handoff
+saved here was readable both at `orderedstrength.com/HANDOFF_....md` (200, verified by curl) and
+on github.com. They quote the CEO and record what is owed, which is not a page of this website.
+
+They live in the private app repo at `docs/Handoffs/site/`, whose README carries the measurement.
+
+A `_redirects` rule does **not** solve this and was removed after being tested against the live
+domain: on Cloudflare Pages a static asset that exists is served directly, so a redirect never
+fires for a file that is present. The only thing that keeps a document off the web is not
+deploying it.
