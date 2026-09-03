@@ -1,6 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+/* SEND A SPANISH PHONE TO THE SPANISH SITE, ONCE, BEFORE ANYTHING RENDERS.
+   The alternative is not that a Spanish reader reads English. It is that Chrome offers to
+   machine-translate this page, and this site has already measured what that does: the CEO
+   turned auto-translate on for /es/ on 2026-08-31 and the page fell apart, because a
+   translator rewrites the quoted app strings that this site prints verbatim, and the hex digests
+   the seal
+   console depends on. tools/translate-gate.py exists because of that morning. A real Spanish
+   page is not a nicety here, it is the only version of this site that stays true.
+
+   🔒 ONLY WHEN NO CHOICE HAS BEEN STORED, WHICH IS WHAT MAKES IT LOOP-FREE. A reader sent to
+   /es/ who clicks English lands back on this page with a stored choice, so nothing sends them
+   away again. Without that rule the two footer links bounce a reader between them forever.
+   🔒 AND IT IS FIRST IN THE HEAD, BEFORE THE STYLESHEET, so location.replace happens before a
+   single pixel is painted: a redirect after render is a flash of the wrong language, which is
+   worse than not redirecting at all. replace(), not assign(), so Back does not re-trigger it.
+   🔒 EVERY BRANCH FAILS OPEN. localStorage throws in some privacy modes; a reader must never
+   lose the site because a preference could not be read. */
+(function () {
+  try {
+    if (localStorage.getItem('os-lang')) return;
+    var l = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+    if (!/^es(-|$)/i.test(l)) return;
+    localStorage.setItem('os-lang', 'es');
+    location.replace('/es' + location.pathname + location.search + location.hash);
+  } catch (e) { /* no preference readable: serve the page that was asked for */ }
+})();
+</script>
+
 <meta charset="utf-8">
 <script>document.documentElement.className="js";</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -147,6 +176,6 @@
   </div>
 </footer>
 
-<script src="/assets/site.js?v=7ac4d3867f" defer></script>
+<script src="/assets/site.js?v=62dd2417fa" defer></script>
 </body>
 </html>

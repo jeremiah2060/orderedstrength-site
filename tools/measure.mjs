@@ -41,7 +41,10 @@ class CDP {
   on(method, fn) { this.handlers.set(method, fn); }
 }
 
-export async function withPage(fn, { width = 1440, height = 900, dsf = 2 } = {}) {
+/* `args` appends extra Chrome flags. Added 2026-09-02 to test the Spanish language redirect,
+   which is decided by `navigator.language` and therefore cannot be exercised at all without a
+   browser that reports a different one. A stubbed navigator would be testing the stub. */
+export async function withPage(fn, { width = 1440, height = 900, dsf = 2, args = [] } = {}) {
   const profile = mkdtempSync(join(tmpdir(), 'os-measure-'));
   // 🔒 KILL THE GROUP, NOT THE PARENT. Chrome forks renderer, GPU and zygote children, and
   // killing only the process we spawned leaves them alive holding their profile directory.
@@ -52,7 +55,7 @@ export async function withPage(fn, { width = 1440, height = 900, dsf = 2 } = {})
     '--headless=new', '--remote-debugging-port=0', `--user-data-dir=${profile}`,
     '--no-first-run', '--no-default-browser-check', '--disable-extensions',
     '--hide-scrollbars', '--force-color-profile=srgb', '--disable-lcd-text',
-    `--window-size=${width},${height}`, 'about:blank',
+    `--window-size=${width},${height}`, ...args, 'about:blank',
   ], { stdio: 'ignore', detached: true });
 
   let target = null, port = null;

@@ -161,6 +161,19 @@ if (bar){
   setTimeout(measure, 400);
 })();
 
+/* ── the language choice, recorded from either direction ──
+   The head script on the English pages sends a Spanish phone to /es/ exactly once, and only
+   while nothing is stored. This is what stores it: using either footer link is a decision, and
+   after it the reader stays where they put themselves. Without this the English link on /es/
+   would work once and then be undone by the next visit to the root. */
+document.addEventListener('click', function (e) {
+  var a = e.target && e.target.closest ? e.target.closest('a[hreflang]') : null;
+  if (!a) return;
+  var want = a.getAttribute('hreflang');
+  if (want !== 'en' && want !== 'es') return;
+  try { localStorage.setItem('os-lang', want); } catch (err) { /* not storable: harmless */ }
+}, true);
+
 /* ── reveal ── */
 var targets = [].slice.call(document.querySelectorAll('.reveal'));
 if (!targets.length) return;

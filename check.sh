@@ -52,6 +52,11 @@
 #                    console and /verify/ depend on, so the translated page claims the app says
 #                    things it does not and the one interactive proof stops verifying. Prose
 #                    stays translatable on purpose.
+#   lang-redirect-gate.mjs A SPANISH PHONE MUST REACH THE SPANISH SITE, and must not then be
+#                    bounced back and forth by two language links that each point at the other.
+#                    Driven by a Chrome launched with a real Spanish locale, because stubbing
+#                    navigator.language would be testing the stub. 🔒 --lang IS THE WRONG FLAG
+#                    and this gate found that by printing the value it branches on.
 #   lang-gate.py     A PAGE IS ACTUALLY WRITTEN IN THE LANGUAGE IT DECLARES. The Spanish site
 #                    shipped with a Spanish headline over an English paragraph, and the
 #                    BUILDER reported "english-left: 0" on every page because its detector
@@ -132,6 +137,8 @@ echo
 BASE="http://127.0.0.1:${PORT}" node tools/align-gate.mjs $WIDTHS || fail=1
 echo
 BASE="http://127.0.0.1:${PORT}" node tools/measure-gate.mjs 1550 390 | tail -3 || fail=1
+echo
+BASE="http://127.0.0.1:${PORT}" node tools/lang-redirect-gate.mjs | tail -3 || fail=1
 echo
 BASE="http://127.0.0.1:${PORT}" node tools/type-gate.mjs || fail=1
 echo
