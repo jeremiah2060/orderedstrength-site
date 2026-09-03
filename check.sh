@@ -123,6 +123,30 @@
 #                    IS INVISIBLE IN THE FILE; both rules read correctly alone. It walks the real
 #                    files rather than intersecting globs in the abstract, and it also refuses an
 #                    immutable rule over a file some page links with no ?v=.
+#   webkit-gate.mjs  THE SAME SITE, IN THE OTHER ENGINE. Every other browser-driven gate in this
+#                    file launches /Applications/Google Chrome.app through measure.mjs, so the
+#                    engine was the one axis nothing here had ever varied, the same shape as the
+#                    viewport height before hero-gate. 🔒 AND IT WAS ALMOST FILED AS IMPOSSIBLE:
+#                    the first attempt reached for `safaridriver --enable`, which asks for an
+#                    administrator password, and the conclusion drafted from that was that the
+#                    axis could not be closed without the CEO. That was a conclusion about one
+#                    ROUTE. A WebKit build is a download and needs no password. It is a MACHINE
+#                    PREREQUISITE, exactly like the Chrome binary measure.mjs hard-codes, and it
+#                    lives OUTSIDE this repository on purpose:
+#                      npm install --prefix ~/.orderedstrength-site-tools playwright
+#                      npx --prefix ~/.orderedstrength-site-tools playwright install webkit
+#                    🔒 A package.json AND node_modules IN THE TREE BROKE THE VERY NEXT RUN:
+#                    bar-gate reported "24 colliding, over 6 widths on 24" for a twenty-page
+#                    site, because nineteen of the walkers here derive their own page list, on
+#                    purpose, and node_modules is full of HTML. Patching all nineteen is a fix
+#                    that is wrong the first time someone writes the twentieth.
+#                    It asks the five things that differ between engines rather than between
+#                    widths: every inline script runs, the header language control is reachable,
+#                    the bar does not collide and no page scrolls sideways, a Spanish locale
+#                    reaches the Spanish site and its English link comes back and stays, and
+#                    print media lays down a light ground. 🔒 ITS FIRST SELFTEST DEFEATED ITSELF
+#                    on a specificity tie and bit 5 times out of 40; it bits 60 of 122 now, and
+#                    5 of 40 is a number worth being suspicious of.
 #   csp-hashes.py --check  THE POLICY MUST NAME EVERY INLINE SCRIPT IN THE TREE. script-src
 #                    stopped saying 'unsafe-inline' and started naming eight SHA-256 hashes, and
 #                    the failure mode of a hash is the worst one here: a stale one does not
@@ -260,6 +284,8 @@ echo
 BASE="http://127.0.0.1:${PORT}" node tools/css-equiv.mjs | tail -3 || fail=1
 echo
 BASE="http://127.0.0.1:${PORT}" node tools/print-gate.mjs | tail -3 || fail=1
+echo
+BASE="http://127.0.0.1:${PORT}" node tools/webkit-gate.mjs | tail -3 || fail=1
 echo
 BASE="http://127.0.0.1:${PORT}" node tools/type-gate.mjs || fail=1
 echo

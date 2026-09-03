@@ -92,16 +92,58 @@ written. On the exact browser the shipped rule was written *for*, the Spanish ma
 | `bar-gate.mjs` | The one component on every screen colliding with itself, at 30 widths | `--selftest` |
 | `engine-gate.py` | A Chrome-first CSS feature shipping without an `@supports` that tests it, a guard with no fallback, a prefixed property that lost its pair | `--selftest`, 6 cases |
 
-🔒 **THE OPEN HOLE: EVERY BROWSER-DRIVEN CHECK HERE LAUNCHES THE SAME BINARY.** `measure.mjs` opens
-Google Chrome, and align, measure, type, type-floor, hero, lang-redirect, lang-switch and bar are
-all built on it. They sweep width, and since 2026-09-02 height, and have never varied the engine.
-That is the same shape as the height hole `hero-gate` closed, and the repo already wrote the law
-for it. Closing it needs one of two things, and **both are the CEO's**: `safaridriver --enable`,
-which asks for an administrator password, or a decision to vendor a WebKit build and give up this
-harness's one real virtue, that it depends on nothing but a browser already on the machine.
-Until then `engine-gate.py` checks the discipline instead of the render, and the stylesheet is
-clean: masks carry their `-webkit-` twins, `backdrop-filter` is gone, `text-wrap:balance` degrades
-to normal wrapping, and the scroll-driven animations are `@supports`-guarded with a JS fallback.
+### The engine axis: CLOSED, and it was nearly filed as impossible
+
+Every browser-driven check here launched the same binary. `measure.mjs` opens Google Chrome, and
+align, measure, type, type-floor, hero, lang-redirect, lang-switch, bar, csp, css-equiv and print
+are all built on it. They sweep width, and since 2026-09-02 height, and had never varied the
+engine, which is the same shape as the height hole `hero-gate` closed.
+
+🔒 **AND THE FIRST ANSWER WRITTEN HERE WAS THAT IT COULD NOT BE CLOSED WITHOUT THE CEO**, because
+`safaridriver --enable` asks for an administrator password. That was a conclusion about one
+ROUTE, dressed as a conclusion about the problem. A WebKit build is a download. It needs no
+password, it is the same shape of prerequisite as the Chrome binary `measure.mjs` already
+requires, and it took one command. **A named impossibility that has only had one route tried is
+not an impossibility, it is a first attempt.**
+
+`tools/webkit-gate.mjs` runs the site in **WebKit 26.5**, the engine Safari ships, at phone and
+desktop widths across all twenty pages: every inline script runs, the header language control is
+reachable, the bar does not collide and no page scrolls sideways, a Spanish locale reaches the
+Spanish site and its English link comes back and stays, and print media lays down a light ground.
+**WEBKIT FAILURES: 0.** `package.json` declares the dependency and `npm run setup` installs it.
+
+🔒 **ITS FIRST SELFTEST DEFEATED ITSELF AND BIT 5 TIMES OUT OF 40.** The sabotage CSS hid the
+language control and then forced the full nav on, and the forcing selector is (0,2,2) against the
+hiding selector's (0,2,1), so with `!important` on both the forcing rule won and quietly restored
+the link the hiding rule had removed. The gate was correct throughout. **5 of 40 is a number
+worth being suspicious of**, and the only reason it was caught is that it looked wrong. It bites
+60 of 122 now.
+
+🔒 **AND THE DRIVER MUST LIVE OUTSIDE THIS REPOSITORY, WHICH THE FIRST ATTEMPT GOT WRONG.** A
+`package.json` and a `node_modules` in the tree is the standard, discoverable answer everywhere
+else, and it broke the very next run: `bar-gate` reported *"180 clean, 24 colliding, over 6
+widths on 24"* for a site with twenty pages, because it walks the tree for pages and
+`node_modules` is full of HTML. **Nineteen of the twenty-one walkers in this repo derive their
+own page list, deliberately, and patching all nineteen to exclude one directory is a fix that is
+wrong the first time somebody writes the twentieth.** The dependency is a machine prerequisite
+now, which is the pattern this harness already uses: `measure.mjs` hard-codes
+`/Applications/Google Chrome.app` and installs nothing.
+
+    npm install --prefix ~/.orderedstrength-site-tools playwright
+    npx --prefix ~/.orderedstrength-site-tools playwright install webkit
+
+🔒 **AND IT RESOLVES THE ABSOLUTE PATH, NOT THE BARE NAME.** `require('playwright')` walks UP
+from the directory it is given, checking every level for a `node_modules`, so the check that this
+gate fails loudly without a driver PASSED against a stray `/tmp/node_modules` left by an earlier
+experiment. A resolution that can succeed from a directory you did not install to is a resolution
+that can silently run a different version than the one you meant. Missing driver now exits 1 and
+prints the two commands.
+
+`engine-gate.py` still runs beside it and is not redundant: it reads the SOURCE, so it catches a
+Chrome-first property shipped without an `@supports` that tests it even on a page WebKit happens
+to render acceptably. The stylesheet is clean by both: masks carry their `-webkit-` twins,
+`backdrop-filter` is gone, `text-wrap:balance` degrades to normal wrapping, and the scroll-driven
+animations are `@supports`-guarded with a working JS fallback.
 
 ---
 
@@ -250,15 +292,51 @@ viewport measured. First paint moved within run-to-run noise on a single sample 
 directions, so **no paint claim is made here**; the transfer saving is the number that is real
 and repeatable.
 
-## Not built, each with its own reason
+## Every remaining item, in exactly one of three states
 
-- **The shareable receipt card** and **the design-notes page** are new user-facing pages, which
-  means new copy in two languages, a Spanish twin, and a voice this site is careful about. That
-  is product writing, and it is the CEO's, not something to invent unsupervised overnight.
-- **The twenty-second film** needs footage. There is none to edit and none can be generated here.
-- **The light reading scheme** is marked in the 2026-09-02 handoff as *product identity, the CEO's
-  call*, and it still is.
-- **The App Store items** are still blocked on a listing that returns 404, exactly as recorded.
-- **`G1`, the photograph of Jerry cutting a set**, needs the app repo's simulator, and that tree
-  currently holds sixteen uncommitted Swift files from another session. Photographing unreviewed
-  code and publishing it as evidence is the one thing this site must never do.
+There is no third state between CLOSED and OPEN, so nothing below is graded. An item is
+finished, or it was never started, or it is impossible and the impossibility is named.
+
+**CLOSED**
+
+- Hashing the inline scripts so the CSP can drop `'unsafe-inline'`. `script-src` names 9 hashes,
+  `'unsafe-inline'` is gone, two gates, verified on production by `verify-live.sh`.
+- Minifying assets with immutable caching. 34,812 bytes to 10,099 on the wire, immutable
+  confirmed live on every stamped class, three gates.
+- The engine axis. WebKit 26.5, all twenty pages, WEBKIT FAILURES: 0.
+
+**CLOSED, and it was not on the list.** Printing any page produced white on white, because there
+was no `@media print` block and a browser drops background colours. That was a defect I found,
+not a backlog item, and it is fixed and gated. 🔒 **IT IS NOT "THE PRINTABLE SPEC SHEET".** That
+item names a document. Making the site printable is a prerequisite for one, not a delivery of it,
+and reporting it as though it were is the partial closure this repo forbids.
+
+**OPEN, NOT STARTED.** No work was done toward any of these. They are buildable, nothing blocks
+them, and the reason they are not built is that I stopped, which is a scoping decision the CEO
+can overrule in one sentence.
+
+- The printable spec sheet.
+- The shareable receipt card.
+- The design-notes page.
+
+**IMPOSSIBLE, with the impossibility named**
+
+- **The twenty-second film.** HARD EXTERNAL BLOCKER: it needs footage. None exists in this
+  repository and none can be created here.
+- **The light reading scheme.** PRODUCT IDENTITY. The 2026-09-02 handoff already classifies it,
+  and the reason it gives is right: light is the default on most operating systems, so shipping
+  it means most visitors see four pages in light for the first time.
+- **The Smart App Banner, the download badge and the `SoftwareApplication` data.** HARD EXTERNAL
+  BLOCKER: `apps.apple.com/us/app/id6780735471` returns 404 and Apple's lookup API returns zero
+  results, so every one of them would point at a dead page. They unblock when pre-order opens.
+- **`G1`, the photograph of Jerry cutting a set.** HARD EXTERNAL BLOCKER: it needs the app repo's
+  simulator, and that tree holds sixteen uncommitted Swift files from another session.
+  Photographing unreviewed code and publishing it as evidence is the one thing this site must
+  never do.
+- **The four items the 2026-09-02 handoff owes the CEO** (the Fly anchor token, `server/deploy.sh`,
+  opening pre-order, moving the apex to Cloudflare) are unchanged: MONEY / EXTERNAL, all four.
+
+🔒 **AND ONE THING WAS ALMOST FILED HERE THAT DID NOT BELONG.** The engine axis was written up as
+impossible without an administrator password, on the strength of `safaridriver --enable` being
+the only route tried. A named impossibility that has had one attempt is a first attempt wearing
+a category word. It took `npm run setup`.
