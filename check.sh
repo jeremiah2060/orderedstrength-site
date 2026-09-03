@@ -112,6 +112,17 @@
 #                    untested, the same shape as the viewport-height axis hero-gate closed.
 #                    Its selftest runs the same assertions in screen media, which is exactly what
 #                    a printer was handed before: 60 of 80 go red there.
+#   headers-gate.py  TWO RULES IN _headers THAT SET THE SAME HEADER FOR ONE FILE DO NOT
+#                    OVERRIDE, THEY APPEND. Written after shipping exactly that on 2026-09-03:
+#                    `/assets/*` at an hour followed by specific rules at a year produced
+#                    `cache-control: public, max-age=3600, must-revalidate, public,
+#                    max-age=31536000, immutable` on the live domain. Two max-age directives and
+#                    must-revalidate beside immutable, in one header, so the effect was the hour
+#                    that was already there: no regression and none of the improvement, which is
+#                    the worst shape a change can have because it looks deployed. 🔒 THE DEFECT
+#                    IS INVISIBLE IN THE FILE; both rules read correctly alone. It walks the real
+#                    files rather than intersecting globs in the abstract, and it also refuses an
+#                    immutable rule over a file some page links with no ?v=.
 #   csp-hashes.py --check  THE POLICY MUST NAME EVERY INLINE SCRIPT IN THE TREE. script-src
 #                    stopped saying 'unsafe-inline' and started naming eight SHA-256 hashes, and
 #                    the failure mode of a hash is the worst one here: a stale one does not
@@ -217,6 +228,8 @@ echo
 python3 tools/minify-css.py --check || fail=1
 echo
 python3 tools/csp-hashes.py --check || fail=1
+echo
+python3 tools/headers-gate.py || fail=1
 echo
 python3 tools/engine-gate.py || fail=1
 echo
