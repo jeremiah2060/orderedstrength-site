@@ -99,7 +99,15 @@
       <p class="sub">Qué es, cómo funciona y qué prueba. Una página, diseñada para imprimir.</p>
     </div>
 
-    <button class="btn ghost print-btn" onclick="window.print()">Imprimir esta página</button>
+    <!-- 🔒 NOT onclick=. The policy names hashes and dropped 'unsafe-inline', and a hash
+         covers a script BLOCK, never an event ATTRIBUTE, so the onclick form of this
+         was refused by the browser and this button did nothing at all. The CEO found it
+         by pressing it, 2026-09-03. tools/csp-hashes.py --check now fails on any inline
+         handler while the policy forbids them. -->
+    <button class="btn ghost print-btn" id="printbtn">Imprimir esta página</button>
+    <script>
+    document.getElementById('printbtn').addEventListener('click', function () { window.print(); });
+    </script>
 
     <div class="spec-sheet">
 
@@ -176,7 +184,6 @@
       <a href="/es/app-privacy/">Privacidad</a>
       <a href="/es/terms/">Términos</a>
       <a href="/es/support/">Soporte</a>
-      <a href="/es/design/">Notas de diseño</a>
     </nav>
   </div>
   <div class="foot__panel">

@@ -77,6 +77,34 @@ def hashes(root=ROOT):
 SCRIPT_SRC = re.compile(r"script-src [^;]*;")
 
 
+# 🔒 A HASH COVERS A <script> BLOCK AND NEVER AN EVENT ATTRIBUTE, AND THE DIFFERENCE IS A
+# BUTTON THAT DOES NOTHING (2026-09-03, the CEO pressed it). Both /spec/ pages shipped
+# `onclick="window.print()"`. The day 'unsafe-inline' left script-src, the browser began
+# refusing that handler, silently: the button still renders, still highlights, and fires
+# nothing. Every gate stayed green, including csp-gate.mjs, which proves each <script> BLOCK
+# still runs and has no concept of an attribute, so it was structurally incapable of seeing it.
+#
+# 🔒 THE RULE IS DERIVED FROM THE POLICY, NOT TYPED. It is not "never use onclick": it is
+# "not while script-src forbids it". Restore 'unsafe-inline' and this arm correctly falls
+# silent, which is what makes it a check rather than a preference.
+EVENT_ATTR = re.compile(r'\s(on[a-z]+)\s*=\s*["\']', re.I)
+
+
+def inline_handlers(root=ROOT, headers=None):
+    """(page, attr) for every inline event handler, when the policy forbids them."""
+    src = open(headers or HEADERS, encoding='utf-8').read()
+    have = SCRIPT_SRC.search(src)
+    if not have or "'unsafe-inline'" in have.group(0):
+        return []                       # the policy permits them; nothing to report
+    out = []
+    for f in pages(root):
+        body = open(f, encoding='utf-8').read()
+        body = re.sub(r'<!--.*?-->', ' ', body, flags=re.S)   # a comment is not markup
+        for m in EVENT_ATTR.finditer(body):
+            out.append((os.path.relpath(f, root), m.group(1)))
+    return out
+
+
 def rewrite(check=False, root=ROOT, headers=None):
     headers = headers or HEADERS
     hs = hashes(root)
@@ -85,7 +113,13 @@ def rewrite(check=False, root=ROOT, headers=None):
     have = SCRIPT_SRC.search(src)
     if not have:
         print('  no script-src directive in _headers'); return 1
+    bad_attrs = inline_handlers(root, headers)
+    for page, attr in bad_attrs:
+        print(f"  INLINE HANDLER: {page} carries {attr}=, which this policy refuses to run. "
+              f"A hash covers a <script> block, never an attribute, so that control is dead.")
     if have.group(0) == want:
+        if bad_attrs:
+            return 1
         print(f"  _headers names all {len(hs)} inline script(s), and nothing else"); return 0
     if check:
         cur = set(re.findall(r"'(sha256-[A-Za-z0-9+/=]+)'", have.group(0)))
@@ -97,6 +131,8 @@ def rewrite(check=False, root=ROOT, headers=None):
             print(f"  NOT IN THE POLICY: {h}  ({', '.join(hs[h][:3])})  that script will not run")
         for h in extra:
             print(f"  stale hash, no script matches it: {h}")
+        return 1
+    if bad_attrs:
         return 1
     open(headers, 'w', encoding='utf-8').write(SCRIPT_SRC.sub(want.replace('\\', '\\\\'), src, count=1))
     print(f"  script-src now names {len(hs)} inline script(s); 'unsafe-inline' is gone")
