@@ -60,26 +60,28 @@ check('🔒 a reader who already CHOSE Spanish is taken there, even from an Engl
   r.path === '/es/');
 
 // 🔒 THE CEO'S WIFE'S MAC, MEASURED: a Spanish computer whose Chrome lists en-US, en, es.
+// 🔒 THE CEO'S WIFE'S MAC: a Spanish computer whose Chrome still lists en-US first. The first
+// version offered a banner here instead of redirecting, on the reasoning that the browser had
+// asked for English. Correct about the browser, wrong about the person: Chrome's list is
+// inherited from the account and the installer far more often than it is chosen.
 r = await run('en-US,en,es');
-check(`Spanish ranked BELOW English is not forced (list ${r.list})`, r.path === '/');
-check('but that reader is OFFERED the Spanish site rather than left to find the footer',
-  r.offer === true);
+check(`Spanish listed anywhere is enough, even ranked third (list ${r.list})`, r.path === '/es/');
 
 r = await run('es,en');
 check('Spanish ranked ABOVE English is followed', r.path === '/es/');
 
 r = await run('en-US,en,es', "localStorage.setItem('os-lang','en');");
-check('a reader who dismissed the offer is not asked again', r.path === '/' && r.offer === false);
+check('a reader who chose English is never sent away again', r.path === '/');
 
 r = await run('en-US');
 check('an English browser with no Spanish listed sees nothing at all',
-  r.path === '/' && r.stored === null && r.offer === false);
+  r.path === '/' && r.stored === null);
 
 r = await run('es-419', '', '/how-it-works/');
 check('a deep link maps to its own Spanish twin, not to the home page', r.path === '/es/how-it-works/');
 
 r = await run('fr-FR');
-check('a language with no version of this site is left alone', r.path === '/' && r.offer === false);
+check('a language with no version of this site is left alone', r.path === '/');
 
 // the loop test
 await withPage(async (page) => {

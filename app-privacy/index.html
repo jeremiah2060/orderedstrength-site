@@ -38,18 +38,18 @@
     var langs = (navigator.languages && navigator.languages.length
                  ? navigator.languages : [navigator.language || '']).map(String);
     var rank = function (re) { for (var i = 0; i < langs.length; i++) if (re.test(langs[i])) return i; return -1; };
-    var es = rank(/^es(-|$)/i), en = rank(/^en(-|$)/i);
-    if (es < 0) return;                      /* no Spanish anywhere: nothing to offer */
-    if (en < 0 || es < en) {                 /* Spanish outranks English: send them */
-      localStorage.setItem('os-lang', 'es');
-      go(); return;
-    }
-    /* 🔒 SPANISH PRESENT BUT RANKED BELOW ENGLISH: OFFER, NEVER FORCE. This browser has said, in
-       order, that it prefers English. Overriding a stated preference because we guessed at the
-       operating system would be the same arrogance as the machine translation this exists to
-       avoid, and Chrome will not offer to translate an English page to a reader who asked for
-       English, so there is no harm to prevent. site.js draws a quiet line instead. */
-    window.__osOfferEs = true;
+    /* 🔒 SPANISH ANYWHERE IN THE LIST IS ENOUGH, AND THE FIRST VERSION ASKED INSTEAD (CEO,
+       2026-09-02: "now we have to ask the user?"). It only redirected when Spanish OUTRANKED
+       English and drew a dismissible offer otherwise, on the reasoning that a browser listing
+       "en-US, en, es" has asked for English in so many words. That reasoning is correct about
+       the browser and wrong about the person. Chrome's list is inherited from the account and
+       the installer far more often than it is chosen, and the measured case is a Spanish macOS
+       whose Chrome still says English first. A reader who lists Spanish at all reads Spanish,
+       and this site has a real Spanish version rather than a machine-translated one, so the
+       useful default is to give it to them and let one click take it back. */
+    if (rank(/^es(-|$)/i) < 0) return;        /* no Spanish listed at all: leave them alone */
+    localStorage.setItem('os-lang', 'es');
+    go(); return;
   } catch (e) { /* no preference readable: serve the page that was asked for */ }
   function go() { location.replace('/es' + location.pathname + location.search + location.hash); }
 })();
@@ -83,7 +83,7 @@
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="stylesheet" href="/assets/site.css?v=b3f56e8524">
+<link rel="stylesheet" href="/assets/site.css?v=630b95408f">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -244,6 +244,6 @@ should read about it before it does rather than after.</p>
   </div>
 </footer>
 
-<script src="/assets/site.js?v=951a64c8e2" defer></script>
+<script src="/assets/site.js?v=62dd2417fa" defer></script>
 </body>
 </html>
