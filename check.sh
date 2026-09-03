@@ -65,6 +65,46 @@
 #                    Driven by a Chrome launched with a real Spanish locale, because stubbing
 #                    navigator.language would be testing the stub. 🔒 --lang IS THE WRONG FLAG
 #                    and this gate found that by printing the value it branches on.
+#   notranslate-gate.py A PAGE THAT IS ALREADY A REAL TRANSLATION MUST DECLINE A MACHINE ONE,
+#                    AND A PAGE THAT IS NOT MUST NOT. The CEO, 2026-09-03: "if you switch to
+#                    spanish it only appears for a split second then goes back to english
+#                    again, but all the screenshots are in spanish, only the content is
+#                    bouncing". Text changing while images do not is not a navigation. It was
+#                    Chrome's translator, from the "always translate Spanish" he set on
+#                    2026-08-31, and nothing on /es/ had ever told a browser not to.
+#                    translate-gate guards the ELEMENTS a translator must not rewrite and is
+#                    right about every one; it has no opinion about whether the PAGE should be
+#                    translated at all, and on a page where a real translation already exists a
+#                    machine pass can only subtract. 🔒 TWO-SIDED: English stays translatable on
+#                    purpose, so this goes red in both directions. --selftest proves both arms.
+#   lang-switch-gate.mjs CAN A PERSON CHANGE LANGUAGE WITHOUT SCROLLING. Not: does the link
+#                    work. lang-redirect-gate walks the whole loop green, because it reaches the
+#                    link with querySelector and clicks it. Measured at 390px before the fix:
+#                    the only language link on this site sat 13,566px down the English home page
+#                    and 14,512px down the Spanish one, 16.1 and 17.2 SCREENS, in the same week
+#                    the site gained the power to move a reader into a language they never
+#                    chose. 🔒 AND A LAYOUT BOX IS NOT A PAINTED PIXEL: its first draft read
+#                    getBoundingClientRect, which a closed <details> still answers, and reported
+#                    zero taps on every phone. checkVisibility asks what was meant.
+#   engine-gate.py   WHAT A BROWSER THAT IS NOT CHROME GETS. Every browser-driven check in this
+#                    file launches the same binary, so the engine is the axis nothing here has
+#                    ever varied, which is the shape of the height hole hero-gate closed. Driving
+#                    a second engine needs an administrator password (safaridriver --enable) or a
+#                    vendored WebKit, so this checks the DISCIPLINE instead: a Chrome-first
+#                    property is declared inside an @supports that TESTS it, that guard has a
+#                    matching "@supports not" fallback, and a prefixed property keeps its pair.
+#                    🔒 The stylesheet's own comment states the failure: without the guard "a
+#                    browser that does not know animation-timeline would run these keyframes once
+#                    against the document timeline". Exemptions by name, with the reason.
+#   bar-gate.mjs     THE ONE COMPONENT ON EVERY SCREEN OF THIS SITE MUST NOT COLLIDE WITH ITSELF.
+#                    Adding one header link on 2026-09-03 put the wordmark and the nav at a gap of
+#                    0px from 900 to 980px in English and 1000 to 1072px in Spanish, on all twenty
+#                    pages, with every gate here green: align reads left edges, measure reads
+#                    wrapping, type reads size, hero reads the hero, and none asks whether two
+#                    things in the bar are touching. 🔒 THIS MEASUREMENT WAS TAKEN BY HAND TWICE
+#                    AND WRITTEN INTO A COMMENT BOTH TIMES, which protects the width it was taken
+#                    at and nothing else. Thirty widths, and it counts TOP offsets rather than box
+#                    heights, because padding raises a height and only a top says a label wrapped.
 #   lang-gate.py     A PAGE IS ACTUALLY WRITTEN IN THE LANGUAGE IT DECLARES. The Spanish site
 #                    shipped with a Spanish headline over an English paragraph, and the
 #                    BUILDER reported "english-left: 0" on every page because its detector
@@ -132,6 +172,10 @@ python3 tools/translate-gate.py || fail=1
 echo
 python3 tools/lang-gate.py || fail=1
 echo
+python3 tools/notranslate-gate.py || fail=1
+echo
+python3 tools/engine-gate.py || fail=1
+echo
 python3 tools/contrast-gate.py | tail -3 || fail=1
 
 if ! curl -sf -o /dev/null "http://127.0.0.1:${PORT}/"; then
@@ -149,6 +193,10 @@ echo
 BASE="http://127.0.0.1:${PORT}" node tools/hero-gate.mjs | tail -3 || fail=1
 echo
 BASE="http://127.0.0.1:${PORT}" node tools/lang-redirect-gate.mjs | tail -3 || fail=1
+echo
+BASE="http://127.0.0.1:${PORT}" node tools/lang-switch-gate.mjs | tail -3 || fail=1
+echo
+BASE="http://127.0.0.1:${PORT}" node tools/bar-gate.mjs | tail -3 || fail=1
 echo
 BASE="http://127.0.0.1:${PORT}" node tools/type-gate.mjs || fail=1
 echo

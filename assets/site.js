@@ -163,9 +163,12 @@ if (bar){
 
 /* ── the language choice, recorded from either direction ──
    The head script on the English pages sends a Spanish phone to /es/ exactly once, and only
-   while nothing is stored. This is what stores it: using either footer link is a decision, and
+   while nothing is stored. This is what stores it: using either language link is a decision, and
    after it the reader stays where they put themselves. Without this the English link on /es/
-   would work once and then be undone by the next visit to the root. */
+   would work once and then be undone by the next visit to the root.
+   🔒 AND SINCE 2026-09-03 IT IS THE ONLY WRITER OF os-lang. The head script used to record its
+   own automatic redirect here too, which made a guess about a browser indistinguishable from a
+   person's decision. A click is a decision. A language list is not. */
 document.addEventListener('click', function (e) {
   var a = e.target && e.target.closest ? e.target.closest('a[hreflang]') : null;
   if (!a) return;
@@ -173,6 +176,85 @@ document.addEventListener('click', function (e) {
   if (want !== 'en' && want !== 'es') return;
   try { localStorage.setItem('os-lang', want); } catch (err) { /* not storable: harmless */ }
 }, true);
+
+/* ── WHEN A BROWSER TRANSLATES THE SPANISH PAGE, SAY SO ──────────────────────────────────
+   FOUND BY THE CEO, 2026-09-03, and every instrument on this site was green while he looked at
+   it: "if you switch to spanish it only appears for a split second then goes back to english
+   again, but all the screenshots are in spanish, only the content is bouncing". That last clause
+   is the whole diagnosis. Text changing while the images do not is not a navigation, and it is
+   not this site: it is Chrome's own translator, from the "always translate Spanish" he switched
+   on for /es/ on 2026-08-31, replaying on every visit since.
+
+   🔒 A PAGE THAT IS ALREADY A REAL TRANSLATION HAS NOTHING TO GAIN FROM A MACHINE ONE AND
+   EVERYTHING TO LOSE. translate-gate.py guards the ELEMENTS a translator must not rewrite, and
+   it is right about all of them, but no one had ever said that this page should not be
+   translated at all. The Spanish pages now declare notranslate, which stops Chrome. Safari's
+   translator does not read that declaration, so the page also has to be able to notice.
+
+   🔒 AND IT NOTICES BY WATCHING ITS OWN WORDS, NOT BY ASKING THE BROWSER. Chrome stamps
+   translated-ltr on <html> and Safari stamps nothing, so a check written against the class name
+   would be a check that can only see one of the two browsers this has to work in. The headline
+   is read once here, before any translator has run, and a change to it that this site did not
+   make is the evidence. That test has no browser in it.
+
+   WHAT IT RESTS ON, SAID PLAINLY RATHER THAN LEFT TO BE DISCOVERED: that this script reads the
+   headline before a translator rewrites it. It is a defer script, so it runs after parsing and
+   before DOMContentLoaded, and a translator detects the page language and swaps text after load.
+   That ordering holds in both engines today and is not a thing either one promises. The class
+   check is the second path for Chrome if it ever stops holding; for Safari the honest statement
+   is that a translation applied before this line would be invisible to it, and the header's
+   language link, which needs none of this, is why that is a degradation and not a failure. */
+(function () {
+  if (!/^es/i.test(root.getAttribute('lang') || '')) return;   /* English prose stays translatable on purpose */
+  var h1 = document.querySelector('h1');
+  var twin = document.querySelector('a[hreflang="en"]');
+  if (!h1 || !twin) return;
+  var ours = (h1.textContent || '').replace(/\s+/g, ' ').trim();
+  if (!ours) return;
+  var shown = false;
+
+  function rewritten() {
+    return /(^|\s)translated-/.test(root.className) ||
+           (h1.textContent || '').replace(/\s+/g, ' ').trim() !== ours;
+  }
+
+  function tell() {
+    if (shown || !rewritten()) return;
+    shown = true;
+    var bar = document.createElement('p');
+    bar.className = 'mtnote';
+    /* 🔒 translate="no" ON THE WHOLE LINE. This is the one sentence on the page that must
+       survive the thing it is reporting. A notice about a translation that is itself translated
+       tells the reader nothing they can act on. */
+    bar.setAttribute('translate', 'no');
+    bar.setAttribute('lang', 'es');
+    bar.setAttribute('role', 'status');
+    bar.appendChild(document.createTextNode(
+      'Tu navegador tradujo esta p\u00e1gina. Las frases que citamos de la app y las huellas del sello ya no son las nuestras. '));
+    var a = document.createElement('a');
+    /* the twin's href, never a second copy of the mapping: one place decides where English is */
+    a.href = twin.getAttribute('href');
+    a.setAttribute('hreflang', 'en');
+    a.setAttribute('lang', 'en');
+    a.setAttribute('translate', 'no');
+    a.className = 'lang';
+    a.textContent = 'English';
+    bar.appendChild(a);
+    var host = document.getElementById('main') || document.body;
+    host.insertBefore(bar, host.firstChild);
+  }
+
+  tell();
+  /* a translator runs after load, and on its own schedule, so watch rather than sample once */
+  if (window.MutationObserver) {
+    var mo = new MutationObserver(function () { tell(); if (shown) mo.disconnect(); });
+    mo.observe(h1, { childList: true, characterData: true, subtree: true });
+    mo.observe(root, { attributes: true, attributeFilter: ['class'] });
+    setTimeout(function () { tell(); }, 4000);
+  } else {
+    setTimeout(tell, 1200); setTimeout(tell, 4000);
+  }
+})();
 
 /* ── reveal ── */
 var targets = [].slice.call(document.querySelectorAll('.reveal'));

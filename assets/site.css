@@ -247,6 +247,34 @@ img{max-width:100%;height:auto}
    reachable: /how-it-works/ is in the footer of every page and linked from the body copy. */
 @media (max-width:23rem){.wordmark{font-size:1.0625rem}.bar nav{gap:.5rem}}
 
+/* 🔒 AND AT 320px THE CALL TO ACTION SAT ON TOP OF THE BRAND NAME. Pre-existing, live on the
+   domain, and found by tools/bar-gate.mjs on its first run: the gap between the wordmark's right
+   edge and the nav's left edge measured 1px in English and 0px in Spanish, with the pill
+   overlapping the last letters of the wordmark, on all twenty pages. The rules above drop the
+   last plain LINK at 23rem and stop, so the three things actually left in the bar at the
+   narrowest width this site claims to support, the wordmark, the pill and the disclosure, had
+   never been measured against each other at all. Every gate was green: align reads left edges,
+   which agreed, and nothing read the distance between two things in the bar.
+   🔒 AND THE ROOM DOES NOT COME FROM THE PADDING, though that is where it looks cheapest. That
+   padding reproduces the section container's own left edge, which is the law at the top of this
+   block and which align-gate asserts on every page at nine widths. Buying room there trades a
+   collision for the misalignment the CEO notices first, because it is at the top. It comes from
+   the three elements instead. */
+@media (max-width:20.5rem){
+  .wordmark{font-size:1rem;gap:.4375rem}
+  .led{width:.5rem;height:.5rem}
+  .bar nav{gap:.375rem}
+  .bar nav .cta{font-size:.8125rem;padding:.375rem .6875rem}
+  .menu > summary{font-size:.8125rem;padding:.375rem .5rem;letter-spacing:.06em}
+}
+/* and Spanish needs the same room again, for the reason recorded twice above: "Únete" against
+   "Join" is the same third that makes every other breakpoint on this bar land later in Spanish.
+   Measured at 320px with the rule above alone: English cleared to 17px and Spanish only to 9px. */
+@media (max-width:20.5rem){
+  html[lang^="es"] .wordmark{font-size:.9375rem}
+  html[lang^="es"] .bar nav .cta{padding:.375rem .625rem}
+}
+
 /* 🔒 THOSE BREAKPOINTS ARE TUNED TO ENGLISH LABEL WIDTHS, AND SPANISH IS ABOUT A THIRD WIDER.
    Measured over CDP with Range.getClientRects (a box height cannot tell you a label wrapped,
    because padding raises it too): on /es/ the wordmark's right edge and the nav's left edge
@@ -273,6 +301,18 @@ html[lang^="es"] .bar nav a{white-space:nowrap}
    changes is only what happens at those widths: the plain links move into a disclosure the
    reader can open, and the call to action shortens instead of vanishing.
 
+   🔒 SUPERSEDED 2026-09-03, AND ONLY BY RE-MEASURING: A BREAKPOINT IS A PROPERTY OF THE
+   CONTENT, SO ADDING ONE LINK MOVED IT. The header gained a language control, and at the old
+   numbers the wordmark and the nav sat at a gap of 0px from 900 to 980px in English and from
+   1000 to 1072px in Spanish, on all twenty pages at once. The law above is still true of the
+   five-item bar it was written for; it was read as though it were true of the bar. Re-measured
+   over CDP with the sixth item present: English is 1px at 984, 9px at 992, 16px at 1000 and
+   24px at 1008; Spanish is 0px through 1072, 14px at 1088 and 29px at 1104. So 63rem and 69rem,
+   which are the first widths that clear with the same room the old ones were chosen for.
+   🔒 AND THE REASON THIS COULD HAPPEN AT ALL IS THAT THE MEASUREMENT LIVED IN A COMMENT. It had
+   been taken by hand twice and written down twice, and a comment protects the width it was
+   taken at and nothing else. tools/bar-gate.mjs takes it on every run now, at thirty widths.
+
    🔒 AND IT IS <details>, SO IT WORKS WITH NO SCRIPT. site.js may fail, be blocked, or be
    turned off, and a header that needs it to navigate is a header that can strand a reader
    on one page. The browser owns the open state. */
@@ -293,17 +333,47 @@ html[lang^="es"] .bar nav a{white-space:nowrap}
       font-weight:600;color:var(--ink2);white-space:nowrap;transition:color .2s,background-color .2s}
 .menu__panel a:hover,.menu__panel a:focus-visible{background:var(--e3);color:var(--ink)}
 .menu__panel a[aria-current]{color:var(--teal)}
+/* ══ THE LANGUAGE CONTROL, IN THE HEADER, AT EVERY WIDTH ══════════════════════════════
+   🔒 MEASURED 2026-09-03, AND THIS IS WHAT "STUCK" MEANT. The only way to change language on
+   this site was one word in a footer column. Driven over CDP: on an iPhone at 390px it sits
+   13,566px down the English home page and 14,512px down the Spanish one, which is 16.1 and
+   17.2 SCREENS of scrolling. In the same week the automatic redirect was given the power to
+   put a reader into a language they never asked for, silently, and the way back was seventeen
+   screens below the fold. Both halves shipped green.
+
+   🔒 AND EVERY GATE WAS BLIND TO IT BECAUSE THEY ALL REACH THE LINK THE SAME WAY.
+   lang-redirect-gate finds it with querySelector and calls .click(). That proves the link
+   WORKS. Nothing on this site asked whether a person could FIND it, which is a different
+   question and the only one a reader ever asks. tools/lang-switch-gate.mjs asks it now.
+
+   It costs no new breakpoint and no new idea. The nav copy is hidden by the collapse rules
+   below at 56rem, and at 61.25rem in Spanish, and the disclosure-panel copy is hidden above
+   them, so exactly one of the two is on screen at every width the site supports. */
+.menu__panel a.lang{margin-top:.25rem;padding-top:.625rem;
+      border-top:1px solid var(--line);border-radius:0 0 .5rem .5rem}
+
+/* ══ WHEN A BROWSER HAS REWRITTEN THIS PAGE, THE PAGE SAYS SO ═════════════════════════
+   Drawn by site.js only on a Spanish page whose own headline has changed under it. The left
+   edge is amber because this is the one line on the site that reports damage rather than
+   describing the product. */
+.mtnote{display:flex;flex-wrap:wrap;align-items:baseline;gap:.375rem .625rem;
+      max-width:var(--wide);margin:0 auto;padding:.8125rem var(--gut);
+      font-size:.875rem;line-height:1.5;color:var(--ink);
+      background:var(--e2);border-bottom:1px solid var(--line);
+      border-left:3px solid var(--amber)}
+.mtnote a{color:var(--teal);font-weight:600}
+
 /* The pill keeps its place and changes its label. Two spans, no script: a width cannot
    rewrite text, and the alternative was a button that disappeared. */
 .cta__short{display:none}
-@media (max-width:56rem){
+@media (max-width:63rem){
   .bar nav > a:not(.cta){display:none}
   .menu{display:block}
   .bar nav .cta{font-size:.875rem;padding:.4375rem .875rem}
   .cta__long{display:none}
   .cta__short{display:inline}
 }
-@media (max-width:61.25rem){
+@media (max-width:69rem){
   html[lang^="es"] .bar nav > a:not(.cta){display:none}
   html[lang^="es"] .menu{display:block}
   html[lang^="es"] .bar nav .cta{font-size:.875rem;padding:.4375rem .875rem}

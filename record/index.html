@@ -16,41 +16,52 @@
    away again. Without that rule the two footer links bounce a reader between them forever.
    🔒 AND IT IS FIRST IN THE HEAD, BEFORE THE STYLESHEET, so location.replace happens before a
    single pixel is painted: a redirect after render is a flash of the wrong language, which is
-   worse than not redirecting at all. replace(), not assign(), so Back does not re-trigger it.
-   🔒 EVERY BRANCH FAILS OPEN. localStorage throws in some privacy modes; a reader must never
-   lose the site because a preference could not be read. */
+   worse than not redirecting at all. replace(), not assign(), so Back does not re-trigger it. */
 (function () {
-  try {
-    var stored = localStorage.getItem('os-lang');
-    /* 🔒 A STORED CHOICE IS A DESTINATION, NOT ONLY A VETO, AND THE FIRST VERSION TREATED IT AS
-       ONLY A VETO. Clicking "Español" stored es and then typing the bare domain landed you on
-       ENGLISH, because the stored value was read solely to suppress the automatic redirect and
-       never to act on. The preference was write-only: the site remembered the choice and then
-       ignored it, which is worse than not remembering, because the reader thinks they chose. */
-    if (stored === 'es') { go(); return; }
-    if (stored) return;                      /* 'en' is a decision to stay */
+  var stored = null;
+  /* 🔒 THE READ IS ITS OWN try, AND THE WHOLE RULE USED TO SHARE ONE (2026-09-03). localStorage
+     throws in some privacy modes, and the old block put localStorage.setItem BEFORE go() inside
+     a single try, so a browser that could not WRITE never RAN the redirect: the one branch that
+     exists to serve a Spanish reader was the one branch that failed by leaving them on English.
+     The comment over it read EVERY BRANCH FAILS OPEN, and that was true of every branch except
+     the one that mattered. Superseded here: nothing between the decision and go() can throw. */
+  try { stored = localStorage.getItem('os-lang'); } catch (e) { stored = null; }
 
-    /* 🔒 AND IT READ ONLY THE FIRST PREFERENCE, WHICH IS NOT WHERE SPANISH USUALLY IS. Measured
-       on a Spanish macOS running Chrome: navigator.languages is "en-US, en, es". The computer is
-       Spanish, the browser keeps its own list, and Spanish sits THIRD. Reading [0] answered a
-       narrower question than the one that matters, and answered it correctly, which is the hard
-       kind of wrong to see. */
-    var langs = (navigator.languages && navigator.languages.length
-                 ? navigator.languages : [navigator.language || '']).map(String);
-    var rank = function (re) { for (var i = 0; i < langs.length; i++) if (re.test(langs[i])) return i; return -1; };
-    /* 🔒 SPANISH ANYWHERE IN THE LIST IS ENOUGH, AND THE FIRST VERSION ASKED INSTEAD (CEO,
-       2026-09-02: "now we have to ask the user?"). It only redirected when Spanish OUTRANKED
-       English and drew a dismissible offer otherwise, on the reasoning that a browser listing
-       "en-US, en, es" has asked for English in so many words. That reasoning is correct about
-       the browser and wrong about the person. Chrome's list is inherited from the account and
-       the installer far more often than it is chosen, and the measured case is a Spanish macOS
-       whose Chrome still says English first. A reader who lists Spanish at all reads Spanish,
-       and this site has a real Spanish version rather than a machine-translated one, so the
-       useful default is to give it to them and let one click take it back. */
-    if (rank(/^es(-|$)/i) < 0) return;        /* no Spanish listed at all: leave them alone */
-    localStorage.setItem('os-lang', 'es');
-    go(); return;
-  } catch (e) { /* no preference readable: serve the page that was asked for */ }
+  /* 🔒 A STORED CHOICE IS A DESTINATION, NOT ONLY A VETO, AND THE FIRST VERSION TREATED IT AS
+     ONLY A VETO. Clicking "Español" stored es and then typing the bare domain landed you on
+     ENGLISH, because the stored value was read solely to suppress the automatic redirect and
+     never to act on. The preference was write-only: the site remembered the choice and then
+     ignored it, which is worse than not remembering, because the reader thinks they chose. */
+  if (stored === 'es') { go(); return; }
+  if (stored === 'en') return;             /* 'en' is a decision to stay */
+
+  /* 🔒 AND IT READ ONLY THE FIRST PREFERENCE, WHICH IS NOT WHERE SPANISH USUALLY IS. Measured
+     on a Spanish macOS running Chrome: navigator.languages is "en-US, en, es". The computer is
+     Spanish, the browser keeps its own list, and Spanish sits THIRD. Reading [0] answered a
+     narrower question than the one that matters, and answered it correctly, which is the hard
+     kind of wrong to see.
+     🔒 SPANISH ANYWHERE IN THE LIST IS ENOUGH, AND THE FIRST VERSION ASKED INSTEAD (CEO,
+     2026-09-02: "now we have to ask the user?"). It only redirected when Spanish OUTRANKED
+     English and drew a dismissible offer otherwise, on the reasoning that a browser listing
+     "en-US, en, es" has asked for English in so many words. That reasoning is correct about
+     the browser and wrong about the person. Chrome's list is inherited from the account and
+     the installer far more often than it is chosen, and the measured case is a Spanish macOS
+     whose Chrome still says English first. A reader who lists Spanish at all reads Spanish,
+     and this site has a real Spanish version rather than a machine-translated one, so the
+     useful default is to give it to them and let one click take it back. */
+  var langs = (navigator.languages && navigator.languages.length
+               ? navigator.languages : [navigator.language || '']).map(String);
+  for (var i = 0; i < langs.length; i++) {
+    if (/^es(-|$)/i.test(langs[i])) { go(); return; }
+  }
+  /* 🔒 AND AN AUTOMATIC REDIRECT IS NOT A CHOICE, THOUGH THIS RECORDED IT AS ONE UNTIL
+     2026-09-03. The detected path wrote os-lang=es on its way out, so a reader who had touched
+     nothing became, on disk, indistinguishable from a reader who had clicked "Español". Three
+     costs, and the site could see none of them: it could never re-ask, it could never tell a
+     guess from a decision, and a person testing the site could not get a clean state back
+     without opening developer tools. Only a CLICK writes os-lang now, in site.js. Loop-freedom
+     never rested on this write and does not now: it rests on /es/ carrying no copy of this
+     script, so the Spanish side has nothing that can send anyone anywhere. */
   function go() { location.replace('/es' + location.pathname + location.search + location.hash); }
 })();
 </script>
@@ -83,7 +94,7 @@
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="stylesheet" href="/assets/site.css?v=630b95408f">
+<link rel="stylesheet" href="/assets/site.css?v=e47d726b61">
 <style>
 .ledger{margin:2rem 0 0;max-width:64rem;background-color:var(--e1);border-radius:12px;overflow:hidden;overflow:clip;box-shadow:var(--shadow-3)}
 .lhead{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.875rem 1.125rem;
@@ -141,6 +152,7 @@
     <a href="/stronger/" class="opt">Stronger</a>
     <a href="/record/" class="opt" aria-current="page">The record</a>
     <a href="/verify/">Verify</a>
+    <a href="/es/record/" hreflang="es" lang="es" translate="no" class="lang">Espa&ntilde;ol</a>
     <a href="/join/" class="cta"><span class="cta__long">Join the test</span><span class="cta__short">Join</span></a>
     <details class="menu">
       <summary>Menu</summary>
@@ -150,6 +162,7 @@
         <a href="/record/" aria-current="page">The record</a>
         <a href="/verify/">Verify</a>
         <a href="/join/">Join the test</a>
+        <a href="/es/record/" hreflang="es" lang="es" translate="no" class="lang">Espa&ntilde;ol</a>
       </div>
     </details>
   </nav>
@@ -285,7 +298,7 @@
   </div>
 </footer>
 
-<script src="/assets/site.js?v=62dd2417fa" defer></script>
+<script src="/assets/site.js?v=62b4210939" defer></script>
 <script>
 (function(){
 'use strict';

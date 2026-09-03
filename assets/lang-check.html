@@ -37,14 +37,30 @@
 <div class="v"><b>Choice already stored</b><span id="saved">…</span></div>
 <div class="verdict" id="verdict">…</div>
 <p><button id="clear">Clear the stored choice</button></p>
+<div class="verdict">If the Spanish page appears for a moment and then turns into English while the
+screenshots stay Spanish, that is not this site. It is your browser translating the page, and the fix
+is in the browser: Chrome, Settings, Languages, and turn off "Always translate Spanish". The Spanish
+pages now ask browsers not to translate them, which Chrome honours and Safari does not, so a Safari
+reader who forces it will see the page say so at the top.</div>
 <p><a href="/">Back to the site</a></p>
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var lang = navigator.language || '(none)';
   var list = (navigator.languages || []).join(', ') || '(none)';
-  var first = (navigator.languages && navigator.languages[0]) || navigator.language || '';
-  var isEs = /^es(-|$)/i.test(first);
+  /* 🔒 THIS READ navigator.languages[0] AND THE SITE HAS NOT USED THAT RULE SINCE 4d9c9b0.
+     Written at 33439ab, one commit before the rule widened to "Spanish anywhere in the list"
+     and then again before it stopped asking, and never touched after either. On the exact
+     browser the shipped rule was written FOR, the Spanish macOS whose Chrome reports
+     "en-US, en, es", this page answered NO and printed "it is not asking for Spanish" while
+     the site redirected. The one tool built to stop the guessing pointed the wrong way.
+     🔒 SO IT IS EXPRESSED THE WAY THE HEAD SCRIPT EXPRESSES IT, and lang-redirect-gate.mjs
+     now drives BOTH over the same language matrix and fails if they ever disagree again. A
+     diagnostic that restates a rule in its own words is a second implementation of it. */
+  var langs = (navigator.languages && navigator.languages.length
+               ? navigator.languages : [navigator.language || '']).map(String);
+  var isEs = false;
+  for (var i = 0; i < langs.length; i++) if (/^es(-|$)/i.test(langs[i])) isEs = true;
 
   var canStore = false, saved = null;
   try { localStorage.setItem('os-probe', '1'); localStorage.removeItem('os-probe'); canStore = true;
@@ -53,15 +69,18 @@
   $('lang').textContent = lang;
   $('list').textContent = list;
   $('isEs').innerHTML = isEs ? '<span class="ok">YES</span>' : '<span class="no">NO</span>';
+  /* 🔒 AND THE REDIRECT NO LONGER DEPENDS ON THIS. It did: the old head script called
+     setItem before location.replace inside one try, so a browser that could not write never
+     ran the redirect at all. Storage now decides only whether a CHOICE survives the visit. */
   $('store').innerHTML = canStore ? '<span class="ok">YES</span>'
-    : '<span class="no">NO. Private browsing blocks it, and the redirect will not run.</span>';
+    : '<span class="no">NO. Private browsing blocks it. The automatic redirect still runs; a choice you make will not survive this visit.</span>';
   $('saved').textContent = saved === null ? '(nothing stored yet)' : saved;
 
   var v;
-  if (!canStore) {
-    v = 'This browser will NOT redirect, because it cannot remember a choice, so the site refuses to send you anywhere it could not send you back from. Turn off private browsing and reload.';
-  } else if (saved !== null) {
-    v = 'This browser will NOT redirect, because a choice is already stored (' + saved + '). Press the button below and reload the home page.';
+  if (saved === 'en' || saved === 'es') {
+    v = saved === 'es'
+      ? 'This browser goes to the Spanish site every time, because Spanish is stored as your choice. Press the button below to clear it.'
+      : 'This browser stays on English every time, because English is stored as your choice. Press the button below to clear it.';
   } else if (!isEs) {
     v = 'This browser will NOT redirect, and that is correct: it is not asking for Spanish. To test, set the device language to Spanish, or open the Spanish site directly at /es/.';
   } else {
