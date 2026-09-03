@@ -155,6 +155,20 @@ try {
     const after = await page.evaluate(`document.getElementById('verdict').textContent`);
     check(`the home page seal recomputes under the policy ("${before}" to "${after}")`,
       before === 'VERIFIED' && after !== before);
+
+    /* 🔒 AND /assets/lang-check, WHICH EVERY OTHER GATE HERE EXCLUDES ON PURPOSE AND WHICH IS
+       STILL A SERVED PAGE WITH AN INLINE SCRIPT. Excluding /assets/ is right for a page gate, so
+       the diagnostic cannot drift into the sitemap or the page counts, and it was wrong for a
+       policy: its hash was left out of script-src and production refused to run it, so the one
+       tool built to end the guessing about the language redirect rendered perfectly and did
+       nothing. Found by running lang-redirect-gate against the LIVE domain, which is the only
+       place the real policy applies. Its fields ship as a single ellipsis; only the script
+       fills them. */
+    await page.goto(B + '/assets/lang-check.html');
+    await page.evaluate(`new Promise(r=>setTimeout(r,500))`);
+    const diag = await page.evaluate(`(document.getElementById('verdict')||{textContent:''}).textContent.trim()`);
+    check(`/assets/lang-check ran its script (verdict is ${diag.length} chars, its placeholder is 1)`,
+      diag.length > 20);
   }, { width: 1280, height: 900, dsf: 1 });
 
   /* ARM 3: the head redirect block, whose only observable is that a Spanish browser moves. */

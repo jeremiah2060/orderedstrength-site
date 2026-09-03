@@ -34,13 +34,29 @@ HEADERS = os.path.join(ROOT, '_headers')
 
 
 def pages(root=ROOT):
-    """🔒 DERIVED, NEVER TYPED, and the first draft of this function missed es/404.html because
-    its globs were the ones copied from check-site.py, which walks `*/index.html` and never
-    `*/*.html`. A page list that is wrong by one is a policy that kills one page."""
+    """Every HTML file a visitor can REQUEST, which is not the same set as "the pages".
+
+    🔒 DERIVED, NEVER TYPED, and this function has now been wrong twice in the same direction.
+    Its first draft missed es/404.html, because the globs were copied from check-site.py, which
+    walks `*/index.html` and never `*/*.html`.
+
+    🔒 AND THEN IT EXCLUDED /assets/, WHICH IS WHERE A SERVED PAGE LIVES. assets/lang-check.html
+    is the language diagnostic, it carries an inline script, and every gate in this repo excludes
+    that directory on purpose so the file cannot drift into the sitemap or the page counts. That
+    exclusion is right for a page gate and wrong for a policy: the script was left out of
+    script-src, and production then refused to run it, so the one tool built to end the guessing
+    about the language redirect rendered perfectly and did nothing. Found by running
+    lang-redirect-gate against the live domain, which is the only place the real policy applies:
+    it reported the diagnostic predicting STAY while the site redirected, three times.
+
+    🔒 tools/ STAYS EXCLUDED, and that is a different question with a different answer: og.html
+    is a generator input rendered to a JPEG and is never served, so no browser ever applies a
+    policy to it."""
     out = []
-    for pat in ('*.html', '*/*.html', '*/index.html', '*/*/index.html'):
+    for pat in ('*.html', '*/*.html', '*/*/*.html'):
         out += glob.glob(os.path.join(root, pat))
-    return sorted(set(p for p in out if '/assets/' not in p and '/tools/' not in p))
+    return sorted(set(p for p in out
+                      if not os.path.relpath(p, root).startswith('tools/')))
 
 
 def inline_scripts(src):
