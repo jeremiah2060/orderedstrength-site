@@ -985,7 +985,23 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
 .hero-shot .appcard.float .lift{padding:.375rem 0}
 .hero-shot .appcard.float .nm{font-size:.875rem}
 .hero-shot .appcard.float .vd{font-size:.75rem}
-@media (max-width:72rem){
+/* 🔒 TOO SHORT IS THE SAME PROBLEM AS TOO NARROW, AND ONLY ONE OF THEM WAS HANDLED.
+   The device is sized by viewport HEIGHT (--device-h: clamp(19rem, 100svh - 21rem, 36rem)) while
+   the floating card is capped at a fixed 16rem, so the two do not scale together. Measured on
+   2026-09-02 from a CEO screenshot of a Windows laptop at 125% display scaling, which is roughly
+   a 1259x637 viewport: the phone renders 145px wide and the card 193px, so the ILLUSTRATION was
+   1.33 times the width of the product it annotates, its label wrapped to two lines, and every
+   lift name wrapped. Nothing was broken; the composition had simply inverted.
+
+   The card's widest row needs 216px, measured with max-content, plus 34px of padding, so 250px.
+   A phone only reaches a width where the card can sit beside it at about 880px of viewport
+   height. Below that the card stops floating and takes the stacked treatment this block already
+   defines for narrow windows, which is proven and needs no new layout.
+
+   🔒 IT IS A COMMA, NOT AN `and`. These are alternatives: too narrow OR too short. Written with
+   `and` it would fire only on windows that are both, which is neither case. */
+@media (max-width:72rem), (max-height:55rem){
+  .hero{min-height:0}
   .hero-shot{height:auto;flex-direction:column;gap:1rem}
   .hero-shot .devices{height:var(--device-h)}
   /* 🔒 `relative`, NEVER `static`. Setting this card static to drop it back into flow

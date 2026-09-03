@@ -52,6 +52,14 @@
 #                    console and /verify/ depend on, so the translated page claims the app says
 #                    things it does not and the one interactive proof stops verifying. Prose
 #                    stays translatable on purpose.
+#   hero-gate.mjs    THE ONE AXIS NOTHING ELSE HERE VARIES: VIEWPORT HEIGHT. Every other gate
+#                    sweeps width from 320 to 2560 and fixes height at 900 or 950, which is
+#                    taller than most laptops. The hero device is sized by HEIGHT and the
+#                    floating card was capped in rem, so on a Windows laptop at 125% scaling the
+#                    illustration rendered wider than the product it annotates and its labels
+#                    wrapped. Two invariants, neither visible in the source: a floating
+#                    annotation is never wider than the thing it annotates, and nothing in it
+#                    wraps. Six real device shapes, including the CEO's.
 #   lang-redirect-gate.mjs A SPANISH PHONE MUST REACH THE SPANISH SITE, and must not then be
 #                    bounced back and forth by two language links that each point at the other.
 #                    Driven by a Chrome launched with a real Spanish locale, because stubbing
@@ -137,6 +145,8 @@ echo
 BASE="http://127.0.0.1:${PORT}" node tools/align-gate.mjs $WIDTHS || fail=1
 echo
 BASE="http://127.0.0.1:${PORT}" node tools/measure-gate.mjs 1550 390 | tail -3 || fail=1
+echo
+BASE="http://127.0.0.1:${PORT}" node tools/hero-gate.mjs | tail -3 || fail=1
 echo
 BASE="http://127.0.0.1:${PORT}" node tools/lang-redirect-gate.mjs | tail -3 || fail=1
 echo
