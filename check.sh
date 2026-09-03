@@ -86,6 +86,46 @@
 #                    chose. 🔒 AND A LAYOUT BOX IS NOT A PAINTED PIXEL: its first draft read
 #                    getBoundingClientRect, which a closed <details> still answers, and reported
 #                    zero taps on every phone. checkVisibility asks what was meant.
+#   minify-css.py --check  THE STYLESHEET THE BROWSER GETS IS WHAT THIS SOURCE GENERATES.
+#                    assets/site.css is 96,745 bytes and 58% of it is comment, because the
+#                    comments here carry the laws and the CDP measurements. Right for the source,
+#                    wrong for the wire, and it is render-blocking. Measured with brotli at
+#                    quality 11, which is what Cloudflare serves: 26,918 bytes as published,
+#                    7,813 with comments removed, so 19,105 bytes off every first visit. The
+#                    pages link the generated twin and every source gate keeps reading the
+#                    source; --check regenerates and byte-compares so the two cannot drift.
+#   css-equiv.mjs    AND THE GENERATED STYLESHEET MUST PARSE INTO THE SAME STYLESHEET AS ITS
+#                    SOURCE. minify-css.py --check proves the artifact is what the CURRENT
+#                    stripper produces, which is a statement about the generator agreeing with
+#                    itself: edit one line of that function and it stays green on a sheet that
+#                    renders differently. This links both files from a bare page and reads them
+#                    back through the CSSOM, where cssText on a grouping rule serializes its
+#                    children, so the comparison is the browser's own canonical form of the whole
+#                    sheet. 260 rules and 41,923 characters on both sides. One deleted
+#                    declaration turns it red and it prints the character where they diverge.
+#   print-gate.mjs   WHAT THIS SITE LOOKS LIKE ON PAPER, which nothing here had ever asked.
+#                    There was no @media print block at all, and a browser does not print
+#                    background colours unless the page asks, so near-white ink on a ground the
+#                    printer drops came out white on white. The two pages most likely to be
+#                    printed are the two the app itself links to, /terms/ and /app-privacy/.
+#                    🔒 EVERY OTHER GATE HERE MEASURES THE SCREEN, so a whole output medium was
+#                    untested, the same shape as the viewport-height axis hero-gate closed.
+#                    Its selftest runs the same assertions in screen media, which is exactly what
+#                    a printer was handed before: 60 of 80 go red there.
+#   csp-hashes.py --check  THE POLICY MUST NAME EVERY INLINE SCRIPT IN THE TREE. script-src
+#                    stopped saying 'unsafe-inline' and started naming eight SHA-256 hashes, and
+#                    the failure mode of a hash is the worst one here: a stale one does not
+#                    error, the browser simply refuses the script, and the page renders perfectly
+#                    and does nothing. This is the source half, exact and instant.
+#   csp-gate.mjs     AND THE RUNTIME HALF, BECAUSE python3 -m http.server DOES NOT SEND _headers.
+#                    Every other browser-driven gate here runs against a server that omits the
+#                    policy, so all of them would stay green with every script on the site
+#                    blocked in production. This one serves the repo under the real `/*` block
+#                    and asserts what each script PRODUCES. 🔒 ITS OWN SELFTEST CAUGHT TWO OF ITS
+#                    FIRST CHECKS BEING DECORATIVE: #hash and #verdict ship as static no-script
+#                    markup, so reading them reported on the HTML, not the script. It counts the
+#                    64 per-character elements only the script can render, and presses a preset
+#                    to make the fingerprint recompute. 24 of 24 go red on a corrupted policy.
 #   engine-gate.py   WHAT A BROWSER THAT IS NOT CHROME GETS. Every browser-driven check in this
 #                    file launches the same binary, so the engine is the axis nothing here has
 #                    ever varied, which is the shape of the height hole hero-gate closed. Driving
@@ -174,6 +214,10 @@ python3 tools/lang-gate.py || fail=1
 echo
 python3 tools/notranslate-gate.py || fail=1
 echo
+python3 tools/minify-css.py --check || fail=1
+echo
+python3 tools/csp-hashes.py --check || fail=1
+echo
 python3 tools/engine-gate.py || fail=1
 echo
 python3 tools/contrast-gate.py | tail -3 || fail=1
@@ -197,6 +241,12 @@ echo
 BASE="http://127.0.0.1:${PORT}" node tools/lang-switch-gate.mjs | tail -3 || fail=1
 echo
 BASE="http://127.0.0.1:${PORT}" node tools/bar-gate.mjs | tail -3 || fail=1
+echo
+node tools/csp-gate.mjs | tail -3 || fail=1
+echo
+BASE="http://127.0.0.1:${PORT}" node tools/css-equiv.mjs | tail -3 || fail=1
+echo
+BASE="http://127.0.0.1:${PORT}" node tools/print-gate.mjs | tail -3 || fail=1
 echo
 BASE="http://127.0.0.1:${PORT}" node tools/type-gate.mjs || fail=1
 echo

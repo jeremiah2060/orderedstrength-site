@@ -1326,3 +1326,67 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
 /* the card fills its column: a 22rem cap inside an 808px column left 456px of dead
    space to the right of every card on /how-it-works. */
 .hiw-card{max-width:none}
+
+/* ══ PAPER ════════════════════════════════════════════════════════════════════════════
+   🔒 THERE WAS NO @media print BLOCK AT ALL, AND THE CONSEQUENCE IS NOT THAT PAPER LOOKS
+   ODD. Browsers do not print background colours unless a page asks them to, so this site's
+   near-white ink sat on a ground the printer dropped: white on white. The two pages a person
+   is most likely to print are the two the app itself links to, /terms/ and /app-privacy/,
+   and those were the ones coming out blank.
+
+   🔒 AND THE FIX IS NOT TO MAKE THE DARK THEME SURVIVE A PRINTER. Paper is a different
+   medium and it is honest to treat it as one: no scroll, so the fixed furniture is noise; no
+   hover, so an annotation that only exists on hover is a lie; no script, so anything a script
+   fills is empty; and no colour budget, so ink goes where meaning is. What is left is a
+   document, which is what someone printing the terms actually wanted.
+
+   🔒 A PRINTED LINK THAT IS ONLY A COLOUR IS A DEAD END, so links inside running prose print
+   where they go. Scoped to .prose: doing it everywhere turns a nav into a wall of URLs. */
+@media print {
+  :root{
+    --e0:#fff; --e1:#fff; --e2:#fff; --e3:#fbfbfc; --e4:#f5f6f8;
+    --ground:#fff; --surface:#fff; --raised:#fbfbfc;
+    /* 🔒 A HAIRLINE THAT IS 1.87:1 ON PAPER IS A HAIRLINE NOBODY SEES. The screen line token
+       reads as a real edge on a dark ground and reads as nothing on white, and a printer is
+       worse at faint greys than a screen is. #8b9099 is 3.21:1, which is the WCAG non-text
+       threshold, and it is the first candidate above it: measured 1.87, 2.31, 2.73, 3.21. */
+    --line:#8b9099; --line-soft:#c9ccd1;
+    --ink:#000; --ink2:#22262c; --ink3:#4a5058;
+    /* The accents restated for white, and these numbers are computed, not estimated: the
+       first draft of this comment guessed five ratios and every one of them was wrong by
+       roughly a point. Measured against #ffffff: ink 21.00, ink2 15.20, ink3 8.14, teal 7.54,
+       stone 8.51, azure 8.94, amber 7.48, red 8.10. All above the 4.5 this site holds to. */
+    --teal:#00604f; --stone:#5c4a2a; --azure:#124a86; --amber:#7a4a00; --red:#9c1b21;
+    --teal-dim:#e6f4f1;
+    --shadow-1:none; --shadow-2:none; --shadow-3:none; --shadow-4:none;
+    --edge-lit:transparent; --edge-lit-soft:transparent;
+    --edge-shade:transparent; --edge-shade-soft:transparent;
+    --grain:none;
+    --bar:0rem; --barscale-h:0rem; --gut:0rem; --rail:0px;
+  }
+  @page{ margin:18mm 16mm }
+  html,body{ background:#fff; color:#000 }
+  body::before,body::after,main>.scene::before,main>.scene::after{ display:none !important }
+
+  /* the furniture a page has because it scrolls, and paper does not */
+  .bar,.rail,.barscale,.prog,.skip,.menu,.mtnote,.chips,.btn,.foot{ display:none !important }
+  /* and the parts that only exist under a pointer, or that a script fills */
+  .pin,.callout,.device__sheen,.device__glass,.led{ display:none !important }
+
+  main{ padding-top:0 }
+  .scene{ max-width:none; margin:0; padding:0 0 1.5rem }
+  .prose,.narrow{ max-width:none }
+  .card,.surface,.hiw-card,.appcard,.row,.state{ border:1px solid var(--line); box-shadow:none;
+        background:#fff; break-inside:avoid }
+  img,figure,.gallery,.pair,.grid{ break-inside:avoid }
+  img{ max-width:100%; height:auto }
+
+  h1,h2,h3,.eyebrow,.pagehead{ break-after:avoid; color:#000 }
+  p,li{ orphans:3; widows:3 }
+  a{ color:#000; text-decoration:underline }
+  .prose a[href^="/"]::after{ content:" (orderedstrength.com" attr(href) ")"; font-size:.85em; color:var(--ink3) }
+  .prose a[href^="http"]::after{ content:" (" attr(href) ")"; font-size:.85em; color:var(--ink3) }
+  /* a quoted app string is still a quotation on paper, and it still must not read as prose */
+  code{ background:#f2f3f5; border:1px solid var(--line-soft); color:#000 }
+  * { animation:none !important; transition:none !important }
+}

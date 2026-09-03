@@ -94,6 +94,12 @@ export async function withPage(fn, { width = 1440, height = 900, dsf = 2, args =
       if (r.exceptionDetails) throw new Error(JSON.stringify(r.exceptionDetails));
       return r.result.value;
     },
+    /* 🔒 ADDED 2026-09-03, BECAUSE A @media print BLOCK IS OTHERWISE UNTESTABLE HERE. Every
+       gate in this repo measures the screen, so a print stylesheet would be the one thing on
+       the site that nothing ever looked at, which is how the site got no print stylesheet at
+       all for its whole life. Emulation.setEmulatedMedia lays a page out for paper without
+       printing it. Additive: no existing caller passes a media and the default is unchanged. */
+    async setMedia(media) { await cdp.send('Emulation.setEmulatedMedia', { media }); },
     async shot(path, { full = false } = {}) {
       /* 🔒 NEVER RESIZE THE VIEWPORT TO CAPTURE A FULL PAGE. Growing the viewport to the
          document height also grows 100svh, so `.hero{min-height:calc(100svh - 5rem)}`

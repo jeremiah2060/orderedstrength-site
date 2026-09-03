@@ -118,3 +118,105 @@ to normal wrapping, and the scroll-driven animations are `@supports`-guarded wit
   link invalidated both. If it is worth a comment it is worth a gate.
 - Everything in the 2026-09-02 handoff still applies: `stamp-assets.py` before `check.sh`, the
   Spanish pages are hand-maintained, publish is `git push origin main` and nothing else.
+
+---
+
+# SECOND BATCH, the same night: the backlog from the 2026-09-02 handoff
+
+The CEO, asleep: "when the machine is free build everything remaining from the last Handoff about
+the website". Its *Not started* list held seven items. Three were infrastructure and are done.
+The rest are named at the bottom with the specific reason each is not, and none of the reasons is
+"later".
+
+## Done
+
+**The CSP stopped trusting inline script.** `script-src` said `'self' 'unsafe-inline'`, which
+tells a browser to run any `<script>` that appears in the markup, which is the payload an
+injection delivers. It now names the eight SHA-256 hashes of the blocks this site actually ships.
+`tools/csp-hashes.py` generates them and `--check` fails a tree whose policy is out of date.
+🔒 **style-src KEEPS `'unsafe-inline'`, AND THAT IS A MEASUREMENT.** There are 83 inline
+`style="..."` attributes here, mostly the callout pins positioning themselves by percentage. A CSP
+hash cannot name an attribute; CSP 3 would need `'unsafe-hashes'`, which re-allows every inline
+handler as a side effect and is worse than what it replaces. Scripts are where injection executes.
+🔒 **AND A STALE HASH KILLS A SCRIPT SILENTLY**, which is the failure this repo has already
+shipped once: *"A BROKEN INLINE SCRIPT IS INVISIBLE TO EVERY SOURCE GATE."* `node --check` will
+happily parse a script the browser was told not to run. So `tools/csp-gate.mjs` serves the repo
+under the real `/*` block, which `python3 -m http.server` never sends, and asserts what each
+script PRODUCES. 24 of 24 go red on a corrupted policy.
+🔒 **ITS OWN SELFTEST CAUGHT TWO OF ITS FIRST CHECKS BEING DECORATIVE.** `#hash` and `#verdict`
+ship as static no-script markup, so reading them reported on the HTML rather than the script. It
+counts the 64 per-character elements only the script can render, and presses a preset to make the
+fingerprint recompute.
+
+**The stylesheet on the wire is a third of the one in the repo.** `assets/site.css` is 96,745
+bytes and 58% of it is comment, because the comments here carry the laws and the CDP
+measurements. Right for the source, wrong for a render-blocking file. Measured with brotli at
+quality 11, which is what Cloudflare serves: **26,918 bytes published, 7,813 with comments
+removed. 19,105 bytes, 71%, off the critical path of every first visit.** The pages link
+`assets/site.min.css`; every source gate still reads the source.
+🔒 **THE STRIPPER IS STRING-AWARE**, because `--grain` holds an SVG data URI and a naive
+`/\*.*?\*/` would eat a comment opener living inside a string and truncate a declaration into
+something that still parses. It removes comments and blank lines and **nothing else**: no
+shorthand collapsing, no selector merging, no newline stripping, each of which can change
+rendering for a saving brotli mostly recovers anyway.
+🔒 **AND `minify-css.py --check` IS NOT SUFFICIENT ON ITS OWN.** It proves the artifact is what
+the *current* stripper produces, which is the generator agreeing with itself: edit one line of
+that function and it stays green on a sheet that renders differently. `tools/css-equiv.mjs` links
+both files from a bare page and compares the browser's own serialized CSSOM. **260 rules and
+41,923 characters on both sides, identical.** One deleted declaration turns it red and it prints
+the character where they diverge.
+
+**Immutable caching.** `/assets/*` was `max-age=3600, must-revalidate`, so a returning reader
+paid a revalidation round trip for the stylesheet and the script on every navigation while
+`stamp-assets.py` had already made a changed file a changed URL. The content-stamped files are
+now `max-age=31536000, immutable`. `/assets/lang-check.html` deliberately keeps the hour: its URL
+never changes and it is the diagnostic a person is sent to when the language redirect misbehaves.
+The precondition is enforced, not assumed: `check-site.py` already fails a page that references
+an asset with no `?v=`, which under these headers would be a file cached for a year at one URL.
+
+**And the site can be printed.** There was no `@media print` block at all, and that is not
+cosmetic: a browser does not print background colours unless the page asks, so near-white ink on
+a ground the printer drops came out **white on white**. The two pages most likely to be printed
+are the two the app itself links to, `/terms/` and `/app-privacy/`.
+🔒 **EVERY GATE HERE MEASURES THE SCREEN, SO A WHOLE OUTPUT MEDIUM WAS UNTESTED**: the same
+shape as the viewport-height axis `hero-gate` closed and the engine axis `engine-gate` covers.
+`measure.mjs` gained one additive method, `setMedia`, because `Emulation.setEmulatedMedia` is the
+only way to lay a page out for paper without printing it, and without it a print stylesheet is
+the one thing on this site nothing would ever look at.
+🔒 **THE PRINT GATE'S SELFTEST IS THE ORIGINAL DEFECT, NOT A MUTATION OF THE CHECK**: the same
+assertions in `screen` media are exactly what a printer was handed before. 60 of 80 go red there.
+
+## Two mistakes made and caught tonight, both by these gates
+
+🔒 **A GATE THAT WRITES INTO THE TREE IT CHECKS CAN BREAK A GATE THAT READS IT.** The first
+`css-equiv.mjs` wrote two probe pages into the repository root and removed them in a `finally`.
+They lived about four seconds, and `icon-gate` walked the tree inside that window in the same
+`check.sh`, counted twenty-two pages instead of twenty, and failed the suite on *"2 page(s) carry
+no icon link"*. It was right. The collision is timing-dependent, which is the kind that passes
+locally and fails in the run that matters. It serves from memory now and writes nothing.
+
+🔒 **A CHECK THAT INVENTS A GROUND REPORTS A DEFECT THAT IS NOT THERE.** The print gate's first
+ground detection stopped at the first background that was not fully transparent, so the seal
+console's `rgba(0,0,0,.32)` well read as opaque black and it reported the home pages printing at
+2.58:1 and 1.38:1 on black. No printer would produce that: 32% black over white paper is light
+grey. The chain is collected inward-to-outward and composited outward-to-inward now, as a
+renderer does. **The next person would have spent the night fixing the page instead of the
+instrument.**
+
+🔒 **AND THE NUMBERS IN A COMMENT MUST BE COMPUTED.** The print palette's comment first asserted
+five contrast ratios from memory and every one was wrong by about a point. Measured against
+`#ffffff`: ink 21.00, ink2 15.20, ink3 8.14, teal 7.54, stone 8.51, azure 8.94, amber 7.48, red
+8.10. The hairline was 1.87:1, which is a hairline nobody sees, and is now `#8b9099` at 3.21:1.
+
+## Not built, each with its own reason
+
+- **The shareable receipt card** and **the design-notes page** are new user-facing pages, which
+  means new copy in two languages, a Spanish twin, and a voice this site is careful about. That
+  is product writing, and it is the CEO's, not something to invent unsupervised overnight.
+- **The twenty-second film** needs footage. There is none to edit and none can be generated here.
+- **The light reading scheme** is marked in the 2026-09-02 handoff as *product identity, the CEO's
+  call*, and it still is.
+- **The App Store items** are still blocked on a listing that returns 404, exactly as recorded.
+- **`G1`, the photograph of Jerry cutting a set**, needs the app repo's simulator, and that tree
+  currently holds sixteen uncommitted Swift files from another session. Photographing unreviewed
+  code and publishing it as evidence is the one thing this site must never do.

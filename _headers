@@ -3,11 +3,33 @@
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
   Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.orderedstrength.com; form-action 'none'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-+FOEPB2SjrHt5XSxkcHmCPB1ZMDpMqoWGs0p3Ruam+k=' 'sha256-/wC+dKUm2PzdgBjMtpwTdJNWL6q8fgLfhdFQNOAcoQU=' 'sha256-1GVVquqms7a4h8upECrZu/5z9ghvm0gGIMpgUkyP1qY=' 'sha256-8pyTH40B89KMmbu4zFat6sumxh+orHMbaxfaSQHTEG8=' 'sha256-cQAeLOqJf757ZfWwo90RhH7rEltUdv4m4BM3ZOvAeS0=' 'sha256-eSfqn6mcH85FOibz5yEKYPrQxA1gpUQfC1M7SKVJOMI=' 'sha256-pd3az8vlUoOOd+jEAgDTzXUM40m7ZRE73qy1OBqoKnA=' 'sha256-q5KKJuuVJO1yqBhzSHQ6tRAaf5ATocesB60yWSrf5UU='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.orderedstrength.com; form-action 'none'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
   Strict-Transport-Security: max-age=31536000
 
+# The default for anything under /assets/ that is NOT content-stamped. /assets/lang-check.html
+# is the one that matters: it is a diagnostic a person is sent to when the language redirect is
+# behaving oddly, its URL never changes, and a year-long cache would hand them last month's
+# answer to this month's question. An hour with revalidation is right for it.
 /assets/*
   Cache-Control: public, max-age=3600, must-revalidate
+
+# And a year, immutable, for the files whose URL carries their own content hash. stamp-assets.py
+# rewrites every reference to `?v=<sha256[:10]>`, so a changed file is a changed URL and a stale
+# pairing is impossible rather than unlikely. That is exactly the precondition immutable needs,
+# and until now the site was paying a revalidation round trip for the stylesheet and the script
+# on every navigation while already having the guarantee that made it unnecessary.
+# 🔒 THE PRECONDITION IS ENFORCED, NOT ASSUMED: check-site.py fails a page that references an
+# asset with no ?v=, which under these headers would be a file cached for a year at the same URL.
+# More specific rules come after the wildcard deliberately: Cloudflare Pages applies them in
+# order and the later rule wins for a header both set.
+/assets/site.min.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/site.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/shots/*
+  Cache-Control: public, max-age=31536000, immutable
 
 /assets/fonts/*
   Cache-Control: public, max-age=31536000, immutable

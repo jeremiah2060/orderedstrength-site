@@ -12,7 +12,13 @@ import hashlib, re, glob, sys
 def h(path):
     return hashlib.sha256(open(path,'rb').read()).hexdigest()[:10]
 
-assets = {'/assets/site.css': h('assets/site.css'), '/assets/site.js': h('assets/site.js')}
+# 🔒 THE PAGES LINK site.min.css, THE GENERATED TWIN, AND THAT IS THE ONE THAT MUST BE STAMPED.
+# assets/site.css stays here too: it is not referenced by any page, but stamping it costs nothing
+# and a future page that links the source directly would otherwise go out unversioned into an
+# immutable cache, which is the one mistake this whole file exists to prevent, made permanent.
+assets = {'/assets/site.min.css': h('assets/site.min.css'),
+          '/assets/site.css': h('assets/site.css'),
+          '/assets/site.js': h('assets/site.js')}
 for img in (sorted(glob.glob('assets/shots/*.png')) + sorted(glob.glob('assets/shots/*.jpg'))
             + sorted(glob.glob('assets/shots/*.webp'))):
     assets['/' + img] = h(img)
