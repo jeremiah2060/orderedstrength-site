@@ -108,7 +108,8 @@ check('a language with no version of this site is left alone', r.path === '/');
 const PAIRS = [['/', '/es/'], ['/how-it-works/', '/es/how-it-works/'], ['/stronger/', '/es/stronger/'],
                ['/record/', '/es/record/'], ['/verify/', '/es/verify/'], ['/join/', '/es/join/'],
                ['/support/', '/es/support/'], ['/terms/', '/es/terms/'],
-               ['/app-privacy/', '/es/app-privacy/'], ['/404.html', '/es/404.html']];
+               ['/app-privacy/', '/es/app-privacy/'], ['/404.html', '/es/404.html'],
+               ['/receipt/', '/es/receipt/'], ['/spec/', '/es/spec/'], ['/design/', '/es/design/']];
 
 /* 🔒 ONE BROWSER FOR ALL TEN, BECAUSE EACH PAIR ALREADY CLEARS ITS OWN STORAGE. The first
    draft opened a fresh Chrome per pair, which is ten launches to establish a clean state that

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es-419" translate="no">
+<head>
+<meta charset="utf-8">
+<meta name="google" content="notranslate">
+<script>document.documentElement.className="js";</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Especificación del producto &middot; OrderedStrength</title>
+<meta name="description" content="Qué es OrderedStrength, cómo funciona y cómo se prueban sus predicciones. Una página, diseñada para imprimir.">
+<meta property="og:title" content="Especificación del producto &middot; OrderedStrength">
+<meta property="og:description" content="Qué es OrderedStrength, cómo funciona y cómo se prueban sus predicciones. Una página, diseñada para imprimir.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OrderedStrength">
+<meta property="og:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: te cambia el entrenamiento en plena sesión.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
+<meta name="theme-color" content="#060709">
+<link rel="preload" href="/assets/fonts/public-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/archivo-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/spec/">
+<link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/spec/">
+<link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/spec/">
+<link rel="canonical" href="https://www.orderedstrength.com/es/spec/">
+<meta property="og:url" content="https://www.orderedstrength.com/es/spec/">
+<meta property="og:locale" content="es_419">
+<meta property="og:locale:alternate" content="en_US">
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="manifest" href="/es/site.webmanifest">
+<link rel="stylesheet" href="/assets/site.min.css?v=6ee5052ef7">
+<style>
+.spec-sheet{max-width:54rem;margin:2rem 0}
+.spec-block{background:var(--e2);border-radius:12px;padding:1.5rem 1.75rem;margin-bottom:1.25rem;
+            box-shadow:var(--shadow-2)}
+.spec-block h2{font-family:var(--display);font-weight:700;font-size:1.0625rem;margin:0 0 .875rem;letter-spacing:.01em}
+.spec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));gap:.625rem 1.5rem}
+.spec-row{border-bottom:1px solid var(--line);padding:.5rem 0;display:flex;gap:1rem;
+          justify-content:space-between;align-items:baseline}
+.spec-row:last-child{border-bottom:none}
+.spec-key{font-size:.875rem;color:var(--ink2)}
+.spec-val{font-family:var(--mono);font-size:.875rem;font-weight:500;color:var(--ink);text-align:right}
+.spec-claim{padding:.5rem 0;border-bottom:1px solid var(--line);font-size:.9375rem;color:var(--ink2);line-height:1.5}
+.spec-claim:last-child{border-bottom:none;padding-bottom:0}
+.spec-claim strong{color:var(--ink)}
+.spec-url{font-family:var(--mono);font-size:.875rem;color:var(--teal);word-break:break-all}
+.print-btn{display:inline-flex;align-items:center;gap:.5rem;margin:1.25rem 0}
+@media print {
+  .print-btn, .pagehead .sub { display:none !important }
+  .pagehead { padding-top:0 }
+  .pagehead h1 { color:#000; font-size:1.75rem }
+  .pagehead .eyebrow { color:#555 }
+  .spec-block { background:#fff; border:1px solid #ccc; border-radius:0; box-shadow:none; break-inside:avoid; padding:1rem 1.25rem }
+  .spec-key { color:#444 }
+  .spec-val { color:#000 }
+  .spec-claim { color:#333 }
+  .spec-claim strong { color:#000 }
+  .spec-row { border-color:#ddd }
+  .spec-claim { border-color:#ddd }
+  .spec-url { color:#006655 }
+  .spec-block h2 { color:#000; border-bottom:1px solid #ccc; padding-bottom:.375rem }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Ir al contenido</a>
+
+<div class="bar">
+  <a class="wordmark" translate="no" href="/es/"><span class="led" id="led" translate="no" aria-hidden="true"></span>OrderedStrength</a>
+  <nav>
+    <a href="/es/how-it-works/" class="opt2">Cómo funciona</a>
+    <a href="/es/stronger/" class="opt">Más fuerte</a>
+    <a href="/es/record/" class="opt">El registro</a>
+    <a href="/es/verify/">Verificar</a>
+    <a href="/spec/" hreflang="en" lang="en" translate="no" class="lang">English</a>
+    <a href="/es/join/" class="cta"><span class="cta__long">Únete a la prueba</span><span class="cta__short">Únete</span></a>
+    <details class="menu">
+      <summary>Menú</summary>
+      <div class="menu__panel">
+        <a href="/es/how-it-works/">Cómo funciona</a>
+        <a href="/es/stronger/">Más fuerte</a>
+        <a href="/es/record/">El registro</a>
+        <a href="/es/verify/">Verificar</a>
+        <a href="/es/join/">Únete a la prueba</a>
+        <a href="/spec/" hreflang="en" lang="en" translate="no" class="lang">English</a>
+      </div>
+    </details>
+  </nav>
+  <div class="prog" aria-hidden="true"></div>
+</div>
+
+<main id="main">
+  <section class="scene">
+    <div class="pagehead">
+      <p class="eyebrow">Especificación</p>
+      <h1>OrderedStrength.</h1>
+      <p class="sub">Qué es, cómo funciona y qué prueba. Una página, diseñada para imprimir.</p>
+    </div>
+
+    <button class="btn ghost print-btn" onclick="window.print()">Imprimir esta página</button>
+
+    <div class="spec-sheet">
+
+      <div class="spec-block">
+        <h2>Qué es</h2>
+        <div class="spec-claim"><strong>Un coach de fuerza para iPhone</strong> que cambia tu sesión mientras la estás haciendo, según cómo se comparan las series que ya hiciste con lo que esperaba.</div>
+        <div class="spec-claim"><strong>Lo anota todo antes de que levantes.</strong> Antes de cada serie sella una predicción: la carga que espera que seas capaz de manejar, dado todo lo que sabe sobre ti. Esa predicción queda sellada con una huella criptográfica. Después puedes comprobar que nada cambió.</div>
+        <div class="spec-claim"><strong>Se califica a sí mismo.</strong> Después de cada serie compara el resultado con la predicción, publica la precisión en la página del registro, y el algoritmo lee de ese registro cuando hace la siguiente predicción.</div>
+      </div>
+
+      <div class="spec-block">
+        <h2>Especificación técnica</h2>
+        <div class="spec-grid">
+          <div>
+            <div class="spec-row"><span class="spec-key">Plataforma</span><span class="spec-val">iPhone (iOS 17 o posterior)</span></div>
+            <div class="spec-row"><span class="spec-key">Cómputo</span><span class="spec-val">En el dispositivo</span></div>
+            <div class="spec-row"><span class="spec-key">Cuenta requerida</span><span class="spec-val">Ninguna</span></div>
+            <div class="spec-row"><span class="spec-key">El registro de entrenamiento sale del dispositivo</span><span class="spec-val">Nunca</span></div>
+          </div>
+          <div>
+            <div class="spec-row"><span class="spec-key">Esquema de compromiso</span><span class="spec-val">SHA-256</span></div>
+            <div class="spec-row"><span class="spec-key">Nonce</span><span class="spec-val">CSPRNG de 32 bytes</span></div>
+            <div class="spec-row"><span class="spec-key">Ancla diaria</span><span class="spec-val">Raíz de Merkle</span></div>
+            <div class="spec-row"><span class="spec-key">Prueba de tiempo</span><span class="spec-val">Fecha de commit en GitHub</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-block">
+        <h2>Qué prueba</h2>
+        <div class="spec-claim"><strong>Vinculante:</strong> cambiar una predicción después de sellarla requiere una colisión SHA-256. Eso equivale a aproximadamente 2<sup>128</sup> operaciones bajo la cota del cumpleaños.</div>
+        <div class="spec-claim"><strong>Ocultamiento:</strong> el compromiso no revela nada sobre la predicción. Un nonce criptográfico de 32 bytes impide explorar el espacio de predicciones por fuerza bruta.</div>
+        <div class="spec-claim"><strong>Fecha y hora:</strong> se publica una raíz de Merkle por día en un repositorio público. Cada compromiso dentro del árbol de ese día hereda una marca de tiempo de la fecha de commit de GitHub, que no es nuestra palabra.</div>
+        <div class="spec-claim"><strong>Verificación abierta:</strong> el verificador en <span class="spec-url">orderedstrength.com/es/verify/</span> no requiere cuenta y no almacena nada. Cualquiera puede verificar cualquier comprobante.</div>
+      </div>
+
+      <div class="spec-block">
+        <h2>Contacto y estado</h2>
+        <div class="spec-row"><span class="spec-key">Sitio web</span><span class="spec-val spec-url">www.orderedstrength.com</span></div>
+        <div class="spec-row"><span class="spec-key">Registro de precisión</span><span class="spec-val spec-url">orderedstrength.com/es/record/</span></div>
+        <div class="spec-row"><span class="spec-key">Estado</span><span class="spec-val">En pruebas</span></div>
+        <div class="spec-row"><span class="spec-key">Soporte</span><span class="spec-val spec-url">orderedstrength.com/es/support/</span></div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot">
+    <div class="foot__mark">
+      <a class="wordmark" translate="no" href="/es/">OrderedStrength</a>
+      <p>Un coach de fuerza para iPhone que anota cada sesión antes de que levantes, y después
+      se califica a sí mismo con lo que escribió.</p>
+    </div>
+    <nav class="foot__col" aria-label="El producto">
+      <p class="foot__label">El producto</p>
+      <a href="/es/how-it-works/">Cómo funciona</a>
+      <a href="/es/stronger/">Ponerse más fuerte</a>
+      <a href="/es/join/">Únete a la prueba</a>
+    </nav>
+    <nav class="foot__col" aria-label="El registro">
+      <p class="foot__label">El registro</p>
+      <a href="/es/record/">Anclas publicadas</a>
+      <a href="/es/verify/">Verificar un comprobante</a>
+    </nav>
+    <nav class="foot__col" aria-label="Idioma">
+      <p class="foot__label">Idioma</p>
+      <a href="/spec/" hreflang="en" lang="en" translate="no">English</a>
+    </nav>
+    <nav class="foot__col" aria-label="La letra chica">
+      <p class="foot__label">La letra chica</p>
+      <a href="/es/app-privacy/">Privacidad</a>
+      <a href="/es/terms/">Términos</a>
+      <a href="/es/support/">Soporte</a>
+    </nav>
+  </div>
+  <div class="foot__panel">
+    <span>iPhone &middot; en pruebas</span>
+    <span>Tu entrenamiento se calcula en tu dispositivo</span>
+  </div>
+</footer>
+
+<script src="/assets/site.js?v=62b4210939" defer></script>
+</body>
+</html>

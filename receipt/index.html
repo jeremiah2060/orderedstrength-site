@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function () {
+  var stored = null;
+  try { stored = localStorage.getItem('os-lang'); } catch (e) { stored = null; }
+  if (stored === 'es') { go(); return; }
+  if (stored === 'en') return;
+  var langs = (navigator.languages && navigator.languages.length
+               ? navigator.languages : [navigator.language || '']).map(String);
+  for (var i = 0; i < langs.length; i++) {
+    if (/^es(-|$)/i.test(langs[i])) { go(); return; }
+  }
+  function go() { location.replace('/es' + location.pathname + location.search + location.hash); }
+})();
+</script>
+
+<meta charset="utf-8">
+<script>document.documentElement.className="js";</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sealed prediction &middot; OrderedStrength</title>
+<meta name="description" content="A prediction Jerry sealed before the set, shown here after the reveal so you can check that nothing changed.">
+<meta property="og:title" content="Sealed prediction &middot; OrderedStrength">
+<meta property="og:description" content="A prediction Jerry sealed before the set, shown here after the reveal so you can check that nothing changed.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OrderedStrength">
+<meta property="og:image" content="https://www.orderedstrength.com/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: he changes your workout in the middle of it.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.orderedstrength.com/assets/og.jpg">
+<meta name="theme-color" content="#060709">
+<link rel="preload" href="/assets/fonts/public-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/archivo-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/receipt/">
+<link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/receipt/">
+<link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/receipt/">
+<link rel="canonical" href="https://www.orderedstrength.com/receipt/">
+<meta property="og:url" content="https://www.orderedstrength.com/receipt/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="es_419">
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="/assets/site.min.css?v=6ee5052ef7">
+<style>
+.rcard{max-width:48rem;background:var(--e2);border-radius:14px;
+      border-left:3px solid var(--teal);padding:1.5rem 1.75rem;
+      box-shadow:var(--shadow-3);margin:2rem 0}
+.rcard.unset{border-left-color:var(--line)}
+.card__eyebrow{font-family:var(--mono);font-size:.75rem;font-weight:500;
+               letter-spacing:.1em;color:var(--teal);text-transform:uppercase;margin-bottom:.5rem}
+.rcard.unset .card__eyebrow{color:var(--ink3)}
+.card__exercise{font-family:var(--display);font-weight:700;font-size:1.5rem;
+                line-height:1.2;margin:.25rem 0 1.25rem}
+.card__fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:.75rem 1.5rem;
+              margin-bottom:1.25rem}
+.field__label{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;
+              color:var(--ink3);margin-bottom:.2rem}
+.field__value{font-family:var(--mono);font-size:1rem;font-weight:500;color:var(--ink)}
+.card__hash{border-top:1px solid var(--line);padding-top:1rem;margin-top:.25rem}
+.hash__label{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:.3rem}
+.hash__hex{font-family:var(--mono);font-size:.75rem;color:var(--ink2);word-break:break-all;line-height:1.6}
+.card__actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.25rem}
+.empty{max-width:48rem;padding:2.5rem 1.75rem;border:1px solid var(--line);border-radius:14px;
+       margin:2rem 0;text-align:center}
+.empty__icon{font-size:2rem;margin-bottom:.875rem;opacity:.4}
+.empty p{font-size:.9375rem;color:var(--ink2);margin:.5rem 0}
+#card{display:none}
+#empty{display:block}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="bar">
+  <a class="wordmark" translate="no" href="/"><span class="led" id="led" translate="no" aria-hidden="true"></span>OrderedStrength</a>
+  <nav>
+    <a href="/how-it-works/" class="opt2">How it works</a>
+    <a href="/stronger/" class="opt">Stronger</a>
+    <a href="/record/" class="opt">The record</a>
+    <a href="/verify/">Verify</a>
+    <a href="/es/receipt/" hreflang="es" lang="es" translate="no" class="lang">Espa&ntilde;ol</a>
+    <a href="/join/" class="cta"><span class="cta__long">Join the test</span><span class="cta__short">Join</span></a>
+    <details class="menu">
+      <summary>Menu</summary>
+      <div class="menu__panel">
+        <a href="/how-it-works/">How it works</a>
+        <a href="/stronger/">Stronger</a>
+        <a href="/record/">The record</a>
+        <a href="/verify/">Verify</a>
+        <a href="/join/">Join the test</a>
+        <a href="/es/receipt/" hreflang="es" lang="es" translate="no" class="lang">Espa&ntilde;ol</a>
+      </div>
+    </details>
+  </nav>
+  <div class="prog" aria-hidden="true"></div>
+</div>
+
+<main id="main">
+  <section class="scene">
+    <div class="pagehead">
+      <p class="eyebrow">Receipt</p>
+      <h1>A sealed prediction.</h1>
+      <p class="sub">Jerry wrote this prediction and sealed it before the set. The seal means it cannot have been changed after the result was known. You can check the math yourself.</p>
+    </div>
+
+    <div id="card" translate="no" aria-live="polite">
+      <div class="rcard">
+        <p class="card__eyebrow" id="card-label">Sealed prediction</p>
+        <p class="card__exercise" id="card-exercise"></p>
+        <div class="card__fields" id="card-fields"></div>
+        <div class="card__hash">
+          <p class="hash__label">Commitment hash</p>
+          <p class="hash__hex" id="card-hash"></p>
+        </div>
+        <div class="card__actions">
+          <a class="btn" id="card-verify" href="/verify/">Verify this receipt</a>
+          <a class="btn ghost" href="/record/">Published anchors</a>
+        </div>
+      </div>
+      <p style="font-size:.875rem;color:var(--ink3);max-width:48rem;margin:1rem 0 0">
+        The commitment hash above was published before this set was performed. Paste the receipt
+        into the <a href="/verify/">verifier</a> to confirm that the prediction and the hash match
+        byte for byte. A single changed character makes them disagree.
+      </p>
+    </div>
+
+    <div id="empty">
+      <div class="empty">
+        <p class="empty__icon" aria-hidden="true">&#9632;</p>
+        <p>The app sends you here after you reveal a prediction, with the receipt encoded in the link.</p>
+        <p>No receipt was found in this URL. Open OrderedStrength, perform a set, and tap <strong>Share receipt</strong> after the reveal.</p>
+      </div>
+      <p style="font-size:.875rem;color:var(--ink3);max-width:48rem">
+        If you already have receipt text, paste it into the <a href="/verify/">verifier</a> to
+        check it directly. The verifier accepts the raw JSON the app copies to the clipboard.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot">
+    <div class="foot__mark">
+      <a class="wordmark" translate="no" href="/">OrderedStrength</a>
+      <p>A strength coach for iPhone that writes each session down before you lift, then grades
+      itself on what it wrote.</p>
+    </div>
+    <nav class="foot__col" aria-label="The product">
+      <p class="foot__label">The product</p>
+      <a href="/how-it-works/">How it works</a>
+      <a href="/stronger/">Getting stronger</a>
+      <a href="/join/">Join the test</a>
+    </nav>
+    <nav class="foot__col" aria-label="The record">
+      <p class="foot__label">The record</p>
+      <a href="/record/">Published anchors</a>
+      <a href="/verify/">Verify a receipt</a>
+    </nav>
+    <nav class="foot__col" aria-label="Language">
+      <p class="foot__label">Language</p>
+      <a href="/es/receipt/" hreflang="es" lang="es" translate="no">Espa&ntilde;ol</a>
+    </nav>
+    <nav class="foot__col" aria-label="The small print">
+      <p class="foot__label">The small print</p>
+      <a href="/app-privacy/">Privacy</a>
+      <a href="/terms/">Terms</a>
+      <a href="/support/">Support</a>
+    </nav>
+  </div>
+  <div class="foot__panel">
+    <span>iPhone &middot; in testing</span>
+    <span>Your training is computed on your device</span>
+  </div>
+</footer>
+
+<script src="/assets/site.js?v=62b4210939" defer></script>
+<script>
+(function () {
+'use strict';
+/* Read the receipt from the URL, decode it, and render the card.
+   The app encodes the receipt as base64url in the ?r= parameter.
+   Empty state is the default; the card shows only when a receipt parses. */
+
+function b64urlDecode(s) {
+  var std = s.replace(/-/g, '+').replace(/_/g, '/');
+  while (std.length % 4) std += '=';
+  var bin = atob(std);
+  var bytes = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+function fmtKg(intStr) {
+  var v = parseInt(intStr, 10) / 10000;
+  return (Math.round(v * 10) / 10).toLocaleString('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' kg';
+}
+
+function fmtTs(intStr) {
+  var ts = parseInt(intStr, 10) * 1000;
+  if (isNaN(ts)) return intStr;
+  return new Date(ts).toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+}
+
+function fieldRow(label, value) {
+  return '<div><p class="field__label">' + label + '</p>' +
+         '<p class="field__value">' + value + '</p></div>';
+}
+
+function render(receipt) {
+  var fields = {};
+  (receipt.fields || []).forEach(function(f) { fields[f.key] = f.value; });
+
+  var exercise = fields.exercise || 'Unknown exercise';
+  document.getElementById('card-exercise').textContent = exercise;
+  document.getElementById('card-hash').textContent = receipt.commitmentHex || '(none)';
+
+  var rows = '';
+  if (fields.bandLowKg && fields.bandHighKg) {
+    rows += fieldRow('Predicted band', fmtKg(fields.bandLowKg) + ' – ' + fmtKg(fields.bandHighKg));
+  }
+  if (fields.naiveBaselineKg) {
+    rows += fieldRow('Naive baseline', fmtKg(fields.naiveBaselineKg));
+  }
+  if (fields.sealedFor) {
+    rows += fieldRow('Session date', fmtTs(fields.sealedFor));
+  }
+  if (fields.kind) {
+    rows += fieldRow('Kind', fields.kind);
+  }
+  document.getElementById('card-fields').innerHTML = rows;
+
+  /* Wire up the Verify link so it pre-fills the receipt JSON in the verifier */
+  var json = JSON.stringify(receipt);
+  var verifyEl = document.getElementById('card-verify');
+  verifyEl.href = '/verify/#paste=' + encodeURIComponent(json);
+
+  document.getElementById('card').style.display = '';
+  document.getElementById('empty').style.display = 'none';
+}
+
+var params = new URLSearchParams(location.search);
+var r = params.get('r');
+if (r) {
+  try {
+    var receipt = JSON.parse(b64urlDecode(r));
+    if (receipt && receipt.scheme) render(receipt);
+  } catch (e) {
+    /* Malformed param: stay on empty state, which is honest and safe */
+  }
+}
+})();
+</script>
+</body>
+</html>

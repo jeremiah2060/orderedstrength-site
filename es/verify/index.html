@@ -14,7 +14,7 @@
 <meta property="og:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: te cambia el entrenamiento a la mitad.">
+<meta property="og:image:alt" content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: te cambia el entrenamiento en plena sesión.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.orderedstrength.com/assets/og-es.jpg">
 <meta name="theme-color" content="#060709">
@@ -174,9 +174,9 @@ var REASONS = {
   unsupported_scheme:'Este comprobante usa un esquema que este verificador no entiende. No fue rechazado por su contenido.',
   malformed_nonce:'El nonce no es un valor hexadecimal válido de 32 bytes, así que no se puede recalcular ninguna huella.',
   malformed_commitment:'La huella sellada no es un valor hexadecimal válido de 32 bytes.',
-  malformed_fields:'Los campos de la predicción faltan o están vacíos, así que no hay nada que hashear.',
+  malformed_fields:'Los campos de la predicción faltan o están vacíos, así que no hay nada de lo que calcular una huella.',
   malformed_body:'Este no es un comprobante que este verificador pueda leer.',
-  too_many_receipts:'Demasiados comprobantes en un solo pegado. Envía menos.'
+  too_many_receipts:'Demasiados comprobantes pegados a la vez. Envía menos.'
 };
 var $ = function(id){ return document.getElementById(id); };
 function render(html){ $('out').innerHTML = html; }
@@ -221,7 +221,7 @@ $('go').addEventListener('click', async function(){
     render(list.map(row).join(''));
     $('led').className='led up';
   } catch(e){
-    render(card('bad','NO SE PUDO ALCANZAR EL VERIFICADOR',null,'La solicitud no se completó. Esto no dice nada sobre tu comprobante.'));
+    render(card('bad','NO SE PUDO CONTACTAR AL VERIFICADOR',null,'La solicitud no se completó. Esto no dice nada sobre tu comprobante.'));
     $('led').className='led down';
   } finally { $('go').disabled = false; }
 });

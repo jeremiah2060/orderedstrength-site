@@ -349,7 +349,7 @@ SUPPORT = {
 HOME = {
     'Strength coaching for iPhone': 'Coaching de fuerza para iPhone',
     'He changes your workout in the middle of it.':
-        'Te cambia el entrenamiento a la mitad.',
+        'Te cambia el entrenamiento en plena sesión.',
     'See him cut a set': 'Míralo recortar una serie',
     'Prediction accuracy': 'Precisión de la predicción',
     'Bulgarian Split Squat': 'Sentadilla Búlgara',
@@ -363,7 +363,7 @@ HOME = {
     'Graded where you can read it': 'Calificado donde puedes leerlo',
     'Hits and misses both. Nothing is deleted to make him look better.':
         'Los aciertos y los fallos. No se borra nada para que se vea mejor.',
-    'The coaching runs on your phone': 'El coaching corre en tu teléfono',
+    'The coaching runs on your phone': 'El coaching se ejecuta en tu teléfono',
     'Every decision is computed on your device. No account, no password, nothing to log into.':
         'Cada decisión se calcula en tu dispositivo. Sin cuenta, sin contraseña, sin nada donde iniciar sesión.',
     'What he actually does': 'Lo que realmente hace',
@@ -381,7 +381,7 @@ HOME = {
     '>logged<': '>registrada<',
     '>withdrawn<': '>retirada<',
     'You are fading faster than I planned. I am cutting the last set. That protects tomorrow more than one more hard set helps today.':
-        'Estás cayendo más rápido de lo que planeé. Voy a recortar la última serie. Eso protege el mañana más de lo que una serie dura más ayuda hoy.',
+        'Estás decayendo más rápido de lo que planeé. Voy a recortar la última serie. Eso protege el mañana más de lo que una serie dura más ayuda hoy.',
     'You add the plate the week you earn it':
         'Agregas el disco la semana en que te lo ganas',
     'Not the week a calendar says. The load moves when you finish the top of the rep range at the effort he asked for, and it holds when you do not.':
@@ -422,7 +422,7 @@ HOME = {
     'Fingerprint, recomputed in your browser': 'Huella, recalculada en tu navegador',
     'matches the seal': 'coincide con el sello',
     'Nothing here is stored by us. The arithmetic ran on your machine.':
-        'Nosotros no guardamos nada de esto. La aritmética corrió en tu máquina.',
+        'Nosotros no guardamos nada de esto. Las cuentas se hicieron en tu máquina.',
     'Checking this page against the live verifier.':
         'Comprobando esta página contra el verificador en vivo.',
     'Where the category stops': 'Dónde se detiene la categoría',
@@ -431,7 +431,7 @@ HOME = {
         'Te hacen una pregunta, y después ignoran la respuesta.',
     'A logbook': 'Una bitácora',
     'Records your sets beautifully. Decides nothing.':
-        'Registra tus series con belleza. No decide nada.',
+        'Registra tus series con elegancia. No decide nada.',
     'A plan': 'Un plan',
     'Adapts between sessions. Not during one.':
         'Se adapta entre sesiones. No durante una.',
@@ -442,8 +442,8 @@ HOME = {
     'Ask twice, get two answers. Nothing to hold it to next month.':
         'Pregunta dos veces y obtén dos respuestas. Nada a lo que atarlo el mes que viene.',
     'Decides your set, changes it as it lands, remembers you for months, and keeps score on himself where you can read it. You train, he adjusts, and you can check every call he made.':
-        'Decide tu serie, la cambia mientras cae, te recuerda durante meses, y lleva la cuenta de sí mismo donde puedes leerla. Tú entrenas, él ajusta, y puedes revisar cada decisión que tomó.',
-    'The pressure test': 'La prueba de presión',
+        'Decide tu serie, la cambia sobre la marcha, te recuerda durante meses, y lleva su propia cuenta donde puedes leerla. Tú entrenas, él ajusta, y puedes revisar cada decisión que tomó.',
+    'The pressure test': 'La prueba de fuego',
     'Four things most apps never show you.':
         'Cuatro cosas que la mayoría de las apps nunca te muestran.',
     'What it knows': 'Lo que sabe',
@@ -473,7 +473,7 @@ HOME = {
     'The same screen on day one, the same screen after a hundred logged\n    sessions, that screen again once the athlete answered one question, and the sheet behind it.\n    Each one admits something. Real captures from the test suite, nothing retouched. Where anything\n    was handed to the app rather than earned by it, the caption underneath says so.':
         'La misma pantalla el día uno, la misma pantalla después de cien sesiones registradas, esa\n    pantalla otra vez cuando el atleta respondió una pregunta, y la hoja que va detrás. Cada una\n    admite algo. Capturas reales de la suite de pruebas, sin retoques. Donde algo se le entregó a\n    la app en vez de que se lo ganara, el pie de foto lo dice.',
     'He changes your workout in the middle of it. Most apps hand you a program and stop listening.':
-        'Te cambia el entrenamiento a la mitad. La mayoría de las apps te entregan un programa y dejan de escuchar.',
+        'Te cambia el entrenamiento en plena sesión. La mayoría de las apps te entregan un programa y dejan de escuchar.',
 }
 
 
@@ -481,7 +481,7 @@ HOME = {
 HOWITWORKS = {
     'How it works · OrderedStrength': 'Cómo funciona · OrderedStrength',
     'The whole loop in plain English: how Jerry decides what you lift, reacts to each set, handles an injury, and refuses to guess when he cannot see enough.':
-        'El ciclo completo en español simple: cómo decide Jerry qué levantas, cómo reacciona a cada serie, cómo maneja una lesión, y cómo se niega a adivinar cuando no alcanza a ver lo suficiente.',
+        'El ciclo completo en palabras sencillas: cómo decide Jerry qué levantas, cómo reacciona a cada serie, cómo maneja una lesión, y cómo se niega a adivinar cuando no alcanza a ver lo suficiente.',
     'One loop. You ask, you train, you rate each set, he reacts.':
         'Un solo ciclo. Pides, entrenas, calificas cada serie, él reacciona.',
     'Everything below is what the app actually does, written from its own source rather than from a brochure. Where it refuses to answer, that is a feature and it is described here too.':
@@ -499,16 +499,16 @@ HOWITWORKS = {
     'Rate each set, and he reacts before the next one':
         'Califica cada serie, y él reacciona antes de la siguiente',
     'After every set you say how many reps you had left. He compares that against what he expected and tells you in one line whether you are on track, drifting, or still teaching him your baseline on a new lift. If you are fading faster than planned he cuts the remaining sets on the spot and says that the cut protects your recovery.':
-        'Después de cada serie dices cuántas repeticiones te quedaban. Él lo compara con lo que esperaba y te dice en una línea si vas bien, si te estás desviando, o si todavía le estás enseñando tu base en un ejercicio nuevo. Si estás cayendo más rápido de lo planeado, recorta las series restantes en el momento y dice que el recorte protege tu recuperación.',
+        'Después de cada serie dices cuántas repeticiones te quedaban. Él lo compara con lo que esperaba y te dice en una línea si vas bien, si te estás desviando, o si todavía le estás enseñando tu base en un ejercicio nuevo. Si estás decayendo más rápido de lo planeado, recorta las series restantes en el momento y dice que el recorte protege tu recuperación.',
     'The weight goes up when you have earned it': 'El peso sube cuando te lo ganaste',
     'Not on a calendar. He holds the load and asks for one more rep, then adds the plate once the reps are there. It runs on what you actually completed, not on how hard you said it felt.':
         'No por calendario. Mantiene la carga y pide una repetición más, y después agrega el disco cuando las repeticiones están. Funciona con lo que realmente completaste, no con lo duro que dijiste que se sintió.',
-    'Tell him something and watch it land': 'Dile algo y observa cómo aterriza',
+    'Tell him something and watch it land': 'Dile algo y mira lo que cambia',
     'Report an injury and he names the lifts he just removed. Say a muscle is sore and he shows the effort buffer he added. Travel, get sick, change your equipment, and the plan changes with a receipt attached. If you quietly use a lighter weight than he asked for, he notices, and if you do it again on another day he lowers the prescription himself instead of arguing with you.':
         'Reporta una lesión y te nombra los ejercicios que acaba de quitar. Di que un músculo está adolorido y te muestra el margen de esfuerzo que agregó. Viaja, enférmate, cambia de equipo, y el plan cambia con un comprobante adjunto. Si usas en silencio un peso más ligero del que te pidió, se da cuenta, y si lo repites otro día baja él mismo la prescripción en vez de discutir contigo.',
     'It gets more personal over time': 'Se vuelve más personal con el tiempo',
     'Every number starts as an honest average. As you log real sets he shifts onto your own body and shows you how far he has moved and how sure he is. The pace follows your evidence: dense sessions of real working sets move him onto your numbers faster than the calendar does, and nothing opens because a week passed. Two of the deepest reads are the exception and hold a hard floor of fifteen sessions however hard you train, because below that the sample cannot mean anything. He says which, by name, on the screen where it matters.':
-        'Cada número empieza como un promedio honesto. Conforme registras series reales, él se mueve hacia tu propio cuerpo y te muestra cuánto se ha movido y qué tan seguro está. El ritmo sigue tu evidencia: sesiones densas de series de trabajo reales lo mueven hacia tus números más rápido que el calendario, y nada se abre porque pasó una semana. Dos de las lecturas más profundas son la excepción y sostienen un piso duro de quince sesiones por muy duro que entrenes, porque debajo de eso la muestra no puede significar nada. Él dice cuáles, por su nombre, en la pantalla donde importa.',
+        'Cada número empieza como un promedio honesto. Conforme registras series reales, él se mueve hacia tu propio cuerpo y te muestra cuánto se ha movido y qué tan seguro está. El ritmo sigue tu evidencia: sesiones densas de series de trabajo reales lo mueven hacia tus números más rápido que el calendario, y nada se abre porque pasó una semana. Dos de las lecturas más profundas son la excepción y exigen un mínimo fijo de quince sesiones por muy duro que entrenes, porque debajo de eso la muestra no puede significar nada. Él dice cuáles, por su nombre, en la pantalla donde importa.',
     'Four moments': 'Cuatro momentos',
     'Where it stops feeling like an app.': 'Donde deja de sentirse como una app.',
     'Hard Truths': 'Verdades Duras',
@@ -667,7 +667,7 @@ APP_PATHS = {
 FRAGMENTS = {
     # ── home ──
     'Most apps hand you a program and stop listening. Jerry, the coach inside\n        the app, writes the next set while you are still breathing hard from the last one. He cuts\n        the session when you are fading, adds the plate the day you earn it, and writes down what\n        he expected from you ':
-        'La mayoría de las apps te entregan un programa y dejan de escuchar. Jerry, el coach dentro\n        de la app, escribe la siguiente serie mientras todavía respiras fuerte de la anterior.\n        Recorta la sesión cuando estás cayendo, agrega el disco el día que te lo ganas, y anota lo\n        que esperaba de ti ',
+        'La mayoría de las apps te entregan un programa y dejan de escuchar. Jerry, el coach dentro\n        de la app, escribe la siguiente serie mientras todavía te falta el aire de la anterior.\n        Recorta la sesión cuando empiezas a decaer, agrega el disco el día que te lo ganas, y anota lo\n        que esperaba de ti ',
     ' you touch the bar, so you can check him on it after.':
         ' de que toques la barra, para que puedas revisarlo después.',
     'Your one rep max is ': 'Tu máximo de una repetición es ',
@@ -677,7 +677,7 @@ FRAGMENTS = {
     'The slider needs JavaScript. What it\n      reveals is written out on ':
         'El deslizador necesita JavaScript. Lo que revela está escrito en ',
     'The slider is a session count because that is the only\n      dial a web page can offer you. Inside the app the pace runs on evidence: dense sessions of\n      real working sets move it faster than the calendar does, and it moves back if his\n      predictions start missing. A few of the deeper reads also hold a hard floor, and those are\n      named on ':
-        'El deslizador cuenta sesiones porque es el único control que una página web puede\n      ofrecerte. Dentro de la app el ritmo corre con evidencia: sesiones densas de series de\n      trabajo reales lo mueven más rápido que el calendario, y retrocede si sus predicciones\n      empiezan a fallar. Algunas de las lecturas más profundas también sostienen un piso duro, y\n      esas están nombradas en ',
+        'El deslizador cuenta sesiones porque es el único control que una página web puede\n      ofrecerte. Dentro de la app el ritmo lo marca la evidencia: sesiones densas de series de\n      trabajo reales lo mueven más rápido que el calendario, y retrocede si sus predicciones\n      empiezan a fallar. Algunas de las lecturas más profundas también exigen un mínimo fijo, y\n      esas están nombradas en ',
     'The badge reads  , not a confidence score invented to look\n          reassuring. One session is not enough to know you and the screen says so.':
         'La insignia dice  , no un puntaje de confianza inventado para tranquilizarte. Una sesión no\n          alcanza para conocerte y la pantalla lo dice.',
     'Fatigue and recovery are marked  , a population estimate.\n          They are not claims about your body, and they are not allowed to pretend to be.':
@@ -777,7 +777,7 @@ FRAGMENTS = {
     ' on a new phone. If you have never made a backup and the phone is gone, the training is gone with it.':
         ' en un teléfono nuevo. Si nunca hiciste un respaldo y el teléfono se perdió, el entrenamiento se fue con él.',
     ' turns off the daily usage summary. Respuestas en la Nube is off unless you switched it on. Turning the spoken voice off stops the voice requests. Apple Health access is revoked in the Apple Health app. One path has no switch yet, the set submission described in point 4 of the ':
-        ' apaga el resumen diario de uso. Respuestas en la Nube está apagado a menos que lo hayas encendido. Apagar la voz hablada detiene las solicitudes de voz. El acceso a Apple Health se revoca en la app Apple Health. Un camino todavía no tiene interruptor, el envío de series descrito en el punto 4 de la ',
+        ' apaga el resumen diario de uso. Respuestas en la Nube está apagado a menos que lo hayas encendido. Apagar la voz hablada detiene las solicitudes de voz. El acceso a Apple Health se revoca en la app Apple Health. Una vía todavía no tiene interruptor, el envío de series descrito en el punto 4 de la ',
     ', and it is being removed rather than given a toggle.':
         ', y se está quitando en vez de darle un interruptor.',
     ', or delete the app. Both are immediate and cannot be undone, so export a backup first if you might want it later.':
@@ -832,7 +832,7 @@ FRAGMENTS2 = {
     'Tu entrenamiento se calcula en tu dispositivo. There is no account, so there is no name, email\n    or password of yours held anywhere, and nothing to delete later except the app. What does and\n    does not leave your phone,\n    including the four things that can and the one of those we are removing, is set out in the\n    ':
         'Tu entrenamiento se calcula en tu dispositivo. No hay cuenta, así que no hay ningún nombre,\n    correo ni contraseña tuya guardada en ningún lado, y nada que borrar después salvo la app.\n    Qué sale y qué no sale de tu teléfono,\n    incluidas las cuatro cosas que pueden y la que estamos quitando, está detallado en la\n    ',
     ' turns off the daily usage summary. Respuestas en la Nube is off unless you switched it on. Turning the spoken voice off stops the voice requests. Apple Health access is revoked in the Apple Health app. One path has no switch yet, the set submission described in point 4 of the ':
-        ' apaga el resumen diario de uso. Respuestas en la Nube está apagado a menos que lo hayas encendido. Apagar la voz hablada detiene las solicitudes de voz. El acceso a Apple Health se revoca en la app Apple Health. Un camino todavía no tiene interruptor, el envío de series descrito en el punto 4 de la ',
+        ' apaga el resumen diario de uso. Respuestas en la Nube está apagado a menos que lo hayas encendido. Apagar la voz hablada detiene las solicitudes de voz. El acceso a Apple Health se revoca en la app Apple Health. Una vía todavía no tiene interruptor, el envío de series descrito en el punto 4 de la ',
 }
 
 
@@ -845,7 +845,7 @@ FRAGMENTS3 = {
     'Your training is computed on your device. There is no account, so there is no name, email\n    or password of yours held anywhere, and nothing to delete later except the app. What does and\n    does not leave your phone,\n    including the four things that can and the one of those we are removing, is set out in the\n    ':
         'Tu entrenamiento se calcula en tu dispositivo. No hay cuenta, así que no hay ningún nombre,\n    correo ni contraseña tuya guardada en ningún lado, y nada que borrar después salvo la app.\n    Qué sale y qué no sale de tu teléfono,\n    incluidas las cuatro cosas que pueden y la que estamos quitando, está detallado en la\n    ',
     ' turns off the daily usage summary. Cloud Answers is off unless you switched it on. Turning the spoken voice off stops the voice requests. Apple Health access is revoked in the Apple Health app. One path has no switch yet, the set submission described in point 4 of the ':
-        ' apaga el resumen diario de uso. Respuestas en la Nube está apagado a menos que lo hayas encendido. Apagar la voz hablada detiene las solicitudes de voz. El acceso a Apple Health se revoca en la app Apple Health. Un camino todavía no tiene interruptor, el envío de series descrito en el punto 4 de la ',
+        ' apaga el resumen diario de uso. Respuestas en la Nube está apagado a menos que lo hayas encendido. Apagar la voz hablada detiene las solicitudes de voz. El acceso a Apple Health se revoca en la app Apple Health. Una vía todavía no tiene interruptor, el envío de series descrito en el punto 4 de la ',
     ' (chat answers, only with Cloud Answers on). They process it to return the result and we do not authorise them to use it for their own purposes.':
         ' (respuestas de chat, solo con Respuestas en la Nube encendido). Lo procesan para devolver el resultado y no los autorizamos a usarlo para sus propios fines.',
 }
@@ -871,9 +871,9 @@ SEAL = {
     '>Exercise<': '>Ejercicio<',
     '>and at most<': '>y como máximo<',
     'kg &middot; last session repeated': 'kg &middot; última sesión repetida',
-    '>Put it back<': '>Devuélvelo<',
+    '>Put it back<': '>Deshazlo<',
     'Nothing here is stored by us. The arithmetic ran on your machine.':
-        'Nosotros no guardamos nada de esto. La aritmética corrió en tu máquina.',
+        'Nosotros no guardamos nada de esto. Las cuentas se hicieron en tu máquina.',
     '>unchanged since session 1<': '>sin cambios desde la sesión 1<',
 }
 
@@ -948,7 +948,7 @@ FINAL_SCRIPT = {
     "'unchanged since session 1' + (n > 1 ? ' · ' + n + ' sessions later' :":
         "'sin cambios desde la sesión 1' + (n > 1 ? ' · ' + n + ' sesiones después' :",
     "? 'Nothing here is stored by us. The arithmetic ran on your machine.'":
-        "? 'Nosotros no guardamos nada de esto. La aritmética corrió en tu máquina.'",
+        "? 'Nosotros no guardamos nada de esto. Las cuentas se hicieron en tu máquina.'",
     "'The verifier did not confirm this receipt. It reported: '":
         "'El verificador no confirmó este comprobante. Reportó: '",
     "' and the '": "' y '",
@@ -1025,7 +1025,7 @@ LEADS = {
     '<span>Fatigue and recovery are marked ': '<span>La fatiga y la recuperación están marcadas ',
     '<span>Fatigue ': '<span>Fatiga ',
     ' and recovery ': ' y recuperación ',
-    ', both stamped ': ', ambas estampadas ',
+    ', both stamped ': ', ambas marcadas ',
 }
 
 
@@ -1051,11 +1051,11 @@ DT_LABELS = {
 # person sees when the Spanish page is shared.
 META = {
     'content="A strength coach for iPhone that changes your session while you are in it, writes down what it expected before you lift, and can be checked. Seal a prediction, then try to change it."':
-        'content="Un coach de fuerza para iPhone que cambia tu sesión mientras estás en ella, anota lo que esperaba antes de que levantes, y se puede comprobar. Sella una predicción, y después intenta cambiarla."',
+        'content="Un coach de fuerza para iPhone que cambia tu sesión mientras la entrenas, anota lo que esperaba antes de que levantes, y se puede comprobar. Sella una predicción, y después intenta cambiarla."',
     'content="He writes the next set while you are still breathing hard from the last one, cuts the session when you are fading, and writes down what he expected before you lift so you can check him after."':
-        'content="Escribe la siguiente serie mientras todavía respiras fuerte de la anterior, recorta la sesión cuando estás cayendo, y anota lo que esperaba antes de que levantes para que puedas revisarlo después."',
+        'content="Escribe la siguiente serie mientras todavía te falta el aire de la anterior, recorta la sesión cuando empiezas a decaer, y anota lo que esperaba antes de que levantes para que puedas revisarlo después."',
     'content="Two iPhones showing the OrderedStrength dashboard beside the line: he changes your workout in the middle of it."':
-        'content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: te cambia el entrenamiento a la mitad."',
+        'content="Dos iPhones mostrando el panel de OrderedStrength junto a la frase: te cambia el entrenamiento en plena sesión."',
 }
 
 MAILTO = {

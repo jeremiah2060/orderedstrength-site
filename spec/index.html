@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function () {
+  var stored = null;
+  try { stored = localStorage.getItem('os-lang'); } catch (e) { stored = null; }
+  if (stored === 'es') { go(); return; }
+  if (stored === 'en') return;
+  var langs = (navigator.languages && navigator.languages.length
+               ? navigator.languages : [navigator.language || '']).map(String);
+  for (var i = 0; i < langs.length; i++) {
+    if (/^es(-|$)/i.test(langs[i])) { go(); return; }
+  }
+  function go() { location.replace('/es' + location.pathname + location.search + location.hash); }
+})();
+</script>
+
+<meta charset="utf-8">
+<script>document.documentElement.className="js";</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product specification &middot; OrderedStrength</title>
+<meta name="description" content="What OrderedStrength is, what it does, and how its predictions are proven. One page, designed to print.">
+<meta property="og:title" content="Product specification &middot; OrderedStrength">
+<meta property="og:description" content="What OrderedStrength is, what it does, and how its predictions are proven. One page, designed to print.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OrderedStrength">
+<meta property="og:image" content="https://www.orderedstrength.com/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two iPhones showing the OrderedStrength dashboard beside the line: he changes your workout in the middle of it.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.orderedstrength.com/assets/og.jpg">
+<meta name="theme-color" content="#060709">
+<link rel="preload" href="/assets/fonts/public-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/archivo-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/spec/">
+<link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/spec/">
+<link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/spec/">
+<link rel="canonical" href="https://www.orderedstrength.com/spec/">
+<meta property="og:url" content="https://www.orderedstrength.com/spec/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="es_419">
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="/assets/site.min.css?v=6ee5052ef7">
+<style>
+/* Screen styles */
+.spec-sheet{max-width:54rem;margin:2rem 0}
+.spec-block{background:var(--e2);border-radius:12px;padding:1.5rem 1.75rem;margin-bottom:1.25rem;
+            box-shadow:var(--shadow-2)}
+.spec-block h2{font-family:var(--display);font-weight:700;font-size:1.0625rem;margin:0 0 .875rem;
+               letter-spacing:.01em}
+.spec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));gap:.625rem 1.5rem}
+.spec-row{border-bottom:1px solid var(--line);padding:.5rem 0;display:flex;gap:1rem;
+          justify-content:space-between;align-items:baseline}
+.spec-row:last-child{border-bottom:none}
+.spec-key{font-size:.875rem;color:var(--ink2)}
+.spec-val{font-family:var(--mono);font-size:.875rem;font-weight:500;color:var(--ink);text-align:right}
+.spec-claim{padding:.5rem 0;border-bottom:1px solid var(--line);font-size:.9375rem;color:var(--ink2);
+            line-height:1.5}
+.spec-claim:last-child{border-bottom:none;padding-bottom:0}
+.spec-claim strong{color:var(--ink)}
+.spec-url{font-family:var(--mono);font-size:.875rem;color:var(--teal);word-break:break-all}
+.print-btn{display:inline-flex;align-items:center;gap:.5rem;margin:1.25rem 0}
+
+/* Print styles: a clean document on white paper */
+@media print {
+  .print-btn, .pagehead .sub { display:none !important }
+  .pagehead { padding-top:0 }
+  .pagehead h1 { color:#000; font-size:1.75rem }
+  .pagehead .eyebrow { color:#555 }
+  .spec-block { background:#fff; border:1px solid #ccc; border-radius:0;
+                box-shadow:none; break-inside:avoid; padding:1rem 1.25rem }
+  .spec-key { color:#444 }
+  .spec-val { color:#000 }
+  .spec-claim { color:#333 }
+  .spec-claim strong { color:#000 }
+  .spec-row { border-color:#ddd }
+  .spec-claim { border-color:#ddd }
+  .spec-url { color:#006655 }
+  .spec-block h2 { color:#000; border-bottom:1px solid #ccc; padding-bottom:.375rem }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="bar">
+  <a class="wordmark" translate="no" href="/"><span class="led" id="led" translate="no" aria-hidden="true"></span>OrderedStrength</a>
+  <nav>
+    <a href="/how-it-works/" class="opt2">How it works</a>
+    <a href="/stronger/" class="opt">Stronger</a>
+    <a href="/record/" class="opt">The record</a>
+    <a href="/verify/">Verify</a>
+    <a href="/es/spec/" hreflang="es" lang="es" translate="no" class="lang">Espa&ntilde;ol</a>
+    <a href="/join/" class="cta"><span class="cta__long">Join the test</span><span class="cta__short">Join</span></a>
+    <details class="menu">
+      <summary>Menu</summary>
+      <div class="menu__panel">
+        <a href="/how-it-works/">How it works</a>
+        <a href="/stronger/">Stronger</a>
+        <a href="/record/">The record</a>
+        <a href="/verify/">Verify</a>
+        <a href="/join/">Join the test</a>
+        <a href="/es/spec/" hreflang="es" lang="es" translate="no" class="lang">Espa&ntilde;ol</a>
+      </div>
+    </details>
+  </nav>
+  <div class="prog" aria-hidden="true"></div>
+</div>
+
+<main id="main">
+  <section class="scene">
+    <div class="pagehead">
+      <p class="eyebrow">Specification</p>
+      <h1>OrderedStrength.</h1>
+      <p class="sub">What it is, how it works, and what it proves. One page, designed to print.</p>
+    </div>
+
+    <button class="btn ghost print-btn" onclick="window.print()">Print this page</button>
+
+    <div class="spec-sheet">
+
+      <div class="spec-block">
+        <h2>What it is</h2>
+        <div class="spec-claim"><strong>A strength coach for iPhone</strong> that changes your session while you are in it, based on how the sets you have already done compare to what it expected.</div>
+        <div class="spec-claim"><strong>It writes things down before you lift.</strong> Before each set, it seals a prediction: the load it expects you to be capable of, given everything it knows about you. That prediction is committed with a cryptographic hash. You can check after the fact that nothing changed.</div>
+        <div class="spec-claim"><strong>It grades itself.</strong> After each set it compares the result to the prediction, publishes the accuracy on the record page, and the algorithm reads from that record when it makes the next prediction.</div>
+      </div>
+
+      <div class="spec-block">
+        <h2>Technical specification</h2>
+        <div class="spec-grid">
+          <div>
+            <div class="spec-row">
+              <span class="spec-key">Platform</span>
+              <span class="spec-val">iPhone (iOS 17+)</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Computation</span>
+              <span class="spec-val">On-device</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Account required</span>
+              <span class="spec-val">None</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Training log leaves device</span>
+              <span class="spec-val">Never</span>
+            </div>
+          </div>
+          <div>
+            <div class="spec-row">
+              <span class="spec-key">Commitment scheme</span>
+              <span class="spec-val">SHA-256</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Nonce</span>
+              <span class="spec-val">32 bytes CSPRNG</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Daily anchor</span>
+              <span class="spec-val">Merkle root</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Timestamp proof</span>
+              <span class="spec-val">GitHub commit date</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-block">
+        <h2>What it proves</h2>
+        <div class="spec-claim">
+          <strong>Binding:</strong> changing a prediction after it is sealed requires a SHA-256 collision. That is approximately 2<sup>128</sup> work under the birthday bound.
+        </div>
+        <div class="spec-claim">
+          <strong>Hiding:</strong> the commitment discloses nothing about the prediction. A 32-byte cryptographic nonce means the prediction space cannot be brute-forced.
+        </div>
+        <div class="spec-claim">
+          <strong>Timestamp:</strong> one Merkle root is published per day to a public repository. Every commitment inside that day's tree inherits a timestamp from GitHub's commit date, which is not our word.
+        </div>
+        <div class="spec-claim">
+          <strong>Open verification:</strong> the verifier at <span class="spec-url">orderedstrength.com/verify/</span> requires no account and stores nothing. Anyone can check any receipt.
+        </div>
+      </div>
+
+      <div class="spec-block">
+        <h2>Contact and status</h2>
+        <div class="spec-row">
+          <span class="spec-key">Website</span>
+          <span class="spec-val spec-url">www.orderedstrength.com</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Accuracy record</span>
+          <span class="spec-val spec-url">orderedstrength.com/record/</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Status</span>
+          <span class="spec-val">In testing</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Support</span>
+          <span class="spec-val spec-url">orderedstrength.com/support/</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot">
+    <div class="foot__mark">
+      <a class="wordmark" translate="no" href="/">OrderedStrength</a>
+      <p>A strength coach for iPhone that writes each session down before you lift, then grades
+      itself on what it wrote.</p>
+    </div>
+    <nav class="foot__col" aria-label="The product">
+      <p class="foot__label">The product</p>
+      <a href="/how-it-works/">How it works</a>
+      <a href="/stronger/">Getting stronger</a>
+      <a href="/join/">Join the test</a>
+    </nav>
+    <nav class="foot__col" aria-label="The record">
+      <p class="foot__label">The record</p>
+      <a href="/record/">Published anchors</a>
+      <a href="/verify/">Verify a receipt</a>
+    </nav>
+    <nav class="foot__col" aria-label="Language">
+      <p class="foot__label">Language</p>
+      <a href="/es/spec/" hreflang="es" lang="es" translate="no">Espa&ntilde;ol</a>
+    </nav>
+    <nav class="foot__col" aria-label="The small print">
+      <p class="foot__label">The small print</p>
+      <a href="/app-privacy/">Privacy</a>
+      <a href="/terms/">Terms</a>
+      <a href="/support/">Support</a>
+    </nav>
+  </div>
+  <div class="foot__panel">
+    <span>iPhone &middot; in testing</span>
+    <span>Your training is computed on your device</span>
+  </div>
+</footer>
+
+<script src="/assets/site.js?v=62b4210939" defer></script>
+</body>
+</html>

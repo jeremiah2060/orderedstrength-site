@@ -145,4 +145,52 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/verify/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/verify/"/>
   </url>
+  <url>
+    <loc>https://www.orderedstrength.com/receipt/</loc>
+    <lastmod>2026-09-03</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/receipt/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/receipt/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/receipt/"/>
+  </url>
+  <url>
+    <loc>https://www.orderedstrength.com/es/receipt/</loc>
+    <lastmod>2026-09-03</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/receipt/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/receipt/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/receipt/"/>
+  </url>
+  <url>
+    <loc>https://www.orderedstrength.com/spec/</loc>
+    <lastmod>2026-09-03</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/spec/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/spec/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/spec/"/>
+  </url>
+  <url>
+    <loc>https://www.orderedstrength.com/es/spec/</loc>
+    <lastmod>2026-09-03</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/spec/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/spec/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/spec/"/>
+  </url>
+  <url>
+    <loc>https://www.orderedstrength.com/design/</loc>
+    <lastmod>2026-09-03</lastmod>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/design/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/design/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/design/"/>
+  </url>
+  <url>
+    <loc>https://www.orderedstrength.com/es/design/</loc>
+    <lastmod>2026-09-03</lastmod>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.orderedstrength.com/design/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.orderedstrength.com/es/design/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.orderedstrength.com/design/"/>
+  </url>
 </urlset>
