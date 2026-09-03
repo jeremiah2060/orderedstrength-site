@@ -161,6 +161,37 @@ if (bar){
   setTimeout(measure, 400);
 })();
 
+/* ── the quiet Spanish offer ──
+   The head script sets this when a reader's browser lists Spanish but ranks English higher. It
+   will not redirect them, because they asked for English in so many words, but it should not
+   leave them to discover a whole Spanish site through a link in the footer either. One line,
+   dismissible, and dismissing it is a decision that sticks. */
+if (window.__osOfferEs) {
+  var bar = document.createElement('div');
+  bar.className = 'langoffer';
+  bar.setAttribute('lang', 'es');
+  /* 🔒 translate="no" ON THE WHOLE BAR. This is Spanish text on a page declared English, which is
+     exactly the shape a browser translator mangles, and it would be absurd for the line offering
+     a real Spanish page to be machine-translated on its way past. */
+  bar.setAttribute('translate', 'no');
+  var msg = document.createElement('span');
+  msg.textContent = 'Esta página también está en español.';
+  var go = document.createElement('a');
+  go.href = '/es' + location.pathname + location.search + location.hash;
+  go.setAttribute('hreflang', 'es');
+  go.textContent = 'Ver en español';
+  var no = document.createElement('button');
+  no.type = 'button';
+  no.textContent = 'No, gracias';
+  no.addEventListener('click', function () {
+    try { localStorage.setItem('os-lang', 'en'); } catch (e) {}
+    bar.remove();
+  });
+  bar.appendChild(msg); bar.appendChild(go); bar.appendChild(no);
+  var main = document.querySelector('main');
+  if (main) main.insertBefore(bar, main.firstChild);
+}
+
 /* ── the language choice, recorded from either direction ──
    The head script on the English pages sends a Spanish phone to /es/ exactly once, and only
    while nothing is stored. This is what stores it: using either footer link is a decision, and

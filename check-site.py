@@ -261,6 +261,37 @@ for f in pages:
     print(f"  {f:28} {'OK' if not iss else '; '.join(iss)}")
     fail += len(iss)
 
+print("\nINLINE SCRIPTS PARSE")
+# 🔒 A BROKEN INLINE SCRIPT IS INVISIBLE TO EVERY OTHER GATE IN THIS REPO, AND I SHIPPED ONE
+# TODAY. Editing the language-redirect script left a duplicated `catch`, so the whole block was a
+# syntax error and did nothing at all. check-site read the HTML and found it well formed. The
+# nesting stack, the hygiene sweep, the stamp check, contrast, type, align and measure ALL passed,
+# because none of them asks whether the JavaScript on the page can run. Only the browser-driven
+# language gate caught it, minutes later and by accident of what it happened to be testing.
+# A page can be perfectly valid HTML and completely dead.
+#
+# node is already a hard dependency of check.sh, so this costs nothing new.
+import subprocess, tempfile
+SCRIPT = re.compile(r'<script(?![^>]*\ssrc=)[^>]*>(.*?)</script>', re.S)
+for f in pages:
+    s = open(f, encoding='utf-8').read()
+    iss = []
+    for i, m in enumerate(SCRIPT.finditer(s)):
+        js = m.group(1)
+        if not js.strip():
+            continue
+        with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False) as tmp:
+            tmp.write(js); tmp_path = tmp.name
+        r = subprocess.run(['node', '--check', tmp_path], capture_output=True, text=True)
+        os.unlink(tmp_path)
+        if r.returncode:
+            line = next((l for l in r.stderr.splitlines() if 'Error' in l), r.stderr[:90])
+            iss.append(f'script #{i + 1} does not parse: {line.strip()[:90]}')
+    print(f"  {f:28} {'OK' if not iss else iss[0]}")
+    for extra in iss[1:]:
+        print(f"  {'':28} {extra}")
+    fail += len(iss)
+
 print("\nCOUNTS ACROSS PAGES")
 # 🔒 A NUMBER STATED ON FIVE PAGES IS ONE FACT WITH FIVE PLACES TO BE WRONG. The privacy
 # policy said "The five things that can leave your device" while /join/, /how-it-works/ and

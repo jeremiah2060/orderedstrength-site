@@ -21,12 +21,37 @@
    lose the site because a preference could not be read. */
 (function () {
   try {
-    if (localStorage.getItem('os-lang')) return;
-    var l = (navigator.languages && navigator.languages[0]) || navigator.language || '';
-    if (!/^es(-|$)/i.test(l)) return;
-    localStorage.setItem('os-lang', 'es');
-    location.replace('/es' + location.pathname + location.search + location.hash);
+    var stored = localStorage.getItem('os-lang');
+    /* 🔒 A STORED CHOICE IS A DESTINATION, NOT ONLY A VETO, AND THE FIRST VERSION TREATED IT AS
+       ONLY A VETO. Clicking "Español" stored es and then typing the bare domain landed you on
+       ENGLISH, because the stored value was read solely to suppress the automatic redirect and
+       never to act on. The preference was write-only: the site remembered the choice and then
+       ignored it, which is worse than not remembering, because the reader thinks they chose. */
+    if (stored === 'es') { go(); return; }
+    if (stored) return;                      /* 'en' is a decision to stay */
+
+    /* 🔒 AND IT READ ONLY THE FIRST PREFERENCE, WHICH IS NOT WHERE SPANISH USUALLY IS. Measured
+       on a Spanish macOS running Chrome: navigator.languages is "en-US, en, es". The computer is
+       Spanish, the browser keeps its own list, and Spanish sits THIRD. Reading [0] answered a
+       narrower question than the one that matters, and answered it correctly, which is the hard
+       kind of wrong to see. */
+    var langs = (navigator.languages && navigator.languages.length
+                 ? navigator.languages : [navigator.language || '']).map(String);
+    var rank = function (re) { for (var i = 0; i < langs.length; i++) if (re.test(langs[i])) return i; return -1; };
+    var es = rank(/^es(-|$)/i), en = rank(/^en(-|$)/i);
+    if (es < 0) return;                      /* no Spanish anywhere: nothing to offer */
+    if (en < 0 || es < en) {                 /* Spanish outranks English: send them */
+      localStorage.setItem('os-lang', 'es');
+      go(); return;
+    }
+    /* 🔒 SPANISH PRESENT BUT RANKED BELOW ENGLISH: OFFER, NEVER FORCE. This browser has said, in
+       order, that it prefers English. Overriding a stated preference because we guessed at the
+       operating system would be the same arrogance as the machine translation this exists to
+       avoid, and Chrome will not offer to translate an English page to a reader who asked for
+       English, so there is no harm to prevent. site.js draws a quiet line instead. */
+    window.__osOfferEs = true;
   } catch (e) { /* no preference readable: serve the page that was asked for */ }
+  function go() { location.replace('/es' + location.pathname + location.search + location.hash); }
 })();
 </script>
 
@@ -54,7 +79,7 @@
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="stylesheet" href="/assets/site.css?v=495de8534f">
+<link rel="stylesheet" href="/assets/site.css?v=8a6293cd4c">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>

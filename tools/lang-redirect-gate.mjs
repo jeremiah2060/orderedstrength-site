@@ -30,53 +30,68 @@ const B = process.env.BASE || 'http://127.0.0.1:8899';
 let pass = 0, fail = 0;
 const check = (n, c) => { if (c) { pass++; console.log('PASS: ' + n); } else { fail++; console.error('FAIL: ' + n); } };
 
-async function run(lang, setup, path = '/') {
+async function run(langs, setup, path = '/') {
   let out;
   await withPage(async (page) => {
-    await page.goto(B + '/404.html');                       // same origin, so localStorage is writable
-    await page.evaluate(`(()=>{try{localStorage.clear();${setup||''}}catch(e){}return 1})()`);
+    await page.goto(B + '/404.html');
+    await page.evaluate(`(()=>{try{localStorage.clear();${setup || ''}}catch(e){}return 1})()`);
     await page.goto(B + path);
-    await page.evaluate(`new Promise(r=>setTimeout(r,400))`);
+    await page.evaluate(`new Promise(r=>setTimeout(r,700))`);
     out = JSON.parse(await page.evaluate(`JSON.stringify({
       path: location.pathname,
-      lang: navigator.language,
+      list: (navigator.languages||[]).join(','),
       stored: (function(){try{return localStorage.getItem('os-lang')}catch(e){return 'ERR'}})(),
-      htmlLang: document.documentElement.lang
+      htmlLang: document.documentElement.lang,
+      offer: !!document.querySelector('.langoffer')
     })`));
-  }, { width: 900, height: 700, dsf: 1, args: [`--lang=${lang}`, `--accept-lang=${lang}`] });
+  }, { width: 900, height: 700, dsf: 1, args: [`--lang=${langs.split(',')[0]}`, `--accept-lang=${langs}`] });
   return out;
 }
 
 let r = await run('es-419');
-check(`a Spanish phone at / lands on the Spanish site (was ${r.path}, navigator.language=${r.lang})`,
-  r.path === '/es/' && r.htmlLang.startsWith('es'));
-check('and the choice is stored, so it happens once and never loops', r.stored === 'es');
+check(`a Spanish browser at / lands on the Spanish site (list ${r.list})`,
+  r.path === '/es/' && r.htmlLang.startsWith('es') && r.stored === 'es');
 
-r = await run('es-419', "localStorage.setItem('os-lang','en');");
-check('a Spanish phone that already chose English is left alone', r.path === '/' && r.htmlLang === 'en');
+// 🔒 THE BUG THE CEO HIT. Clicking "Español" stored es, and then the bare domain served ENGLISH,
+// because the stored value was read only to SUPPRESS the automatic redirect and never acted on.
+// A remembered preference that is never honoured is worse than none: the reader believes they chose.
+r = await run('en-US', "localStorage.setItem('os-lang','es');");
+check('🔒 a reader who already CHOSE Spanish is taken there, even from an English browser',
+  r.path === '/es/');
+
+// 🔒 THE CEO'S WIFE'S MAC, MEASURED: a Spanish computer whose Chrome lists en-US, en, es.
+r = await run('en-US,en,es');
+check(`Spanish ranked BELOW English is not forced (list ${r.list})`, r.path === '/');
+check('but that reader is OFFERED the Spanish site rather than left to find the footer',
+  r.offer === true);
+
+r = await run('es,en');
+check('Spanish ranked ABOVE English is followed', r.path === '/es/');
+
+r = await run('en-US,en,es', "localStorage.setItem('os-lang','en');");
+check('a reader who dismissed the offer is not asked again', r.path === '/' && r.offer === false);
 
 r = await run('en-US');
-check('an English phone is not touched at all', r.path === '/' && r.stored === null);
+check('an English browser with no Spanish listed sees nothing at all',
+  r.path === '/' && r.stored === null && r.offer === false);
 
 r = await run('es-419', '', '/how-it-works/');
 check('a deep link maps to its own Spanish twin, not to the home page', r.path === '/es/how-it-works/');
 
 r = await run('fr-FR');
-check('a language with no version of this site stays on English', r.path === '/');
+check('a language with no version of this site is left alone', r.path === '/' && r.offer === false);
 
-// the loop test: land on /es/ from Spanish, then follow the English footer link
+// the loop test
 await withPage(async (page) => {
   await page.goto(B + '/404.html');
   await page.evaluate(`(()=>{try{localStorage.clear()}catch(e){}return 1})()`);
   await page.goto(B + '/');
-  await page.evaluate(`new Promise(r=>setTimeout(r,400))`);
+  await page.evaluate(`new Promise(r=>setTimeout(r,700))`);
   const onEs = await page.evaluate(`location.pathname`);
-  const links = await page.evaluate(`JSON.stringify([...document.querySelectorAll('a[hreflang]')].map(a=>a.getAttribute('hreflang')+':'+a.getAttribute('href')))`);
-  console.log('  (diagnostic) path after load:', onEs, ' language links:', links);
   await page.evaluate(`(()=>{const a=[...document.querySelectorAll('a[hreflang="en"]')][0]; if(!a) return 0; a.click(); return 1})()`);
-  await page.evaluate(`new Promise(r=>setTimeout(r,600))`);
+  await page.evaluate(`new Promise(r=>setTimeout(r,900))`);
   const after = JSON.parse(await page.evaluate(`JSON.stringify({p:location.pathname,s:localStorage.getItem('os-lang')})`));
-  check('clicking English from /es/ lands on / and STAYS there, no bounce',
+  check('🔒 clicking English from /es/ lands on / and STAYS there, no bounce',
     onEs === '/es/' && after.p === '/' && after.s === 'en');
 }, { width: 900, height: 700, dsf: 1, args: ['--lang=es-419', '--accept-lang=es-419,es'] });
 
