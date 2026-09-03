@@ -107,11 +107,11 @@
 <p><strong>No incluye tus series, tus pesos, tus datos corporales, ni nada de Apple Health.</strong>  Puedes apagarlo en  <em>Perfil / Datos y privacidad</em>, y apagarlo lo detiene por completo.</p>
 
 <h3>4. Las series que registras &middot; quitadas del código, y fuera en cuanto actualices</h3>
-<p>Cuando terminabas un entrenamiento libre, la app enviaba a nuestro servidor cada serie que registrabas: el ejercicio, el peso, las repeticiones, y la reserva que reportaste. Estaba ligado a un identificador aleatorio creado en tu dispositivo y nunca a tu nombre, y no se vendía, no se compartía ni se usaba para mostrarte publicidad.</p>
-<p><strong>Nunca defendimos esta.</strong> Quedó de un diseño anterior en el que el motor de coaching se ejecutaba en un servidor, y sobrevivió a la mudanza al teléfono. Contradecía la promesa que encabeza esta página, así que se quitó en vez de conservarla y explicarla, y se quitó en vez de darle un interruptor, porque un interruptor habría significado defenderla.</p>
-<p><strong>Lee esta parte con atención, porque es la que te aplica a ti.</strong> La llamada ya no está: nada en la app llega a esa subida, y ninguna versión envía una serie. Si estás en una versión anterior, la llamada sigue ahí hasta que actualices, y por eso esta sección sigue aquí en vez de haberse borrado. Se borrará cuando ya no quede ninguna versión que la tuviera.</p>
+<p><strong>Esto ya no pasa.</strong> El código que lo hacía ya no está, nada en la app llega a esa subida, y ninguna versión actual envía una serie. Si tu teléfono sigue en una versión anterior, la llamada sigue ahí hasta que actualices, y por eso esta sección sigue aquí en vez de haberse borrado. Se irá cuando ya no quede ninguna versión que la tuviera.</p>
+<p>Lo que era: cuando terminabas un entrenamiento libre, la app enviaba a nuestro servidor cada serie que registrabas, el ejercicio, el peso, las repeticiones, y la reserva que reportaste. Estaba ligado a un identificador aleatorio creado en tu dispositivo y nunca a tu nombre, y no se vendía, no se compartía ni se usaba para mostrarte publicidad.</p>
+<p>Quedó de un diseño anterior en el que el motor de coaching se ejecutaba en un servidor, y sobrevivió a la mudanza al teléfono. Contradecía la promesa que encabeza esta página, así que se quitó en vez de conservarla y explicarla, y se quitó en vez de darle un interruptor, porque un interruptor habría significado defenderla.</p>
 
-<h3>5. Un token de notificaciones &middot; activo, para que una notificación pueda llegarte</h3>
+<h3>5. Un token de notificaciones &middot; todavía no, porque Apple no lo ha habilitado en esta versión</h3>
 <p>Para poder enviarte una notificación, Apple tiene que darle a la app un token de dispositivo, y nosotros tenemos que saber a dónde mandarla. Cuando la app arranca se registra con Apple y envía ese token, junto con el idioma en que tienes configurado tu teléfono, a nuestro servidor. El token identifica una copia de la app en un dispositivo, no a ti: no lleva nombre, ni correo, ni nada de tu entrenamiento, y Apple lo reemplaza cada cierto tiempo.</p>
 <p><strong>En la versión que puedes instalar hoy, esto no pasa.</strong> La app no tiene el permiso
 de notificaciones push de Apple, así que el registro falla y no se envía ningún token a nadie. Está
@@ -119,7 +119,7 @@ escrito aquí porque la vía existe en el código y empezará a funcionar el dí
 notificaciones, y deberías leerlo antes de que pase y no después.</p>
 <p>Esto es lo que hay detrás de las notas de Jerry sobre tu recuperación y de tu reporte semanal. Si nunca permites las notificaciones, nunca se entrega nada a ese token.</p>
 
-<h3>6. Una huella de cada predicción sellada &middot; activa, y no lleva ningún identificador</h3>
+<h3>6. Una huella de cada predicción sellada &middot; todavía no, y cuando empiece no llevará ningún identificador</h3>
 <p>Antes de una serie, Jerry anota lo que espera de ti y lo sella: un SHA-256 tomado sobre esa predicción junto con un número aleatorio de 32 bytes que nunca sale de tu teléfono. Esa huella, y nada más, va a nuestro servidor, que publica una raíz combinada por día en un repositorio público. La fecha del commit ahí viene de GitHub y no de nosotros, que es lo que convierte "lo escribió antes de la serie" de una promesa nuestra en algo que puedes comprobar.</p>
 <p>Sin el número aleatorio la huella no se puede revertir ni adivinar, así que no dice nada del ejercicio, del peso, de las repeticiones ni de ti. <strong>Es lo único que esta app envía sin ningún identificador:</strong> sin nombre, sin correo, sin cuenta, y ni siquiera el identificador aleatorio de instalación que llevan los puntos 3 y 5. No hay aquí nada que se pueda ligar a una persona, a un dispositivo ni a una sesión.</p>
 <p><strong>En la versión que puedes instalar hoy, esto no pasa.</strong> Todavía nada en la app lo envía y el lado que lo recibe está escrito pero aún no está en marcha. Está escrito aquí primero, para que nada de lo que sale de tu teléfono cambie antes de que hayas podido leerlo.</p>
@@ -170,6 +170,7 @@ notificaciones, y deberías leerlo antes de que pase y no después.</p>
       <a href="/es/how-it-works/">Cómo funciona</a>
       <a href="/es/stronger/">Ponerse más fuerte</a>
       <a href="/es/join/">Únete a la prueba</a>
+      <a href="/es/spec/">Especificación</a>
     </nav>
     <nav class="foot__col" aria-label="El registro">
       <p class="foot__label">El registro</p>
@@ -185,6 +186,7 @@ notificaciones, y deberías leerlo antes de que pase y no después.</p>
       <a href="/es/app-privacy/">Privacidad</a>
       <a href="/es/terms/">Términos</a>
       <a href="/es/support/">Soporte</a>
+      <a href="/es/design/">Notas de diseño</a>
     </nav>
   </div>
   <div class="foot__panel">

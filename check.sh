@@ -72,6 +72,14 @@
 #                    bouncing". Text changing while images do not is not a navigation. It was
 #                    Chrome's translator, from the "always translate Spanish" he set on
 #                    2026-08-31, and nothing on /es/ had ever told a browser not to.
+#   privacy-status-gate.py  A STATUS LABEL ON THE PRIVACY POLICY AGAINST THE PARAGRAPH
+#                    UNDER IT. CD-015, the CEO on his own phone, 2026-09-03: items 5
+#                    and 6 were headed `. on`, in the same shape as items 1 and 3 which
+#                    really are on, while each one's own body said "In the build you
+#                    can install today, this does not happen." The policy overstated
+#                    what leaves the phone, in the headings, which is the part of a
+#                    privacy policy people actually read. Fourteen gates read that page
+#                    and none compared a heading to the sentence beneath it.
 #                    translate-gate guards the ELEMENTS a translator must not rewrite and is
 #                    right about every one; it has no opinion about whether the PAGE should be
 #                    translated at all, and on a page where a real translation already exists a
@@ -248,6 +256,8 @@ echo
 python3 tools/lang-gate.py || fail=1
 echo
 python3 tools/notranslate-gate.py || fail=1
+echo
+python3 tools/privacy-status-gate.py || fail=1
 echo
 python3 tools/minify-css.py --check || fail=1
 echo
