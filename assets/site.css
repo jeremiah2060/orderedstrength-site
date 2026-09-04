@@ -163,7 +163,6 @@ body{margin:0;color:var(--ink);font-family:var(--body);
      background-color:var(--ground);
      background-image:var(--grain);
      background-size:160px 160px}
-body{counter-reset:scene}
 a{color:inherit;text-decoration:none}
 /* Focus is a TRACE, not a glow: a hairline that follows the shape, plus one ring of
    spill, which is how a lit indicator behaves and is legible on every surface here. */
@@ -575,58 +574,76 @@ main > .scene:nth-of-type(even)::before{--pool:66%}
 .narrow{max-width:44rem}
 
 /* ── type ─────────────────────────────────────────────── */
-/* ══ THE SPECIFICATION RULE ═══════════════════════════════════════════════════
-   The signature of this site, and the thing that will never be confused with anyone
-   else's. Every section label is set the way a dimension is called out on an engineering
-   drawing: a tick, the label, a leader line running the full measure, and the section's
-   number at the end of it.
+/* ══ THE SECTION LABEL ════════════════════════════════════════════════════════
+   A teal tick and the section's name. It is the mark of this site and could not be
+   anyone else's, and that is now ALL it is.
 
-   It earns its place three times over. It is unmistakably ours. It reads the page as a
-   numbered specification, which is exactly what this product claims to be. And it solves
-   a real compositional problem measured in the previous round: a left-aligned reading
-   measure leaves the right half of a long-form section empty, and the leader line is what
-   now spans it, so the section reads as one object at full width instead of as text
-   pushed against an edge.
+   Until 2026-09-04 it was a full engineering-drawing callout: the tick, the label, a
+   leader line running the measure, and the section number at the end of it. The
+   paragraph that stood here defended the line and the number with two arguments, and
+   the CEO asked on 2026-09-04 whether either was necessary. Measured on the built page,
+   neither was true.
 
-   The counter increments on the LABEL, not the section, so a section without one cannot
-   punch a hole in the numbering. */
-.eyebrow{font-family:var(--mono);font-size:.9375rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;
-         color:var(--teal);margin:0 0 1rem;display:flex;align-items:center;gap:.75rem;
-         counter-increment:scene;
+   THE LEADER LINE WAS WRITTEN TO SPAN THE DEAD ZONE AND NEVER ENTERED IT. The claim was
+   that a left-aligned reading measure leaves the right half of a long-form section empty
+   and the line is what spans it. But the eyebrow is a `<p>` and set no max-width of its
+   own, so `p{max-width:44rem}` further down this file capped it at the reading measure,
+   the very edge the line existed to escape. Read back off the live home page with
+   getComputedStyle, the eyebrow's max-width is 704px, and in a `.scene` at 1440px that
+   puts the body paragraph at 128 to 832 and the eyebrow at 128 to 832: the identical box.
+   The empty right half it was added to fill is 832 to 1312. It reached 0 of those 480
+   pixels. The composition was the same with the line and without it, bought with the
+   loudest horizontal rule on the page sitting directly over the headline.
+
+   THE NUMBER WAS PRINTED TWICE ON ONE SCREEN AND MOVED ONLY ONCE. `.rail` prints it in
+   the margin above 95rem and `.barscale` prints it under the header below that, so at
+   every width an instrument already answers "which section is this", and there the number
+   MOVES with the reader and brightens as it is reached, which is the whole of what made
+   it informative. Stamped a second time at the head of the section it names, it answered
+   a question already answered a few centimetres higher. Measured on the home page at
+   1440 by 813, the two elements' centres: bar scale "01 Strength coaching for iPhone" at
+   y 75.0, hero eyebrow "Strength coaching for iPhone" at y 195.0, a gap of 120.0px, and
+   the two label strings compare EQUAL. A signature is diluted by being said three times,
+   not strengthened. (The gap is viewport-height dependent because the hero centres its
+   content; the duplication is not.)
+
+   font-weight was 600 against a family served here at 400 and 500 ONLY (see the
+   @font-face block at the top of this file), so this one rule, alone among the fifteen
+   that set var(--mono), was being faux-bolded by the browser: thickened unevenly at
+   14px with wide tracking, which is most of why it read as shouting.
+
+   REVERT: this block, `body{counter-reset:scene}`, `.eyebrow--bare` and the
+   `eyebrow--bare` class on the six single-section pages all came out together. */
+.eyebrow{font-family:var(--mono);font-size:.875rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;
+         color:var(--teal);margin:0 0 1.125rem;display:flex;align-items:center;gap:.625rem;
          text-shadow:0 1px 0 rgba(0,0,0,.55)}
-.eyebrow::before{content:"";width:2.25rem;height:2px;background:var(--teal);flex:none;opacity:.85;
-         box-shadow:0 0 .625rem rgba(0,212,177,.45)}
-.eyebrow::after{content:counter(scene,decimal-leading-zero);
-         flex:1 1 0;min-width:3.5rem;text-align:right;
-         color:var(--ink3);font-weight:500;letter-spacing:.1em;
-         background-image:linear-gradient(90deg,
-            rgba(35,43,55,0) 0%, var(--line) 6%, var(--line) calc(100% - 3.4em),
-            rgba(35,43,55,0) calc(100% - 3.4em));
-         background-repeat:no-repeat;background-size:100% 1px;background-position:0 52%}
-/* 🔒 `.eyebrow` NUMBERS A SECTION. IT IS NOT A GENERIC SMALL-CAPS LABEL, and reusing it as
-   one has a cost that is invisible until you read the page: the verifier's field label was
-   `<label class="eyebrow">Receipt JSON</label>`, so it printed the section counter right up
-   against its own text as "RECEIPT JSON02" AND consumed a number, which silently pushed
-   every real section on that page one out of step. Anything that wants the small engraved
-   mono treatment without being a section uses .ilabel. */
+.eyebrow::before{content:"";width:1.5rem;height:2px;background:var(--teal);flex:none}
+/* 🔒 `.eyebrow` STILL NUMBERS A SECTION, IT JUST NO LONGER PRINTS THE NUMBER, AND THAT
+   MADE THE OLD FAILURE SILENT. site.js counts `.eyebrow` elements document-wide and hands
+   the index to the rail and the bar scale, so reusing this class as a generic label still
+   consumes a number and still pushes every real section on that page one out of step. It
+   used to ANNOUNCE itself: the verifier's `<label class="eyebrow">Receipt JSON</label>`
+   printed "RECEIPT JSON02" on screen, which is how it was caught. With the number gone
+   that same mistake renders perfectly and miscounts the instrument, so the tell is no
+   longer the page. It is `check-site.py`'s eyebrow-placement check, which is why that
+   check shipped in the same commit as this change and is not optional. Anything that
+   wants the small engraved mono treatment without being a section uses .ilabel. */
 .ilabel{font-family:var(--mono);font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;
         color:var(--ink3);margin:0 0 .75rem;display:block;text-shadow:0 1px 0 rgba(0,0,0,.6)}
-/* and a page with exactly one section has nothing to number */
-.eyebrow--bare{counter-increment:none}
-.eyebrow--bare::after{content:none}
-/* On a narrow screen the label itself needs both lines, and a leader line fighting it for
-   the same row collapses to a three-character stub beside the number, which reads as
-   broken rather than as restrained. It takes its own row instead, at full width, so the
-   signature survives the phone rather than being switched off there. */
+/* `.eyebrow--bare` existed so a page with exactly one section printed no number. With no
+   number anywhere it said nothing, so it came out of this file and off the six pages that
+   carried it rather than being left behind as a class that matches no rule.
+
+   On a narrow screen the label needs both lines. Flex would keep the tick on the first
+   line and shrink the label beside it; block flow lets the tick sit inline with the first
+   line and the label wrap underneath it, which is what a two-line label wants. Kept from
+   the leader-line era, where it solved a worse version of the same problem. */
 @media (max-width:52rem){
   /* 🔒 NOT flex-wrap. A wrapped flex line places items at their MAX-CONTENT size before it
      shrinks anything, so the label jumped to its own row and left the tick stranded alone
-     above it: three rows where two were wanted. Dropping back to block flow lets the tick
-     sit inline with the label, the label wrap normally inside it, and the leader line take
-     the row beneath. */
+     above it: three rows where two were wanted. */
   .eyebrow{display:block}
-  .eyebrow::before{display:inline-block;vertical-align:.22em;margin-right:.75rem}
-  .eyebrow::after{display:block;margin-top:.4375rem;background-position:0 50%}
+  .eyebrow::before{display:inline-block;vertical-align:.22em;margin-right:.625rem}
 }
 h1{font-family:var(--display);font-weight:700;font-size:clamp(2.125rem,6.4vw,3.875rem);line-height:1.02;
    letter-spacing:-.038em;margin:0 0 1.125rem;max-width:17ch;text-wrap:balance}

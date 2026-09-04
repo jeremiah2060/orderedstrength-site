@@ -376,6 +376,80 @@ for f in pages + ['assets/site.css']:
         print(f"  {'':28} {extra}")
     fail += len(iss)
 
+print("\nEYEBROW PLACEMENT (the number is gone, so the page can no longer tell you)")
+# 🔒 THIS CHECK EXISTS BECAUSE A VISIBLE TELL WAS DELETED, 2026-09-04. `.eyebrow` used to
+# print the section number through a CSS counter, and site.js hands the SAME index to the
+# rail and the bar scale by counting `.eyebrow` elements document-wide. Reusing the class
+# as a generic label therefore consumed a number and pushed every real section on that page
+# one out of step. It was caught last time because it also SHOWED itself: the verifier's
+# `<label class="eyebrow">Receipt JSON</label>` rendered "RECEIPT JSON02" on screen.
+#
+# The number no longer renders, so that same mistake now renders perfectly and silently
+# miscounts the instrument. The failure became an ABSENCE, and absence reads as all-clear.
+# The DIAGNOSTIC that decides whether this check is real: name the input that turns it red.
+# It is one `<p class="eyebrow">` placed outside `main > .scene`, which is exactly the shape
+# of the defect that shipped. --selftest constructs it and proves both arms.
+#
+# It asks the question site.js asks and not a proxy for it: every `.eyebrow` in the document
+# must sit inside a section the rail actually maps, or the indices disagree. It runs on
+# pages with three or more scenes because that is the condition site.js builds the rail on.
+from html.parser import HTMLParser
+EB_VOID = {'area','base','br','col','embed','hr','img','input','link','meta','param',
+           'source','track','wbr'}
+
+class _Brows(HTMLParser):
+    """Every .eyebrow, and the scene count site.js would compute on the same page.
+
+    A real tag stack, never a count of opening tags: two opposite nesting errors cancel in
+    a count, which is the reason the nesting check further up this file is a stack too."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.stack = []; self.brows = []; self.scenes = 0
+    def handle_starttag(self, tag, attrs):
+        cls = (dict(attrs).get('class') or '').split()
+        if 'eyebrow' in cls:
+            inside = any('scene' in c for _, c in self.stack) and any(
+                t == 'main' for t, _ in self.stack)
+            self.brows.append((self.getpos()[0], inside))
+        if tag == 'section' and 'scene' in cls and self.stack and self.stack[-1][0] == 'main':
+            self.scenes += 1
+        if tag not in EB_VOID:
+            self.stack.append((tag, cls))
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+    def handle_endtag(self, tag):
+        for i in range(len(self.stack) - 1, -1, -1):
+            if self.stack[i][0] == tag:
+                del self.stack[i:]; return
+
+def eyebrow_issues(src):
+    p = _Brows(); p.feed(src)
+    if p.scenes < 3:
+        return []          # site.js returns early; no rail, nothing to put out of step
+    return [ln for ln, inside in p.brows if not inside]
+
+if '--selftest' in sys.argv:
+    print("  SELFTEST")
+    good = ('<main><section class="scene"><p class="eyebrow">A</p></section>'
+            '<section class="scene"><p class="eyebrow">B</p></section>'
+            '<section class="scene"><p class="eyebrow">C</p></section></main>')
+    bad = good.replace('</main>', '</main><label class="eyebrow">Receipt JSON</label>')
+    stray = good.replace('<main>', '<main><p class="eyebrow">Stray</p>')
+    for name, doc, want in (('clean page', good, 0),
+                            ('label after main', bad, 1),
+                            ('eyebrow outside a scene', stray, 1),
+                            ('one-section page', '<main><section class="scene">'
+                             '<p class="eyebrow">A</p></section></main>', 0)):
+        got = len(eyebrow_issues(doc))
+        ok = got == want
+        print(f"    {name:26} expected {want}, got {got}  {'OK' if ok else 'SELFTEST FAILED'}")
+        fail += 0 if ok else 1
+
+for f in pages:
+    bad = eyebrow_issues(open(f, encoding='utf-8').read())
+    print(f"  {f:28} {'OK' if not bad else 'eyebrow outside main > .scene at line ' + ', '.join(map(str, bad))}")
+    fail += len(bad)
+
 print("\nTHIRD-PARTY HOSTS (this site makes no request it does not own)")
 # 🔒 A LINK IS NOT A REQUEST, AND CONFLATING THEM WOULD MAKE THIS GATE A LIAR. /record/ links
 # to the receipts repository on github.com on purpose: a reader following it is the whole

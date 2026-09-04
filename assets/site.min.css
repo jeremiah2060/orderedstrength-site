@@ -69,7 +69,6 @@ body{margin:0;color:var(--ink);font-family:var(--body);
      background-color:var(--ground);
      background-image:var(--grain);
      background-size:160px 160px}
-body{counter-reset:scene}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:1px solid var(--teal);outline-offset:3px;border-radius:4px;
                box-shadow:0 0 0 4px rgba(0,212,177,.16)}
@@ -228,27 +227,15 @@ main > .scene:nth-of-type(even)::before{--pool:66%}
   .hero-grid{grid-template-columns:1fr;gap:2.5rem}
 }
 .narrow{max-width:44rem}
-.eyebrow{font-family:var(--mono);font-size:.9375rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;
-         color:var(--teal);margin:0 0 1rem;display:flex;align-items:center;gap:.75rem;
-         counter-increment:scene;
+.eyebrow{font-family:var(--mono);font-size:.875rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;
+         color:var(--teal);margin:0 0 1.125rem;display:flex;align-items:center;gap:.625rem;
          text-shadow:0 1px 0 rgba(0,0,0,.55)}
-.eyebrow::before{content:"";width:2.25rem;height:2px;background:var(--teal);flex:none;opacity:.85;
-         box-shadow:0 0 .625rem rgba(0,212,177,.45)}
-.eyebrow::after{content:counter(scene,decimal-leading-zero);
-         flex:1 1 0;min-width:3.5rem;text-align:right;
-         color:var(--ink3);font-weight:500;letter-spacing:.1em;
-         background-image:linear-gradient(90deg,
-            rgba(35,43,55,0) 0%, var(--line) 6%, var(--line) calc(100% - 3.4em),
-            rgba(35,43,55,0) calc(100% - 3.4em));
-         background-repeat:no-repeat;background-size:100% 1px;background-position:0 52%}
+.eyebrow::before{content:"";width:1.5rem;height:2px;background:var(--teal);flex:none}
 .ilabel{font-family:var(--mono);font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;
         color:var(--ink3);margin:0 0 .75rem;display:block;text-shadow:0 1px 0 rgba(0,0,0,.6)}
-.eyebrow--bare{counter-increment:none}
-.eyebrow--bare::after{content:none}
 @media (max-width:52rem){
   .eyebrow{display:block}
-  .eyebrow::before{display:inline-block;vertical-align:.22em;margin-right:.75rem}
-  .eyebrow::after{display:block;margin-top:.4375rem;background-position:0 50%}
+  .eyebrow::before{display:inline-block;vertical-align:.22em;margin-right:.625rem}
 }
 h1{font-family:var(--display);font-weight:700;font-size:clamp(2.125rem,6.4vw,3.875rem);line-height:1.02;
    letter-spacing:-.038em;margin:0 0 1.125rem;max-width:17ch;text-wrap:balance}
