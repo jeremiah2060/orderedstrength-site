@@ -90,7 +90,7 @@
   --display:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --body:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  --bar:5rem; --barscale-h:0rem; --barscale-track:.5625rem; --gut:clamp(1.25rem,3.5vw,3rem); --wide:min(80rem,100vw);
+  --bar:5rem; --gut:clamp(1.25rem,3.5vw,3rem); --wide:min(80rem,100vw);
   --rail:clamp(0px, calc((100vw - var(--wide)) / 2), 7.5rem);
 
   /* MOTION HAS TWO JOBS AND THEY NEED DIFFERENT CURVES. Something arriving should settle
@@ -180,7 +180,6 @@ img{max-width:100%;height:auto}
 .bar{position:fixed;inset:0 0 auto;height:var(--bar);z-index:80;display:flex;align-items:center;
      justify-content:space-between;
      padding:0 max(var(--gut), calc((100vw - var(--wide)) / 2 + var(--gut)));
-     padding-bottom:var(--barscale-h);
      background:var(--e0)}
 /* 🔒 OPAQUE, AND THE GLASS WAS NOT A STYLE CHOICE TO DEFEND (2026-09-02). It was
    `rgba(5,7,11,.7)` over `backdrop-filter: blur(22px)`, which is three costs for one look:
@@ -203,22 +202,18 @@ img{max-width:100%;height:auto}
    It keys off `has-rail`, which the script sets only once the scale is actually BUILT,
    never off the media query alone: if the script fails to load, hiding this on the
    promise of a replacement that never arrived would leave the page with neither. */
-/* 🔒 SUPERSEDED 2026-09-02. The rule was `@media (min-width:95rem){.has-rail .bar .prog}`
-   under this law, which is kept because it is still true of the world it was written in:
+@media (min-width:95rem){.has-rail .bar .prog{opacity:0}}
+/* 🔒 BOTH CONDITIONS, NOT EITHER. `has-rail` says the script BUILT the scale; the query
+   says the margin is wide enough to SHOW it. Keying off the class alone hid this bar at
+   1440px, where the scale is display:none, and left that width with no position
+   indicator of any kind. Measured, not guessed: progOpacity 0 with railShown false.
 
-     BOTH CONDITIONS, NOT EITHER. `has-rail` says the script BUILT the scale; the query says
-     the margin is wide enough to SHOW it. Keying off the class alone hid this bar at 1440px,
-     where the scale is display:none, and left that width with no position indicator of any
-     kind. Measured, not guessed: progOpacity 0 with railShown false.
-
-   WHAT SUPERSEDED IT: the horizontal scale in the bar covers exactly the widths the margin
-   rail cannot, so `has-rail` now guarantees ONE of the two is on screen and the width has
-   stopped deciding. The condition that made "either" wrong no longer exists.
-   AND THE COST OF NOT UPDATING IT WAS VISIBLE: the CEO opened the preview at about 1000px
-   and found TWO position indicators stacked at the top of his page, the strip's needle and
-   this line, on every screen under 1520px. The law above exists so a replacement is never
-   assumed; this line exists because one arrived. */
-.has-rail .bar .prog{opacity:0}
+   🔒 RESTORED VERBATIM 2026-09-04, AND THE THING THAT SUPERSEDED IT IS GONE. The horizontal
+   bar scale replaced this line under every width below 95rem, and the CEO's verdict on it
+   was "lets strip away the noise ... just a line a teal filler". Two position indicators
+   was the original diagnosis and it stayed true; the answer was simply the other one. This
+   line hides at the top of the page because it has width 0 there, not because anything
+   fades it, which is exactly the behaviour he described from memory. */
 .wordmark{display:flex;align-items:center;gap:.625rem;font-family:var(--display);font-weight:700;
           font-size:1.75rem;letter-spacing:-.035em}
 .led{width:.6875rem;height:.6875rem;border-radius:50%;background:var(--ink3);flex:none;
@@ -380,88 +375,13 @@ html[lang^="es"] .bar nav a{white-space:nowrap}
   html[lang^="es"] .cta__short{display:inline}
 }
 
-/* ══ THE SCALE, ON A PHONE ════════════════════════════════════════════════════════════
-   🔒 THE SECOND SIGNATURE OF THIS SITE RENDERED FOR NOBODY. `.js .rail` is gated at
-   min-width 95rem (1520px), so the margin scale never appeared on a 1440px laptop, let
-   alone a phone: measured absent in the 1440px capture on 2026-09-02. Below that width the
-   page had a 2px progress line and no answer to "which section is this".
-
-   This is the same instrument laid on its side, built from the same items array, so there
-   is still no second list to keep in sync. THE ONE-COORDINATE-SPACE LAW TRAVELS WITH IT: a
-   tick sits at the scroll progress at which its section becomes ACTIVE, never at its
-   proportional position in the document, so "the needle is level with this tick" and "this
-   is the section you are reading" remain the same statement. */
-.barscale{position:absolute;inset:auto 0 0 0;height:var(--barscale-h);display:none;
-      align-items:center;gap:.625rem;
-      padding:0 max(var(--gut), calc((100vw - var(--wide)) / 2 + var(--gut)));
-      padding-bottom:var(--barscale-track);
-      font-family:var(--mono);font-size:.8125rem;letter-spacing:.14em;text-transform:uppercase}
-.barscale__n{color:var(--teal);font-weight:500;flex:none;font-variant-numeric:tabular-nums}
-.barscale__lab{color:var(--ink3);font-style:normal;font-weight:500;
-      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;min-width:0}
-/* The scale keeps a legible minimum and the LABEL gives way first: a name truncated to an
-   ellipsis is still a name, a gauge squeezed to a stub is no longer a gauge. Tracking eases
-   on narrow screens because 0.14em on 28 uppercase mono characters is most of a phone. */
-/* ══ ONE LINE, NOT TWO (CEO, 2026-09-04) ══════════════════════════════════════
-   "when you scroll the lines look like they are competing."
-
-   He was describing a real geometry, not a feeling. `.bar::after` is the header's
-   own bottom hairline and it is opacity:0 at the top of the page, fading in once
-   `.stuck` says you have scrolled. The scale drew its OWN hairline through the
-   middle of its 1.625rem strip. Both are 1px of var(--line), and the strip is
-   pinned to the bottom of the bar, so the two rules sat 13px apart: measured, the
-   scale line at y 75.0 and the bar line at y 88.0 on a 1440px laptop. At the top of
-   the page you saw one line. The moment you scrolled you saw two, parallel, the
-   same colour, one full bleed and one inset. Nothing was misaligned. There was
-   simply one rule too many.
-
-   THE SCALE IS NOW THE BAR'S BOTTOM EDGE. The track is lifted out of the flex row
-   and pinned across the full width at the bottom of the bar, so the header's
-   boundary and the instrument are the same 1px, and `.bar::after` stands down under
-   exactly the two conditions that put this on screen. The ticks rise from that edge
-   and the needle crosses it.
-
-   IT ALSO GAINS RESOLUTION RATHER THAN LOSING IT. As a flex child the track only
-   occupied the space to the RIGHT of the label, so the whole document mapped onto
-   roughly half the viewport and the needle could never reach the left edge. Full
-   bleed, 0% is the left edge of the screen and 100% is the right, and the label
-   stops competing with the gauge for width, which is also why it now ellipsises
-   later on a phone.
-
-   🔒 NO PROGRESS FILL, AND THIS IS NOT A STYLE PREFERENCE. The rail's own comment
-   further up states the thesis: it answers where am I and how much is left "the way
-   an instrument does rather than with a progress bar". Tinting the travelled half of
-   this line teal was the obvious way to make one line feel dynamic and it would have
-   converted the instrument into the exact thing that sentence rejects. The needle
-   moving along a fixed scale IS the dynamic part. */
-.barscale__track{position:absolute;left:0;right:0;bottom:0;height:var(--barscale-track)}
-@media (max-width:40rem){.barscale{letter-spacing:.07em;gap:.5rem}}
-.barscale__track::before{content:"";position:absolute;inset:auto 0 0 0;height:1px;
-      background:var(--line)}
-.barscale__tick{position:absolute;top:0;bottom:0;width:1px;background:var(--line);
-      transition:background-color .3s var(--ease)}
-.barscale__tick.on{background:var(--teal)}
-/* The needle CROSSES the scale rather than standing on it: 3px above the ticks and
-   2px through the edge into the page, which is what a needle on a rule does and what
-   keeps it readable against the ticks it sits between. */
-.barscale__needle{position:absolute;top:-.1875rem;bottom:-.125rem;width:2px;border-radius:2px;
-      background:var(--teal);box-shadow:0 0 .5rem rgba(0,212,177,.65);
-      transition:left .1s linear}
-/* Both conditions, never the class alone: `has-rail` says the script BUILT the scale and
-   the query says the margin is too narrow to SHOW the vertical one. This is the same pair
-   the .bar .prog rule above is written on, and for the same reason. */
-@media (max-width:95rem){
-  .has-rail{--barscale-h:1.625rem; --bar:5.5rem}
-  .has-rail .barscale{display:flex}
-  /* 🔒 BOTH CONDITIONS, THE SAME PAIR THE RULES ABOVE ARE WRITTEN ON. `has-rail` says
-     the script BUILT the scale and the query says the margin is too narrow to show the
-     vertical one, so this stands the bar's hairline down ONLY where the scale is
-     actually drawing that edge itself. Keyed off either one alone, a page whose script
-     failed to load would lose its header boundary entirely and gain nothing back. */
-  .has-rail .bar::after{content:none}
-}
-@media (max-width:56rem){.has-rail{--bar:4.75rem}}
-
+/* THE SCALE STAYS IN THE MARGIN. A horizontal version of it lived in the header from
+   2026-09-02 to 2026-09-04, carrying the section number, the section name, ticks and a
+   needle. It answered "which section is this" at widths the margin cannot reach, and it
+   was removed for the reason the line above was written for: it put a second position
+   indicator, and then a second HAIRLINE, into the one component that is on every screen
+   of this site. Below 95rem the bar's own teal fill is the indicator. `git show 3e2d420`
+   is the build if it is ever wanted back. */
 
 main{padding-top:var(--bar)}
 
@@ -637,17 +557,19 @@ main > .scene:nth-of-type(even)::before{--pool:66%}
    pixels. The composition was the same with the line and without it, bought with the
    loudest horizontal rule on the page sitting directly over the headline.
 
-   THE NUMBER WAS PRINTED TWICE ON ONE SCREEN AND MOVED ONLY ONCE. `.rail` prints it in
-   the margin above 95rem and `.barscale` prints it under the header below that, so at
-   every width an instrument already answers "which section is this", and there the number
-   MOVES with the reader and brightens as it is reached, which is the whole of what made
-   it informative. Stamped a second time at the head of the section it names, it answered
-   a question already answered a few centimetres higher. Measured on the home page at
-   1440 by 813, the two elements' centres: bar scale "01 Strength coaching for iPhone" at
-   y 75.0, hero eyebrow "Strength coaching for iPhone" at y 195.0, a gap of 120.0px, and
-   the two label strings compare EQUAL. A signature is diluted by being said three times,
-   not strengthened. (The gap is viewport-height dependent because the hero centres its
-   content; the duplication is not.)
+   THE NUMBER WAS PRINTED TWICE ON ONE SCREEN. Measured on the home page at 1440 by 813,
+   the two elements' centres: the header's bar scale reading "01 Strength coaching for
+   iPhone" at y 75.0, the hero eyebrow reading "Strength coaching for iPhone" at y 195.0,
+   a gap of 120.0px, and the two label strings comparing EQUAL. A signature is diluted by
+   being said twice, not strengthened.
+
+   🔒 THAT DUPLICATE IS GONE AND THIS PARAGRAPH IS KEPT AS HISTORY, NOT AS A LIVE REASON.
+   The header's bar scale was itself removed on 2026-09-04, hours later, so below 95rem no
+   instrument now names the section at all; only `.rail`, in the margin above 95rem, still
+   does. The number stayed off the eyebrow anyway, on the CEO's direction the same day
+   ("lets strip away the noise"), and on the leader-line finding above, which never
+   depended on the duplication. Do not restore the number by citing this paragraph: the
+   condition it describes expired.
 
    font-weight was 600 against a family served here at 400 and 500 ONLY (see the
    @font-face block at the top of this file), so this one rule, alone among the fifteen
@@ -1432,14 +1354,14 @@ ol.loop span{grid-column:2;font-size:.9375rem;color:var(--ink2);line-height:1.6}
     --edge-lit:transparent; --edge-lit-soft:transparent;
     --edge-shade:transparent; --edge-shade-soft:transparent;
     --grain:none;
-    --bar:0rem; --barscale-h:0rem; --gut:0rem; --rail:0px;
+    --bar:0rem; --gut:0rem; --rail:0px;
   }
   @page{ margin:18mm 16mm }
   html,body{ background:#fff; color:#000 }
   body::before,body::after,main>.scene::before,main>.scene::after{ display:none !important }
 
   /* the furniture a page has because it scrolls, and paper does not */
-  .bar,.rail,.barscale,.prog,.skip,.menu,.mtnote,.chips,.btn,.foot{ display:none !important }
+  .bar,.rail,.prog,.skip,.menu,.mtnote,.chips,.btn,.foot{ display:none !important }
   /* and the parts that only exist under a pointer, or that a script fills */
   .pin,.callout,.device__sheen,.device__glass,.led{ display:none !important }
 
