@@ -90,7 +90,7 @@
   --display:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --body:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  --bar:5rem; --barscale-h:0rem; --gut:clamp(1.25rem,3.5vw,3rem); --wide:min(80rem,100vw);
+  --bar:5rem; --barscale-h:0rem; --barscale-track:.5625rem; --gut:clamp(1.25rem,3.5vw,3rem); --wide:min(80rem,100vw);
   --rail:clamp(0px, calc((100vw - var(--wide)) / 2), 7.5rem);
 
   /* MOTION HAS TWO JOBS AND THEY NEED DIFFERENT CURVES. Something arriving should settle
@@ -394,6 +394,7 @@ html[lang^="es"] .bar nav a{white-space:nowrap}
 .barscale{position:absolute;inset:auto 0 0 0;height:var(--barscale-h);display:none;
       align-items:center;gap:.625rem;
       padding:0 max(var(--gut), calc((100vw - var(--wide)) / 2 + var(--gut)));
+      padding-bottom:var(--barscale-track);
       font-family:var(--mono);font-size:.8125rem;letter-spacing:.14em;text-transform:uppercase}
 .barscale__n{color:var(--teal);font-weight:500;flex:none;font-variant-numeric:tabular-nums}
 .barscale__lab{color:var(--ink3);font-style:normal;font-weight:500;
@@ -401,14 +402,49 @@ html[lang^="es"] .bar nav a{white-space:nowrap}
 /* The scale keeps a legible minimum and the LABEL gives way first: a name truncated to an
    ellipsis is still a name, a gauge squeezed to a stub is no longer a gauge. Tracking eases
    on narrow screens because 0.14em on 28 uppercase mono characters is most of a phone. */
-.barscale__track{position:relative;flex:1 0 5.5rem;min-width:5.5rem;height:.5rem}
+/* ══ ONE LINE, NOT TWO (CEO, 2026-09-04) ══════════════════════════════════════
+   "when you scroll the lines look like they are competing."
+
+   He was describing a real geometry, not a feeling. `.bar::after` is the header's
+   own bottom hairline and it is opacity:0 at the top of the page, fading in once
+   `.stuck` says you have scrolled. The scale drew its OWN hairline through the
+   middle of its 1.625rem strip. Both are 1px of var(--line), and the strip is
+   pinned to the bottom of the bar, so the two rules sat 13px apart: measured, the
+   scale line at y 75.0 and the bar line at y 88.0 on a 1440px laptop. At the top of
+   the page you saw one line. The moment you scrolled you saw two, parallel, the
+   same colour, one full bleed and one inset. Nothing was misaligned. There was
+   simply one rule too many.
+
+   THE SCALE IS NOW THE BAR'S BOTTOM EDGE. The track is lifted out of the flex row
+   and pinned across the full width at the bottom of the bar, so the header's
+   boundary and the instrument are the same 1px, and `.bar::after` stands down under
+   exactly the two conditions that put this on screen. The ticks rise from that edge
+   and the needle crosses it.
+
+   IT ALSO GAINS RESOLUTION RATHER THAN LOSING IT. As a flex child the track only
+   occupied the space to the RIGHT of the label, so the whole document mapped onto
+   roughly half the viewport and the needle could never reach the left edge. Full
+   bleed, 0% is the left edge of the screen and 100% is the right, and the label
+   stops competing with the gauge for width, which is also why it now ellipsises
+   later on a phone.
+
+   🔒 NO PROGRESS FILL, AND THIS IS NOT A STYLE PREFERENCE. The rail's own comment
+   further up states the thesis: it answers where am I and how much is left "the way
+   an instrument does rather than with a progress bar". Tinting the travelled half of
+   this line teal was the obvious way to make one line feel dynamic and it would have
+   converted the instrument into the exact thing that sentence rejects. The needle
+   moving along a fixed scale IS the dynamic part. */
+.barscale__track{position:absolute;left:0;right:0;bottom:0;height:var(--barscale-track)}
 @media (max-width:40rem){.barscale{letter-spacing:.07em;gap:.5rem}}
-.barscale__track::before{content:"";position:absolute;inset:50% 0 auto 0;height:1px;
-      margin-top:-.5px;background:var(--line)}
+.barscale__track::before{content:"";position:absolute;inset:auto 0 0 0;height:1px;
+      background:var(--line)}
 .barscale__tick{position:absolute;top:0;bottom:0;width:1px;background:var(--line);
       transition:background-color .3s var(--ease)}
 .barscale__tick.on{background:var(--teal)}
-.barscale__needle{position:absolute;top:-.125rem;bottom:-.125rem;width:2px;border-radius:2px;
+/* The needle CROSSES the scale rather than standing on it: 3px above the ticks and
+   2px through the edge into the page, which is what a needle on a rule does and what
+   keeps it readable against the ticks it sits between. */
+.barscale__needle{position:absolute;top:-.1875rem;bottom:-.125rem;width:2px;border-radius:2px;
       background:var(--teal);box-shadow:0 0 .5rem rgba(0,212,177,.65);
       transition:left .1s linear}
 /* Both conditions, never the class alone: `has-rail` says the script BUILT the scale and
@@ -417,6 +453,12 @@ html[lang^="es"] .bar nav a{white-space:nowrap}
 @media (max-width:95rem){
   .has-rail{--barscale-h:1.625rem; --bar:5.5rem}
   .has-rail .barscale{display:flex}
+  /* 🔒 BOTH CONDITIONS, THE SAME PAIR THE RULES ABOVE ARE WRITTEN ON. `has-rail` says
+     the script BUILT the scale and the query says the margin is too narrow to show the
+     vertical one, so this stands the bar's hairline down ONLY where the scale is
+     actually drawing that edge itself. Keyed off either one alone, a page whose script
+     failed to load would lose its header boundary entirely and gain nothing back. */
+  .has-rail .bar::after{content:none}
 }
 @media (max-width:56rem){.has-rail{--bar:4.75rem}}
 
