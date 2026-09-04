@@ -814,7 +814,12 @@ footer{border-top:0;max-width:var(--wide);margin:0 auto;position:relative;
 footer::before{content:"";position:absolute;inset:0 var(--gut) auto;height:1px;
        background:linear-gradient(90deg,rgba(233,241,255,.16) 0,var(--line) 8%,
                   rgba(35,43,55,.4) 68%,transparent 100%)}
-.foot{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(3,minmax(0,1fr));
+/* 🔒 FIVE CHILDREN, AND THIS DECLARED FOUR TRACKS (CEO, 2026-09-03: "why 'The small print'
+   is below the rest instead of ... in the same row"). The footer holds the wordmark plus
+   FOUR nav columns: The product, The record, Language, The small print. With four tracks the
+   fifth child wrapped to a row of its own, which read as a mistake because it was one. The
+   count is now derived from the markup rather than assumed: 1 mark + repeat(4). */
+.foot{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(4,minmax(0,1fr));
       gap:clamp(1.75rem,3vw,3rem);align-items:start}
 .foot__mark .wordmark{font-size:1.25rem;margin-bottom:.75rem}
 .foot__mark p{font-size:.875rem;color:var(--ink3);max-width:30ch;margin:0;line-height:1.55}
@@ -830,6 +835,12 @@ footer::before{content:"";position:absolute;inset:0 var(--gut) auto;height:1px;
 .foot__panel::before{content:"";position:absolute;inset:0 0 auto;height:1px;
       background:linear-gradient(90deg,var(--line),rgba(35,43,55,.25) 70%,transparent)}
 .foot__panel b{font-weight:500;color:var(--ink2);letter-spacing:.06em;text-transform:none}
+/* Five across needs the room for it. "Verificar un comprobante" is 24 characters and is the
+   widest link in either language, so the row steps down before it has to wrap. */
+@media (max-width:68rem){
+  .foot{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .foot__mark{grid-column:1 / -1}
+}
 @media (max-width:56rem){
   .foot{grid-template-columns:1fr 1fr;gap:2rem}
   .foot__mark{grid-column:1 / -1}
