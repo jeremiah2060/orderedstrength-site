@@ -4,6 +4,15 @@
 #   check-site.py    what the source says: shadowed selectors, real tag NESTING (a stack,
 #                    not a count: two opposite errors cancel in a count), dead anchors,
 #                    unversioned assets, banned symbols, images with no alt text.
+#   gen-sitemap.py --check  EVERY PAGE IS IN THE SITEMAP AND EVERY DATE IS TRUE. The file was
+#                    hand-typed, which made it correct on the day it was written and silent on
+#                    the day it stopped being: a page left out is not a visible defect, it is a
+#                    page a crawler may never come back for. It happened to be complete when
+#                    this was wired in, 22 URLs for 22 pages, which is exactly how such a list
+#                    looks the day before someone adds the twenty-third. 🔒 THE DATES WERE A
+#                    CLAIM NOBODY CHECKED: every entry read 2026-09-01 or 09-03 while the pages
+#                    had been rewritten since, so the sitemap told Google nothing had changed on
+#                    the day everything had. lastmod now comes from `git log` for that exact file.
 #   shot-gate.py     THE PIXELS, CHECKED AGAINST THE CLAIMS. Reads the text out of every
 #                    published screenshot with the OS's Vision framework and asserts that
 #                    every quoted phrase and every number the page states about it is
@@ -238,6 +247,8 @@ PORT="${PORT:-8899}"
 fail=0
 
 python3 check-site.py || fail=1
+echo
+python3 tools/gen-sitemap.py --check || fail=1
 echo
 python3 tools/shot-gate.py || fail=1
 echo

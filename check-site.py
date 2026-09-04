@@ -271,14 +271,29 @@ print("\nINLINE SCRIPTS PARSE")
 # A page can be perfectly valid HTML and completely dead.
 #
 # node is already a hard dependency of check.sh, so this costs nothing new.
-import subprocess, tempfile
-SCRIPT = re.compile(r'<script(?![^>]*\ssrc=)[^>]*>(.*?)</script>', re.S)
+#
+# 🔒 AND A <script> IS NOT ALWAYS JAVASCRIPT. `type="application/ld+json"` is a DATA BLOCK:
+# the browser never executes it, it exists to be read by a crawler, and `node --check` calls
+# it a SyntaxError on the first colon. Adding structured data to two pages turned this gate
+# red twice for a file that was perfectly correct. The wrong fix is to skip those blocks,
+# because that trades a false red for a real blind spot: nothing would then notice the day
+# the structured data becomes malformed and Google silently stops reading it. So the block is
+# still checked, against the grammar it is actually written in. JSON in, JSON parser.
+import subprocess, tempfile, json as _json
+SCRIPT = re.compile(r'<script(?![^>]*\ssrc=)([^>]*)>(.*?)</script>', re.S)
+DATA_TYPE = re.compile(r'type\s*=\s*["\']application/(ld\+json|json)["\']', re.I)
 for f in pages:
     s = open(f, encoding='utf-8').read()
     iss = []
     for i, m in enumerate(SCRIPT.finditer(s)):
-        js = m.group(1)
+        attrs, js = m.group(1), m.group(2)
         if not js.strip():
+            continue
+        if DATA_TYPE.search(attrs):
+            try:
+                _json.loads(js)
+            except ValueError as e:
+                iss.append(f'data block #{i + 1} is not valid JSON: {e}')
             continue
         with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False) as tmp:
             tmp.write(js); tmp_path = tmp.name
@@ -467,7 +482,17 @@ for f in pages:
     hosts = set()
     for u in RESOURCE.findall(s):
         hosts.add(URL.match(u).group(1))
-    for blk in re.findall(r'<script[^>]*>(.*?)</script>', s, re.S):
+    # 🔒 THE SAME LAW AS THE <a href> EXEMPTION ABOVE, APPLIED TO STRUCTURED DATA. A
+    # `application/ld+json` block is inert: the browser never executes it and never fetches
+    # anything named inside it. Its `@context` is the string "https://schema.org", which is
+    # an IDENTIFIER for a vocabulary and not a URL anyone retrieves, and `sameAs` states
+    # "this organisation is also that account", which is the machine-readable form of the
+    # link /record/ already carries in its markup. Reading either as a request would have
+    # this gate report the honest half of the page as the dishonest half, which is exactly
+    # what the anchor exemption exists to prevent. Stripped by TYPE, never by content.
+    s_no_data = re.sub(r'<script[^>]*type\s*=\s*["\']application/(?:ld\+json|json)["\'][^>]*>.*?</script>',
+                       ' ', s, flags=re.S | re.I)
+    for blk in re.findall(r'<script[^>]*>(.*?)</script>', s_no_data, re.S):
         # A script that BUILDS an <a href> is still building a link, not making a request.
         # /record/ writes its "check the repository yourself" link from JS, and reading the
         # host out of that string would report the honest half of the page as the dishonest
