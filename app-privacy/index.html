@@ -183,10 +183,10 @@ because the code path exists and will start working the day notifications are pr
 should read about it before it does rather than after.</p>
 <p>This is the plumbing behind Jerry's notes about your recovery and your weekly report. If you never allow notifications, nothing is ever delivered to it.</p>
 
-<h3>6. A fingerprint of each sealed prediction &middot; not yet, and when it starts it carries no identifier at all</h3>
+<h3>6. A fingerprint of each sealed prediction &middot; on, and it carries no identifier at all</h3>
 <p>Before a set, Jerry writes down what he expects of you and seals it: a SHA-256 taken over that prediction together with a 32 byte random number that never leaves your phone. That fingerprint, and nothing else, goes to our server, which publishes one combined root hash per day to a public repository. The commit date there comes from GitHub rather than from us, which is what turns "he wrote it before the set" from our word into something you can check.</p>
 <p>Without the random number the fingerprint cannot be reversed or guessed, so it says nothing about the lift, the weight, the reps or you. <strong>It is the only thing this app sends with no identifier attached at all:</strong> no name, no email, no account, and not even the random install identifier that points 3 and 5 carry. There is nothing here that can be linked to a person, a device or a session.</p>
-<p><strong>In the version you can install today, this does not happen.</strong> Nothing in the app sends it yet and the receiving end is written but not yet running. It is written here first, so that nothing about what leaves your phone changes before you have had the chance to read about it.</p>
+<p><strong>This is live in the version you can install.</strong> When the app comes to the front it sends the fingerprints it has sealed and not yet seen published, and it keeps each one until it can see that fingerprint inside a published day. That is the only reason it re-sends: so that a prediction cannot go missing from the record without anyone noticing. The request carries no account, no install identifier and no headers of ours at all, which is what the paragraph above means literally rather than as a figure of speech.</p>
 
 <h2>What we never do</h2>
 <ul>

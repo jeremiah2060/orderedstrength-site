@@ -119,10 +119,10 @@ escrito aquí porque la vía existe en el código y empezará a funcionar el dí
 notificaciones, y deberías leerlo antes de que pase y no después.</p>
 <p>Esto es lo que hay detrás de las notas de Jerry sobre tu recuperación y de tu reporte semanal. Si nunca permites las notificaciones, nunca se entrega nada a ese token.</p>
 
-<h3>6. Una huella de cada predicción sellada &middot; todavía no, y cuando empiece no llevará ningún identificador</h3>
+<h3>6. Una huella de cada predicción sellada &middot; activo, y no lleva ningún identificador</h3>
 <p>Antes de una serie, Jerry anota lo que espera de ti y lo sella: un SHA-256 tomado sobre esa predicción junto con un número aleatorio de 32 bytes que nunca sale de tu teléfono. Esa huella, y nada más, va a nuestro servidor, que publica una raíz combinada por día en un repositorio público. La fecha del commit ahí viene de GitHub y no de nosotros, que es lo que convierte "lo escribió antes de la serie" de una promesa nuestra en algo que puedes comprobar.</p>
 <p>Sin el número aleatorio la huella no se puede revertir ni adivinar, así que no dice nada del ejercicio, del peso, de las repeticiones ni de ti. <strong>Es lo único que esta app envía sin ningún identificador:</strong> sin nombre, sin correo, sin cuenta, y ni siquiera el identificador aleatorio de instalación que llevan los puntos 3 y 5. No hay aquí nada que se pueda ligar a una persona, a un dispositivo ni a una sesión.</p>
-<p><strong>En la versión que puedes instalar hoy, esto no pasa.</strong> Todavía nada en la app lo envía y el lado que lo recibe está escrito pero aún no está en marcha. Está escrito aquí primero, para que nada de lo que sale de tu teléfono cambie antes de que hayas podido leerlo.</p>
+<p><strong>Esto está activo en la versión que puedes instalar.</strong> Cuando la app pasa al frente envía las huellas que ha sellado y todavía no ha visto publicadas, y guarda cada una hasta que puede verla dentro de un día publicado. Esa es la única razón por la que reenvía: para que una predicción no pueda desaparecer del registro sin que nadie se entere. La petición no lleva cuenta, ni identificador de instalación, ni ninguna cabecera nuestra, que es lo que el párrafo de arriba quiere decir de forma literal y no como una manera de hablar.</p>
 
 <h2>Lo que nunca hacemos</h2>
 <ul>
