@@ -85,6 +85,9 @@
 #                    Chrome's translator, from the "always translate Spanish" he set on
 #                    2026-08-31, and nothing on /es/ had ever told a browser not to.
 #   privacy-status-gate.py  A STATUS LABEL ON THE PRIVACY POLICY AGAINST THE PARAGRAPH
+#   privacy-anchor-coupling-gate.py  ITEM 6 AGAINST WHAT THE APP ACTUALLY SENDS. The gate
+#                       above proves the page agrees with ITSELF; this one reads the app's own
+#                       source, because a self-consistent page can still be wrong about the phone.
 #                    UNDER IT. CD-015, the CEO on his own phone, 2026-09-03: items 5
 #                    and 6 were headed `. on`, in the same shape as items 1 and 3 which
 #                    really are on, while each one's own body said "In the build you
@@ -273,6 +276,7 @@ echo
 python3 tools/notranslate-gate.py || fail=1
 echo
 python3 tools/privacy-status-gate.py || fail=1
+python3 tools/privacy-anchor-coupling-gate.py || fail=1
 echo
 python3 tools/minify-css.py --check || fail=1
 echo
