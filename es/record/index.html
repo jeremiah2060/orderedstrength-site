@@ -165,8 +165,8 @@
     </div>
     <p class="small" style="margin-top:1rem">Fuente:
       <a href="https://github.com/jeremiah2060/orderedstrength-receipts" style="color:var(--teal)">github.com/jeremiah2060/orderedstrength-receipts</a>.
-      Se copió en esta página cuando se construyó, el <span id="lmirror">una fecha anterior</span>,
-      así que esta página responde conteste GitHub o no. El repositorio es donde revisar el estado
+      Se copió en esta página cuando se construyó, <span id="lmirror">en una fecha anterior</span>,
+      así que esta página responde, conteste GitHub o no. El repositorio es donde revisar el estado
       de ahora mismo, y las raíces de ahí siempre serán las mismas raíces.</p>
   </section>
 
@@ -266,7 +266,12 @@ function score(doc){
   f.textContent = first || f.textContent;
   f.className = first ? '' : 'none';
   var mirrored = document.getElementById('lmirror');
-  if (mirrored && doc && doc.mirrored) mirrored.textContent = doc.mirrored;
+  // 🔒 THE PREPOSITION TRAVELS WITH THE VALUE, IN SPANISH IT CANNOT BE HARD-CODED OUTSIDE IT.
+  // A date takes "el" (el 2026-09-05) and the fallback phrase takes "en" (en una fecha
+  // anterior). The markup used to carry a bare "el" before this span, so the no-date branch
+  // rendered "el una fecha anterior", which is not Spanish. English is immune because "on"
+  // fits both, which is exactly why this survived every gate.
+  if (mirrored && doc && doc.mirrored) mirrored.textContent = 'el ' + doc.mirrored;
 }
 
 function empty(reason){
@@ -286,7 +291,7 @@ fetch(API, { headers: { 'accept': 'application/json' } })
     if (!anchors.length){
       empty(doc && doc.state === 'no-folder'
         ? 'El repositorio existe y la carpeta de anclas todavía no se ha creado, que era el estado cuando se construyó esta página, el ' + doc.mirrored + '.'
-        : 'La carpeta de anclas existe pero no contenía raíces publicadas cuando se construyó esta página, el ' + ((doc && doc.mirrored) || 'una fecha anterior') + '.');
+        : 'La carpeta de anclas existe pero no contenía raíces publicadas cuando se construyó esta página, ' + (doc && doc.mirrored ? 'el ' + doc.mirrored : 'en una fecha anterior') + '.');
       return;
     }
     state.textContent = anchors.length + ' publicadas';
