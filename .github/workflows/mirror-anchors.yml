@@ -1,0 +1,94 @@
+# Keep /record/ true without anyone remembering to.
+#
+# WHY THIS EXISTS (2026-09-05, CEO: "i think we have already build this, Didn't we? the
+# website hasn't been updated yet?"). The publisher was built, and it was built in the
+# RECEIPTS repository: a scheduled Action there writes one root hash per day. This site
+# does not read that repository at runtime, on purpose, because a page promising it makes
+# no third-party request may not make one. It reads record/anchors.json, a mirror taken at
+# BUILD time by tools/mirror-anchors.py.
+#
+# 🔒 SO HALF THE PIPELINE WAS AUTOMATED AND THE HALF A READER SEES WAS NOT. The tool's own
+# docs said "Commit record/anchors.json alongside each new anchor", which is a person
+# remembering. The day the first anchor lands, /record/ would have gone on saying "No
+# anchors published yet" until somebody noticed, on the single page whose entire purpose is
+# that a stranger can check us. A record that updates only when its author remembers is the
+# thing this product exists to not be.
+#
+# SAFE TO RUN UNATTENDED because the mirror script refuses to write on a bad read: an
+# unreachable API or a malformed document exits non-zero and leaves the good file alone.
+# A failure here is a red run, never a blanked record.
+
+name: Mirror the anchor record
+
+on:
+  schedule:
+    # 01:00 UTC, forty minutes after the receipts repository publishes at 00:20 UTC.
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mirror-anchors
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # No setup-python step on purpose: the script is pure standard library and the runner
+      # already ships python3. One less action to age out, and this job must still run
+      # correctly on the morning nobody is watching it.
+      - name: Take the mirror
+        run: python3 tools/mirror-anchors.py
+
+      - name: Publish it only if the record actually moved
+        run: |
+          set -euo pipefail
+
+          # 🔒 THE STAMP CHANGES EVERY RUN, SO "the file changed" IS NOT "the record moved".
+          # mirror-anchors.py always writes today's date into `mirrored`, which would commit
+          # 365 times a year to say nothing. Compare what a reader would SEE instead: the
+          # state and the anchors. The date still cannot go quietly stale, because a mirror
+          # older than seven days is refreshed on its own.
+          python3 - <<'PY'
+          import json, subprocess, datetime, sys
+          new = json.load(open('record/anchors.json', encoding='utf-8'))
+          old = json.loads(subprocess.run(['git','show','HEAD:record/anchors.json'],
+                                          capture_output=True, text=True).stdout or '{}')
+          moved = (new.get('state'), new.get('anchors')) != (old.get('state'), old.get('anchors'))
+          stamp = old.get('mirrored')
+          try:
+              age = (datetime.date.today() - datetime.date.fromisoformat(stamp)).days
+          except Exception:
+              age = 999
+          reason = 'the record moved' if moved else ('the mirror was %d days old' % age if age >= 7 else '')
+          open('/tmp/reason','w').write(reason)
+          print('state %s -> %s, %d anchor(s), previous stamp %s (%d days old)'
+                % (old.get('state'), new.get('state'), len(new.get('anchors') or []), stamp, age))
+          print('publish:', reason or 'no, nothing a reader would see has changed')
+          PY
+
+          REASON="$(cat /tmp/reason)"
+          if [ -z "$REASON" ]; then
+            git checkout -- record/anchors.json
+            exit 0
+          fi
+
+          # 🔒 THIS JOB MAY TOUCH ONE FILE AND NOTHING ELSE. An unattended committer with a
+          # wider blast radius is how a bot ships somebody's half-finished work.
+          CHANGED="$(git status --porcelain | awk '{print $2}')"
+          if [ "$CHANGED" != "record/anchors.json" ]; then
+            echo "Refusing to commit: expected only record/anchors.json, got:"
+            git status --porcelain
+            exit 1
+          fi
+
+          git config user.name  "OrderedStrength mirror"
+          git config user.email "mirror@orderedstrength.com"
+          git add record/anchors.json
+          git commit -m "record: mirror the anchor listing ($REASON)"
+          git push
