@@ -356,8 +356,15 @@ fetch(API, { headers: { 'accept': 'application/json' } })
     state.textContent = anchors.length + ' published';
     state.className = 'lstate live';
     body.innerHTML = anchors.slice(0, 60).map(function(a){
+      /* THE ROOT, out of the file, never git's hash OF the file. Until 2026-09-05 this printed
+         a.sha, the blob hash the contents API returns, under the promise above that this line
+         carries "the root hash covering every prediction sealed that day". A reader who
+         recomputed the root from the published fingerprints would have got a different number
+         from ours, on the one page whose entire purpose is that they can check us. */
+      var root = (typeof a.root === 'string' && /^[0-9a-f]{64}$/.test(a.root)) ? a.root : null;
       return '<div class="anchor"><span class="d">' + a.date +
-             '</span><a class="h" href="' + a.url + '">' + a.sha.slice(0,40) + '</a></div>';
+             '</span><a class="h" href="' + a.url + '">' +
+             (root ? root.slice(0,40) : 'open the file') + '</a></div>';
     }).join('');
   })
   .catch(function(){

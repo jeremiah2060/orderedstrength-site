@@ -21,6 +21,9 @@
 #                    (tools/audit-captures.py is its upstream twin: point it at a capture
 #                    directory BEFORE choosing which frames to publish.)
 #   ring-cause-gate.py A CAPTION MAY NOT EXPLAIN ONE RING WITH ANOTHER RING'S INPUT.
+#   anchor-root-gate.py THE RECORD PAGE PRINTS THE MERKLE ROOT, NEVER GIT'S HASH OF THE
+#                       FILE HOLDING IT. Unreachable until the first anchor lands, which is
+#                       exactly why it needed a gate rather than only a fix.
 #                    shot-gate proves a quoted phrase is in the pixels; it is blind to a
 #                    false CAUSE, and on 2026-08-30 the site shipped "the middle ring
 #                    still says Calibration (Building), because this athlete never once
@@ -253,6 +256,7 @@ echo
 python3 tools/shot-gate.py || fail=1
 echo
 python3 tools/ring-cause-gate.py || fail=1
+python3 tools/anchor-root-gate.py || fail=1
 echo
 python3 tools/pin-gate.py || fail=1
 echo

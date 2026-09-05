@@ -292,8 +292,10 @@ fetch(API, { headers: { 'accept': 'application/json' } })
     state.textContent = anchors.length + ' publicadas';
     state.className = 'lstate live';
     body.innerHTML = anchors.slice(0, 60).map(function(a){
+      var root = (typeof a.root === 'string' && /^[0-9a-f]{64}$/.test(a.root)) ? a.root : null;
       return '<div class="anchor"><span class="d">' + a.date +
-             '</span><a class="h" href="' + a.url + '">' + a.sha.slice(0,40) + '</a></div>';
+             '</span><a class="h" href="' + a.url + '">' +
+             (root ? root.slice(0,40) : 'abre el archivo') + '</a></div>';
     }).join('');
   })
   .catch(function(){

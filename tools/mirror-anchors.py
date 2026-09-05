@@ -45,6 +45,31 @@ def fetch():
         return 'unreachable', []
 
 
+def fetch_document(url):
+    """Read one published anchor file and hand back what it actually claims.
+
+    🔒 IT VALIDATES BEFORE IT MIRRORS. A root that is not 64 hex characters, or a count that
+    is not a positive integer, is refused rather than copied onto the page. This site prints
+    these values as fact; mirroring a malformed one would republish somebody else's mistake in
+    our own voice.
+    """
+    if not url:
+        return 'unreachable', {}
+    req = urllib.request.Request(url, headers={'user-agent': 'orderedstrength-site-mirror'})
+    try:
+        with urllib.request.urlopen(req, timeout=20) as r:
+            doc = json.load(r)
+    except Exception:
+        return 'unreachable', {}
+    root = doc.get('root')
+    count = doc.get('count')
+    if not isinstance(root, str) or len(root) != 64 or any(c not in '0123456789abcdef' for c in root):
+        return 'unreachable', {}
+    if not isinstance(count, int) or count < 1:
+        return 'unreachable', {}
+    return 'ok', doc
+
+
 def main():
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d')
     if '--offline' in sys.argv:
@@ -59,11 +84,27 @@ def main():
             # to stop, moved from the visitor's browser to ours.
             print('mirror: the API was unreachable. record/anchors.json left as it is.')
             return 1
-        anchors = [{'date': f['name'].rsplit('.', 1)[0],
-                    'sha': f['sha'],
-                    'url': f['html_url']}
-                   for f in listing
-                   if f.get('type') == 'file' and f['name'].endswith(('.txt', '.json'))]
+        # 🔒 THE ROOT COMES OUT OF THE FILE, NEVER OUT OF THE LISTING. Until 2026-09-05 this
+        # stored `f['sha']`, which is GIT'S BLOB HASH of the file: a hash OF the document, not
+        # the Merkle root INSIDE it. /record/ then printed it under the words "the root hash
+        # covering every prediction sealed that day". Both halves were working correctly and
+        # the sentence was false, and it was invisible only because no anchor had ever been
+        # published: the first real one would have shipped a number a checking stranger could
+        # not reproduce, on the single page whose whole purpose is that they can.
+        anchors = []
+        for f in sorted(listing, key=lambda f: f.get('name', ''), reverse=True):
+            if f.get('type') != 'file' or not f['name'].endswith('.json'):
+                continue
+            state, doc = fetch_document(f.get('download_url'))
+            if state != 'ok':
+                # Same law as a failed listing: a half-read mirror is worse than yesterday's
+                # good one, because the page cannot tell the difference.
+                print('mirror: could not read %s. record/anchors.json left as it is.' % f['name'])
+                return 1
+            anchors.append({'date': f['name'].rsplit('.', 1)[0],
+                            'root': doc.get('root'),
+                            'count': doc.get('count'),
+                            'url': f['html_url']})
         anchors.sort(key=lambda a: a['date'], reverse=True)
         if state == 'ok' and not anchors:
             state = 'empty'
